@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlain
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from ui_files.agrega_trapecios_c_layout import Ui_Dialog  # Import from the ui_files directory
 
+# QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
 
 class MyDialog(QDialog):
     def __init__(self):
@@ -15,30 +16,36 @@ class MyDialog(QDialog):
         self.ui = Ui_Dialog()  # Create an instance of the UI class
         self.ui.setupUi(self)  # Set up the UI on the dialog window
         self.dynamic_layouts = []  # Initialize dynamic layouts for row management
+        self.historial_agregados = 0
 
         # Connect the signal here
-        # self.ui.btn_acpt_cant.clicked.connect(self.generate_layout)
         self.ui.btn_acpt_cant.clicked.connect(self.generate_layout)
-
-    def debug_button(self):
-        print("Debug: Button clicked")
 
 
     def generate_layout(self):
         # Get the number of frames to generate from the spinbox
         num_rows = self.ui.spin_cant.value()
-        print("SpinBox Cantidad a generar value: ", num_rows)
+        print("SpinBox Cantidad a generar value: ", num_rows) # Debug
 
-        # Loop to create the frames
+        # print("elementos dinamicamente agregados: ", self.historial_agregados) # Debug
+        # Obtiene el numero de figuras(tuplas) ya existentes en el QVlayout contenedor, se usa para nombrar correctamente los nuevos elementos
+        tuplas_existentes = self.historial_agregados
+
+        ''' Loop to create the frames '''
         for i in range(num_rows):
-            self.add_rows(i + 2)  # Starts from trapecio 2 (T2)
+            self.add_rows(self.historial_agregados + 2)  # Starts from trapecio 2 (T2)
+        # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
+        self.ui.layout_nuevas_row.addStretch()
 
+    ''' genera nuevo Hlayout y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor'''
     def add_rows(self, index):
         # Create a new horizontal layout
         layout = QHBoxLayout()
         
+
+
         ''' Create the widgets for the row '''
-        name_label = QLabel(f"T{index}              ")  # Tiene espacio para coincidir, Aumenta el numero iterativamente
+        name_label = QLabel(f"T{index}\t    ")  # usa tab + 4 espacios( 1/2 tab) para coincidir, Aumenta el numero mostrado iterativamente
         bi_line = QLineEdit()
         bs_line = QLineEdit()
         altura_line = QLineEdit()
@@ -47,11 +54,6 @@ class MyDialog(QDialog):
         inercia_line = QLineEdit()
         op_line = QLineEdit()
 
-        if self.dynamic_layouts:
-            print("Hay layouts agregados dinamicamente con antereoridad")
-            # print("nombres son: " self.dynamic_layouts)
-            for layout in self.dynamic_layouts:
-                print(layout['name_label'])
 
         ''' Set object names to refer to them later '''
         name_label.setObjectName(f"t{index}_name")
@@ -79,6 +81,11 @@ class MyDialog(QDialog):
 
         # Store the layout reference to avoid duplicates
         self.dynamic_layouts.append(layout)
+        # self.historial_agregados.append(name_label) # Originalmente se guardaba informacion de Label de cada nueva row, Ahora solo se usa un contador += 1
+        self.historial_agregados += 1
+        print("elementos dinamicamente agregados: ", self.historial_agregados) # Debug
+        print("Numero recibido por tuplas_existentes: ", index) # Debug
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)  # Create the application

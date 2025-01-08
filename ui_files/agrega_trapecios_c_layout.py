@@ -264,7 +264,7 @@ class Ui_Dialog(object):
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Sup", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"I(nercia?)", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
-        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1              ", None))
+        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1\t    ", None)) # Agrega tab + 4 espacios (1/2 tab) para alinear con titulos de campos
         self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Sum Altura", None))
         self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Sum Area", None))
         self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Sum Ponderado", None))

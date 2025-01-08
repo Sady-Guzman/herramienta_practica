@@ -1,5 +1,0 @@
--- dependencias instaladas para herramientas
-
-- Numpy
-- PySide6
-- UI construida con QTdesigner
