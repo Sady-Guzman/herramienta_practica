@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLa
 from ui_files.agrega_trapecios_c_layout import Ui_Dialog  # Import from the ui_files directory
 
 # QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
+# historial_agregados -> Contador de tuplas que se agregaron dinamicamente a QVlayout
 
 class MyDialog(QDialog):
     def __init__(self):
@@ -35,14 +36,22 @@ class MyDialog(QDialog):
         for i in range(num_rows):
             self.add_rows(self.historial_agregados + 2)  # Starts from trapecio 2 (T2)
         # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
-        self.ui.layout_nuevas_row.addStretch()
+        # self.ui.layout_nuevas_row.addStretch()
+
 
     ''' genera nuevo Hlayout y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor'''
     def add_rows(self, index):
-        # Create a new horizontal layout
+        
+        ''' maneja vertical stretcher para solo tener 1 y que siempre este abajo'''
+        if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count()-1).spacerItem():
+            # item = ultimo que se encuentra (vertical stretcher)
+            # Lo elimina mientras agrega nuevas tuplas, Lo vuelve a ingresar despues.
+            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count()-1)
+            del item
+        
+        ''' crea un nuevo Hlayout para agregar elementos de nueva tupla '''
         layout = QHBoxLayout()
         
-
 
         ''' Create the widgets for the row '''
         name_label = QLabel(f"T{index}\t    ")  # usa tab + 4 espacios( 1/2 tab) para coincidir, Aumenta el numero mostrado iterativamente
@@ -76,15 +85,16 @@ class MyDialog(QDialog):
         layout.addWidget(op_line)
 
         ''' Add the layout to the vertical layout container '''
-        # Este layout vertical esta bajo el layour horizontal predeterminado de T1.
+        # Este layout vertical esta bajo el layout horizontal predeterminado de T1.
         self.ui.layout_nuevas_row.addLayout(layout)
+
+        ''' se vuelve a insertar vertical stretcher en posicion inferior de layout vertical '''
+        self.ui.layout_nuevas_row.addStretch()
 
         # Store the layout reference to avoid duplicates
         self.dynamic_layouts.append(layout)
         # self.historial_agregados.append(name_label) # Originalmente se guardaba informacion de Label de cada nueva row, Ahora solo se usa un contador += 1
         self.historial_agregados += 1
-        print("elementos dinamicamente agregados: ", self.historial_agregados) # Debug
-        print("Numero recibido por tuplas_existentes: ", index) # Debug
 
 
 if __name__ == "__main__":

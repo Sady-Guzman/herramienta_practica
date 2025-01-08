@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'agrega_trapecios_c_layout.ui'
+## Form generated from reading UI file 'agrega_trapecios_c_layout_stretch.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.1
 ##
@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QSpinBox, QVBoxLayout, QWidget)
+    QSpacerItem, QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -236,12 +236,18 @@ class Ui_Dialog(object):
         self.layout_nuevas_row = QVBoxLayout(self.verticalLayoutWidget_5)
         self.layout_nuevas_row.setObjectName(u"layout_nuevas_row")
         self.layout_nuevas_row.setContentsMargins(0, 0, 0, 0)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.layout_nuevas_row.addItem(self.verticalSpacer)
+
 
         self.retranslateUi(Dialog)
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi
 
+    ''' Generado por QT Designer. Sirve para que programa se convierta a otros idiomas '''
+    # No se ha generado ningun archivo .ts para hacer traduccion. En esta version este bloque de codigo no hace nada
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.label_familia.setText(QCoreApplication.translate("Dialog", u"Familia", None))
@@ -264,7 +270,7 @@ class Ui_Dialog(object):
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Sup", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"I(nercia?)", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
-        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1\t    ", None)) # Agrega tab + 4 espacios (1/2 tab) para alinear con titulos de campos
+        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1\t    ", None)) # usa tab + 4 espacios( 1/2 tab) para coincidir, Aumenta el numero mostrado iterativamente
         self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Sum Altura", None))
         self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Sum Area", None))
         self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Sum Ponderado", None))
