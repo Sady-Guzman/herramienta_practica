@@ -3,3 +3,5 @@
 - Numpy
 - PySide6
 - UI construida con QTdesigner
+- Enpaquetado con Pyinstaller
+- Desarrollado usando un Python VEnv

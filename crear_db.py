@@ -19,12 +19,9 @@ cursor.execute("""
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS parametros (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        secciones INTEGER NOT NULL,
-        cortes INTEGER NOT NULL,
-        base_sup REAL NOT NULL,
-        base_inf REAL NOT NULL,
-        alto REAL NOT NULL,
-        pieza_id INTEGER NOT NULL,
+        tipo_seccion INTEGER NOT NULL,
+        trapecios INTEGER NOT NULL,
+        pieza_id INTEGER NOT NULL, 
         FOREIGN KEY (pieza_id) REFERENCES piezas (id)
     )
 """)
@@ -32,13 +29,13 @@ cursor.execute("""
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS trapecios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        secciones INTEGER NOT NULL,
-        cortes INTEGER NOT NULL,
-        base_sup REAL NOT NULL,
+        tipo_seccion TEXT NOT NULL,
+        posicion INTEGER NOT NULL,
         base_inf REAL NOT NULL,
-        alto REAL NOT NULL,
-        trapecio_id INTEGER NOT NULL,
-        FOREIGN KEY (trapecio_id) REFERENCES piezas (id)
+        base_sup REAL NOT NULL,
+        altura REAL NOT NULL,
+        pieza_id INTEGER NOT NULL,
+        FOREIGN KEY (pieza_id) REFERENCES piezas (id)
     )
 """)
 
