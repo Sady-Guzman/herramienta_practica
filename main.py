@@ -3,13 +3,13 @@ from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlain
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from ui_files.herramienta_trapecios_v4 import Ui_Dialog  # Import from the ui_files directory
-from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones # Recupera set de familias y respectivos modelos de DB
+from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, db_get_datos_trapecios, db_get_cant_trapecios, db_get_id_pieza # Recupera set de familias y respectivos modelos de DB
 
 
 
 # QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
 # historial_agregados -> Contador de tuplas que se agregaron dinamicamente a QVlayout
-        
+
 
 class MyDialog(QDialog):
         
@@ -233,14 +233,27 @@ class MyDialog(QDialog):
         # Determina la pieza seleccionada
         pieza_familia = self.ui.combo_familia.currentText()
         pieza_modelo = self.ui.combo_modelo.currentText()
-        print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo) # Debug
+        pieza_seccion = self.ui.combo_tipo_seccion.currentText()
+        print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion) # Debug
+
+        pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
+        
+        trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion)
+        print("DEBUG> Cantidad de trapecios: ") # Debug
 
         # Obtiene informacion de la pieza desde la DB
-        info_pieza = db_obtener_info_pieza(pieza_familia, pieza_modelo)
+        pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion)
 
+        # Print para DEBUG
+        if pieza_trapecios:
+            print(f"Trapecios para la pieza {pieza_familia} - {pieza_modelo} con tipo de sección {pieza_seccion}:")
+            for trapecio in pieza_trapecios:
+                print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
+                    f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
+        else:
+            print(f"No se encontraron trapecios para la pieza {pieza_familia} - {pieza_modelo} con tipo de sección {pieza_seccion}.")
 
-
-        print("DEBUG> Cantidad de trapecios: ") # Debug
+        
 
     
     ''' Determina la cantidad de layouts dinamicos a agregar o eliminar de layout contenedor para pieza catalogo '''

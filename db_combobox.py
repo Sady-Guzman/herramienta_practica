@@ -72,38 +72,78 @@ def db_cargar_tipos_secciones(familia, modelo):
     return tipos_secciones
 
 
-import sqlite3
 
-def db_get_trapecios_por_nombre(familia, modelo):
-    """
-    Conecta a DB y obtiene cantidad de trapecios en cada seccion
-    """
 
+
+def db_get_datos_trapecios(pieza_id, seccion):
+    # Connect to the database
     conn = sqlite3.connect("catalogo.db")  # Replace with your database file
     cursor = conn.cursor()
 
-    # Enable foreign key constraints
-    cursor.execute("PRAGMA foreign_keys = ON;")
+    print("pieza_id = " ,pieza_id)
+    pieza_id_str = pieza_id[0]
+    print("pieza_id_Str = ", pieza_id_str)
 
-    # SQL query to join the tables and fetch trapecios
-    query = """
-        SELECT parametros.trapecios
-        FROM parametros
-        JOIN piezas ON parametros.pieza_id = piezas.id
-        WHERE piezas.familia = ? AND piezas.modelo = ?;
-    """
+    
+    # Query to get the trapecios from the trapecios table based on pieza_id and tipo_seccion
+    cursor.execute("""
+        SELECT * FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ?
+    """, (pieza_id_str, seccion))
 
-    # Execute the query with the provided familia and modelo
-    cursor.execute(query, (familia, modelo))
-
-    # Fetch all matching rows
+    # Fetch all matching trapecios
     trapecios = cursor.fetchall()
 
     # Close the database connection
     conn.close()
 
-    # Return the results as a list of trapecios
-    return [row[0] for row in trapecios]
+
+    return trapecios
+
+
+def db_get_cant_trapecios(pieza_id, seccion):
+    # Connect to the database
+    conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    cursor = conn.cursor()
+
+    print("pieza_id = " ,pieza_id)
+    pieza_id_str = pieza_id[0]
+    print("pieza_id_Str = ", pieza_id_str)
+    
+    # Query to get the trapecios from the trapecios table based on pieza_id and tipo_seccion
+    cursor.execute("""
+        SELECT * FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ?
+    """, (pieza_id_str, seccion))
+
+    # Fetch all matching trapecios
+    trapecios = cursor.fetchall()
+
+    # Close the database connection
+    conn.close()
+
+    
+    
+
+    return trapecios
+
+def db_get_id_pieza(familia, modelo):
+    # Connect to the database
+    conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    cursor = conn.cursor()
+
+    # Query to get the pieza_id from the piezas table based on familia and modelo
+    cursor.execute("""
+        SELECT id FROM piezas WHERE familia = ? AND modelo = ?
+    """, (familia, modelo))
+    pieza_id = cursor.fetchone()
+
+    # If no match is found in the piezas table
+    if pieza_id is None:
+        print(f"No se encontró la pieza con familia: {familia} y modelo: {modelo}")
+        conn.close()
+        return []
+    
+    print("debug.db_get_id_pieza() > id pieza: ", pieza_id)
+    return pieza_id
 
 
 ''' print todas las familias y sus respectivos modelos de forma estructurada'''
