@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'agrega_trapecios_v2.ui'
+## Form generated from reading UI file 'agrega_trapecios_v2_sinListas.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.1
 ##
@@ -42,9 +42,6 @@ class Ui_Dialog(object):
         self.Vlayout_catalogo.addWidget(self.label_familia)
 
         self.combo_familia = QComboBox(self.verticalLayoutWidget)
-        self.combo_familia.addItem("")
-        self.combo_familia.addItem("")
-        self.combo_familia.addItem("")
         self.combo_familia.setObjectName(u"combo_familia")
 
         self.Vlayout_catalogo.addWidget(self.combo_familia)
@@ -55,9 +52,6 @@ class Ui_Dialog(object):
         self.Vlayout_catalogo.addWidget(self.label_modelo)
 
         self.combo_modelo = QComboBox(self.verticalLayoutWidget)
-        self.combo_modelo.addItem("")
-        self.combo_modelo.addItem("")
-        self.combo_modelo.addItem("")
         self.combo_modelo.setObjectName(u"combo_modelo")
 
         self.Vlayout_catalogo.addWidget(self.combo_modelo)
@@ -265,13 +259,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.label_familia.setText(QCoreApplication.translate("Dialog", u"Familia", None))
-        self.combo_familia.setItemText(0, QCoreApplication.translate("Dialog", u"Elegir", None))
-        # self.combo_familia.setItemText(1, QCoreApplication.translate("Dialog", u"VI", None))
-        # self.combo_familia.setItemText(2, QCoreApplication.translate("Dialog", u"VF", None))
-
         self.label_modelo.setText(QCoreApplication.translate("Dialog", u"Modelo", None))
-        self.combo_modelo.setItemText(0, QCoreApplication.translate("Dialog", u"Elegir Familia", None))
-
         self.label_name.setText(QCoreApplication.translate("Dialog", u"Num", None))
         self.label_bi.setText(QCoreApplication.translate("Dialog", u"Base_inf", None))
         self.label_bs.setText(QCoreApplication.translate("Dialog", u"Base_sup", None))
@@ -280,7 +268,7 @@ class Ui_Dialog(object):
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Sup", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"I(nercia?)", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
-        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1\t    ", None)) # usa tab + 4 espacios( 1/2 tab) para coincidir, Aumenta el numero mostrado iterativamente
+        self.t1_name.setText(QCoreApplication.translate("Dialog", u"T1              ", None))
         self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Sum Altura", None))
         self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Sum Area", None))
         self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Sum Ponderado", None))

@@ -2,7 +2,8 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.agrega_trapecios_v2 import Ui_Dialog  # Import from the ui_files directory
+from ui_files.agrega_trapecios_v2_sinListas import Ui_Dialog  # Import from the ui_files directory
+from db_combobox import cargar_familias_modelos_db # Recupera set de familias y respectivos modelos de DB
 
 
 # QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
@@ -10,10 +11,6 @@ from ui_files.agrega_trapecios_v2 import Ui_Dialog  # Import from the ui_files d
         
 
 class MyDialog(QDialog):
-    # def __init__(self):
-    #     super().__init__()
-    #     self.ui = Ui_Dialog()  # Create an instance of the UI class
-    #     self.ui.setupUi(self)  # Set up the UI on the dialog window
         
     def __init__(self):
         super().__init__()
@@ -22,13 +19,39 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []  # Initialize dynamic layouts for row management
         self.historial_agregados = 0
 
+        ''' Inicia variables y conexiones '''
+        # Carga datos de familias/modelos de DB
+        self.family_model_mapping = cargar_familias_modelos_db()
+
         # Conecta boton que acepta agregar tuplas a func generate_layout()
         self.ui.btn_acpt_agregar.clicked.connect(self.generate_layout)
 
         # Conecta boton que aceptar eliminar tuplas func del_rows()
         self.ui.btn_acpt_eliminar.clicked.connect(self.del_rows)
 
+        # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
+        self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
 
+
+        ''' llena comboBoxes Familia/Modelo'''
+        # Usa variable iniciada en def__init__()... Siempre esta 'Elegir' como placeholder
+        self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
+        
+    
+    ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
+    def update_combo_modelo(self):
+        # Obtiene familia seleccionada
+        selected_family = self.ui.combo_familia.currentText()
+
+        # obtiene los modelos respectivos de la familia seleccionada
+        models = self.family_model_mapping.get(selected_family, [])
+
+        # Clear the combo_modelo and populate it with the new models
+        self.ui.combo_modelo.clear()
+        self.ui.combo_modelo.addItems(models)
+
+
+    ''' Genera de manera dinamica tuplas para trapecios '''
     def generate_layout(self):
         # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
         num_rows = self.ui.spin_cant_agregar.value()
@@ -173,6 +196,10 @@ if __name__ == "__main__":
     dialog = MyDialog()            # Create the dialog window
     dialog.show()                  # Show the dialog window
     sys.exit(app.exec())           # Start the application's event loop
+
+
+
+
 
 
 
