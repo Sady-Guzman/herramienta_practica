@@ -2,8 +2,9 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.agrega_trapecios_v2_sinListas import Ui_Dialog  # Import from the ui_files directory
-from db_combobox import cargar_familias_modelos_db # Recupera set de familias y respectivos modelos de DB
+from ui_files.herramienta_trapecios_v4 import Ui_Dialog  # Import from the ui_files directory
+from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones # Recupera set de familias y respectivos modelos de DB
+
 
 
 # QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
@@ -19,9 +20,11 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []  # Initialize dynamic layouts for row management
         self.historial_agregados = 0
 
-        ''' Inicia variables y conexiones '''
+        ''' >>>> Inicia variables y conexiones de elementos <<<< '''
+
         # Carga datos de familias/modelos de DB
         self.family_model_mapping = cargar_familias_modelos_db()
+
 
         # Conecta boton que acepta agregar tuplas a func generate_layout()
         self.ui.btn_acpt_agregar.clicked.connect(self.generate_layout)
@@ -32,11 +35,44 @@ class MyDialog(QDialog):
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
 
+        # Conecta btn con funcion para usar una pieza de catalogo en calculo
+        self.ui.btn_acpt_pieza.clicked.connect(self.aplicar_pieza_catalogo)
+
+        # agg btn para usar pieza temporal
+
+        # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
+        self.ui.combo_modelo.currentIndexChanged.connect(self.update_combo_secciones)
 
         ''' llena comboBoxes Familia/Modelo'''
         # Usa variable iniciada en def__init__()... Siempre esta 'Elegir' como placeholder
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
         
+    
+    
+    ''' en desarrollo, TIPOS DE SECCIONES PARA PIEZA '''
+    def update_combo_secciones(self):
+        familia_seleccionada = self.ui.combo_familia.currentText()
+        modelo_seleccionado = self.ui.combo_modelo.currentText()
+
+        tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado)
+        print(tipos_secciones)
+
+        # Extract values from the tuples and convert them to strings
+        tipos_secciones_str = [str(item[0]) for item in tipos_secciones]
+
+        self.ui.combo_tipo_seccion.clear()
+
+        if tipos_secciones:
+            print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
+            self.ui.combo_tipo_seccion.addItems(tipos_secciones_str)
+        else:
+            self.ui.combo_tipo_seccion.addItems(["Sin secciones disponibles"])
+
+
+
+
+    
+    
     
     ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
     def update_combo_modelo(self):
@@ -46,7 +82,6 @@ class MyDialog(QDialog):
         # obtiene los modelos respectivos de la familia seleccionada
         models = self.family_model_mapping.get(selected_family, [])
 
-        # Clear the combo_modelo and populate it with the new models
         self.ui.combo_modelo.clear()
         self.ui.combo_modelo.addItems(models)
 
@@ -67,6 +102,7 @@ class MyDialog(QDialog):
         # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
         # self.ui.layout_nuevas_row.addStretch()
 
+    ''' >>>> Manipula layouts dinamicos y layout contenedor <<<< '''
 
     ''' genera nuevo Hlayout y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor'''
     def add_rows(self, index):
@@ -190,16 +226,34 @@ class MyDialog(QDialog):
                 self.delete_layout_widgets(item.layout())  # Recursive call to delete nested layouts
 
 
+    ''' >>>> Usa pieza de catalogo seleccionada con comboBoxes <<<< '''
+
+    ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
+    def aplicar_pieza_catalogo(self):
+        # Determina la pieza seleccionada
+        pieza_familia = self.ui.combo_familia.currentText()
+        pieza_modelo = self.ui.combo_modelo.currentText()
+        print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo) # Debug
+
+        # Obtiene informacion de la pieza desde la DB
+        info_pieza = db_obtener_info_pieza(pieza_familia, pieza_modelo)
+
+
+
+        print("DEBUG> Cantidad de trapecios: ") # Debug
+
+    
+    ''' Determina la cantidad de layouts dinamicos a agregar o eliminar de layout contenedor para pieza catalogo '''
+    def determinar_layouts(self, index):
+        return
+
+
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)  # Create the application
     dialog = MyDialog()            # Create the dialog window
     dialog.show()                  # Show the dialog window
     sys.exit(app.exec())           # Start the application's event loop
-
-
-
-
-
-
 
