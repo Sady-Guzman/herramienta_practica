@@ -198,34 +198,37 @@ class MyDialog(QDialog):
         print("DEBUG del_rows() > valor de Index: ", index)
 
         # Determine the number of rows to delete, using the spinner or the passed index
-        num_rows = min(index, self.historial_agregados)  # Ensure it doesn’t exceed the available rows
+        # Determina cuantos borrar, una MIN para asegurar no intentar borrar mas de lo que existe
+        num_rows = min(index, self.historial_agregados)
         if num_rows == 0:
             return
 
         print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
 
-        ''' Remove the vertical stretcher at the end temporarily '''
+        ''' Elimina Vertical stretcher temporalmente '''
         if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
             item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
             del item  # Remove the stretcher
 
-        ''' Delete the specified number of rows and update dynamic_layouts '''
+
+        ''' Itera para eliminar layouts y referencias a layouts'''
         for _ in range(num_rows):
             if self.ui.layout_nuevas_row.count() > 0:
                 last_item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
 
-                # Check if it's a layout, and delete its widgets
+
+                # Comprueba que el item sea un layout (Pero siempre deberia ser)
                 if last_item.layout():
-                    self.delete_layout_widgets(last_item.layout())  # Delete widgets recursively from the layout
-                del last_item  # Delete the layout
+                    self.delete_layout_widgets(last_item.layout())  # Elimina los widgets dentro del layout primero
+                del last_item  # Elimina layout
 
-                # Remove the layout reference from dynamic_layouts
-                self.dynamic_layouts.pop()  # Remove the last layout reference
+                # Elimina referencia del layout dinamico
+                self.dynamic_layouts.pop()  # elimina el mas reciente
 
-        ''' Decrease the counter for dynamic layouts '''
+        # Se disminuye contador de dinamicos existes
         self.historial_agregados -= num_rows
 
-        ''' Re-insert the vertical stretcher at the bottom of the layout '''
+        # Vuelve a agregar stretcher al final para pegar LineEdits a borde superior
         self.ui.layout_nuevas_row.addStretch()
 
     
@@ -243,8 +246,6 @@ class MyDialog(QDialog):
 
     ''' >>>> Usa pieza de catalogo seleccionada con comboBoxes <<<< '''
 
-    
-        
 
     ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
     ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
