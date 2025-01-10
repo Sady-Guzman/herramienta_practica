@@ -164,7 +164,18 @@ class MyDialog(QDialog):
         self.ui.layout_nuevas_row.addStretch()
 
         # Store the layout reference to avoid duplicates
-        self.dynamic_layouts.append(layout)
+        # self.dynamic_layouts.append(layout) # Antiguo
+
+        self.dynamic_layouts.append({
+            "bi_line": bi_line,
+            "bs_line": bs_line,
+            "altura_line": altura_line,
+            "area_line": area_line,
+            "cg_line": cg_line,
+            "inercia_line": inercia_line,
+            "op_line": op_line,
+        })
+        
         # self.historial_agregados.append(name_label) # Originalmente se guardaba informacion de Label de cada nueva row, Ahora solo se usa un contador += 1
         self.historial_agregados += 1
 
@@ -184,49 +195,37 @@ class MyDialog(QDialog):
 
     ''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
     def del_rows(self, index):
-
         print("DEBUG del_rows() > valor de Index: ", index)
 
-        # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-        # num_rows = self.ui.spin_cant_eliminar.value()
-        num_rows = index
-
-        # Asegura que la cantidad de layouts dinamicos que se van a intentar borrar no superen a la cantidad existente
-        # Si usa boton mientras spin=0, sale para evitar bug en contador dinamico
-        if num_rows > self.historial_agregados:
-            num_rows = self.historial_agregados
-        elif num_rows == 0:
+        # Determine the number of rows to delete, using the spinner or the passed index
+        num_rows = min(index, self.historial_agregados)  # Ensure it doesn’t exceed the available rows
+        if num_rows == 0:
             return
-        
-        
-        
-        print("debug_print> SpinBox Cantidad a eliminar value: ", num_rows) # Debug
 
-        
-        ''' Elimina stretcher vertical en ultima posicion, se inserta nuevamente al final de proceso'''
-        if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count()-1).spacerItem():
-            # item = ultimo que se encuentra (vertical stretcher)
-            # Lo elimina mientras agrega nuevas tuplas, Lo vuelve a ingresar despues.
-            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count()-1)
-            del item
+        print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
 
+        ''' Remove the vertical stretcher at the end temporarily '''
+        if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+            del item  # Remove the stretcher
 
-        ''' Itera por los elementos de layout contenedor 'layout_nuevas_row' eliminando ultimos agregados'''
-        # Usa funcion 'delete_layout_widgets()
+        ''' Delete the specified number of rows and update dynamic_layouts '''
         for _ in range(num_rows):
-            # Elimina la ultima tupla (layout) del layout contenedor
             if self.ui.layout_nuevas_row.count() > 0:
                 last_item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-                
-                # comprueba que sea un layout (siempre deberia serlo) y usa funcion para eliminar iterando por sus elementos
-                if last_item.layout():
-                    self.delete_layout_widgets(last_item.layout())
-                del last_item  # elimina layout
 
-        ''' disminuye el contador de layouts que existen dinamicamente '''
+                # Check if it's a layout, and delete its widgets
+                if last_item.layout():
+                    self.delete_layout_widgets(last_item.layout())  # Delete widgets recursively from the layout
+                del last_item  # Delete the layout
+
+                # Remove the layout reference from dynamic_layouts
+                self.dynamic_layouts.pop()  # Remove the last layout reference
+
+        ''' Decrease the counter for dynamic layouts '''
         self.historial_agregados -= num_rows
 
-        ''' se vuelve a insertar vertical stretcher en posicion inferior de layout vertical '''
+        ''' Re-insert the vertical stretcher at the bottom of the layout '''
         self.ui.layout_nuevas_row.addStretch()
 
     
@@ -285,21 +284,38 @@ class MyDialog(QDialog):
 
         ''' Loop to create the frames '''
         for i in range(cantidad_trapecios):
-            self.add_rows(self.historial_agregados + 1)  # Starts from trapecio 2 (T2)
-        # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
-        # self.ui.layout_nuevas_row.addStretch()
-
+            self.add_rows(self.historial_agregados + 1)
+        
+        
     def aplicar_dimensiones_pieza(self, pieza_trapecios):
-        
-        # Print para DEBUG
-        if pieza_trapecios:
-            for trapecio in pieza_trapecios:
-                print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
-                    f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
-        
-        
-        
-        return 1
+        # Check if the number of trapecios matches the layouts
+        if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
+            print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+            return
+
+        # Print for debugging
+        for trapecio in pieza_trapecios:
+            print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
+                f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
+                f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
+
+        # Iterate over layouts and update widgets
+        for i, trapecio in enumerate(pieza_trapecios):
+            layout = self.dynamic_layouts[i]
+
+            # Check if the widget is valid (exists)
+            if not layout["bi_line"]:  # You can add similar checks for other widgets if necessary
+                print(f"Error: Widget for layout {i} is missing or deleted.")
+                continue
+
+            # Assign values to QLineEdit widgets
+            layout["bi_line"].setText(f"{trapecio[3]:.2f}")  # Base Inferior
+            layout["bs_line"].setText(f"{trapecio[4]:.2f}")  # Base Superior
+            layout["altura_line"].setText(f"{trapecio[5]:.2f}")  # Altura
+            layout["area_line"].setText("")  # Placeholder
+            layout["cg_line"].setText("")  # Placeholder
+            layout["inercia_line"].setText("")  # Placeholder
+            layout["op_line"].setText("")  # Placeholder
     
 
 
