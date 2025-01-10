@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.herramienta_trapecios_v4 import Ui_Dialog  # Import from the ui_files directory
+from ui_files.herramienta_trapecios_v5 import Ui_Dialog  # Import from the ui_files directory
 from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, db_get_datos_trapecios, db_get_cant_trapecios, db_get_id_pieza # Recupera set de familias y respectivos modelos de DB
 
 
@@ -12,7 +12,7 @@ from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, d
 
 
 class MyDialog(QDialog):
-        
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog()  # Create an instance of the UI class
@@ -29,19 +29,24 @@ class MyDialog(QDialog):
         # Conecta boton que acepta agregar tuplas a func generate_layout()
         self.ui.btn_acpt_agregar.clicked.connect(self.generate_layout)
 
-        # Conecta boton que aceptar eliminar tuplas func del_rows()
-        self.ui.btn_acpt_eliminar.clicked.connect(self.del_rows)
+
+        self.ui.btn_acpt_eliminar.clicked.connect(
+            lambda: self.confirmar_accion(self.ui.spin_cant_eliminar.value())
+        )
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
 
         # Conecta btn con funcion para usar una pieza de catalogo en calculo
-        self.ui.btn_acpt_pieza.clicked.connect(self.aplicar_pieza_catalogo)
+        self.ui.btn_acpt_pieza.clicked.connect(lambda: self.aplicar_pieza_catalogo(1))
 
         # agg btn para usar pieza temporal
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_modelo.currentIndexChanged.connect(self.update_combo_secciones)
+
+        # Cambioa tipo de seccion en layouts dinamicos
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza_catalogo(0))
 
         ''' llena comboBoxes Familia/Modelo'''
         # Usa variable iniciada en def__init__()... Siempre esta 'Elegir' como placeholder
@@ -98,7 +103,7 @@ class MyDialog(QDialog):
 
         ''' Loop to create the frames '''
         for i in range(num_rows):
-            self.add_rows(self.historial_agregados + 2)  # Starts from trapecio 2 (T2)
+            self.add_rows(self.historial_agregados + 1)  # Starts from trapecio 2 (T2)
         # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
         # self.ui.layout_nuevas_row.addStretch()
 
@@ -163,11 +168,28 @@ class MyDialog(QDialog):
         # self.historial_agregados.append(name_label) # Originalmente se guardaba informacion de Label de cada nueva row, Ahora solo se usa un contador += 1
         self.historial_agregados += 1
 
+    def confirmar_accion(self, index):
+        # Pide confirmacion de usuario antes de borrar layouts
+        reply = QMessageBox.question(self, 'Confirmar', 
+                                    "Confirmar acción?", 
+                                    QMessageBox.Yes  | QMessageBox.No, 
+                                    QMessageBox.No)
+        # Opcion si/no, Y opcion por defecto es NO
+        if reply == QMessageBox.No:
+            return
+        
+        print("DEBUG confirmar_accion() > valor de Index: ", index)
+
+        self.del_rows(index)
 
     ''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
     def del_rows(self, index):
+
+        print("DEBUG del_rows() > valor de Index: ", index)
+
         # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-        num_rows = self.ui.spin_cant_eliminar.value()
+        # num_rows = self.ui.spin_cant_eliminar.value()
+        num_rows = index
 
         # Asegura que la cantidad de layouts dinamicos que se van a intentar borrar no superen a la cantidad existente
         # Si usa boton mientras spin=0, sale para evitar bug en contador dinamico
@@ -176,13 +198,7 @@ class MyDialog(QDialog):
         elif num_rows == 0:
             return
         
-        # Pide confirmacion de usuario antes de borrar layouts
-        reply = QMessageBox.question(self, 'Confirmar', 
-                                    "Confirmar: Eliminar cantidad de tuplas seleccionadas?", 
-                                    QMessageBox.Yes  | QMessageBox.No, 
-                                    QMessageBox.No)
-        if reply == QMessageBox.No:
-            return  # escapa con NO
+        
         
         print("debug_print> SpinBox Cantidad a eliminar value: ", num_rows) # Debug
 
@@ -228,37 +244,64 @@ class MyDialog(QDialog):
 
     ''' >>>> Usa pieza de catalogo seleccionada con comboBoxes <<<< '''
 
+    
+        
+
     ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
-    def aplicar_pieza_catalogo(self):
+    ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
+    def aplicar_pieza_catalogo(self, tipo_boton):
         # Determina la pieza seleccionada
         pieza_familia = self.ui.combo_familia.currentText()
         pieza_modelo = self.ui.combo_modelo.currentText()
         pieza_seccion = self.ui.combo_tipo_seccion.currentText()
         print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion) # Debug
 
+        # Obtiene Primary Key de la pieza (ID)
         pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
         
+        # Usa tabla Parametros de DB
         trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion)
-        print("DEBUG> Cantidad de trapecios: ") # Debug
 
-        # Obtiene informacion de la pieza desde la DB
+        # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
         pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion)
 
+        # iguala la cantidad de layouts dinamicos a la cantidad necesaria
+        self.ajustar_layouts_dinamicos(trapecios_necesarios, tipo_boton)
+
+        # Aplicar dimensione de trapecios a campos        
+        self.aplicar_dimensiones_pieza(pieza_trapecios)
+
+        
+
+
+    def ajustar_layouts_dinamicos(self, cantidad_trapecios, tipo_boton):
+        # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
+        # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
+        print("DEBUG - ajustar_layouts_dinamicos > valor cantidad_trapecios: ", cantidad_trapecios)
+        if tipo_boton == 0:
+            self.del_rows(99) # No pide confirmacion
+        else: 
+            self.confirmar_accion(99) # Pide confirmacion
+
+        ''' Loop to create the frames '''
+        for i in range(cantidad_trapecios):
+            self.add_rows(self.historial_agregados + 1)  # Starts from trapecio 2 (T2)
+        # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
+        # self.ui.layout_nuevas_row.addStretch()
+
+    def aplicar_dimensiones_pieza(self, pieza_trapecios):
+        
         # Print para DEBUG
         if pieza_trapecios:
-            print(f"Trapecios para la pieza {pieza_familia} - {pieza_modelo} con tipo de sección {pieza_seccion}:")
             for trapecio in pieza_trapecios:
                 print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
                     f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
-        else:
-            print(f"No se encontraron trapecios para la pieza {pieza_familia} - {pieza_modelo} con tipo de sección {pieza_seccion}.")
-
         
-
+        
+        
+        return 1
     
-    ''' Determina la cantidad de layouts dinamicos a agregar o eliminar de layout contenedor para pieza catalogo '''
-    def determinar_layouts(self, index):
-        return
+
 
 
 

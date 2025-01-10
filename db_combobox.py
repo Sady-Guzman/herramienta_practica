@@ -108,22 +108,22 @@ def db_get_cant_trapecios(pieza_id, seccion):
     print("pieza_id = " ,pieza_id)
     pieza_id_str = pieza_id[0]
     print("pieza_id_Str = ", pieza_id_str)
+
     
     # Query to get the trapecios from the trapecios table based on pieza_id and tipo_seccion
     cursor.execute("""
-        SELECT * FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ?
+        SELECT trapecios FROM parametros WHERE pieza_id = ? AND tipo_seccion = ?
     """, (pieza_id_str, seccion))
 
     # Fetch all matching trapecios
-    trapecios = cursor.fetchall()
+    cant_trapecios = cursor.fetchone()
+    cant_trapecios = cant_trapecios[0]
 
     # Close the database connection
     conn.close()
 
-    
-    
-
-    return trapecios
+    print("DEBUG get_cant_trapecios > Cantidad de trapecios en seccion: ", cant_trapecios)
+    return cant_trapecios
 
 def db_get_id_pieza(familia, modelo):
     # Connect to the database
