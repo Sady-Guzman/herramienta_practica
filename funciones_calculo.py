@@ -152,3 +152,14 @@ def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
     return resultados
 
 # 0,002180267 ; 0,000585973 ; 0,000164640 ; 0,000585973 ; 0,002180267
+
+def calcular_altura_acumulada(trapecios):
+    # trapecio[5] # 5: Posicion altura
+
+    altura_acumulada = 0
+
+    for i in range(len(trapecios)):
+            altura_acumulada += trapecios[i][5]
+    
+    print("Altura acumulada: ", altura_acumulada)
+    return altura_acumulada
