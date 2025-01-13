@@ -45,9 +45,9 @@ def calcular_inercia(trapecios, target):
     return inercia
 
 
-def calculate_formula(trapecios):
+def calcular_centro_gravedad(trapecios):
     '''
-        FORMULA HOJA DE CALCULU JOAQUIN
+        --> FORMULA HOJA DE CALCULU JOAQUIN
 
         IF(D4≤C4;E4*(2*MAX(D4;C4)+MIN(C4;D4))÷(3*(D4+C4));E4-E4*(2*MAX(D4;C4)+MIN(C4;D4))÷(3*(D4+C4)))+SUM($E$3:E3)
         

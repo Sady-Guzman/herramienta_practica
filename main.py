@@ -287,7 +287,7 @@ class MyDialog(QDialog):
         #     print("LLAMANDO cg() con i = ", i)
         #     print("///////////////////////////////////////////////////////")
         #     test(pieza_trapecios, i) # Centro de Gravedad
-        resultados = calculate_formula(pieza_trapecios)
+        resultados = calcular_centro_gravedad(pieza_trapecios)
         print("Resultados finales: ", resultados)
 
         
