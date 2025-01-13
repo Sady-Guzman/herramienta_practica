@@ -4,6 +4,8 @@ from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLa
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from ui_files.herramienta_trapecios_v5 import Ui_Dialog  # Import from the ui_files directory
 from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, db_get_datos_trapecios, db_get_cant_trapecios, db_get_id_pieza # Recupera set de familias y respectivos modelos de DB
+from funciones_calculo import *
+
 
 
 
@@ -256,6 +258,10 @@ class MyDialog(QDialog):
         pieza_seccion = self.ui.combo_tipo_seccion.currentText()
         print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion) # Debug
 
+        if not pieza_modelo:
+            print("Debug: No se selecciona ninguna pieza/modelo")
+            return
+        
         # Obtiene Primary Key de la pieza (ID)
         pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
         
@@ -270,6 +276,25 @@ class MyDialog(QDialog):
 
         # Aplicar dimensione de trapecios a campos        
         self.aplicar_dimensiones_pieza(pieza_trapecios)
+
+
+        # Asignar valores calculados
+        # valor_area = calcular_area(pieza_trapecios, 2)
+        # valor_inercia = calcular_inercia(pieza_trapecios, 3)
+        # valor_centro_gravedad_sup = calcular_centro_gravedad_sup(pieza_trapecios)
+        # for i in range(5):
+        #     print("///////////////////////////////////////////////////////")
+        #     print("LLAMANDO cg() con i = ", i)
+        #     print("///////////////////////////////////////////////////////")
+        #     test(pieza_trapecios, i) # Centro de Gravedad
+        resultados = calculate_formula(pieza_trapecios)
+        print("Resultados finales: ", resultados)
+
+        
+        
+        # valores_calculados = [valor_area, valor_inercia]
+        # self.aplicar_valores_calculados(valores_calculados)
+
 
         
 
@@ -317,6 +342,11 @@ class MyDialog(QDialog):
             layout["cg_line"].setText("")  # Placeholder
             layout["inercia_line"].setText("")  # Placeholder
             layout["op_line"].setText("")  # Placeholder
+    
+    # def aplicar_valores_calculados(self, valores):
+    #     print("debug aplicar_valores > Valores en dict: ", valores)
+
+
     
 
 

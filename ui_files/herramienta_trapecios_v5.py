@@ -253,7 +253,7 @@ class Ui_Dialog(object):
         self.label_altura.setText(QCoreApplication.translate("Dialog", u"Altura", None))
         self.label_area.setText(QCoreApplication.translate("Dialog", u"Area", None))
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Sup", None))
-        self.label_inercia.setText(QCoreApplication.translate("Dialog", u"I(nercia?)", None))
+        self.label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
         self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Sum Altura", None))
         self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Sum Area", None))
