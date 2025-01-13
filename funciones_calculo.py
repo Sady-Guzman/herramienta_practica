@@ -6,43 +6,53 @@ bs = Base superior
 h = Altura
 '''
 
-def calcular_area(trapecios, target):
+def calcular_area(trapecios):
     ''' ( (base_inf + base_sup) * Altura ) / 2'''
+    resultados = []
 
-    b_i = trapecios[target][3]
-    b_s = trapecios[target][4]
-    h = trapecios[target][5]
+    for i in range(len(trapecios)):
+        b_i = trapecios[i][3]
+        b_s = trapecios[i][4]
+        h = trapecios[i][5]
 
-    area = ((b_i + b_s) * h) / 2
+        area = ((b_i + b_s) * h) / 2
+        
+        print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+        print("AREA: ", area)
 
-    print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-    print("AREA: ", area)
-    
-    return 1
+        resultados.append(area)
 
-def calcular_inercia(trapecios, target):
+    print("Areas calculadas: ", resultados)
+    return resultados
+
+def calcular_inercia(trapecios):
     ''' (altura^3) * ((MAX(bi,bs)^2)+4*bi*bs+(MIN(bi,bs)^2)) / (36*(bi+bs))'''
 
-    b_i = trapecios[target][3]
-    b_s = trapecios[target][4]
-    h = trapecios[target][5]
+    resultados = []
 
-    inercia = (h**3) * ((max(b_i,b_s)**2)+4*b_i*b_s+(min(b_i,b_s)**2)) / (36*(b_i+b_s))
+    for i in range(len(trapecios)):
+        b_i = trapecios[i][3]
+        b_s = trapecios[i][4]
+        h = trapecios[i][5]
 
-    h_cubed = h ** 3
+        h_cubed = h ** 3
     
-    # Calculating the max, min, and sum of the bases
-    max_base = max(b_i, b_s)
-    min_base = min(b_i, b_s)
-    sum_bases = b_i + b_s
-    
-    # Applying the formula
-    result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
+        # pre-calcular max y min de bases de trapecio
+        max_base = max(b_i, b_s)
+        min_base = min(b_i, b_s)
+        sum_bases = b_i + b_s
+        
+        # calculo final
+        result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
 
-    print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-    print("Inercia: ", result)
+        print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+        print("Inercia: ", result)
 
-    return inercia
+        resultados.append(result)
+
+
+    print("Valores lista Inercia: ", resultados)
+    return resultados
 
 
 def calcular_centro_gravedad(trapecios):
@@ -89,4 +99,56 @@ def calcular_centro_gravedad(trapecios):
     print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
     print(f"Debug calc_Cg -> Trapezoid {trapecio[0]} - Resultado: {resultado:.7f}") # 7 decimales
     
+    print("Resultados CG's: ", resultados)
     return resultados
+
+
+def calcular_suma_areas(areas):
+    suma_areas = 0
+
+    for i in range(len(areas)):
+        suma_areas += areas[i]
+    print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
+    
+    return suma_areas
+
+def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
+    '''
+        =+SUMPRODUCT(F3:F7;G3:G7)/F9
+
+        Columnas -> F: Area, G: Centro Gravedad, (F9: Suma de todas las areas)
+    '''
+
+    resultado = 0
+
+    for i in range(len(areas)):
+        resultado += areas[i] * centros_gravedad[i]
+    
+    resultado = resultado / suma_areas
+
+    print("Resultado suma ponderada: ", resultado)
+    return resultado
+
+
+
+def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
+    '''
+        =+H4+F4*(G4-$G$9)^2
+
+        Columnas ->
+        H: Inercias
+        F: Areas
+        G: Centros de Gravedad
+        $G$9: Producto ponderado
+    '''
+
+    resultados = []
+
+    for i in range(len(areas)):
+        result = inercias[i] + (areas[i] * (centros_gravedad[i] - producto_ponderado) ** 2)
+        resultados.append(result)
+
+    print("Resultados OP: ", resultados)
+    return resultados
+
+# 0,002180267 ; 0,000585973 ; 0,000164640 ; 0,000585973 ; 0,002180267

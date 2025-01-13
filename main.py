@@ -278,18 +278,18 @@ class MyDialog(QDialog):
         self.aplicar_dimensiones_pieza(pieza_trapecios)
 
 
-        # Asignar valores calculados
-        # valor_area = calcular_area(pieza_trapecios, 2)
-        # valor_inercia = calcular_inercia(pieza_trapecios, 3)
-        # valor_centro_gravedad_sup = calcular_centro_gravedad_sup(pieza_trapecios)
-        # for i in range(5):
-        #     print("///////////////////////////////////////////////////////")
-        #     print("LLAMANDO cg() con i = ", i)
-        #     print("///////////////////////////////////////////////////////")
-        #     test(pieza_trapecios, i) # Centro de Gravedad
-        resultados = calcular_centro_gravedad(pieza_trapecios)
-        print("Resultados finales: ", resultados)
+        '''   Funciones de calculo  '''
+        ''' Area, Centro de Gravedad, Inercia, Sumatoria area, Suma Producto (area, Cg / SUM(area)), OP '''
+        # Calcula cada variable
+        valores_areas = calcular_area(pieza_trapecios)
+        valores_inercia = calcular_inercia(pieza_trapecios)
+        valores_cg = calcular_centro_gravedad(pieza_trapecios)
+        suma_areas = calcular_suma_areas(valores_areas)
+        producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
+        calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
+        # Asigna valores a LineEdits
+        # func()
         
         
         # valores_calculados = [valor_area, valor_inercia]
