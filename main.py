@@ -331,9 +331,9 @@ class MyDialog(QDialog):
                 continue
 
             # Assign values to QLineEdit widgets
-            layout["bi_line"].setText(f"{trapecio[3]:.2f}")  # Base Inferior
-            layout["bs_line"].setText(f"{trapecio[4]:.2f}")  # Base Superior
-            layout["altura_line"].setText(f"{trapecio[5]:.2f}")  # Altura
+            layout["bi_line"].setText(f"{trapecio[3]:.3f}")  # Base Inferior
+            layout["bs_line"].setText(f"{trapecio[4]:.3f}")  # Base Superior
+            layout["altura_line"].setText(f"{trapecio[5]:.3f}")  # Altura
             layout["area_line"].setText("")  # Placeholder
             layout["cg_line"].setText("")  # Placeholder
             layout["inercia_line"].setText("")  # Placeholder
