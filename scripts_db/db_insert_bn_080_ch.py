@@ -9,7 +9,7 @@ cursor.execute("PRAGMA foreign_keys = ON;")
 
 # Data to insert
 piezas_data = [
-    ("BN", "123"),  # Add more rows here as needed
+    ("BN", "080_CH"),  # Add more rows here as needed
 ]
 
 parametros_data = [
@@ -17,11 +17,11 @@ parametros_data = [
 ]
 
 trapecios_data = [
-    (1, 9, 1.530, 1.530, 0.200), # En jacena el 9no trapecio es in situ --->  Crear Campo para especificar material/inSitu o Tabla separada para trapecios que no son de Prefabricado
-    (1, 8, 1.530, 1.530, 0.050), # (tipo_seccion, posicion, base_inf, base_sup, altura)
-    (1, 7, 0.530, 1.530, 0.060),
-    (1, 6, 0.150, 0.530, 0.120),
-    (1, 5, 0.150, 0.150, 0.700),
+    (1, 9, 1.170, 1.170, 0.200), # En jacena el 9no trapecio es in situ --->  Crear Campo para especificar material/inSitu o Tabla separada para trapecios que no son de Prefabricado
+    (1, 8, 1.170, 1.170, 0.072), # (tipo_seccion, posicion, base_inf, base_sup, altura)
+    (1, 7, 0.530, 1.170, 0.038),
+    (1, 6, 0.150, 0.530, 0.100),
+    (1, 5, 0.150, 0.150, 0.290),
     (1, 4, 0.320, 0.150, 0.100),
     (1, 3, 0.620, 0.320, 0.050),
     (1, 2, 0.620, 0.620, 0.125),
