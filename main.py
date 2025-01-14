@@ -359,6 +359,9 @@ class MyDialog(QDialog):
         ''' Obtiene valores de dimensiones '''
         valores_dimensiones_dinamicas = []
 
+        if not self.dynamic_layouts:
+            return
+
         for layout in self.dynamic_layouts:
             bi = layout["bi_line"].text()
             bs = layout["bs_line"].text()

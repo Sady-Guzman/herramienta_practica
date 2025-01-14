@@ -1,7 +1,7 @@
--- dependencias instaladas para herramientas
+-- dependencias instaladas
 
 - Numpy
-- PySide6
+- PySide6 UI
 - UI construida con QTdesigner
 - Enpaquetado con Pyinstaller
-- Desarrollado usando un Python VEnv
+- Desarrollado usando Python Virtual Enviroment
