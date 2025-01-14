@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.herramienta_trapecios_v5 import Ui_Dialog  # Import from the ui_files directory
+from ui_files.herramienta_trapecios_v6 import Ui_Dialog  # Import from the ui_files directory
 from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, db_get_datos_trapecios, db_get_cant_trapecios, db_get_id_pieza # Recupera set de familias y respectivos modelos de DB
 from funciones_calculo import *
 
@@ -35,6 +35,8 @@ class MyDialog(QDialog):
         self.ui.btn_acpt_eliminar.clicked.connect(
             lambda: self.confirmar_accion(self.ui.spin_cant_eliminar.value())
         )
+
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: self.calcular_nuevos_valores())
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
@@ -148,6 +150,13 @@ class MyDialog(QDialog):
         inercia_line.setObjectName(f"t{index}_inercia")
         op_line.setObjectName(f"t{index}_op")
 
+        ''' Make specific QLineEdits read-only '''
+        # Resultados calculos
+        area_line.setReadOnly(True)
+        cg_line.setReadOnly(True)
+        inercia_line.setReadOnly(True)
+        op_line.setReadOnly(True)
+
         ''' Add the widgets to the layout '''
         layout.addWidget(name_label)
         layout.addWidget(bi_line)
@@ -189,7 +198,7 @@ class MyDialog(QDialog):
                                     QMessageBox.No)
         # Opcion si/no, Y opcion por defecto es NO
         if reply == QMessageBox.No:
-            return
+            return 0
         
         print("DEBUG confirmar_accion() > valor de Index: ", index)
 
@@ -291,7 +300,6 @@ class MyDialog(QDialog):
 
         self.aplicar_valores_calculados(valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
-
         
 
 
@@ -302,7 +310,9 @@ class MyDialog(QDialog):
         if tipo_boton == 0:
             self.del_rows(99) # No pide confirmacion
         else: 
-            self.confirmar_accion(99) # Pide confirmacion
+            confirmacion = self.confirmar_accion(99) # Pide confirmacion 
+            if confirmacion == 0:
+                return
 
         ''' Loop to create the frames '''
         for i in range(cantidad_trapecios):
@@ -338,6 +348,11 @@ class MyDialog(QDialog):
             layout["cg_line"].setText("")  # Placeholder
             layout["inercia_line"].setText("")  # Placeholder
             layout["op_line"].setText("")  # Placeholder
+
+    ''' Lee valores de todos los LineEdits dinamicos existentes y calcula nuevo resultado de area,I,cg,OP '''
+    def calcular_nuevos_valores():
+        
+        return 
 
     ''' Asignar valores calculados en LineEdits dinamicos '''
     
