@@ -13,11 +13,11 @@ piezas_data = [
 ]
 
 parametros_data = [
-    (1, 4),  # (tipo_seccion, trapecios)
+    (1, 9),  # (tipo_seccion, trapecios)
 ]
 
 trapecios_data = [
-    (1, 4, 0.200, 0.168, 0.190), # (tipo_seccion, posicion, base_inf, base_sup, altura)
+    (1, 1, 0.200, 0.168, 0.190), # (tipo_seccion, posicion, base_inf, base_sup, altura)
     (1, 3, 0.400, 0.400, 0.103),
     (1, 2, 0.160, 0.200, 0.192),
     (1, 1, 0.100, 0.160, 0.015)

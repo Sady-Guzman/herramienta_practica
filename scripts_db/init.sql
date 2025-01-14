@@ -11,7 +11,14 @@
 -- table parametros: informacion de cada pieza, cantidad de trapecios y cortes
 -- table trapecios: (b_s, b_i, h) de cada seccion que forman una pieza
 
+--  para mejor output en terminal sqlite
+-- .mode table
+-- .headers on
 
+-- To export
+-- .output results.txt
+-- SELECT * FROM trapecios;
+-- .output stdout
 
 CREATE TABLE IF NOT EXISTS piezas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
