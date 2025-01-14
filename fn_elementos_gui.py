@@ -165,16 +165,11 @@ def delete_layout_widgets(self, layout):
 
 
 ''' hace gen/del de layouts dinamicamente para hacerlos coincidir con la cantidad de trapecios que usa la pieza '''
-def ajustar_layouts_dinamicos(self, cantidad_trapecios, tipo_boton):
+def ajustar_layouts_dinamicos(self, cantidad_trapecios):
     # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
     # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
     print("DEBUG - ajustar_layouts_dinamicos > valor cantidad_trapecios: ", cantidad_trapecios)
-    # if tipo_boton == 0:
     del_rows(self, 99) # No pide confirmacion
-    # else: 
-    #     confirmacion = self.confirmar_accion(99) # Pide confirmacion 
-    #     if confirmacion == 0:
-    #         return
 
     ''' Loop to create the frames '''
     for i in range(cantidad_trapecios):
@@ -185,7 +180,7 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios, tipo_boton):
 
 ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
 ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
-def aplicar_pieza_catalogo(self, tipo_boton):
+def aplicar_pieza_catalogo(self):
     # Determina la pieza seleccionada
     pieza_familia = self.ui.combo_familia.currentText()
     pieza_modelo = self.ui.combo_modelo.currentText()
@@ -208,7 +203,7 @@ def aplicar_pieza_catalogo(self, tipo_boton):
 
     ''' asigna valores fijos (dimensiones) a layouts dinamicos '''
     # iguala la cantidad de layouts dinamicos a la cantidad necesaria
-    ajustar_layouts_dinamicos(self, trapecios_necesarios, tipo_boton)
+    ajustar_layouts_dinamicos(self, trapecios_necesarios)
 
     # Aplicar dimensione de trapecios a campos        
     aplicar_dimensiones_pieza(self, pieza_trapecios)

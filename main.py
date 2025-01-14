@@ -42,8 +42,8 @@ class MyDialog(QDialog):
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self))
 
-        # Conecta btn con funcion para usar una pieza de catalogo en calculo
-        self.ui.btn_acpt_pieza.clicked.connect(lambda: aplicar_pieza_catalogo(self, 1))
+        # Conecta btn con funcion para usar una pieza de catalogo en calculo (POBLAR COMBO FAMILIA w/ CATALOGO)
+        self.ui.btn_acpt_pieza.clicked.connect(lambda: poblar_combo_familia(self)) # poblar combo catalogo
 
         # agg btn para usar pieza temporal
 
@@ -51,12 +51,7 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self))
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self, 0))
-
-        ''' llena comboBoxes Familia/Modelo'''
-        ''' Cambiar a funcion que se llama despues de hacer click en btn usar catalogo '''
-        # Usa variable iniciada en def__init__()... Siempre esta 'Elegir' como placeholder
-        self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self))
 
 
 if __name__ == "__main__":

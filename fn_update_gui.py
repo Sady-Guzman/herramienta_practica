@@ -7,6 +7,12 @@ from fn_database import *
 
 ''' ======================== Pobla conetenido de comboboxes ================================== '''
 
+''' Poblar combobox famila '''
+def poblar_combo_familia(self):
+    self.ui.combo_familia.clear()
+    self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
+
+
 ''' TIIPOS DE SECCIONES PARA PIEZA '''
 def update_combo_secciones(self):
     familia_seleccionada = self.ui.combo_familia.currentText()
