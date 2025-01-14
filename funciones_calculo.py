@@ -1,9 +1,26 @@
 import numpy as np
+from fn_update_gui import aplicar_valores_calculados
 
 ''' 
-bi = Base inferior
-bs = Base superior
-h = Altura
+    Funciones para calcular propiedades en base a dimensiones de piezas
+    Como: Area, Centro de Gravedad, Inercia, Sumatorias de valores para todos los trapecios, Producto ponderado, C.G. Pieza
+'''
+
+''' 
+    bi = Base inferior
+    bs = Base superior
+    h = Altura
+
+    
+    En lista (de listas) que es Trapecios[] se tiene que:
+    esta lista se saca de tuplas de DB catalogo.db en tabla Trapecios
+    [0]: id
+    [1]: seccion
+    [2]: pos
+    [3]: bi
+    [4]: bs
+    [5]: h
+    [6]: FK pieza_id
 '''
 
 def calcular_area(trapecios):
@@ -116,6 +133,7 @@ def calcular_suma_areas(areas):
     
     return suma_areas
 
+# Se usa en calculo centro gravedad pieza
 def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
     '''
         =+SUMPRODUCT(F3:F7;G3:G7)/F9
@@ -134,7 +152,10 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
     return resultado
 
 
-
+# Centro de gravedad de pieza completa (o hasta el trapecio que actual)
+# Por cada trapecio que se agrega al calculo, el centro de gravedad se mueve
+# Lista de resultados entrega el CG hasta el trapecio al que corresponde el indice
+''' Confirmar definicion con Joaquin/Ignacio '''
 def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
     '''
         =+H4+F4*(G4-$G$9)^2
@@ -167,3 +188,44 @@ def calcular_altura_acumulada(trapecios):
     
     print("Altura acumulada: ", altura_acumulada)
     return altura_acumulada
+
+
+''' Lee valores de todos los LineEdits dinamicos existentes y calcula nuevo resultado de area,I,cg,OP '''
+# Se usa en caso de que usuario agregue mas trapecios a una figura, para recalcular propiedades de pieza contemplando nuevos trapecios
+def calcular_nuevos_valores(self):
+    ''' Obtiene valores de dimensiones '''
+    valores_dimensiones_dinamicas = []
+
+    if not self.dynamic_layouts:
+        return
+
+    for layout in self.dynamic_layouts:
+        bi = layout["bi_line"].text()
+        bs = layout["bs_line"].text()
+        altura = layout["altura_line"].text()
+
+        if not bi or not bs or not altura:
+            print("Error calcular_nuevos_valores(): Missing values in one or more of the LineEdits.")
+            return
+
+        try:
+            # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
+            valores_dimensiones_dinamicas.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+        except Exception as e:
+            print("Error calcular_nuevos_valores(): ", e)
+
+    print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
+
+    ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
+    valores_areas = calcular_area(valores_dimensiones_dinamicas)
+    altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
+    valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
+    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas)
+    suma_areas = calcular_suma_areas(valores_areas)
+    producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
+    valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
+
+    # Aplica resultados a layouts dinamicos + layouts fijos
+    aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+
+    return 

@@ -3,11 +3,9 @@ from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlain
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from ui_files.herramienta_trapecios_v6 import Ui_Dialog  # Import from the ui_files directory
-from db_combobox import cargar_familias_modelos_db, db_cargar_tipos_secciones, db_get_datos_trapecios, db_get_cant_trapecios, db_get_id_pieza # Recupera set de familias y respectivos modelos de DB
+from db_combobox import *
 from funciones_calculo import *
-
-
-
+from fn_update_gui import aplicar_valores_calculados
 
 # QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
 # historial_agregados -> Contador de tuplas que se agregaron dinamicamente a QVlayout
@@ -22,7 +20,7 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []  # Initialize dynamic layouts for row management
         self.historial_agregados = 0
 
-        ''' >>>> Inicia variables y conexiones de elementos <<<< '''
+        ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Carga datos de familias/modelos de DB
         self.family_model_mapping = cargar_familias_modelos_db()
@@ -36,7 +34,7 @@ class MyDialog(QDialog):
             lambda: self.confirmar_accion(self.ui.spin_cant_eliminar.value())
         )
 
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: self.calcular_nuevos_valores())
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self))
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
@@ -58,7 +56,7 @@ class MyDialog(QDialog):
         
     
     
-    ''' en desarrollo, TIPOS DE SECCIONES PARA PIEZA '''
+    ''' TIIPOS DE SECCIONES PARA PIEZA '''
     def update_combo_secciones(self):
         familia_seleccionada = self.ui.combo_familia.currentText()
         modelo_seleccionado = self.ui.combo_modelo.currentText()
@@ -79,8 +77,6 @@ class MyDialog(QDialog):
 
 
 
-
-    
     
     
     ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
@@ -301,8 +297,10 @@ class MyDialog(QDialog):
         producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
         valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
+
+        print("DEBUG aplicar_pieza_catalogo() -- producto_ponderado: ", producto_ponderado)
         # Aplica resultados a layouts dinamicos + layouts fijos
-        self.aplicar_valores_calculados(valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+        aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
         
 
@@ -322,7 +320,8 @@ class MyDialog(QDialog):
         for i in range(cantidad_trapecios):
             self.add_rows(self.historial_agregados + 1)
         
-        
+    
+
     def aplicar_dimensiones_pieza(self, pieza_trapecios):
         # Check if the number of trapecios matches the layouts
         if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
@@ -354,76 +353,6 @@ class MyDialog(QDialog):
             layout["op_line"].setText("")  # Placeholder
 
     
-    ''' Lee valores de todos los LineEdits dinamicos existentes y calcula nuevo resultado de area,I,cg,OP '''
-    def calcular_nuevos_valores(self):
-        ''' Obtiene valores de dimensiones '''
-        valores_dimensiones_dinamicas = []
-
-        if not self.dynamic_layouts:
-            return
-
-        for layout in self.dynamic_layouts:
-            bi = layout["bi_line"].text()
-            bs = layout["bs_line"].text()
-            altura = layout["altura_line"].text()
-
-            if not bi or not bs or not altura:
-                print("Error calcular_nuevos_valores(): Missing values in one or more of the LineEdits.")
-                return
-
-            try:
-                # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
-                valores_dimensiones_dinamicas.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
-            except Exception as e:
-                print("Error calcular_nuevos_valores(): ", e)
-
-        print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
-
-        ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
-        valores_areas = calcular_area(valores_dimensiones_dinamicas)
-        altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
-        valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
-        valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas)
-        suma_areas = calcular_suma_areas(valores_areas)
-        producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
-        valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
-
-        # Aplica resultados a layouts dinamicos + layouts fijos
-        self.aplicar_valores_calculados(valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
-
-        return 
-
-    ''' Asignar valores calculados en LineEdits dinamicos '''
-    
-    def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):
-
-        # asegeura que numero de indices en parametros sea igual a cant de layouts dinamicos
-        if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
-            print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
-            return
-
-        # Itera sobre layouts y asigna valores a widgets LineEdits
-        for i, trapecio in enumerate(valores_areas):
-            layout = self.dynamic_layouts[i]
-
-            # asegura que el widget existe
-            if not layout["area_line"] or not layout["cg_line"] or not layout["inercia_line"] or not layout["op_line"]:
-                print(f"Error: Widget for layout {i} is missing or deleted.")
-                continue
-
-            layout["area_line"].setText(f"{valores_areas[i]}")
-            layout["cg_line"].setText(f"{valores_cg[i]:.7f}")
-            layout["inercia_line"].setText(f"{valores_inercia[i]:.7f}")
-            layout["op_line"].setText(f"{valores_op[i]:.7f}")
-        
-        ''' valores en layout NO-dinamico de ventana '''
-
-        sumatoria_op = sum(valores_op)
-
-        self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")
-        self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
-        self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")
-        self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
 
 
 
