@@ -38,16 +38,19 @@ class Ui_Dialog(object):
         self.Vlayout_catalogo.setContentsMargins(0, 0, 0, 0)
         self.btn_acpt_pieza = QPushButton(self.verticalLayoutWidget)
         self.btn_acpt_pieza.setObjectName(u"btn_acpt_pieza")
+        self.btn_acpt_pieza.setAutoDefault(False)
 
         self.Vlayout_catalogo.addWidget(self.btn_acpt_pieza)
 
         self.btn_acpt_pieza_2 = QPushButton(self.verticalLayoutWidget)
         self.btn_acpt_pieza_2.setObjectName(u"btn_acpt_pieza_2")
+        self.btn_acpt_pieza_2.setAutoDefault(False)
 
         self.Vlayout_catalogo.addWidget(self.btn_acpt_pieza_2)
 
         self.btn_crear_pieza_temp = QPushButton(self.verticalLayoutWidget)
         self.btn_crear_pieza_temp.setObjectName(u"btn_crear_pieza_temp")
+        self.btn_crear_pieza_temp.setAutoDefault(False)
 
         self.Vlayout_catalogo.addWidget(self.btn_crear_pieza_temp)
 
@@ -83,6 +86,7 @@ class Ui_Dialog(object):
 
         self.btn_acpt_tipo_seccion = QPushButton(self.verticalLayoutWidget)
         self.btn_acpt_tipo_seccion.setObjectName(u"btn_acpt_tipo_seccion")
+        self.btn_acpt_tipo_seccion.setAutoDefault(False)
 
         self.Vlayout_catalogo.addWidget(self.btn_acpt_tipo_seccion)
 
@@ -237,8 +241,12 @@ class Ui_Dialog(object):
         self.btn_calcular_nuevos_valores = QPushButton(Dialog)
         self.btn_calcular_nuevos_valores.setObjectName(u"btn_calcular_nuevos_valores")
         self.btn_calcular_nuevos_valores.setGeometry(QRect(300, 180, 171, 32))
+        self.btn_calcular_nuevos_valores.setAutoDefault(False)
 
         self.retranslateUi(Dialog)
+
+        self.btn_calcular_nuevos_valores.setDefault(True)
+
 
         QMetaObject.connectSlotsByName(Dialog)
     # setupUi

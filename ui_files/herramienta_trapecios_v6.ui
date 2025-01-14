@@ -35,6 +35,9 @@
       <property name="text">
        <string>Usar pieza catalogo</string>
       </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
     <item>
@@ -42,12 +45,18 @@
       <property name="text">
        <string>Usar pieza usuario</string>
       </property>
+      <property name="autoDefault">
+       <bool>false</bool>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="btn_crear_pieza_temp">
       <property name="text">
        <string>Crear pieza temporal</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -85,6 +94,9 @@
      <widget class="QPushButton" name="btn_acpt_tipo_seccion">
       <property name="text">
        <string>Cambiar sección</string>
+      </property>
+      <property name="autoDefault">
+       <bool>false</bool>
       </property>
      </widget>
     </item>
@@ -320,6 +332,12 @@
    </property>
    <property name="text">
     <string>Calcular nuevos valores</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

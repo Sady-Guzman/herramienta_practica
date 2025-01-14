@@ -20,6 +20,7 @@ def calcular_area(trapecios):
         print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
         print("AREA: ", area)
 
+        area = round(area, 9)
         resultados.append(area)
 
     print("Areas calculadas: ", resultados)
@@ -45,9 +46,11 @@ def calcular_inercia(trapecios):
         # calculo final
         result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
 
+
         print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
         print("Inercia: ", result)
 
+        result = round(result, 9)
         resultados.append(result)
 
 
@@ -94,6 +97,7 @@ def calcular_centro_gravedad(trapecios):
 
         # paso final: agregar valor de altura acumulada
         resultado = centro + altura_acumulada
+        resultado = round(resultado, 9)
         resultados.append(resultado)
 
     print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")

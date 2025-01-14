@@ -270,7 +270,8 @@ class MyDialog(QDialog):
         if not pieza_modelo:
             print("Debug: No se selecciona ninguna pieza/modelo")
             return
-        
+
+        ''' Obtiene informacion de pieza '''        
         # Obtiene Primary Key de la pieza (ID)
         pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
         
@@ -280,6 +281,7 @@ class MyDialog(QDialog):
         # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
         pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion)
 
+        ''' asigna valores fijos (dimensiones) a layouts dinamicos '''
         # iguala la cantidad de layouts dinamicos a la cantidad necesaria
         self.ajustar_layouts_dinamicos(trapecios_necesarios, tipo_boton)
 
@@ -289,6 +291,7 @@ class MyDialog(QDialog):
 
         '''   Funciones de calculo  '''
         ''' Area, Centro de Gravedad, Inercia, Sumatoria area, Suma Producto (area, Cg / SUM(area)), OP '''
+
         # Calcula cada variable
         valores_areas = calcular_area(pieza_trapecios)
         altura_acumulada = calcular_altura_acumulada(pieza_trapecios)
@@ -298,6 +301,7 @@ class MyDialog(QDialog):
         producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
         valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
+        # Aplica resultados a layouts dinamicos + layouts fijos
         self.aplicar_valores_calculados(valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
         
@@ -349,9 +353,41 @@ class MyDialog(QDialog):
             layout["inercia_line"].setText("")  # Placeholder
             layout["op_line"].setText("")  # Placeholder
 
+    
     ''' Lee valores de todos los LineEdits dinamicos existentes y calcula nuevo resultado de area,I,cg,OP '''
-    def calcular_nuevos_valores():
-        
+    def calcular_nuevos_valores(self):
+        ''' Obtiene valores de dimensiones '''
+        valores_dimensiones_dinamicas = []
+
+        for layout in self.dynamic_layouts:
+            bi = layout["bi_line"].text()
+            bs = layout["bs_line"].text()
+            altura = layout["altura_line"].text()
+
+            if not bi or not bs or not altura:
+                print("Error calcular_nuevos_valores(): Missing values in one or more of the LineEdits.")
+                return
+
+            try:
+                # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
+                valores_dimensiones_dinamicas.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+            except Exception as e:
+                print("Error calcular_nuevos_valores(): ", e)
+
+        print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
+
+        ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
+        valores_areas = calcular_area(valores_dimensiones_dinamicas)
+        altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
+        valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
+        valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas)
+        suma_areas = calcular_suma_areas(valores_areas)
+        producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
+        valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
+
+        # Aplica resultados a layouts dinamicos + layouts fijos
+        self.aplicar_valores_calculados(valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+
         return 
 
     ''' Asignar valores calculados en LineEdits dinamicos '''
