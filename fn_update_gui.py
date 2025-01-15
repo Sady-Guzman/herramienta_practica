@@ -8,9 +8,16 @@ from fn_database import *
 ''' ======================== Pobla conetenido de comboboxes ================================== '''
 
 ''' Poblar combobox famila '''
-def poblar_combo_familia(self):
+def poblar_combo_familia(self, tipo_db):
+    # tipo_db: true -> catalogo, false -> usuario
+
     self.ui.combo_familia.clear()
-    self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
+    if tipo_db == True:
+        self.db_es_catalogo = True
+        self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_catalogo.keys()))
+    else:
+        self.db_es_catalogo = False
+        self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_usuario.keys()))
 
 
 ''' TIIPOS DE SECCIONES PARA PIEZA '''
@@ -34,12 +41,17 @@ def update_combo_secciones(self):
 
 
 ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
-def update_combo_modelo(self):
+def update_combo_modelo(self, db_es_catalogo):
+    # tipo_db: true -> catalogo, false -> usuario
+
     # Obtiene familia seleccionada
     selected_family = self.ui.combo_familia.currentText()
 
     # obtiene los modelos respectivos de la familia seleccionada
-    models = self.family_model_mapping.get(selected_family, [])
+    if db_es_catalogo == True:
+        models = self.family_model_mapping_catalogo.get(selected_family, [])
+    else:
+        models = self.family_model_mapping_usuario.get(selected_family, [])
 
     self.ui.combo_modelo.clear()
     self.ui.combo_modelo.addItems(models)

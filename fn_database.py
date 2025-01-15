@@ -1,6 +1,6 @@
 import sqlite3
 
-def db_cargar_familias_modelos():
+def db_cargar_familias_modelos_catalogo():
     """
     Connects to the database and fetches data to populate combo_familia and combo_modelo.
     Returns a dictionary where each familia maps to a list of modelos.

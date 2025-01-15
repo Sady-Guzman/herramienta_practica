@@ -11,7 +11,8 @@ from fn_elementos_gui import *
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout
-# family_model_mapping         -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
+# family_model_mapping_(catalogo or usuario)        -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
+# db_es_catalogo -> guarda que tipo de catalogo se esta usando (True -> catalogo, False -> usuario)
 
 class MyDialog(QDialog):
 
@@ -21,11 +22,14 @@ class MyDialog(QDialog):
         self.ui.setupUi(self)  # Set up the UI on the dialog window
         self.dynamic_layouts = []  # Initialize dynamic layouts for row management
         self.historial_agregados = 0
+        self.db_es_catalogo = 0
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Carga datos de familias/modelos de DB
-        self.family_model_mapping = db_cargar_familias_modelos()
+        self.family_model_mapping_catalogo = db_cargar_familias_modelos_catalogo()
+        ''' Cambiar por funcion de DB usuario '''
+        self.family_model_mapping_usuario = db_cargar_familias_modelos_catalogo() 
 
 
         # Conecta btn genera layouts dinamicos
@@ -39,17 +43,19 @@ class MyDialog(QDialog):
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self))
 
+        
+        # conecta btn para poblar combo familia con piezas DB catalogo
+        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
+
+        # conecta btn para poblar combo familia con piezas de DB creada por usuario
+        ''' cambiar lambda a fn de catalogo creado '''
+        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ Creados
+
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self))
-
-        # Conecta btn con funcion para usar una pieza de catalogo en calculo (POBLAR COMBO FAMILIA w/ CATALOGO)
-        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self)) # poblar combo catalogo
-
-        # agg btn para usar pieza temporal
-        # self.ui.btn_usar_pieza_usuario.clicked.connect(lambda:)
+        self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self))
+        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self)) # Combo Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self))
