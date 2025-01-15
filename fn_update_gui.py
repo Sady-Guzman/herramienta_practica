@@ -39,6 +39,28 @@ def update_combo_secciones(self):
     else:
         self.ui.combo_tipo_seccion.addItems(["Sin secciones disponibles"])
 
+def update_list_secciones(self):
+    # Retrieve the selected family and model
+    familia_seleccionada = self.ui.combo_familia.currentText()
+    modelo_seleccionado = self.ui.combo_modelo.currentText()
+
+    # Load the types of sections from the database
+    tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado)
+    print(tipos_secciones)
+
+    # Extract values from the tuples and convert them to strings
+    tipos_secciones_str = [str(item[0]) for item in tipos_secciones]
+
+    # Clear the current contents of the list widget
+    self.ui.list_tipo_seccion.clear()
+
+    # Add the retrieved section types to the list widget
+    if tipos_secciones:
+        print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
+        self.ui.list_tipo_seccion.addItems(tipos_secciones_str)
+    else:
+        self.ui.list_tipo_seccion.addItem("Sin secciones disponibles")
+
 
 ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
 def update_combo_modelo(self, db_es_catalogo):

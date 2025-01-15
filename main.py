@@ -28,7 +28,7 @@ class MyDialog(QDialog):
 
         # Carga datos de familias/modelos de DB
         self.family_model_mapping_catalogo = db_cargar_familias_modelos(True)
-        ''' Cambiar por funcion de DB usuario '''
+        ''' ========================================= Cambiar por funcion de DB usuario =============================== '''
         # TODO Cambiar True ---> False 
         self.family_model_mapping_usuario = db_cargar_familias_modelos(True) 
 
@@ -44,6 +44,8 @@ class MyDialog(QDialog):
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self))
 
+        # conecta btn para usar nueva pieza
+        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
         
         # conecta btn para poblar combo familia con piezas DB catalogo
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
@@ -57,9 +59,10 @@ class MyDialog(QDialog):
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self)) # Combo Secciones
+        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self))
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self)) # Aplica pieza
 
 
 if __name__ == "__main__":

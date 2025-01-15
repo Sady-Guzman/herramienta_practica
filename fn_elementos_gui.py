@@ -172,11 +172,20 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
 ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
 ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
 def aplicar_pieza_catalogo(self):
-    # Determina la pieza seleccionada
+    # Retrieve selected family, model, and section type
     pieza_familia = self.ui.combo_familia.currentText()
     pieza_modelo = self.ui.combo_modelo.currentText()
-    pieza_seccion = self.ui.combo_tipo_seccion.currentText()
-    print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion) # Debug
+
+    # Get the selected item from the ListWidget
+    pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+
+    # Ensure there is a selection in the list widget
+    if pieza_seccion_item is None:
+        print("Debug: No section selected in the ListWidget.")
+        return
+
+    pieza_seccion = pieza_seccion_item.text()
+    print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion)  # Debug
 
     if not pieza_modelo:
         print("Debug: No se selecciona ninguna pieza/modelo")
@@ -192,18 +201,14 @@ def aplicar_pieza_catalogo(self):
     # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
     pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion)
 
-    ''' asigna valores fijos (dimensiones) a layouts dinamicos '''
-    # iguala la cantidad de layouts dinamicos a la cantidad necesaria
+    ''' Asigna valores fijos (dimensiones) a layouts dinamicos '''
+    # Iguala la cantidad de layouts dinamicos a la cantidad necesaria
     ajustar_layouts_dinamicos(self, trapecios_necesarios)
 
-    # Aplicar dimensione de trapecios a campos        
+    # Aplica dimensiones de trapecios a campos        
     aplicar_dimensiones_pieza(self, pieza_trapecios)
 
-
-    '''   Funciones de calculo  '''
-    ''' Area, Centro de Gravedad, Inercia, Sumatoria area, Suma Producto (area, Cg / SUM(area)), OP '''
-
-    # Calcula cada variable
+    ''' Funciones de cálculo '''
     valores_areas = calcular_area(pieza_trapecios)
     altura_acumulada = calcular_altura_acumulada(pieza_trapecios)
     valores_inercia = calcular_inercia(pieza_trapecios)
@@ -212,7 +217,7 @@ def aplicar_pieza_catalogo(self):
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
-
     print("DEBUG aplicar_pieza_catalogo() -- producto_ponderado: ", producto_ponderado)
-    # Aplica resultados a layouts dinamicos + layouts fijos
+
+    # Aplica resultados a layouts dinámicos + layouts fijos
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)

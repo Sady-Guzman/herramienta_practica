@@ -26,7 +26,7 @@
      <x>20</x>
      <y>10</y>
      <width>211</width>
-     <height>318</height>
+     <height>371</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="Vlayout_catalogo">
@@ -88,7 +88,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QComboBox" name="combo_tipo_seccion"/>
+     <widget class="QListWidget" name="list_tipo_seccion"/>
     </item>
     <item>
      <widget class="QPushButton" name="btn_acpt_tipo_seccion">

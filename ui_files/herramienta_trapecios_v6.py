@@ -16,9 +16,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QSpinBox, QVBoxLayout,
-    QWidget)
+    QHBoxLayout, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QSizePolicy, QSpacerItem,
+    QSpinBox, QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -32,7 +32,7 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         self.verticalLayoutWidget = QWidget(Dialog)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(20, 10, 211, 318))
+        self.verticalLayoutWidget.setGeometry(QRect(20, 10, 211, 371))
         self.Vlayout_catalogo = QVBoxLayout(self.verticalLayoutWidget)
         self.Vlayout_catalogo.setObjectName(u"Vlayout_catalogo")
         self.Vlayout_catalogo.setContentsMargins(0, 0, 0, 0)
@@ -79,10 +79,10 @@ class Ui_Dialog(object):
 
         self.Vlayout_catalogo.addWidget(self.label_tipo_seccion)
 
-        self.combo_tipo_seccion = QComboBox(self.verticalLayoutWidget)
-        self.combo_tipo_seccion.setObjectName(u"combo_tipo_seccion")
+        self.list_tipo_seccion = QListWidget(self.verticalLayoutWidget)
+        self.list_tipo_seccion.setObjectName(u"list_tipo_seccion")
 
-        self.Vlayout_catalogo.addWidget(self.combo_tipo_seccion)
+        self.Vlayout_catalogo.addWidget(self.list_tipo_seccion)
 
         self.btn_acpt_tipo_seccion = QPushButton(self.verticalLayoutWidget)
         self.btn_acpt_tipo_seccion.setObjectName(u"btn_acpt_tipo_seccion")
