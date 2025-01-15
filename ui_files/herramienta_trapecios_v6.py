@@ -36,17 +36,17 @@ class Ui_Dialog(object):
         self.Vlayout_catalogo = QVBoxLayout(self.verticalLayoutWidget)
         self.Vlayout_catalogo.setObjectName(u"Vlayout_catalogo")
         self.Vlayout_catalogo.setContentsMargins(0, 0, 0, 0)
-        self.btn_acpt_pieza = QPushButton(self.verticalLayoutWidget)
-        self.btn_acpt_pieza.setObjectName(u"btn_acpt_pieza")
-        self.btn_acpt_pieza.setAutoDefault(False)
+        self.btn_usar_pieza_catalogo = QPushButton(self.verticalLayoutWidget)
+        self.btn_usar_pieza_catalogo.setObjectName(u"btn_usar_pieza_catalogo")
+        self.btn_usar_pieza_catalogo.setAutoDefault(False)
 
-        self.Vlayout_catalogo.addWidget(self.btn_acpt_pieza)
+        self.Vlayout_catalogo.addWidget(self.btn_usar_pieza_catalogo)
 
-        self.btn_acpt_pieza_2 = QPushButton(self.verticalLayoutWidget)
-        self.btn_acpt_pieza_2.setObjectName(u"btn_acpt_pieza_2")
-        self.btn_acpt_pieza_2.setAutoDefault(False)
+        self.btn_usar_pieza_usuario = QPushButton(self.verticalLayoutWidget)
+        self.btn_usar_pieza_usuario.setObjectName(u"btn_usar_pieza_usuario")
+        self.btn_usar_pieza_usuario.setAutoDefault(False)
 
-        self.Vlayout_catalogo.addWidget(self.btn_acpt_pieza_2)
+        self.Vlayout_catalogo.addWidget(self.btn_usar_pieza_usuario)
 
         self.btn_crear_pieza_temp = QPushButton(self.verticalLayoutWidget)
         self.btn_crear_pieza_temp.setObjectName(u"btn_crear_pieza_temp")
@@ -253,8 +253,8 @@ class Ui_Dialog(object):
 
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.btn_acpt_pieza.setText(QCoreApplication.translate("Dialog", u"Usar pieza catalogo", None))
-        self.btn_acpt_pieza_2.setText(QCoreApplication.translate("Dialog", u"Usar pieza usuario", None))
+        self.btn_usar_pieza_catalogo.setText(QCoreApplication.translate("Dialog", u"Usar pieza catalogo", None))
+        self.btn_usar_pieza_usuario.setText(QCoreApplication.translate("Dialog", u"Usar pieza usuario", None))
         self.btn_crear_pieza_temp.setText(QCoreApplication.translate("Dialog", u"Crear pieza temporal", None))
         self.label_familia.setText(QCoreApplication.translate("Dialog", u"Familia", None))
         self.label_modelo.setText(QCoreApplication.translate("Dialog", u"Modelo", None))

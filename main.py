@@ -9,9 +9,9 @@ from fn_update_gui import *
 from fn_elementos_gui import *
 
 
-# QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
-# historial_agregados -> Contador de tuplas que se agregaron dinamicamente a QVlayout
-
+# QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
+# historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout
+# family_model_mapping         -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
 
 class MyDialog(QDialog):
 
@@ -43,9 +43,10 @@ class MyDialog(QDialog):
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self))
 
         # Conecta btn con funcion para usar una pieza de catalogo en calculo (POBLAR COMBO FAMILIA w/ CATALOGO)
-        self.ui.btn_acpt_pieza.clicked.connect(lambda: poblar_combo_familia(self)) # poblar combo catalogo
+        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self)) # poblar combo catalogo
 
         # agg btn para usar pieza temporal
+        # self.ui.btn_usar_pieza_usuario.clicked.connect(lambda:)
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self))
@@ -55,7 +56,7 @@ class MyDialog(QDialog):
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Create the application
+    app = QApplication(sys.argv)  # Create the applicatio
     dialog = MyDialog()            # Create the dialog window
     dialog.show()                  # Show the dialog window
     sys.exit(app.exec())           # Start the application's event loop

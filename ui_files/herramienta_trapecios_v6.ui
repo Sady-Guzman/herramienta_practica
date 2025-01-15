@@ -31,7 +31,7 @@
    </property>
    <layout class="QVBoxLayout" name="Vlayout_catalogo">
     <item>
-     <widget class="QPushButton" name="btn_acpt_pieza">
+     <widget class="QPushButton" name="btn_usar_pieza_catalogo">
       <property name="text">
        <string>Usar pieza catalogo</string>
       </property>
@@ -41,7 +41,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="btn_acpt_pieza_2">
+     <widget class="QPushButton" name="btn_usar_pieza_usuario">
       <property name="text">
        <string>Usar pieza usuario</string>
       </property>
