@@ -259,7 +259,7 @@ class Ui_Dialog(object):
         self.label_familia.setText(QCoreApplication.translate("Dialog", u"Familia", None))
         self.label_modelo.setText(QCoreApplication.translate("Dialog", u"Modelo", None))
         self.label_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Tipo secci\u00f3n", None))
-        self.btn_acpt_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Cambiar secci\u00f3n", None))
+        self.btn_acpt_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Aplicar secci\u00f3n", None))
         self.label_name.setText(QCoreApplication.translate("Dialog", u"Num", None))
         self.label_bi.setText(QCoreApplication.translate("Dialog", u"Base_inf", None))
         self.label_bs.setText(QCoreApplication.translate("Dialog", u"Base_sup", None))

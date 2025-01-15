@@ -93,7 +93,7 @@
     <item>
      <widget class="QPushButton" name="btn_acpt_tipo_seccion">
       <property name="text">
-       <string>Cambiar sección</string>
+       <string>Aplicar sección</string>
       </property>
       <property name="autoDefault">
        <bool>false</bool>

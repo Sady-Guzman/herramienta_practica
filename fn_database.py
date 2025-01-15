@@ -1,12 +1,19 @@
 import sqlite3
 
-def db_cargar_familias_modelos_catalogo():
+def db_cargar_familias_modelos_catalogo(es_catalogo):
     """
-    Connects to the database and fetches data to populate combo_familia and combo_modelo.
-    Returns a dictionary where each familia maps to a list of modelos.
+        Conecta la base de datos y recupera tuplas para poblar combo_familia y combo_modelo.
+        Retorna un diccionario donde cada familia mapea a una lista de modelos.
+
+        db_es_catalogo: True -> Usa base datos catalogo.db, donde estan las piezas migradas de Jacena
+                        False -> Usa base datos creada por usuario (piezas_creadas.db)
     """
 
-    db_path = 'catalogo.db' 
+    if es_catalogo == True:
+        db_path = 'catalogo.db' 
+    else:
+        db_path = 'piezas_creadas.db'
+    
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
 

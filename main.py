@@ -18,18 +18,18 @@ class MyDialog(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Dialog()  # Create an instance of the UI class
-        self.ui.setupUi(self)  # Set up the UI on the dialog window
-        self.dynamic_layouts = []  # Initialize dynamic layouts for row management
+        self.ui = Ui_Dialog()          # Crea instancia de clase UI
+        self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
+        self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
         self.db_es_catalogo = 0
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Carga datos de familias/modelos de DB
-        self.family_model_mapping_catalogo = db_cargar_familias_modelos_catalogo()
+        self.family_model_mapping_catalogo = db_cargar_familias_modelos_catalogo(True)
         ''' Cambiar por funcion de DB usuario '''
-        self.family_model_mapping_usuario = db_cargar_familias_modelos_catalogo() 
+        self.family_model_mapping_usuario = db_cargar_familias_modelos_catalogo(False) 
 
 
         # Conecta btn genera layouts dinamicos
@@ -49,7 +49,7 @@ class MyDialog(QDialog):
 
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
         ''' cambiar lambda a fn de catalogo creado '''
-        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ Creados
+        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ piezas Creadas_usuario
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
@@ -62,7 +62,7 @@ class MyDialog(QDialog):
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Create the applicatio
-    dialog = MyDialog()            # Create the dialog window
-    dialog.show()                  # Show the dialog window
-    sys.exit(app.exec())           # Start the application's event loop
+    app = QApplication(sys.argv)   # Crear aplicacion
+    dialog = MyDialog()            # Crear ventana Dialog
+    dialog.show()                  # Mostrar Dialog
+    sys.exit(app.exec())           # Inicia loop de eventos app
