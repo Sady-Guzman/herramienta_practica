@@ -31,23 +31,31 @@ class CrearPiezaDialog(QDialog):
         self.ventana_crear_dynamic_layouts = []  # Initialize the attribute
 
         # Conecta btn aceptar a fucion
-        self.ui_crear.btn_aceptar.clicked.connect(self.handle_accept)
+        self.ui_crear.btn_aceptar.clicked.connect(self.aceptar)
         self.ui_crear.btn_agregar_seccion.clicked.connect(self.add_dynamic_layout)
         self.ui_crear.btn_eliminar_seccion.clicked.connect(self.remove_dynamic_layout)
+        self.ui_crear.btn_cancelar.clicked.connect(self.cancelar)
 
-    def handle_accept(self):
+    
+    def cancelar(self):
+        ''' Handles the action when the cancel button is clicked '''
+        print("Cancel button clicked. Closing window.")
+        self.close()  # Closes the window when cancel is clicked
+    
+    def aceptar(self):
         # Retrieve the data entered by the user
         familia = self.ui_crear.lineEdit_familia.text()
         modelo = self.ui_crear.lineEdit_modelo.text()
         # cantidad_secciones = self.ui_crear.spin_cant_agregar.value()
+        cantidad_secciones = self.ventana_crear_secciones_dinamicas
 
-        # # Validate inputs
-        # if not familia or not modelo or cantidad_secciones <= 0:
-        #     print("Please enter valid data for all fields.")
-        #     return
+        # Validate inputs
+        if not familia or not modelo or cantidad_secciones <= 0:
+            print("Please enter valid data for all fields.")
+            return
 
         # Close the dialog after processing
-        # print(f"Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}")
+        print(f"Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}")
         self.accept()
 
 
