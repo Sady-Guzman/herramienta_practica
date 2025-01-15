@@ -221,3 +221,67 @@ def aplicar_pieza_catalogo(self):
 
     # Aplica resultados a layouts dinámicos + layouts fijos
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+
+''' Funciones para VENTANA CREAR PIEZA '''
+def add_rows_simple(self, index):
+    ''' Adds a single row with one QLineEdit to the layout '''
+    # Remove the vertical stretcher if present
+    if self.ui_crear.layout_nuevas_row.itemAt(self.ui_crear.layout_nuevas_row.count() - 1).spacerItem():
+        item = self.ui_crear.layout_nuevas_row.takeAt(self.ui_crear.layout_nuevas_row.count() - 1)
+        del item
+
+    # Create a horizontal layout for the row
+    layout = QHBoxLayout()
+    layout_name = f"layout_s{index}"
+
+    # Create the QLineEdit
+    line_edit = QLineEdit()
+    line_edit.setObjectName(f"s{index}_name")  # Assign a unique object name
+
+    # Add the QLineEdit to the layout
+    layout.addWidget(line_edit)
+
+    # Insert the layout into the vertical container
+    self.ui_crear.layout_nuevas_row.insertLayout(0, layout)
+
+    # Add the vertical stretcher back to the bottom
+    self.ui_crear.layout_nuevas_row.addStretch()
+
+    # Keep a reference to the line_edit for future access if needed
+    self.ventana_crear_dynamic_layouts.append({"line_edit": line_edit})
+
+    # Increment the counter
+    self.ventana_crear_secciones_dinamicas += 1  # Keep track of dynamic sections
+
+def del_rows_create_piezas(self, num_rows):
+    ''' Removes a dynamic layout '''
+    print(f"DEBUG del_rows_create_piezas() > Removing {num_rows} layout(s)")
+
+    if num_rows == 0:
+        return
+
+    ''' Removes the vertical stretcher temporarily '''
+    if self.ui_crear.layout_nuevas_row.itemAt(self.ui_crear.layout_nuevas_row.count() - 1).spacerItem():
+        item = self.ui_crear.layout_nuevas_row.takeAt(self.ui_crear.layout_nuevas_row.count() - 1)
+        del item
+
+    ''' Removes layouts one by one '''
+    for _ in range(num_rows):
+        if self.ui_crear.layout_nuevas_row.count() > 0:
+            # Take the first layout item (first visually, last logically due to the ordering)
+            last_item = self.ui_crear.layout_nuevas_row.takeAt(0)
+
+            if last_item.layout():
+                self.delete_layout_widgets(last_item.layout())
+
+            del last_item  # Delete the layout from the container
+
+            # Remove the reference to the layout from the dynamic layouts list
+            self.ventana_crear_dynamic_layouts.pop(0)
+
+            # Decrement the dynamic section counter
+            self.ventana_crear_secciones_dinamicas -= 1
+            print(f"Current number of sections: {self.ventana_crear_secciones_dinamicas}")
+
+    ''' Add the vertical stretcher back to the layout '''
+    self.ui_crear.layout_nuevas_row.addStretch()

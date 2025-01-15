@@ -15,15 +15,15 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QLabel,
-    QLineEdit, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QDialog, QGridLayout, QHBoxLayout,
+    QLabel, QLineEdit, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(501, 338)
+        Dialog.resize(536, 336)
         font = QFont()
         font.setFamilies([u"Verdana"])
         font.setBold(False)
@@ -41,14 +41,14 @@ class Ui_Dialog(object):
 
         self.btn_aceptar = QPushButton(Dialog)
         self.btn_aceptar.setObjectName(u"btn_aceptar")
-        self.btn_aceptar.setGeometry(QRect(320, 290, 171, 32))
+        self.btn_aceptar.setGeometry(QRect(390, 290, 131, 32))
         self.btn_aceptar.setAutoDefault(False)
         self.label_titulo = QLabel(Dialog)
         self.label_titulo.setObjectName(u"label_titulo")
         self.label_titulo.setGeometry(QRect(20, 10, 181, 16))
         self.gridLayoutWidget_3 = QWidget(Dialog)
         self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(20, 40, 471, 59))
+        self.gridLayoutWidget_3.setGeometry(QRect(20, 40, 501, 60))
         self.gridLayout_datos = QGridLayout(self.gridLayoutWidget_3)
         self.gridLayout_datos.setObjectName(u"gridLayout_datos")
         self.gridLayout_datos.setContentsMargins(0, 0, 0, 0)
@@ -77,14 +77,27 @@ class Ui_Dialog(object):
 
         self.gridLayout_datos.addWidget(self.lineEdit_familia, 1, 1, 1, 1)
 
-        self.spin_cant_agregar = QSpinBox(self.gridLayoutWidget_3)
-        self.spin_cant_agregar.setObjectName(u"spin_cant_agregar")
+        self.layout_btns_secciones = QHBoxLayout()
+        self.layout_btns_secciones.setObjectName(u"layout_btns_secciones")
+        self.btn_agregar_seccion = QPushButton(self.gridLayoutWidget_3)
+        self.btn_agregar_seccion.setObjectName(u"btn_agregar_seccion")
 
-        self.gridLayout_datos.addWidget(self.spin_cant_agregar, 1, 4, 1, 1)
+        self.layout_btns_secciones.addWidget(self.btn_agregar_seccion)
+
+        self.btn_eliminar_seccion = QPushButton(self.gridLayoutWidget_3)
+        self.btn_eliminar_seccion.setObjectName(u"btn_eliminar_seccion")
+
+        self.layout_btns_secciones.addWidget(self.btn_eliminar_seccion)
+
+
+        self.gridLayout_datos.addLayout(self.layout_btns_secciones, 1, 4, 1, 1)
 
         self.label_nombre_secciones = QLabel(Dialog)
         self.label_nombre_secciones.setObjectName(u"label_nombre_secciones")
         self.label_nombre_secciones.setGeometry(QRect(20, 100, 219, 29))
+        self.btn_cancelar = QPushButton(Dialog)
+        self.btn_cancelar.setObjectName(u"btn_cancelar")
+        self.btn_cancelar.setGeometry(QRect(280, 290, 100, 32))
 
         self.retranslateUi(Dialog)
 
@@ -103,6 +116,9 @@ class Ui_Dialog(object):
         self.label_modelo.setText(QCoreApplication.translate("Dialog", u"Modelo:", None))
         self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Cantidad de secciones", None))
         self.lineEdit_familia.setText("")
+        self.btn_agregar_seccion.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
+        self.btn_eliminar_seccion.setText(QCoreApplication.translate("Dialog", u"Eliminar", None))
         self.label_nombre_secciones.setText(QCoreApplication.translate("Dialog", u"Nombre para secciones", None))
+        self.btn_cancelar.setText(QCoreApplication.translate("Dialog", u"Cancelar", None))
     # retranslateUi
 

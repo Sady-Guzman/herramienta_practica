@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>501</width>
-    <height>338</height>
+    <width>536</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="font">
@@ -48,9 +48,9 @@
   <widget class="QPushButton" name="btn_aceptar">
    <property name="geometry">
     <rect>
-     <x>320</x>
+     <x>390</x>
      <y>290</y>
-     <width>171</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -82,8 +82,8 @@
     <rect>
      <x>20</x>
      <y>40</y>
-     <width>471</width>
-     <height>59</height>
+     <width>501</width>
+     <height>60</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout_datos">
@@ -123,7 +123,22 @@
      </widget>
     </item>
     <item row="1" column="4">
-     <widget class="QSpinBox" name="spin_cant_agregar"/>
+     <layout class="QHBoxLayout" name="layout_btns_secciones">
+      <item>
+       <widget class="QPushButton" name="btn_agregar_seccion">
+        <property name="text">
+         <string>Agregar</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_eliminar_seccion">
+        <property name="text">
+         <string>Eliminar</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -138,6 +153,19 @@
    </property>
    <property name="text">
     <string>Nombre para secciones</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btn_cancelar">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>290</y>
+     <width>100</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancelar</string>
    </property>
   </widget>
  </widget>
