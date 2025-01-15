@@ -1,6 +1,6 @@
 import sqlite3
 
-def db_cargar_familias_modelos_catalogo(es_catalogo):
+def db_cargar_familias_modelos(es_catalogo):
     """
         Conecta la base de datos y recupera tuplas para poblar combo_familia y combo_modelo.
         Retorna un diccionario donde cada familia mapea a una lista de modelos.
@@ -155,11 +155,71 @@ def db_get_id_pieza(familia, modelo):
 
 ''' print todas las familias y sus respectivos modelos de forma estructurada'''
 def print_familias_modelos():
-    dict_fam_mod = cargar_familias_modelos_db()
+    def print_families_and_models(title, data):
+        print(title)
+        for family, models in data.items():
+            print(f"Family: {family}")
+            print("Models:")
+            for model in models:
+                print(f"  - {model}")
+            print()
+    
+    dict_fam_mod_catalogo = db_cargar_familias_modelos(True)
+    dict_fam_mod_creadas = db_cargar_familias_modelos(False)
 
-    for familias, modelos in dict_fam_mod.items():
-        print(f"Family: {familias}")
-        print("Models:")
-        for model in modelos:
-            print(f"  - {model}")
-        print()
+    print_families_and_models("Piezas CATALOGO", dict_fam_mod_catalogo)
+    print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
+
+def db_iniciar_catalogo(db_path):
+    """
+    Initializes the database by creating the required tables if they do not exist.
+
+    Args:
+        db_path (str): The path to the database file (e.g., 'catalogo.db').
+    """
+    connection = sqlite3.connect(db_path)
+    cursor = connection.cursor()
+
+    try:
+        # Create the `piezas` table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS piezas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                familia TEXT NOT NULL,
+                modelo TEXT NOT NULL
+            )
+        """)
+
+        # Create the `parametros` table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS parametros (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tipo_seccion INTEGER NOT NULL,
+                trapecios INTEGER NOT NULL,
+                pieza_id INTEGER NOT NULL, 
+                FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+            )
+        """)
+
+        # Create the `trapecios` table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS trapecios (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                tipo_seccion TEXT NOT NULL,
+                posicion INTEGER NOT NULL,
+                base_inf REAL NOT NULL,
+                base_sup REAL NOT NULL,
+                altura REAL NOT NULL,
+                pieza_id INTEGER NOT NULL,
+                FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+            )
+        """)
+
+        print(f"Database '{db_path}' initialized successfully.")
+    except sqlite3.Error as e:
+        print(f"Error initializing database '{db_path}': {e}")
+    finally:
+        # Ensure the connection is closed
+        connection.close()
+
+    return
