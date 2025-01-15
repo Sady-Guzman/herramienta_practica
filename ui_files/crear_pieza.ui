@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>501</width>
+    <height>338</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Verdana</family>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget_5">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>130</y>
+     <width>221</width>
+     <height>191</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="layout_nuevas_row">
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="btn_aceptar">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>290</y>
+     <width>171</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Aceptar</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+   <property name="default">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_titulo">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>181</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ingresar datos nueva pieza</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>40</y>
+     <width>471</width>
+     <height>59</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_datos">
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_familia">
+      <property name="text">
+       <string>Familia:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEdit_modelo">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QLabel" name="label_modelo">
+      <property name="text">
+       <string>Modelo:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="4">
+     <widget class="QLabel" name="label_cant_agregar">
+      <property name="text">
+       <string>Cantidad de secciones</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_familia">
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="4">
+     <widget class="QSpinBox" name="spin_cant_agregar"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="label_nombre_secciones">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>219</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Nombre para secciones</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

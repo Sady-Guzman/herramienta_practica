@@ -7,6 +7,8 @@ from fn_database import *
 from fn_calculo_propiedades import *
 from fn_update_gui import *
 from fn_elementos_gui import *
+# from fn_crear_pieza import CrearPiezaDialog
+from fn_crear_pieza import open_crear_pieza_dialog
 
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
@@ -44,8 +46,11 @@ class MyDialog(QDialog):
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self))
 
-        # conecta btn para usar nueva pieza
+        # conecta btn para usar nueva pieza CATALOGO
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
+
+        # Invoca ventana para CREAR NUEVA PIEZA
+        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: open_crear_pieza_dialog(self))
         
         # conecta btn para poblar combo familia con piezas DB catalogo
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
@@ -58,11 +63,13 @@ class MyDialog(QDialog):
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self)) # Combo Secciones
+        # self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self)) # Combo Secciones
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self)) # Aplica pieza
+        
+    
 
 
 if __name__ == "__main__":
