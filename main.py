@@ -29,7 +29,8 @@ class MyDialog(QDialog):
         # Carga datos de familias/modelos de DB
         self.family_model_mapping_catalogo = db_cargar_familias_modelos(True)
         ''' Cambiar por funcion de DB usuario '''
-        self.family_model_mapping_usuario = db_cargar_familias_modelos(False) 
+        # TODO Cambiar True ---> False 
+        self.family_model_mapping_usuario = db_cargar_familias_modelos(True) 
 
 
         # Conecta btn genera layouts dinamicos
@@ -63,9 +64,12 @@ class MyDialog(QDialog):
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''
-    # db_iniciar_catalogo()
-    print_familias_modelos("catalogo.db") # Debug muestra todo el catalogo y piezas_creadas
-    print_familias_modelos("piezas_creadas.db") # Debug muestra todo el catalogo y piezas_creadas
+    # TODO descomentar init de base de datos
+    db_iniciar_database("catalogo.db")
+    db_iniciar_database("piezas_creadas.db")
+
+    print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas\
+
     app = QApplication(sys.argv)   # Crear aplicacion
     dialog = MyDialog()            # Crear ventana Dialog
     dialog.show()                  # Mostrar Dialog

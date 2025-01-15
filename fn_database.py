@@ -32,7 +32,7 @@ def db_cargar_familias_modelos(es_catalogo):
             modelos = [row[0] for row in cursor.fetchall()]
             dict_fam_mod[family] = modelos
     except sqlite3.Error as e:
-        print(f"Debug print> Database error: {e}")
+        print(f"DEBUG db_cargar_fam_mod() > Database error: {e}")
     finally:
         # Close the database connection
         connection.close()
@@ -164,62 +164,81 @@ def print_familias_modelos():
                 print(f"  - {model}")
             print()
     
+
     dict_fam_mod_catalogo = db_cargar_familias_modelos(True)
-    dict_fam_mod_creadas = db_cargar_familias_modelos(False)
+    # dict_fam_mod_creadas = db_cargar_familias_modelos(False)
 
     print_families_and_models("Piezas CATALOGO", dict_fam_mod_catalogo)
-    print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
+    # print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
 
-def db_iniciar_catalogo(db_path):
+''' init_db '''
+def db_iniciar_database(db_path):
     """
-    Initializes the database by creating the required tables if they do not exist.
+    Inicializa la base de datos creando las tablas requeridas si no existen.
 
     Args:
-        db_path (str): The path to the database file (e.g., 'catalogo.db').
+        db_path (str): Path al archivo base de datos (ej., 'catalogo.db').
     """
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
 
+    # Revisa si existe la relacion
+    def table_exists(table_name):
+        cursor.execute("""
+            SELECT name FROM sqlite_master WHERE type='table' AND name=?
+        """, (table_name,))
+        return cursor.fetchone() is not None
+
     try:
-        # Create the `piezas` table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS piezas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                familia TEXT NOT NULL,
-                modelo TEXT NOT NULL
-            )
-        """)
+        # REVISAR RELACION PIEZAS
+        if not table_exists("piezas"):
+            cursor.execute("""
+                CREATE TABLE piezas (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    familia TEXT NOT NULL,
+                    modelo TEXT NOT NULL
+                )
+            """)
+            print(f"init_db {db_path} > Tabla 'piezas' creada.")
+        else:
+            print(f"init_db {db_path} > La relacion 'piezas' ya existe. No se realizaron cambios.")
 
-        # Create the `parametros` table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS parametros (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tipo_seccion INTEGER NOT NULL,
-                trapecios INTEGER NOT NULL,
-                pieza_id INTEGER NOT NULL, 
-                FOREIGN KEY (pieza_id) REFERENCES piezas (id)
-            )
-        """)
+        # REVISAR RELACION PARAMETROS
+        if not table_exists("parametros"):
+            cursor.execute("""
+                CREATE TABLE parametros (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo_seccion INTEGER NOT NULL,
+                    trapecios INTEGER NOT NULL,
+                    pieza_id INTEGER NOT NULL, 
+                    FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+                )
+            """)
+            print(f"init_db {db_path} > Tabla 'parametros' creada")
+        else:
+            print(f"init_db {db_path} > La relacion 'parametros' ya existe. No se realizaron cambios.")
 
-        # Create the `trapecios` table
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS trapecios (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tipo_seccion TEXT NOT NULL,
-                posicion INTEGER NOT NULL,
-                base_inf REAL NOT NULL,
-                base_sup REAL NOT NULL,
-                altura REAL NOT NULL,
-                pieza_id INTEGER NOT NULL,
-                FOREIGN KEY (pieza_id) REFERENCES piezas (id)
-            )
-        """)
+        # REVISAR RELACION TRAPECIOS
+        if not table_exists("trapecios"):
+            cursor.execute("""
+                CREATE TABLE trapecios (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo_seccion TEXT NOT NULL,
+                    posicion INTEGER NOT NULL,
+                    base_inf REAL NOT NULL,
+                    base_sup REAL NOT NULL,
+                    altura REAL NOT NULL,
+                    pieza_id INTEGER NOT NULL,
+                    FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+                )
+            """)
+            print(f"init_db {db_path} > Tabla 'trapecios' creada.")
+        else:
+            print(f"init_db {db_path} > La relacion 'trapecios' ya existe. No se realizaron cambios.")
 
-        print(f"Database '{db_path}' initialized successfully.")
     except sqlite3.Error as e:
-        print(f"Error initializing database '{db_path}': {e}")
+        print(f"DEBUG error al inicializar DB '{db_path}': {e}")
     finally:
-        # Ensure the connection is closed
         connection.close()
 
     return
