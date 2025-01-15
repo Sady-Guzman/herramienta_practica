@@ -115,14 +115,18 @@ class CrearPiezaDialog(QDialog):
         layout_name = f"layout_s{index}"
 
         # Create the QLineEdit
+        name_label = QLabel(f"Sección {index}")  # Usa tab + 4 espacios para coincidir
         line_edit = QLineEdit()
+
+        name_label.setObjectName(f"t{index}_name")
         line_edit.setObjectName(f"s{index}_name")  # Assign a unique object name
 
         # Add the QLineEdit to the layout
+        layout.addWidget(name_label)
         layout.addWidget(line_edit)
 
-        # Insert the layout into the vertical container
-        self.ui_crear.layout_nuevas_row.insertLayout(0, layout)
+        # Insert the layout at the end (instead of the beginning)
+        self.ui_crear.layout_nuevas_row.addLayout(layout)
 
         # Add the vertical stretcher back to the bottom
         self.ui_crear.layout_nuevas_row.addStretch()
@@ -136,17 +140,18 @@ class CrearPiezaDialog(QDialog):
 
         if num_rows == 0:
             return
-        
+
         ''' Removes the vertical stretcher temporarily '''
         if self.ui_crear.layout_nuevas_row.itemAt(self.ui_crear.layout_nuevas_row.count() - 1).spacerItem():
             item = self.ui_crear.layout_nuevas_row.takeAt(self.ui_crear.layout_nuevas_row.count() - 1)
             del item
 
-        ''' Removes layouts one by one '''
+        ''' Removes layouts starting from the end '''
         for _ in range(num_rows):
             if self.ui_crear.layout_nuevas_row.count() > 0:
-                # Take the first layout item (first visually, last logically due to the ordering)
-                last_item = self.ui_crear.layout_nuevas_row.takeAt(0)
+                # Take the last layout item (last visually, last logically)
+                last_index = self.ui_crear.layout_nuevas_row.count() - 1
+                last_item = self.ui_crear.layout_nuevas_row.takeAt(last_index)
 
                 if last_item.layout():
                     self.delete_layout_widgets(last_item.layout())
@@ -154,7 +159,7 @@ class CrearPiezaDialog(QDialog):
                 del last_item  # Delete the layout from the container
 
                 # Remove the reference to the layout from the dynamic layouts list
-                self.ventana_crear_dynamic_layouts.pop(0)
+                self.ventana_crear_dynamic_layouts.pop()
 
                 # Decrement the dynamic section counter
                 self.ventana_crear_secciones_dinamicas -= 1
