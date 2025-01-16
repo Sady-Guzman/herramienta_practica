@@ -133,24 +133,33 @@ def db_get_cant_trapecios(pieza_id, seccion):
     return cant_trapecios
 
 def db_get_id_pieza(familia, modelo):
+    """
+    Fetch the pieza_id for a given familia and modelo.
+    """
     # Connect to the database
     conn = sqlite3.connect("catalogo.db")  # Replace with your database file
     cursor = conn.cursor()
 
-    # Query to get the pieza_id from the piezas table based on familia and modelo
-    cursor.execute("""
-        SELECT id FROM piezas WHERE familia = ? AND modelo = ?
-    """, (familia, modelo))
-    pieza_id = cursor.fetchone()
+    try:
+        # Query to get pieza_id from the piezas table
+        cursor.execute("""
+            SELECT id FROM piezas WHERE familia = ? AND modelo = ?
+        """, (familia, modelo))
 
-    # If no match is found in the piezas table
-    if pieza_id is None:
-        print(f"No se encontró la pieza con familia: {familia} y modelo: {modelo}")
+        # Fetch the pieza_id
+        pieza_id = cursor.fetchone()
+
+        if pieza_id:
+            return pieza_id  # Return the pieza_id as a tuple
+        else:
+            print(f"Debug: No pieza_id found for familia '{familia}' and modelo '{modelo}'")
+            return None
+    except sqlite3.Error as e:
+        print(f"Debug: Database error in db_get_id_pieza: {e}")
+        return None
+    finally:
+        # Close the database connection
         conn.close()
-        return []
-    
-    print("debug.db_get_id_pieza() > id pieza: ", pieza_id)
-    return pieza_id
 
 
 ''' print todas las familias y sus respectivos modelos de forma estructurada'''
@@ -196,7 +205,7 @@ def db_iniciar_database(db_path):
                 CREATE TABLE piezas (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     familia TEXT NOT NULL,
-                    modelo TEXT NOT NULL
+                    modelo TEXT NOT NULL UNIQUE
                 )
             """)
             print(f"init_db {db_path} > Tabla 'piezas' creada.")
@@ -242,3 +251,194 @@ def db_iniciar_database(db_path):
         connection.close()
 
     return
+
+
+''' ==================================================================================================== '''
+
+# def insert_pieza_dynamically(pieza_data, parametros_data, trapecios_data):
+#     """
+#     Inserts a new pieza into the database with a variable number of sections (parametros)
+#     and trapezoids (trapecios).
+    
+#     :param db_path: Path to the SQLite database file.
+#     :param pieza_data: Tuple containing the familia and modelo for the pieza.
+#     :param parametros_data: List of tuples, each representing a (tipo_seccion, trapecios).
+#     :param trapecios_data: List of tuples, each representing a (tipo_seccion, posicion, base_inf, base_sup, altura).
+#     """
+#     # Connect to SQLite database
+#     conn = sqlite3.connect("piezas_creadas.db")
+#     cursor = conn.cursor()
+
+#     # Enable foreign key constraints
+#     cursor.execute("PRAGMA foreign_keys = ON;")
+
+#     try:
+#         # Insert data into piezas and fetch the auto-generated pieza_id
+#         cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", pieza_data)
+#         pieza_id = cursor.lastrowid  # Dynamically fetch the ID of the last inserted row
+
+#         # Insert data into parametros using the fetched pieza_id
+#         parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
+#         cursor.executemany(
+#             "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
+#             parametros_data_with_id,
+#         )
+
+#         # Insert data into trapecios using the fetched pieza_id
+#         trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
+#         cursor.executemany(
+#             "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
+#             trapecios_data_with_id,
+#         )
+
+#         # Commit the transaction
+#         conn.commit()
+#         print(f"Se insertaron los datos de: {pieza_data[0]} - {pieza_data[1]}")
+
+#     except sqlite3.Error as e:
+#         print(f"Error inserting data: {e}")
+#         conn.rollback()  # Rollback in case of an error
+
+#     finally:
+#         # Close the connection
+#         conn.close()
+
+
+def insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
+    """
+    Inserts or updates a pieza in the database. If the pieza's modelo already exists, 
+    updates the existing record and its related data.
+    
+    :param db_path: Path to the SQLite database file.
+    :param pieza_data: Tuple containing the familia and modelo for the pieza.
+    :param parametros_data: List of tuples, each representing a (tipo_seccion, trapecios).
+    :param trapecios_data: List of tuples, each representing a (tipo_seccion, posicion, base_inf, base_sup, altura).
+    """
+    # Connect to SQLite database
+    conn = sqlite3.connect("piezas_creadas.db")
+    cursor = conn.cursor()
+
+    # Enable foreign key constraints
+    cursor.execute("PRAGMA foreign_keys = ON;")
+
+    try:
+        # Check if a pieza with the same modelo already exists
+        cursor.execute("SELECT id FROM piezas WHERE modelo = ?;", (pieza_data[1],))
+        existing_pieza = cursor.fetchone()
+
+        if existing_pieza:
+            # If pieza exists, fetch its ID
+            pieza_id = existing_pieza[0]
+            print(f"Pieza with modelo '{pieza_data[1]}' already exists. Updating data.")
+
+            # Update the familia column for the existing pieza
+            cursor.execute("UPDATE piezas SET familia = ? WHERE id = ?;", (pieza_data[0], pieza_id))
+
+            # Delete existing related records in parametros and trapecios
+            cursor.execute("DELETE FROM parametros WHERE pieza_id = ?;", (pieza_id,))
+            cursor.execute("DELETE FROM trapecios WHERE pieza_id = ?;", (pieza_id,))
+        else:
+            # If pieza does not exist, insert it and get the new pieza_id
+            cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", pieza_data)
+            pieza_id = cursor.lastrowid
+            print(f"Inserted new pieza: {pieza_data[0]} - {pieza_data[1]}")
+
+        # Insert data into parametros using the pieza_id
+        parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
+        cursor.executemany(
+            "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
+            parametros_data_with_id,
+        )
+
+        # Insert data into trapecios using the pieza_id
+        trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
+        cursor.executemany(
+            "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
+            trapecios_data_with_id,
+        )
+
+        # Commit the transaction
+        conn.commit()
+        print(f"Data successfully inserted/updated for pieza: {pieza_data[0]} - {pieza_data[1]}")
+
+    except sqlite3.Error as e:
+        print(f"Error inserting/updating data: {e}")
+        conn.rollback()  # Rollback in case of an error
+
+    finally:
+        # Close the connection
+        conn.close()
+
+
+
+
+# def insert_or_update_pieza(piezas_data, parametros_data, trapecios_data):
+    
+#     # Connect to SQLite database
+#     conn = sqlite3.connect("piezas_creadas.db")
+#     cursor = conn.cursor()
+
+#     # Enable foreign key constraints
+#     cursor.execute("PRAGMA foreign_keys = ON;")
+    
+#     # Insert or update data
+#     for familia, modelo in piezas_data:
+#         # Check if the pieza already exists
+#         cursor.execute("SELECT id FROM piezas WHERE modelo = ?", (modelo,))
+#         result = cursor.fetchone()
+
+#         if result:
+#             # If pieza exists, fetch its ID
+#             pieza_id = result[0]
+
+#             # Update the pieza (optional if familia or other data can change)
+#             cursor.execute(
+#                 "UPDATE piezas SET familia = ? WHERE id = ?;",
+#                 (familia, pieza_id),
+#             )
+
+#             # Update related records in parametros
+#             cursor.execute("DELETE FROM parametros WHERE pieza_id = ?", (pieza_id,))
+#             parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
+#             cursor.executemany(
+#                 "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
+#                 parametros_data_with_id,
+#             )
+
+#             # Update related records in trapecios
+#             cursor.execute("DELETE FROM trapecios WHERE pieza_id = ?", (pieza_id,))
+#             trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
+#             cursor.executemany(
+#                 "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
+#                 trapecios_data_with_id,
+#             )
+
+#             print(f"Pieza existente actualizada: {familia} - {modelo}")
+#         else:
+#             # If pieza doesn't exist, insert it and fetch the new ID
+#             cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", (familia, modelo))
+#             pieza_id = cursor.lastrowid  # Dynamically fetch the ID of the last inserted row
+
+#             # Insert data into parametros
+#             parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
+#             cursor.executemany(
+#                 "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
+#                 parametros_data_with_id,
+#             )
+
+#             # Insert data into trapecios
+#             trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
+#             cursor.executemany(
+#                 "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
+#                 trapecios_data_with_id,
+#             )
+
+#             print(f"Se insertó una nueva pieza: {familia} - {modelo}")
+
+#     # Commit the transaction
+#     conn.commit()
+
+#     # Close the connection
+#     conn.close()
+
+#     print("Operación completada.")

@@ -350,6 +350,35 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QPushButton" name="btn_save_pieza">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>591</y>
+     <width>221</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Guardar como Pieza de Usuario</string>
+   </property>
+   <property name="autoDefault">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_guardar_pieza">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>570</y>
+     <width>221</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Guardar en base de datos</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

@@ -23,8 +23,8 @@ class MyDialog(QDialog):
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
-        self.db_es_catalogo = 0 # Se usa para saber con cual variable de mapping poblar ComboBox Modelos
-        self.es_temporal = 0 # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
+        self.es_creada = 0 # Se usa para saber con cual variable de mapping poblar ComboBox Modelos
+        self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
         
         # Initialize storage for dynamic layout data
@@ -33,10 +33,8 @@ class MyDialog(QDialog):
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Carga datos de familias/modelos de DB
-        self.family_model_mapping_catalogo = db_cargar_familias_modelos(True)
-        ''' ========================================= Cambiar por funcion de DB usuario =============================== '''
-        # TODO Cambiar True ---> False 
-        self.family_model_mapping_usuario = db_cargar_familias_modelos(True) 
+        self.family_model_mapping_catalogo = db_cargar_familias_modelos(True) # Usa DB CATALOGO
+        self.family_model_mapping_usuario = db_cargar_familias_modelos(False) # Usa DB PIEZAS_CREADAS
 
 
         # Conecta btn genera layouts dinamicos
@@ -235,6 +233,32 @@ if __name__ == "__main__":
     db_iniciar_database("piezas_creadas.db")
 
     print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
+
+    # Example of a pieza with dynamic sections and trapezoids
+    pieza_data = ("test-familia1", "test-modelo1")  # This comes from your GUI
+    parametros_data = [
+        (1, 4),  # First section has 2 trapezoids
+        # (2, 3),  # Second section has 3 trapezoids
+        # Add more sections dynamically based on GUI inputs
+    ]
+    trapecios_data = [
+        # First section's trapezoids
+        (1, 1, 11, 22, 33),  # tipo_seccion, posicion, base_inf, base_sup, altura
+        (1, 2, 44, 55, 66),  # tipo_seccion, posicion, base_inf, base_sup, altura
+        (1, 3, 1111, 2222, 3333),
+        (1, 4, 11, 22, 33)
+        # Second section's trapezoids
+        # (2, 1, 0.400, 0.400, 0.100),
+        # (2, 2, 0.400, 0.300, 0.200),
+        # (2, 3, 0.300, 0.300, 0.150),
+        # Add more trapezoids dynamically based on GUI inputs
+    ]
+
+    # Call the function to insert data
+    # insert_pieza_dynamically(pieza_data, parametros_data, trapecios_data)
+
+    insert_or_update_pieza(pieza_data, parametros_data, trapecios_data)
+
 
     app = QApplication(sys.argv)   # Crear aplicacion
     dialog = MyDialog()            # Crear ventana Dialog

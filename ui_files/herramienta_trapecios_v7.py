@@ -248,6 +248,13 @@ class Ui_Dialog(object):
         self.btn_calcular_nuevos_valores.setObjectName(u"btn_calcular_nuevos_valores")
         self.btn_calcular_nuevos_valores.setGeometry(QRect(300, 180, 171, 32))
         self.btn_calcular_nuevos_valores.setAutoDefault(False)
+        self.btn_save_pieza = QPushButton(Dialog)
+        self.btn_save_pieza.setObjectName(u"btn_save_pieza")
+        self.btn_save_pieza.setGeometry(QRect(10, 591, 221, 31))
+        self.btn_save_pieza.setAutoDefault(False)
+        self.label_guardar_pieza = QLabel(Dialog)
+        self.label_guardar_pieza.setObjectName(u"label_guardar_pieza")
+        self.label_guardar_pieza.setGeometry(QRect(10, 570, 221, 21))
 
         self.retranslateUi(Dialog)
 
@@ -284,5 +291,7 @@ class Ui_Dialog(object):
         self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
         self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar trapecios", None))
         self.btn_calcular_nuevos_valores.setText(QCoreApplication.translate("Dialog", u"Calcular nuevos valores", None))
+        self.btn_save_pieza.setText(QCoreApplication.translate("Dialog", u"Guardar como Pieza de Usuario", None))
+        self.label_guardar_pieza.setText(QCoreApplication.translate("Dialog", u"Guardar en base de datos", None))
     # retranslateUi
 
