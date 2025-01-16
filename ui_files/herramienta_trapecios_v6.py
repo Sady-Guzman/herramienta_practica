@@ -272,10 +272,10 @@ class Ui_Dialog(object):
         self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Sum Area", None))
         self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Sum Ponderado", None))
         self.label_sum_op.setText(QCoreApplication.translate("Dialog", u"Sum I+A*r^2", None))
-        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar secciones", None))
+        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar trapecios", None))
         self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar", None))
         self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
-        self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar secciones", None))
+        self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar trapecios", None))
         self.btn_calcular_nuevos_valores.setText(QCoreApplication.translate("Dialog", u"Calcular nuevos valores", None))
     # retranslateUi
 

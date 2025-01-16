@@ -15,8 +15,8 @@ from fn_database import *
 def generate_layout(self):
     # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
     num_rows = self.ui.spin_cant_agregar.value()
+    # num_rows = 1 # BTN actua como agregar trapecios de Jacena en vez de usar spinBox
     print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
-
     tuplas_existentes = self.historial_agregados
 
     ''' Loop to create the frames '''
