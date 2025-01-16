@@ -222,3 +222,12 @@ def aplicar_pieza_catalogo(self):
     # Aplica resultados a layouts dinámicos + layouts fijos
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
+
+def show_popup(self, message):
+    ''' Displays a popup message with the given message '''
+    popup = QMessageBox()
+    popup.setIcon(QMessageBox.Warning)  # Warning icon
+    popup.setWindowTitle("Alerta")  # Popup window title
+    popup.setText(message)  # Main message text
+    popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
+    popup.exec_()  # Displays the popup

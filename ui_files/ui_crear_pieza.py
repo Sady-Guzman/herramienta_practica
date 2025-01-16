@@ -57,10 +57,7 @@ class Ui_Dialog(object):
 
         self.gridLayout_datos.addWidget(self.label_familia, 1, 0, 1, 1)
 
-        self.lineEdit_modelo = QLineEdit(self.gridLayoutWidget_3)
-        self.lineEdit_modelo.setObjectName(u"lineEdit_modelo")
-
-        self.gridLayout_datos.addWidget(self.lineEdit_modelo, 1, 3, 1, 1)
+        
 
         self.label_modelo = QLabel(self.gridLayoutWidget_3)
         self.label_modelo.setObjectName(u"label_modelo")
@@ -76,6 +73,11 @@ class Ui_Dialog(object):
         self.lineEdit_familia.setObjectName(u"lineEdit_familia")
 
         self.gridLayout_datos.addWidget(self.lineEdit_familia, 1, 1, 1, 1)
+
+        self.lineEdit_modelo = QLineEdit(self.gridLayoutWidget_3)
+        self.lineEdit_modelo.setObjectName(u"lineEdit_modelo")
+
+        self.gridLayout_datos.addWidget(self.lineEdit_modelo, 1, 3, 1, 1)
 
         self.layout_btns_secciones = QHBoxLayout()
         self.layout_btns_secciones.setObjectName(u"layout_btns_secciones")

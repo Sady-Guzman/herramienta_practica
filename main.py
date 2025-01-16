@@ -24,6 +24,7 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
         self.db_es_catalogo = 0
+        self.test_value = 0
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
@@ -76,7 +77,7 @@ if __name__ == "__main__":
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
 
-    print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas\
+    print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
     app = QApplication(sys.argv)   # Crear aplicacion
     dialog = MyDialog()            # Crear ventana Dialog
