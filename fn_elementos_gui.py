@@ -172,6 +172,23 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
 
 ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
 ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
+
+# TODO implementar FLAG true/false para caso de uso
+# TRUE -> Uso normal, aplica pieza/seccion catalogo usando id_DB
+# FALSE -> Uso para pieza temporal. No hace query a DB
+
+def aplicar_pieza(self, es_temporal):
+    if es_temporal == False:
+        aplicar_pieza_catalogo(self)
+    else:
+        aplicar_pieza_temporal(self)
+
+
+def aplicar_pieza_temporal(self):
+    print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
+
+
+
 def aplicar_pieza_catalogo(self):
     # Retrieve selected family, model, and section type
     pieza_familia = self.ui.combo_familia.currentText()
@@ -254,6 +271,7 @@ def handle_crear_pieza(self):
         poblar_datos_pieza_temporal(self, familia, modelo, secciones)
 
 
+        self.es_temporal = 1 # Se usa para saber que comportamiento darle a btn acpt_tipo_seccion
     else:
         # The dialog was canceled
         print("No data returned. Dialog was canceled.")

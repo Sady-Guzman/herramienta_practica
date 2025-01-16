@@ -23,7 +23,8 @@ class MyDialog(QDialog):
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
-        self.db_es_catalogo = 0
+        self.db_es_catalogo = 0 # Se usa para saber con cual variable de mapping poblar ComboBox Modelos
+        self.es_temporal = 0 # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
@@ -67,7 +68,7 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza_catalogo(self)) # Aplica pieza
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza(self, self.es_temporal)) # Aplica pieza/seccion
         
     
 
