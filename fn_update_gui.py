@@ -21,6 +21,7 @@ def poblar_combo_familia(self, tipo_db):
 
 
 ''' TIIPOS DE SECCIONES PARA PIEZA '''
+''' FUNCION ANTIGUA SIN USAR, AHORA SE USA update_list_seccines para lo mismo '''
 def update_combo_secciones(self):
     familia_seleccionada = self.ui.combo_familia.currentText()
     modelo_seleccionado = self.ui.combo_modelo.currentText()
@@ -145,3 +146,25 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
     self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
     self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")
     self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
+
+
+
+
+''' Poblar campos de ventana principal para pieza 'temporal' con datos de ventana de creacion '''
+''' Una pieza temporal es una pieza que existe despues de crearla con ventana de creacion pero aun no es guardada en base de datos '''
+def poblar_datos_pieza_temporal(self, familia, modelo, secciones):
+    ''' limpia y asigna nuevo valor a ComboBox de Familia '''
+    self.ui.combo_familia.clear()
+    self.ui.combo_familia.addItems(list(familia))
+
+    ''' limpia y asigna nuevo valor a ComboBox de Modelo '''
+    self.ui.combo_modelo.clear()
+    self.ui.combo_modelo.addItems(modelo)
+
+    ''' limpiar y asignar secciones a lista secciones '''
+    self.ui.list_tipo_seccion.clear()
+    if secciones:
+        print("El contenido de la lista tipos_Secciones es: ", secciones)
+        self.ui.list_tipo_seccion.addItems(secciones)
+    else:
+        self.ui.list_tipo_seccion.addItem("Sin secciones disponibles")

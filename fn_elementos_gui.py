@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from fn_calculo_propiedades import *
 from fn_update_gui import *
 from fn_database import *
+from fn_crear_pieza import open_crear_pieza_dialog
 
 ''' 
     Generacion y eliminacion de elementos dinamicos de ventana
@@ -223,11 +224,36 @@ def aplicar_pieza_catalogo(self):
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
 
-def show_popup(self, message):
-    ''' Displays a popup message with the given message '''
-    popup = QMessageBox()
-    popup.setIcon(QMessageBox.Warning)  # Warning icon
-    popup.setWindowTitle("Alerta")  # Popup window title
-    popup.setText(message)  # Main message text
-    popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
-    popup.exec_()  # Displays the popup
+
+
+
+''' funcion para manejar informacion ingresada por usuario en VENTANA CREACION PIEZA '''
+def handle_crear_pieza(self):
+    ''' Handles the logic when the "Crear Pieza" button is clicked '''
+    # Open the dialog and capture the result data
+    result_data = open_crear_pieza_dialog(self)
+
+    if result_data:
+        # The dialog was accepted, and result_data is returned
+        print("Data from CrearPiezaDialog:")
+        print(result_data)
+
+        # Example: Process the result_data
+        familia = result_data["familia"]
+        modelo = result_data["modelo"]
+        cantidad_secciones = result_data["cantidad_secciones"]
+        secciones = result_data["secciones"]
+
+        # Use the data (e.g., store it, update the GUI, etc.)
+        print(f"DEBUG fn_elementos_gui -> Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}")
+        print("Secciones:")
+        for index, seccion in enumerate(secciones, start=1):
+            print(f"  Sección {index}: {seccion}")
+
+        ''' Poblar ComboBoxes Familia/Modelo, Lista secciones '''
+        poblar_datos_pieza_temporal(self, familia, modelo, secciones)
+
+
+    else:
+        # The dialog was canceled
+        print("No data returned. Dialog was canceled.")

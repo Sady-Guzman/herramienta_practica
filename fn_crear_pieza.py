@@ -20,7 +20,6 @@ from ui_files.ui_crear_pieza import Ui_Dialog
 
 from fn_elementos_gui import *
 from fn_update_gui import *
-from fn_elementos_gui import show_popup
 
 
 class CrearPiezaDialog(QDialog):
@@ -59,14 +58,14 @@ class CrearPiezaDialog(QDialog):
         # Validate inputs
         if not familia or not modelo or cantidad_secciones <= 0 or not self.validate_dynamic_layouts():
             print("DEBUG crear_pieza -> Please enter valid data for all fields.")
-            show_popup("Alerta", "Ingresar todos los valores requeridos.")
+            self.show_popup("Ingresar todos los valores requeridos.")
             return
 
         # Collect the content of the dynamic QLineEdit widgets
         secciones = [layout["line_edit"].text() for layout in self.ventana_crear_dynamic_layouts]
 
         # Close the dialog after processing
-        print(f"Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}, Contenido Secciones: {secciones}")
+        # print(f"Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}, Contenido Secciones: {secciones}")
         self.result_data = {
             "familia": familia,
             "modelo": modelo,
@@ -187,6 +186,14 @@ class CrearPiezaDialog(QDialog):
         ''' Add the vertical stretcher back to the layout '''
         self.ui_crear.layout_nuevas_row.addStretch()
 
+    def show_popup(self, message):
+        ''' Displays a popup message with the given message '''
+        popup = QMessageBox()
+        popup.setIcon(QMessageBox.Warning)  # Warning icon
+        popup.setWindowTitle("Alerta")  # Popup window title
+        popup.setText(message)  # Main message text
+        popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
+        popup.exec_()  # Displays the popup
 
 
 ''' Se llama por btn desde main.py '''

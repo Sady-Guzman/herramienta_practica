@@ -24,7 +24,7 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
         self.db_es_catalogo = 0
-        self.test_value = 0
+        self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
@@ -50,7 +50,7 @@ class MyDialog(QDialog):
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
 
         # Invoca ventana para CREAR NUEVA PIEZA
-        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: open_crear_pieza_dialog(self))
+        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR
         
         # conecta btn para poblar combo familia con piezas DB catalogo
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
