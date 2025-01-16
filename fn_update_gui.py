@@ -14,6 +14,7 @@ def poblar_combo_familia(self, tipo_db):
     self.ui.combo_familia.clear()
     if tipo_db == True:
         self.db_es_catalogo = True
+        self.es_temporal = False
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_catalogo.keys()))
     else:
         self.db_es_catalogo = False

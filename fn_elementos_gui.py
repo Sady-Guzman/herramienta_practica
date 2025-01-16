@@ -177,11 +177,11 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
 # TRUE -> Uso normal, aplica pieza/seccion catalogo usando id_DB
 # FALSE -> Uso para pieza temporal. No hace query a DB
 
-def aplicar_pieza(self, es_temporal):
-    if es_temporal == False:
-        aplicar_pieza_catalogo(self)
-    else:
-        aplicar_pieza_temporal(self)
+# def aplicar_pieza(self, es_temporal):
+#     if es_temporal == False:
+#         aplicar_pieza_catalogo(self)
+#     else:
+#         aplicar_pieza_temporal(self)
 
 
 
@@ -289,7 +289,7 @@ def handle_crear_pieza(self):
         poblar_datos_pieza_temporal(self, familia, modelo, secciones)
 
 
-        self.es_temporal = 1 # Se usa para saber que comportamiento darle a btn acpt_tipo_seccion
+        self.es_temporal = True # Se usa para saber que comportamiento darle a btn acpt_tipo_seccion
     else:
         # The dialog was canceled
         print("No data returned. Dialog was canceled.")
