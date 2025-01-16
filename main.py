@@ -7,7 +7,6 @@ from fn_database import *
 from fn_calculo_propiedades import *
 from fn_update_gui import *
 from fn_elementos_gui import *
-# from fn_crear_pieza import CrearPiezaDialog
 from fn_crear_pieza import open_crear_pieza_dialog
 
 
@@ -74,7 +73,6 @@ class MyDialog(QDialog):
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''
-    # TODO descomentar init de base de datos
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
 
