@@ -140,7 +140,7 @@ class MyDialog(QDialog):
     def repopulate_dynamic_layouts(self, pieza_seccion, cantidad_secciones, cantidad_trapecios):
         ''' Repopulates the dynamic layouts with stored data for the selected section '''
         # Clear the current layouts and adjust for the selected section
-        ajustar_layouts_dinamicos(self, cantidad_secciones)
+        ajustar_layouts_dinamicos(self, cantidad_trapecios)
 
         # Retrieve data for the selected section
         if pieza_seccion in self.dynamic_layout_data:
@@ -150,7 +150,8 @@ class MyDialog(QDialog):
 
         # print("DEBUG repopulate_d_l() -->\t\t valor actual de self.dynamic_layouts: ", self.dynamic_layouts)
         # Populate the dynamic layouts with the corresponding data
-        for i, layout in enumerate(self.dynamic_layouts):
+        # for i, layout in enumerate(self.dynamic_layouts):
+        for i, layout in range(cantidad_trapecios):
             print("*** *** REPOPULATE Dyn Lay *** *** ", i)
             if i < len(section_data):
                 data = section_data[i]
@@ -204,31 +205,29 @@ class MyDialog(QDialog):
             return
 
         pieza_seccion = pieza_seccion_item.text()
-        cantidad_secciones = self.ui.list_tipo_seccion.count()
-        cantidad_trapecios = len(self.dynamic_layouts)
-
-        # Adjust dynamic layouts based on the section count
-        ajustar_layouts_dinamicos(self, cantidad_secciones)
 
         # Retrieve the data for the selected section
         section_data = self.dynamic_layout_data.get(pieza_seccion, [])
+        cantidad_trapecios_seccion = len(section_data)  # The number of rows in the selected section
 
-        # print("DEBUG load_section_data() -->\t\t valor actual de self.dynamic_layouts: ", self.dynamic_layouts)
+        print(f"DEBUG: Selected section '{pieza_seccion}' has {cantidad_trapecios_seccion} trapecios.")
 
-        # Populate the dynamic layouts with the data
-        for i, layout in enumerate(self.dynamic_layouts):
-            print("*** *** LOAD SECTION *** *** ", i)
-            if i < len(section_data):
-                data = section_data[i]
-                layout["bi_line"].setText(data["bi_line"])
-                layout["bs_line"].setText(data["bs_line"])
-                layout["altura_line"].setText(data["altura_line"])
-            else:
-                layout["bi_line"].setText("")
-                layout["bs_line"].setText("")
-                layout["altura_line"].setText("")
+        # Adjust the dynamic layouts to match the number of trapecios in the selected section
+        ajustar_layouts_dinamicos(self, cantidad_trapecios_seccion)
 
-        # print(f"DEBUG load_section_data -> Loaded data for section '{pieza_seccion}': {section_data}")
+        # Populate the dynamic layouts with the data for the selected section
+        for i in range(cantidad_trapecios_seccion):
+            if i < len(self.dynamic_layouts):  # Ensure we don’t access out-of-range layouts
+                layout = self.dynamic_layouts[i]
+                if i < len(section_data):  # Populate with stored data if available
+                    data = section_data[i]
+                    layout["bi_line"].setText(data.get("bi_line", ""))
+                    layout["bs_line"].setText(data.get("bs_line", ""))
+                    layout["altura_line"].setText(data.get("altura_line", ""))
+                else:  # Clear the layout fields if no data is available
+                    layout["bi_line"].setText("")
+                    layout["bs_line"].setText("")
+                    layout["altura_line"].setText("")
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''
