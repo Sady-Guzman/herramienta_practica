@@ -55,10 +55,9 @@ class MyDialog(QDialog):
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR
         
         # conecta btn para poblar combo familia con piezas DB catalogo
-        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
+        # self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
 
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
-        ''' TODO cambiar lambda a fn de catalogo creado '''
         self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ piezas Creadas_usuario
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
@@ -66,7 +65,7 @@ class MyDialog(QDialog):
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         # self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_combo_secciones(self)) # Combo Secciones
-        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self)) # Lista Secciones
+        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.db_es_catalogo)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal)) # Aplica pieza/seccion
@@ -257,7 +256,7 @@ if __name__ == "__main__":
     # Call the function to insert data
     # insert_pieza_dynamically(pieza_data, parametros_data, trapecios_data)
 
-    insert_or_update_pieza(pieza_data, parametros_data, trapecios_data)
+    # insert_or_update_pieza(pieza_data, parametros_data, trapecios_data)
 
 
     app = QApplication(sys.argv)   # Crear aplicacion

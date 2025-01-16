@@ -231,6 +231,7 @@ def aplicar_pieza_catalogo(self):
     # Obtiene Primary Key de la pieza (ID)
     pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
     
+    
     # Usa tabla Parametros de DB
     trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion)
 

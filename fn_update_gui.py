@@ -9,15 +9,17 @@ from fn_database import *
 
 ''' Poblar combobox famila '''
 def poblar_combo_familia(self, tipo_db):
-    # tipo_db: true -> catalogo, false -> usuario
+    # tipo_db: true -> catalogo, false -> usuario pieza_creada
 
     self.ui.combo_familia.clear()
     if tipo_db == True:
+        self.es_creada = False
         self.db_es_catalogo = True
         self.es_temporal = False
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_catalogo.keys()))
     else:
         self.db_es_catalogo = False
+        self.es_creada = True
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_usuario.keys()))
 
 
@@ -41,13 +43,16 @@ def update_combo_secciones(self):
     else:
         self.ui.combo_tipo_seccion.addItems(["Sin secciones disponibles"])
 
-def update_list_secciones(self):
+def update_list_secciones(self, db_es_catalogo):
     # Retrieve the selected family and model
     familia_seleccionada = self.ui.combo_familia.currentText()
     modelo_seleccionado = self.ui.combo_modelo.currentText()
 
     # Load the types of sections from the database
-    tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado)
+    if db_es_catalogo == True:
+        tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, True)
+    else:
+        tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, False)
     print(tipos_secciones)
 
     # Extract values from the tuples and convert them to strings

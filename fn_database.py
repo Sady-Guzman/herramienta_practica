@@ -39,12 +39,16 @@ def db_cargar_familias_modelos(es_catalogo):
 
     return dict_fam_mod
 
-def db_cargar_tipos_secciones(familia, modelo):
+def db_cargar_tipos_secciones(familia, modelo, es_catalogo):
     """
     obtiene tipos de secciones existentes para una pieza seleccionada
     """
 
-    db_path = 'catalogo.db' 
+    if es_catalogo == True:
+        db_path = 'catalogo.db' 
+    else:
+        db_path = 'piezas_creadas.db'
+    
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -69,7 +73,7 @@ def db_cargar_tipos_secciones(familia, modelo):
         conn.close()
 
     except sqlite3.Error as e:
-        print(f"Debug print> Database error: {e}")
+        print(f"Debug print db_cargar_tipos_secciones() -> Database error: {e}")
     finally:
         # Close the database connection
         conn.close()
@@ -77,7 +81,6 @@ def db_cargar_tipos_secciones(familia, modelo):
     print(tipos_secciones)
 
     return tipos_secciones
-
 
 
 
@@ -137,7 +140,7 @@ def db_get_id_pieza(familia, modelo):
     Fetch the pieza_id for a given familia and modelo.
     """
     # Connect to the database
-    conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    conn = sqlite3.connect("catalogo.db")
     cursor = conn.cursor()
 
     try:
@@ -175,10 +178,10 @@ def print_familias_modelos():
     
 
     dict_fam_mod_catalogo = db_cargar_familias_modelos(True)
-    # dict_fam_mod_creadas = db_cargar_familias_modelos(False)
+    dict_fam_mod_creadas = db_cargar_familias_modelos(False)
 
     print_families_and_models("Piezas CATALOGO", dict_fam_mod_catalogo)
-    # print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
+    print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
 
 ''' init_db '''
 def db_iniciar_database(db_path):
