@@ -68,9 +68,63 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: aplicar_pieza(self, self.es_temporal)) # Aplica pieza/seccion
-        
-    
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal)) # Aplica pieza/seccion
+
+    def aplicar_pieza(self, es_temporal):
+        if es_temporal == False:
+            aplicar_pieza_catalogo(self)
+        else:
+            self.aplicar_pieza_temporal()
+
+    def aplicar_pieza_temporal(self):
+        print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
+
+        # Store data from current dynamic layouts before switching sections
+        self.store_dynamic_layout_data()
+
+        # Retrieve the selected family and model
+        familia = self.ui.combo_familia.currentText()
+        modelo = self.ui.combo_modelo.currentText()
+
+        # Ensure there is a selection in the list widget
+        if not familia or not modelo:
+            print("Debug: No family or model selected.")
+            return
+
+        # Retrieve the number of sections
+        cantidad_secciones = len(self.dynamic_layouts)
+
+        # Repopulate the dynamic layouts with stored data
+        self.repopulate_dynamic_layouts(cantidad_secciones)
+
+    def store_dynamic_layout_data(self):
+        ''' Stores the data from the current dynamic layouts '''
+        self.dynamic_layout_data = []
+        for layout in self.dynamic_layouts:
+            data = {
+                "bi_line": layout["bi_line"].text(),
+                "bs_line": layout["bs_line"].text(),
+                "altura_line": layout["altura_line"].text(),
+                "area_line": layout["area_line"].text(),
+                "cg_line": layout["cg_line"].text(),
+                "inercia_line": layout["inercia_line"].text(),
+                "op_line": layout["op_line"].text(),
+            }
+            self.dynamic_layout_data.append(data)
+
+    def repopulate_dynamic_layouts(self, cantidad_secciones):
+        ''' Repopulates the dynamic layouts with stored data '''
+        ajustar_layouts_dinamicos(self, cantidad_secciones)
+        for i, layout in enumerate(self.dynamic_layouts):
+            if i < len(self.dynamic_layout_data):
+                data = self.dynamic_layout_data[i]
+                layout["bi_line"].setText(data["bi_line"])
+                layout["bs_line"].setText(data["bs_line"])
+                layout["altura_line"].setText(data["altura_line"])
+                layout["area_line"].setText(data["area_line"])
+                layout["cg_line"].setText(data["cg_line"])
+                layout["inercia_line"].setText(data["inercia_line"])
+                layout["op_line"].setText(data["op_line"])
 
 
 if __name__ == "__main__":

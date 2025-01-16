@@ -184,9 +184,27 @@ def aplicar_pieza(self, es_temporal):
         aplicar_pieza_temporal(self)
 
 
+
 def aplicar_pieza_temporal(self):
     print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
 
+    # Store data from current dynamic layouts before switching sections
+    self.store_dynamic_layout_data()
+
+    # Retrieve the selected family and model
+    familia = self.ui.combo_familia.currentText()
+    modelo = self.ui.combo_modelo.currentText()
+
+    # Ensure there is a selection in the list widget
+    if not familia or not modelo:
+        print("Debug: No family or model selected.")
+        return
+
+    # Retrieve the number of sections
+    cantidad_secciones = len(self.dynamic_layouts)
+
+    # Repopulate the dynamic layouts with stored data
+    self.repopulate_dynamic_layouts(cantidad_secciones)
 
 
 def aplicar_pieza_catalogo(self):
