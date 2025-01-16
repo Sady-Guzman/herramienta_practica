@@ -23,7 +23,7 @@ class MyDialog(QDialog):
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
-        self.es_creada = 0 # Se usa para saber con cual variable de mapping poblar ComboBox Modelos
+        self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
         
