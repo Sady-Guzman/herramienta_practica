@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.herramienta_trapecios_v6 import Ui_Dialog  # Import from the ui_files directory
+from ui_files.herramienta_trapecios_v7 import Ui_Dialog  # Import from the ui_files directory
 from fn_database import *
 from fn_calculo_propiedades import *
 from fn_update_gui import *
@@ -26,6 +26,9 @@ class MyDialog(QDialog):
         self.db_es_catalogo = 0 # Se usa para saber con cual variable de mapping poblar ComboBox Modelos
         self.es_temporal = 0 # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+        
+        # Initialize storage for dynamic layout data
+        self.dynamic_layout_data = {}
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
@@ -70,62 +73,149 @@ class MyDialog(QDialog):
         # Cambia tipo de seccion en layouts dinamicos
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal)) # Aplica pieza/seccion
 
+        # Conectar botones a sus métodos
+        # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
+        self.ui.btn_save_seccion.clicked.connect(self.save_section_data)       # Guardar datos de sección
+
+
     def aplicar_pieza(self, es_temporal):
         if es_temporal == False:
             aplicar_pieza_catalogo(self)
         else:
-            self.aplicar_pieza_temporal()
+            # self.aplicar_pieza_temporal()
+            self.load_section_data()
 
     def aplicar_pieza_temporal(self):
         print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
 
-        # Store data from current dynamic layouts before switching sections
-        self.store_dynamic_layout_data()
-
-        # Retrieve the selected family and model
+        # Retrieve the selected family, model, and section
         familia = self.ui.combo_familia.currentText()
         modelo = self.ui.combo_modelo.currentText()
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()  # variable tipo obj/mem
 
         # Ensure there is a selection in the list widget
-        if not familia or not modelo:
-            print("Debug: No family or model selected.")
+        if not familia or not modelo or not pieza_seccion_item:
+            print("Debug: No family, model, or section selected.")
             return
 
+        pieza_seccion = pieza_seccion_item.text()  # obtiene sección de lista
+        print(f"DEBUG ap_pie_temp() --> contenido pieza_seccion_item: {pieza_seccion_item}, contenido pieza_seccion: {pieza_seccion}")
+
         # Retrieve the number of sections
-        cantidad_secciones = len(self.dynamic_layouts)
+        cantidad_secciones = self.ui.list_tipo_seccion.count()
+        cantidad_trapecios = len(self.dynamic_layouts)
+        print(f"DEBUG ap_pie_temp() -> cantidad secciones: {cantidad_secciones} ... cantidad_trapecios: {cantidad_trapecios}")
 
-        # Repopulate the dynamic layouts with stored data
-        self.repopulate_dynamic_layouts(cantidad_secciones)
+        # Store data from the current dynamic layouts before switching sections
+        self.store_dynamic_layout_data(pieza_seccion)
 
-    def store_dynamic_layout_data(self):
+        # Repopulate the dynamic layouts with the data for the selected section
+        self.repopulate_dynamic_layouts(pieza_seccion, cantidad_secciones, cantidad_trapecios)
+
+
+    def store_dynamic_layout_data(self, pieza_seccion):
         ''' Stores the data from the current dynamic layouts '''
-        self.dynamic_layout_data = []
+        if not hasattr(self, "dynamic_layout_data"):  # Initialize the storage dictionary if it doesn't exist
+            self.dynamic_layout_data = {}
+
+        # Collect data for the current section
+        current_section_data = []
         for layout in self.dynamic_layouts:
             data = {
                 "bi_line": layout["bi_line"].text(),
                 "bs_line": layout["bs_line"].text(),
-                "altura_line": layout["altura_line"].text(),
-                "area_line": layout["area_line"].text(),
-                "cg_line": layout["cg_line"].text(),
-                "inercia_line": layout["inercia_line"].text(),
-                "op_line": layout["op_line"].text(),
+                "altura_line": layout["altura_line"].text()
             }
-            self.dynamic_layout_data.append(data)
+            current_section_data.append(data)
 
-    def repopulate_dynamic_layouts(self, cantidad_secciones):
-        ''' Repopulates the dynamic layouts with stored data '''
+        # Store the data associated with the current section
+        self.dynamic_layout_data[pieza_seccion] = current_section_data
+        print(f"DEBUG store_dynamic_layout_data -> Stored data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
+
+
+    def repopulate_dynamic_layouts(self, pieza_seccion, cantidad_secciones, cantidad_trapecios):
+        ''' Repopulates the dynamic layouts with stored data for the selected section '''
+        # Clear the current layouts and adjust for the selected section
         ajustar_layouts_dinamicos(self, cantidad_secciones)
+
+        # Retrieve data for the selected section
+        if pieza_seccion in self.dynamic_layout_data:
+            section_data = self.dynamic_layout_data[pieza_seccion]
+        else:
+            section_data = []  # If no data exists for the section, use an empty list
+
+        # Populate the dynamic layouts with the corresponding data
         for i, layout in enumerate(self.dynamic_layouts):
-            if i < len(self.dynamic_layout_data):
-                data = self.dynamic_layout_data[i]
+            if i < len(section_data):
+                data = section_data[i]
                 layout["bi_line"].setText(data["bi_line"])
                 layout["bs_line"].setText(data["bs_line"])
                 layout["altura_line"].setText(data["altura_line"])
-                layout["area_line"].setText(data["area_line"])
-                layout["cg_line"].setText(data["cg_line"])
-                layout["inercia_line"].setText(data["inercia_line"])
-                layout["op_line"].setText(data["op_line"])
+            else:
+                # Clear the fields if no data exists for this index
+                layout["bi_line"].setText("")
+                layout["bs_line"].setText("")
+                layout["altura_line"].setText("")
 
+        print(f"DEBUG repopulate_dynamic_layouts -> Loaded data for section '{pieza_seccion}': {section_data}")
+        
+    def save_section_data(self):
+        """
+        Save the current dynamic layout data associated with the selected section.
+        """
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+        if not pieza_seccion_item:
+            print("Debug: No section selected to save.")
+            return
+
+        pieza_seccion = pieza_seccion_item.text()
+        current_section_data = []
+
+        # Collect data from the dynamic layouts
+        for layout in self.dynamic_layouts:
+            data = {
+                "bi_line": layout["bi_line"].text(),
+                "bs_line": layout["bs_line"].text(),
+                "altura_line": layout["altura_line"].text()
+            }
+            current_section_data.append(data)
+
+        # Store the data under the selected section name
+        self.dynamic_layout_data[pieza_seccion] = current_section_data
+        print(f"DEBUG save_section_data -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
+
+    def load_section_data(self):
+        """
+        Load the dynamic layout data associated with the selected section.
+        """
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+        if not pieza_seccion_item:
+            print("Debug: No section selected to load.")
+            return
+
+        pieza_seccion = pieza_seccion_item.text()
+        cantidad_secciones = self.ui.list_tipo_seccion.count()
+        cantidad_trapecios = len(self.dynamic_layouts)
+
+        # Adjust dynamic layouts based on the section count
+        ajustar_layouts_dinamicos(self, cantidad_secciones)
+
+        # Retrieve the data for the selected section
+        section_data = self.dynamic_layout_data.get(pieza_seccion, [])
+
+        # Populate the dynamic layouts with the data
+        for i, layout in enumerate(self.dynamic_layouts):
+            if i < len(section_data):
+                data = section_data[i]
+                layout["bi_line"].setText(data["bi_line"])
+                layout["bs_line"].setText(data["bs_line"])
+                layout["altura_line"].setText(data["altura_line"])
+            else:
+                layout["bi_line"].setText("")
+                layout["bs_line"].setText("")
+                layout["altura_line"].setText("")
+
+        print(f"DEBUG load_section_data -> Loaded data for section '{pieza_seccion}': {section_data}")
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''
