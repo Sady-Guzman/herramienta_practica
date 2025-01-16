@@ -60,7 +60,7 @@ class MyDialog(QDialog):
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
 
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
-        ''' cambiar lambda a fn de catalogo creado '''
+        ''' TODO cambiar lambda a fn de catalogo creado '''
         self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ piezas Creadas_usuario
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
@@ -118,9 +118,13 @@ class MyDialog(QDialog):
         if not hasattr(self, "dynamic_layout_data"):  # Initialize the storage dictionary if it doesn't exist
             self.dynamic_layout_data = {}
 
+        # print("DEBUG store_d_l() -->\t\t valor actual de self.dynamic_layouts: ", self.dynamic_layouts)
         # Collect data for the current section
         current_section_data = []
+        i = 0 # TODO Eliminar i
         for layout in self.dynamic_layouts:
+            print("*** *** STORE Dyn Lay *** *** ", i)
+            i += 1
             data = {
                 "bi_line": layout["bi_line"].text(),
                 "bs_line": layout["bs_line"].text(),
@@ -130,7 +134,7 @@ class MyDialog(QDialog):
 
         # Store the data associated with the current section
         self.dynamic_layout_data[pieza_seccion] = current_section_data
-        print(f"DEBUG store_dynamic_layout_data -> Stored data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
+        # print(f"DEBUG store_dynamic_layout_data -> Stored data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
 
 
     def repopulate_dynamic_layouts(self, pieza_seccion, cantidad_secciones, cantidad_trapecios):
@@ -144,8 +148,10 @@ class MyDialog(QDialog):
         else:
             section_data = []  # If no data exists for the section, use an empty list
 
+        # print("DEBUG repopulate_d_l() -->\t\t valor actual de self.dynamic_layouts: ", self.dynamic_layouts)
         # Populate the dynamic layouts with the corresponding data
         for i, layout in enumerate(self.dynamic_layouts):
+            print("*** *** REPOPULATE Dyn Lay *** *** ", i)
             if i < len(section_data):
                 data = section_data[i]
                 layout["bi_line"].setText(data["bi_line"])
@@ -157,7 +163,7 @@ class MyDialog(QDialog):
                 layout["bs_line"].setText("")
                 layout["altura_line"].setText("")
 
-        print(f"DEBUG repopulate_dynamic_layouts -> Loaded data for section '{pieza_seccion}': {section_data}")
+        # print(f"DEBUG repopulate_dynamic_layouts -> Loaded data for section '{pieza_seccion}': {section_data}")
         
     def save_section_data(self):
         """
@@ -172,7 +178,11 @@ class MyDialog(QDialog):
         current_section_data = []
 
         # Collect data from the dynamic layouts
+        # TODO Eliminar i
+        i = 0
         for layout in self.dynamic_layouts:
+            print("*** *** SAVE SECTION *** *** ", i)
+            i += 1
             data = {
                 "bi_line": layout["bi_line"].text(),
                 "bs_line": layout["bs_line"].text(),
@@ -182,7 +192,7 @@ class MyDialog(QDialog):
 
         # Store the data under the selected section name
         self.dynamic_layout_data[pieza_seccion] = current_section_data
-        print(f"DEBUG save_section_data -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
+        # print(f"DEBUG save_section_data -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
 
     def load_section_data(self):
         """
@@ -203,8 +213,11 @@ class MyDialog(QDialog):
         # Retrieve the data for the selected section
         section_data = self.dynamic_layout_data.get(pieza_seccion, [])
 
+        # print("DEBUG load_section_data() -->\t\t valor actual de self.dynamic_layouts: ", self.dynamic_layouts)
+
         # Populate the dynamic layouts with the data
         for i, layout in enumerate(self.dynamic_layouts):
+            print("*** *** LOAD SECTION *** *** ", i)
             if i < len(section_data):
                 data = section_data[i]
                 layout["bi_line"].setText(data["bi_line"])
@@ -215,7 +228,7 @@ class MyDialog(QDialog):
                 layout["bs_line"].setText("")
                 layout["altura_line"].setText("")
 
-        print(f"DEBUG load_section_data -> Loaded data for section '{pieza_seccion}': {section_data}")
+        # print(f"DEBUG load_section_data -> Loaded data for section '{pieza_seccion}': {section_data}")
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''
