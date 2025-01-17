@@ -43,6 +43,7 @@ def db_cargar_tipos_secciones(familia, modelo, es_catalogo):
     """
     obtiene tipos de secciones existentes para una pieza seleccionada
     """
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_catalogo: ", es_catalogo)
 
     if es_catalogo == True:
         db_path = 'catalogo.db' 

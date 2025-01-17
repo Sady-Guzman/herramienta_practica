@@ -26,6 +26,7 @@ class MyDialog(QDialog):
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+        self.es_catalogo = 0
         
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
@@ -73,6 +74,7 @@ class MyDialog(QDialog):
         # Conectar botones a sus métodos
         # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
         self.ui.btn_save_seccion.clicked.connect(self.save_section_data)       # Guardar datos de sección
+
 
 
     def aplicar_pieza(self, es_temporal, es_creada):
