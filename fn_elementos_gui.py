@@ -207,7 +207,7 @@ def aplicar_pieza_temporal(self):
     self.repopulate_dynamic_layouts(cantidad_secciones)
 
 
-def aplicar_pieza_catalogo(self):
+def aplicar_pieza_catalogo(self, es_creada):
     # Retrieve selected family, model, and section type
     pieza_familia = self.ui.combo_familia.currentText()
     pieza_modelo = self.ui.combo_modelo.currentText()
@@ -227,16 +227,17 @@ def aplicar_pieza_catalogo(self):
         print("Debug: No se selecciona ninguna pieza/modelo")
         return
 
-    ''' Obtiene informacion de pieza '''        
-    # Obtiene Primary Key de la pieza (ID)
-    pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo)
+      
+    print(" AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada)
+    ''' obtiene ID de pieza, dependiendo de la base de datos '''
+    pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
     
     
     # Usa tabla Parametros de DB
-    trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion)
+    trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion, es_creada)
 
     # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
-    pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion)
+    pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
 
     ''' Asigna valores fijos (dimensiones) a layouts dinamicos '''
     # Iguala la cantidad de layouts dinamicos a la cantidad necesaria

@@ -68,16 +68,16 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.db_es_catalogo)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal)) # Aplica pieza/seccion
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada)) # Aplica pieza/seccion
 
         # Conectar botones a sus métodos
         # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
         self.ui.btn_save_seccion.clicked.connect(self.save_section_data)       # Guardar datos de sección
 
 
-    def aplicar_pieza(self, es_temporal):
+    def aplicar_pieza(self, es_temporal, es_creada):
         if es_temporal == False:
-            aplicar_pieza_catalogo(self)
+            aplicar_pieza_catalogo(self, es_creada)
         else:
             # self.aplicar_pieza_temporal()
             self.load_section_data()
@@ -233,29 +233,27 @@ if __name__ == "__main__":
 
     print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
-    # Example of a pieza with dynamic sections and trapezoids
-    pieza_data = ("test-familia1", "test-modelo1")  # This comes from your GUI
+    # Insert/Update de ejemplo para db piezas_creadas.db
+    pieza_data = ("test-familia1", "test-modelo1")  # En implementacion final se obtiene de ComboBoxes
     parametros_data = [
-        (1, 4),  # First section has 2 trapezoids
-        # (2, 3),  # Second section has 3 trapezoids
-        # Add more sections dynamically based on GUI inputs
+        (1, 4),  # (seccion, cant_trapecios en seccion)
+        # (2, 3)
+
     ]
     trapecios_data = [
-        # First section's trapezoids
+        # Trapecios primera seccion
         (1, 1, 11, 22, 33),  # tipo_seccion, posicion, base_inf, base_sup, altura
-        (1, 2, 44, 55, 66),  # tipo_seccion, posicion, base_inf, base_sup, altura
+        (1, 2, 44, 55, 66),
         (1, 3, 1111, 2222, 3333),
         (1, 4, 11, 22, 33)
-        # Second section's trapezoids
+        # Trapecios segunda seccion
         # (2, 1, 0.400, 0.400, 0.100),
         # (2, 2, 0.400, 0.300, 0.200),
-        # (2, 3, 0.300, 0.300, 0.150),
-        # Add more trapezoids dynamically based on GUI inputs
+        # (2, 3, 0.300, 0.300, 0.150)
     ]
 
-    # Call the function to insert data
-    # insert_pieza_dynamically(pieza_data, parametros_data, trapecios_data)
-
+    # Funcion de insert/update correctamente implementada
+    # TODO hacer fetch de valores de GUI y entregarlos como parametros
     # insert_or_update_pieza(pieza_data, parametros_data, trapecios_data)
 
 

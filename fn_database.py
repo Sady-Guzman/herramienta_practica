@@ -85,9 +85,15 @@ def db_cargar_tipos_secciones(familia, modelo, es_catalogo):
 
 
 
-def db_get_datos_trapecios(pieza_id, seccion):
+def db_get_datos_trapecios(pieza_id, seccion, es_creada):
     # Connect to the database
-    conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    # conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    # cursor = conn.cursor()
+
+    if es_creada == False:
+        conn = sqlite3.connect("catalogo.db")
+    else:
+        conn = sqlite3.connect("piezas_creadas.db")
     cursor = conn.cursor()
 
     print("pieza_id = " ,pieza_id)
@@ -110,9 +116,15 @@ def db_get_datos_trapecios(pieza_id, seccion):
     return trapecios
 
 
-def db_get_cant_trapecios(pieza_id, seccion):
+def db_get_cant_trapecios(pieza_id, seccion, es_creada):
     # Connect to the database
-    conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    # conn = sqlite3.connect("catalogo.db")  # Replace with your database file
+    # cursor = conn.cursor()
+
+    if es_creada == False:
+        conn = sqlite3.connect("catalogo.db")
+    else:
+        conn = sqlite3.connect("piezas_creadas.db")
     cursor = conn.cursor()
 
     print("pieza_id = " ,pieza_id)
@@ -135,12 +147,18 @@ def db_get_cant_trapecios(pieza_id, seccion):
     print("DEBUG get_cant_trapecios > Cantidad de trapecios en seccion: ", cant_trapecios)
     return cant_trapecios
 
-def db_get_id_pieza(familia, modelo):
+def db_get_id_pieza(familia, modelo, es_creada):
     """
     Fetch the pieza_id for a given familia and modelo.
     """
+
+    # print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB --> Valor es_Creada: ", es_creada)
+    # print("valor familia y modelo: ",familia, modelo)
     # Connect to the database
-    conn = sqlite3.connect("catalogo.db")
+    if es_creada == False:
+        conn = sqlite3.connect("catalogo.db")
+    else:
+        conn = sqlite3.connect("piezas_creadas.db")
     cursor = conn.cursor()
 
     try:
