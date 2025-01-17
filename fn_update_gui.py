@@ -103,9 +103,9 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
             f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
             f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
 
-    # Iterate over layouts and update widgets
+    # Iterate over layouts in reverse order and update widgets
     for i, trapecio in enumerate(pieza_trapecios):
-        layout = self.dynamic_layouts[i]
+        layout = self.dynamic_layouts[len(pieza_trapecios) - 1 - i]
 
         # Check if the widget is valid (exists)
         if not layout["bi_line"]:  # You can add similar checks for other widgets if necessary
@@ -152,6 +152,7 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
     self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")
     self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
     self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")
+    # self.ui.result_sum_ponderado.setText(f"{altura_acumulada-producto_ponderado:.7f}")
     self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
 
 

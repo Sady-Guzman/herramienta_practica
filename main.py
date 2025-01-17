@@ -52,14 +52,11 @@ class MyDialog(QDialog):
         # conecta btn para usar nueva pieza CATALOGO
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
 
-        # Invoca ventana para CREAR NUEVA PIEZA
-        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR
-        
-        # conecta btn para poblar combo familia con piezas DB catalogo
-        # self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
-
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
         self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ piezas Creadas_usuario
+
+        # Invoca ventana para CREAR NUEVA PIEZA
+        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
@@ -73,7 +70,43 @@ class MyDialog(QDialog):
 
         # Conectar botones a sus métodos
         # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
-        self.ui.btn_save_seccion.clicked.connect(self.save_section_data)       # Guardar datos de sección
+        self.ui.btn_save_seccion.clicked.connect(lambda: self.save_section_data())       # Guardar datos de sección
+
+        # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
+        self.ui.btn_save_pieza.clicked.connect(lambda: self.save_pieza_data(self.es_temporal)) # Guardar Pieza TEMP en DB
+
+
+    ''' Guarda informacion de pieza creada de forma temporal en base de datos piezas_creadas.db '''
+    def save_pieza_data(self, es_temp):
+        ''' 
+        Se necesita -->
+            Table Piezas
+                Nombre failia
+                Nombre Modelo
+            Table Parametros
+                cantidad secciones
+                nombre secciones
+                cantidad trapecios por seccion
+            Table Trapecios
+                informacion de LineEdits para cada seccion
+        '''
+        print("DEBUG - SAVE_PIEZA_DATA() CALLED")
+
+        if es_temp == False:
+            print(" NO SE PUEDE sobreescribir UNA PIEZA DE CATALOGO ")
+            self.popup_no_temp("No es posible guardar modificaciones de una pieza de catalogo.")
+        else:
+            print("Continua")
+            print("informacion en self.dynamic_layouts: ", self.dynamic_layout_data)
+
+    def popup_no_temp(self, message):
+        ''' Displays a popup message with the given message '''
+        popup = QMessageBox()
+        popup.setIcon(QMessageBox.Warning)  # Warning icon
+        popup.setWindowTitle("Alerta")  # Popup window title
+        popup.setText(message)  # Main message text
+        popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
+        popup.exec()  # Displays the popup
 
 
 

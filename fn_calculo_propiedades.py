@@ -93,8 +93,6 @@ def calcular_centro_gravedad(trapecios):
             ELSE:
                 h - h * (2 * MAX(base_sup, base_inf) + MIN(base_sup, base_inf)) ÷ (3 * (base_sup + base_inf)) + altura_acumulada
     '''
-
-
     altura_acumulada = 0  # representa SUM($E$3:E3)
     resultados = []       # Guarda cada valor de Cg
 
@@ -116,6 +114,8 @@ def calcular_centro_gravedad(trapecios):
         resultado = centro + altura_acumulada
         resultado = round(resultado, 9)
         resultados.append(resultado)
+        print("valor de var resultado: ", resultado)
+        print("Valor de var altura_acumulada: ", altura_acumulada)
 
     print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
     print(f"Debug calc_Cg -> Trapezoid {trapecio[0]} - Resultado: {resultado:.7f}") # 7 decimales
@@ -220,7 +220,7 @@ def calcular_nuevos_valores(self):
     valores_areas = calcular_area(valores_dimensiones_dinamicas)
     altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
     valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
-    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas)
+    valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas)
     suma_areas = calcular_suma_areas(valores_areas)
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)

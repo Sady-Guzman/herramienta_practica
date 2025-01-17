@@ -26,6 +26,7 @@ def generate_layout(self):
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
+''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
 def add_rows(self, index):
     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
     if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
@@ -75,13 +76,13 @@ def add_rows(self, index):
     layout.addWidget(op_line)
 
     ''' Inserta el layout al principio del contenedor vertical '''
-    self.ui.layout_nuevas_row.insertLayout(0, layout)
+    self.ui.layout_nuevas_row.insertLayout(0, layout)  # Change to insertLayout to add at the top
 
     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
     self.ui.layout_nuevas_row.addStretch()
 
     ''' Guarda la referencia al layout dinámico '''
-    self.dynamic_layouts.insert(0, {  # Cambia a `insert(0, ...)` para mantener el orden invertido en la lista
+    self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
         "bi_line": bi_line,
         "bs_line": bs_line,
         "altura_line": altura_line,

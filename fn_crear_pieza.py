@@ -186,6 +186,7 @@ class CrearPiezaDialog(QDialog):
         ''' Add the vertical stretcher back to the layout '''
         self.ui_crear.layout_nuevas_row.addStretch()
 
+    ''' TODO Cambiar nombre a caso especifico '''
     def show_popup(self, message):
         ''' Displays a popup message with the given message '''
         popup = QMessageBox()
