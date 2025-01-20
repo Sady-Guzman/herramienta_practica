@@ -11,6 +11,8 @@ from fn_database import *
 def poblar_combo_familia(self, tipo_db):
     # tipo_db: true -> catalogo, false -> usuario pieza_creada
 
+    self.family_model_mapping_usuario = db_cargar_familias_modelos(False) # Carga nuevamente mapeo de fam/mod ya que se puede haber creado una pieza nueva
+
     self.ui.combo_familia.clear()
     if tipo_db == True:
         self.es_creada = False
