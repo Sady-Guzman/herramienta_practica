@@ -227,7 +227,7 @@ def aplicar_pieza_catalogo(self, es_creada):
         print("Debug: No se selecciona ninguna pieza/modelo")
         return
 
-      
+    
     print(" AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada)
     ''' obtiene ID de pieza, dependiendo de la base de datos '''
     pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)

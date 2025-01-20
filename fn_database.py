@@ -467,7 +467,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 
 def db_get_all_trapecios_data(pieza_id, es_creada):
     conn = sqlite3.connect("catalogo.db" if not es_creada else "piezas_creadas.db")
+
     cursor = conn.cursor()
+
+    print(f"en db_get_all_trapecio_data() ---> value pieza_id: {pieza_id} ,,, value es_creada: {es_creada}")
+    print("\n")
 
     try:
         # Obtener todas las secciones de la pieza

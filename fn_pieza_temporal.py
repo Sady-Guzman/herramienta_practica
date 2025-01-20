@@ -93,6 +93,7 @@ def load_section_data(self):
     # Adjust the dynamic layouts to match the number of trapecios in the selected section
     ajustar_layouts_dinamicos(self, cantidad_trapecios_seccion)
 
+    print("123 debug print in load_section_data ---> value of section_data: ", section_data, "\n\n\n")
     # Populate the dynamic layouts with the data for the selected section
     for i in range(cantidad_trapecios_seccion):
         if i < len(self.dynamic_layouts):  # Ensure we don’t access out-of-range layouts
@@ -111,32 +112,122 @@ def load_section_data(self):
 
 
 ''' Guarda el contenido actual del layout dinamico mostrado  de la pieza temporal '''
-def save_section_data(self, se_guardaron_cambios):
-    pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
-    if not pieza_seccion_item:
-        print("Debug: No section selected to save.")
-        return
+# def save_section_data(self, es_temporal, es_creada):
+#     ''' Save the content of all sections into dynamic_layout_data '''
+#     # Fetch all section data from the database
+#     if es_temporal == False:
+#         pieza_familia = self.ui.combo_familia.currentText()
+#         pieza_modelo = self.ui.combo_modelo.currentText()
+#         pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
+#         all_section_data = db_get_all_trapecios_data(pieza_id, es_creada)
 
-    pieza_seccion = pieza_seccion_item.text()
-    current_section_data = []
+#     # Check if there are any sections to save
+#     if not all_section_data:
+#         print("Debug: No sections found to save.")
+#         return
 
-    # Collect data from the dynamic layouts
-    # TODO Eliminar i
-    i = 0
-    for layout in self.dynamic_layouts:
-        print("*** *** SAVE SECTION *** *** ", i)
-        i += 1
-        data = {
-            "bi_line": layout["bi_line"].text(),
-            "bs_line": layout["bs_line"].text(),
-            "altura_line": layout["altura_line"].text()
-        }
-        current_section_data.append(data)
+#     # Initialize a variable to indicate changes were saved
+#     self.se_guardaron_cambios = False
 
-    # Store the data under the selected section name
-    self.se_guardaron_cambios = True
-    self.dynamic_layout_data[pieza_seccion] = current_section_data
+#     # Iterate through each section and its data
+#     for seccion, trapecios in all_section_data.items():
+#         current_section_data = []
+
+#         # Iterate through the trapecios for this section
+#         for idx, trapecio in enumerate(trapecios):
+#             print(f"*** Processing section '{seccion}' - Trapecio {idx + 1} ***")
+            
+#             # Create data dictionary for each layout
+#             data = {
+#                 "bi_line": str(trapecio[1]),  # Convert database values to strings
+#                 "bs_line": str(trapecio[2]),
+#                 "altura_line": str(trapecio[3])
+#             }
+#             current_section_data.append(data)
+
+#         # Save the collected data for this section in dynamic_layout_data
+#         self.dynamic_layout_data[seccion] = current_section_data
+#         print(f"Saved data for section '{seccion}':", current_section_data)
+
+#     # Update the flag to indicate changes were saved
+#     self.se_guardaron_cambios = True
+#     print("All sections have been successfully saved into dynamic_layout_data.")
+   
     # print(f"DEBUG save_section_data -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
+
+def save_section_data(self, es_temporal, es_creada, es_primera_vez):
+    ''' Save the content of all sections into dynamic_layout_data '''
+
+    # Only process all sections if es_primera_vez is True
+    if es_primera_vez:
+        print("DEBUG!!!! save_section_data() ----> valor de es_primera_vez: ", es_primera_vez)
+        print("\n")
+        self.es_primera_vez = False
+        # Fetch all section data from the database
+        if not es_temporal:
+            pieza_familia = self.ui.combo_familia.currentText()
+            pieza_modelo = self.ui.combo_modelo.currentText()
+            pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
+            all_section_data = db_get_all_trapecios_data(pieza_id, es_creada)
+
+        # Check if there are any sections to save
+        if not all_section_data:
+            print("Debug: No sections found to save.")
+            return
+
+        # Initialize a variable to indicate changes were saved
+        self.se_guardaron_cambios = False
+
+        # Iterate through each section and its data
+        for seccion, trapecios in all_section_data.items():
+            current_section_data = []
+
+            # Iterate through the trapecios for this section
+            for idx, trapecio in enumerate(trapecios):
+                print(f"*** Processing section '{seccion}' - Trapecio {idx + 1} ***")
+                
+                # Create data dictionary for each layout
+                data = {
+                    "bi_line": str(trapecio[1]),  # Convert database values to strings
+                    "bs_line": str(trapecio[2]),
+                    "altura_line": str(trapecio[3])
+                }
+                current_section_data.append(data)
+
+            # Save the collected data for this section in dynamic_layout_data
+            self.dynamic_layout_data[seccion] = current_section_data
+            print(f"Saved data for section '{seccion}':", current_section_data)
+
+        # Update the flag to indicate changes were saved
+        self.se_guardaron_cambios = True
+        print("All sections have been successfully saved into dynamic_layout_data.")
+
+    else:
+        print("DEBUG!!!! save_section_data() ----> valor de es_primera_vez: ", es_primera_vez)
+        print("\n")
+        # If es_primera_vez is False, retain the previous logic (current section only)
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+        if not pieza_seccion_item:
+            print("Debug: No section selected to save.")
+            return
+
+        pieza_seccion = pieza_seccion_item.text()
+        current_section_data = []
+
+        # Collect data from the dynamic layouts
+        for layout in self.dynamic_layouts:
+            data = {
+                "bi_line": layout["bi_line"].text(),
+                "bs_line": layout["bs_line"].text(),
+                "altura_line": layout["altura_line"].text()
+            }
+            current_section_data.append(data)
+
+        # Save the collected data for the currently selected section
+        self.dynamic_layout_data[pieza_seccion] = current_section_data
+        self.se_guardaron_cambios = True
+
+        print(f"Saved section data for '{pieza_seccion}':", current_section_data)
 
 
 

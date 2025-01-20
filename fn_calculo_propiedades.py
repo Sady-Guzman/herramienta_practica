@@ -34,13 +34,13 @@ def calcular_area(trapecios):
 
         area = ((b_i + b_s) * h) / 2
         
-        print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-        print("AREA: ", area)
+        # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+        # print("AREA: ", area)
 
         area = round(area, 9)
         resultados.append(area)
 
-    print("Areas calculadas: ", resultados)
+    # print("Areas calculadas: ", resultados)
     return resultados
 
 def calcular_inercia(trapecios):
@@ -64,14 +64,14 @@ def calcular_inercia(trapecios):
         result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
 
 
-        print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-        print("Inercia: ", result)
+        # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+        # print("Inercia: ", result)
 
         result = round(result, 9)
         resultados.append(result)
 
 
-    print("Valores lista Inercia: ", resultados)
+    # print("Valores lista Inercia: ", resultados)
     return resultados
 
 
@@ -114,13 +114,13 @@ def calcular_centro_gravedad(trapecios):
         resultado = centro + altura_acumulada
         resultado = round(resultado, 9)
         resultados.append(resultado)
-        print("valor de var resultado: ", resultado)
-        print("Valor de var altura_acumulada: ", altura_acumulada)
+        # print("valor de var resultado: ", resultado)
+        # print("Valor de var altura_acumulada: ", altura_acumulada)
 
-    print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-    print(f"Debug calc_Cg -> Trapezoid {trapecio[0]} - Resultado: {resultado:.7f}") # 7 decimales
+    # print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+    # print(f"Debug calc_Cg -> Trapezoid {trapecio[0]} - Resultado: {resultado:.7f}") # 7 decimales
     
-    print("Resultados CG's: ", resultados)
+    # print("Resultados CG's: ", resultados)
     return resultados
 
 
@@ -129,7 +129,7 @@ def calcular_suma_areas(areas):
 
     for i in range(len(areas)):
         suma_areas += areas[i]
-    print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
+    # print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
     
     return suma_areas
 
@@ -148,7 +148,7 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
     
     resultado = resultado / suma_areas
 
-    print("Resultado suma ponderada: ", resultado)
+    # print("Resultado suma ponderada: ", resultado)
     return resultado
 
 
@@ -173,7 +173,7 @@ def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
         result = inercias[i] + (areas[i] * (centros_gravedad[i] - producto_ponderado) ** 2)
         resultados.append(result)
 
-    print("Resultados OP: ", resultados)
+    # print("Resultados OP: ", resultados)
     return resultados
 
 # 0,002180267 ; 0,000585973 ; 0,000164640 ; 0,000585973 ; 0,002180267
@@ -186,7 +186,7 @@ def calcular_altura_acumulada(trapecios):
     for i in range(len(trapecios)):
             altura_acumulada += trapecios[i][5]
     
-    print("Altura acumulada: ", altura_acumulada)
+    # print("Altura acumulada: ", altura_acumulada)
     return altura_acumulada
 
 
@@ -214,7 +214,7 @@ def calcular_nuevos_valores(self):
         except Exception as e:
             print("Error calcular_nuevos_valores(): ", e)
 
-    print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
+    # print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
 
     ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
     valores_areas = calcular_area(valores_dimensiones_dinamicas)
@@ -227,6 +227,7 @@ def calcular_nuevos_valores(self):
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
     # Aplica resultados a layouts dinamicos + layouts fijos
+    print(" ------ Calcular_nuevos_valores() ----> VALORES DE PROPIEDADES FUERON CALCULADOS Y ASIGNADOS ------\n\n")
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
     return 

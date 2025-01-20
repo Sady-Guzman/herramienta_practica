@@ -31,7 +31,7 @@ class MyDialog(QDialog):
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         self.es_catalogo = 0
         self.se_guardaron_cambios = False
-        
+        self.es_primera_vez = True
         
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
@@ -70,11 +70,11 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.db_es_catalogo)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios)) # Aplica pieza/seccion
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios, self.es_primera_vez)) # Aplica pieza/seccion
 
         # Conectar botones a sus métodos
         # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
-        self.ui.btn_save_seccion.clicked.connect(lambda: save_section_data(self, self.se_guardaron_cambios))       # Guardar datos de sección
+        self.ui.btn_save_seccion.clicked.connect(lambda: save_section_data(self, self.es_temporal, self.es_creada, self.es_primera_vez))     # Guardar datos de sección
 
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
@@ -82,9 +82,10 @@ class MyDialog(QDialog):
 
 
 
-    def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios):
+    def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
         print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
-        if es_temporal == False:
+        if self.es_primera_vez == True:
+            self.es_primera_vez = False
             aplicar_pieza_catalogo(self, es_creada)
         else:
             # self.aplicar_pieza_temporal()
