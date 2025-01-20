@@ -26,7 +26,6 @@ def generate_layout(self):
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
-''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
 def add_rows(self, index):
     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
     if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
@@ -247,20 +246,7 @@ def aplicar_pieza_catalogo(self, es_creada):
     # Aplica dimensiones de trapecios a campos        
     aplicar_dimensiones_pieza(self, pieza_trapecios)
 
-    # ''' Funciones de cálculo '''
-    # valores_areas = calcular_area(pieza_trapecios)
-    # altura_acumulada = calcular_altura_acumulada(pieza_trapecios)
-    # valores_inercia = calcular_inercia(pieza_trapecios)
-    # valores_cg = calcular_centro_gravedad(pieza_trapecios)
-    # suma_areas = calcular_suma_areas(valores_areas)
-    # producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
-    # valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
-
-    # print("DEBUG aplicar_pieza_catalogo() -- producto_ponderado: ", producto_ponderado)
-
-    # # Aplica resultados a layouts dinámicos + layouts fijos
-    # aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
-
+    ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)
 
 

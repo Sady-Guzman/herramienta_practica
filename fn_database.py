@@ -326,7 +326,7 @@ def db_iniciar_database(db_path):
 #         conn.close()
 
 
-def insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
+def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
     """
     Inserts or updates a pieza in the database. If the pieza's modelo already exists, 
     updates the existing record and its related data.

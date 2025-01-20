@@ -22,13 +22,18 @@ class MyDialog(QDialog):
         super().__init__()
         self.ui = Ui_Dialog()          # Crea instancia de clase UI
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
+
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
+        self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
-        self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
         self.es_catalogo = 0
+        self.se_guardaron_cambios = False
         
+        
+
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
 
@@ -40,24 +45,24 @@ class MyDialog(QDialog):
 
 
         # Conecta btn genera layouts dinamicos
-        self.ui.btn_acpt_agregar.clicked.connect(lambda: generate_layout(self))
+        self.ui.btn_acpt_agregar.clicked.connect(lambda: generate_layout(self)) # Agrega Dynamic Row
 
         # conecta btn Elimina layouts dinamicos
         self.ui.btn_acpt_eliminar.clicked.connect(
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
-        )
+        ) # Elimina Dynamic Row
 
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
 
         # conecta btn para usar nueva pieza CATALOGO
-        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
+        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ CATALOGO
 
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
-        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ piezas Creadas_usuario
+        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ PIEZAS_CREADAS
 
         # Invoca ventana para CREAR NUEVA PIEZA
-        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR
+        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
         self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
@@ -66,23 +71,25 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.db_es_catalogo)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada)) # Aplica pieza/seccion
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios)) # Aplica pieza/seccion
 
         # Conectar botones a sus métodos
         # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
-        self.ui.btn_save_seccion.clicked.connect(lambda: save_section_data(self))       # Guardar datos de sección
+        self.ui.btn_save_seccion.clicked.connect(lambda: save_section_data(self, self.se_guardaron_cambios))       # Guardar datos de sección
 
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
-        self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self, self.es_temporal)) # Guardar Pieza TEMP en DB
+        self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
 
 
 
-    def aplicar_pieza(self, es_temporal, es_creada):
-        if es_temporal == False:
+    def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios):
+        print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
+        if se_guardaron_cambios == False:
             aplicar_pieza_catalogo(self, es_creada)
         else:
             # self.aplicar_pieza_temporal()
+            # self.se_guardaron_cambios = False # Re-setea la variable FLAG
             load_section_data(self)
 
 
