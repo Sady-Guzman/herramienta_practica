@@ -76,7 +76,10 @@ def popup_temp(message):
 
 
 ''' Carga la informacion correpondiente de a la seccion de la pieza temporal a layouts dinamicos '''
-def load_section_data(self):
+def load_section_data(self, dynamic_layout_data):
+    """
+    Load the dynamic layout data associated with the selected section.
+    """
     pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
     if not pieza_seccion_item:
         print("Debug: No section selected to load.")
@@ -85,7 +88,7 @@ def load_section_data(self):
     pieza_seccion = pieza_seccion_item.text()
 
     # Retrieve the data for the selected section
-    section_data = self.dynamic_layout_data.get(pieza_seccion, [])
+    section_data = dynamic_layout_data.get(pieza_seccion, [])
     cantidad_trapecios_seccion = len(section_data)  # The number of rows in the selected section
 
     print(f"DEBUG: Selected section '{pieza_seccion}' has {cantidad_trapecios_seccion} trapecios.")
@@ -93,21 +96,21 @@ def load_section_data(self):
     # Adjust the dynamic layouts to match the number of trapecios in the selected section
     ajustar_layouts_dinamicos(self, cantidad_trapecios_seccion)
 
-    print("123 debug print in load_section_data ---> value of section_data: ", section_data, "\n\n\n")
     # Populate the dynamic layouts with the data for the selected section
     for i in range(cantidad_trapecios_seccion):
         if i < len(self.dynamic_layouts):  # Ensure we don’t access out-of-range layouts
             layout = self.dynamic_layouts[i]
             if i < len(section_data):  # Populate with stored data if available
                 data = section_data[i]
-                layout["bi_line"].setText(data.get("bi_line", ""))
-                layout["bs_line"].setText(data.get("bs_line", ""))
-                layout["altura_line"].setText(data.get("altura_line", ""))
+                layout["bi_line"].setText(str(data[1]))
+                layout["bs_line"].setText(str(data[2]))
+                layout["altura_line"].setText(str(data[3]))
             else:  # Clear the layout fields if no data is available
                 layout["bi_line"].setText("")
                 layout["bs_line"].setText("")
                 layout["altura_line"].setText("")
 
+    print(f"DEBUG load_section_data -> Loaded data for section '{pieza_seccion}': {section_data}")
 
 
 
@@ -160,6 +163,7 @@ def save_section_data(self, es_temporal, es_creada, es_primera_vez):
 
     # Only process all sections if es_primera_vez is True
     if es_primera_vez:
+        print("====================================================================================================")
         print("DEBUG!!!! save_section_data() ----> valor de es_primera_vez: ", es_primera_vez)
         print("\n")
         self.es_primera_vez = False
@@ -203,6 +207,7 @@ def save_section_data(self, es_temporal, es_creada, es_primera_vez):
         print("All sections have been successfully saved into dynamic_layout_data.")
 
     else:
+        print("====================================================================================================")
         print("DEBUG!!!! save_section_data() ----> valor de es_primera_vez: ", es_primera_vez)
         print("\n")
         # If es_primera_vez is False, retain the previous logic (current section only)

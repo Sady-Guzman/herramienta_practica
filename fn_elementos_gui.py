@@ -207,7 +207,7 @@ def aplicar_pieza_temporal(self):
     self.repopulate_dynamic_layouts(cantidad_secciones)
 
 
-def aplicar_pieza_catalogo(self, es_creada):
+def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
     # Retrieve selected family, model, and section type
     pieza_familia = self.ui.combo_familia.currentText()
     pieza_modelo = self.ui.combo_modelo.currentText()
@@ -254,7 +254,7 @@ def aplicar_pieza_catalogo(self, es_creada):
     secciones_data = db_get_all_trapecios_data(pieza_id, es_creada)
     print(" CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", secciones_data)
     print("\n\n")
-
+    self.dynamic_layout_data = secciones_data
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)

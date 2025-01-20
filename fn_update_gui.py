@@ -123,6 +123,10 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
         layout["inercia_line"].setText("")  # Placeholder
         layout["op_line"].setText("")  # Placeholder
 
+    # Store the data in the correct format
+    self.dynamic_layout_data = {
+        trapecio[1]: [(trapecio[2], trapecio[3], trapecio[4], trapecio[5]) for trapecio in pieza_trapecios]
+    }
 
     
 ''' Asignar valores calculados en LineEdits dinamicos '''

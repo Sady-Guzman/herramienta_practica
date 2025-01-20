@@ -466,7 +466,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 #     print("Operación completada.")
 
 def db_get_all_trapecios_data(pieza_id, es_creada):
-    conn = sqlite3.connect("catalogo.db" if not es_creada else "piezas_creadas.db")
+    if es_creada == False:
+        conn = sqlite3.connect("catalogo.db")
+    else:
+        conn = sqlite3.connect("piezas_creadas.db")
+    cursor = conn.cursor()
 
     cursor = conn.cursor()
 
@@ -495,4 +499,5 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
     finally:
         conn.close()
 
+    # print(" db_get_all_trapecios_data() ------> Valor de datos_por_seccion: ", datos_por_seccion)
     return datos_por_seccion

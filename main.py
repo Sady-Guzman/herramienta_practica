@@ -26,6 +26,7 @@ class MyDialog(QDialog):
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.historial_agregados = 0
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+        self.dynamic_layout_data = []
 
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
@@ -86,11 +87,14 @@ class MyDialog(QDialog):
         print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
         if self.es_primera_vez == True:
             self.es_primera_vez = False
-            aplicar_pieza_catalogo(self, es_creada)
+            print("MAIN.aplicar_pieza() entra en IF")
+            aplicar_pieza_catalogo(self, es_creada, self.dynamic_layout_data)
+            print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
         else:
+            print("MAIN.aplicar_pieza() entra en ELSE")
             # self.aplicar_pieza_temporal()
             # self.se_guardaron_cambios = False # Re-setea la variable FLAG
-            load_section_data(self)
+            load_section_data(self, self.dynamic_layout_data)
 
 
 
