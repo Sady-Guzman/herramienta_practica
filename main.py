@@ -76,6 +76,16 @@ class MyDialog(QDialog):
         self.ui.btn_save_pieza.clicked.connect(lambda: self.save_pieza_data(self.es_temporal)) # Guardar Pieza TEMP en DB
 
 
+
+
+
+
+
+
+
+
+
+
     ''' Guarda informacion de pieza creada de forma temporal en base de datos piezas_creadas.db '''
     def save_pieza_data(self, es_temp):
         ''' 
@@ -96,8 +106,57 @@ class MyDialog(QDialog):
             print(" NO SE PUEDE sobreescribir UNA PIEZA DE CATALOGO ")
             self.popup_no_temp("No es posible guardar modificaciones de una pieza de catalogo.")
         else:
-            print("Continua")
+            print("Comienza proceso de guardado a DB")
             print("informacion en self.dynamic_layouts: ", self.dynamic_layout_data)
+        
+        ''' Obtiene str de FAMILIA y MODELO '''
+        familia = self.ui.combo_familia.currentText()
+        modelo = self.ui.combo_modelo.currentText()
+
+        if not familia or not modelo:
+            print("Error: Familia o Modelo no seleccionado.")
+            self.popup_no_temp("Debe seleccionar una Familia y un Modelo para guardar.")
+            return
+
+        ''' Obtiene listas con info de secciones y su contenido para hacer insert en base de datos piezas_creadas.db '''
+        secciones_data = []
+        trapecios_data = []
+
+        # Iterate through each section
+        for seccion, trapecios in self.dynamic_layout_data.items():
+            cantidad_trapecios = len(trapecios)
+            secciones_data.append((seccion, cantidad_trapecios))  # Store section name and count
+
+            # Iterate through each trapecio in the section
+            for i, trapecio in enumerate(trapecios, start=1):  # Start trapecio index at 1
+                trapecios_data.append((
+                    seccion,       # Nombre de la sección
+                    i,             # Posición del trapecio en la sección
+                    trapecio["bi_line"],
+                    trapecio["bs_line"],
+                    trapecio["altura_line"]
+                ))
+
+        # Debug outputs
+        print("---------\nsave_pieza_data() --> Datos obtenidos para insert: ")
+        print(f"Familia: {familia}, Modelo: {modelo}")
+        print("Secciones:", secciones_data)
+        print("Trapecios:", trapecios_data)
+        print("---------")
+
+        try:
+            insert_or_update_pieza(
+                pieza_data=(familia, modelo),
+                parametros_data=secciones_data,
+                trapecios_data=trapecios_data
+            )
+            print("Pieza guardada exitosamente en la base de datos.")
+            self.popup_no_temp("La pieza ha sido guardada exitosamente.")
+        except Exception as e:
+            print(f"Error al guardar en la base de datos: {e}")
+            self.popup_no_temp(f"Error al guardar la pieza: {e}")
+
+
 
     def popup_no_temp(self, message):
         ''' Displays a popup message with the given message '''
@@ -260,6 +319,13 @@ class MyDialog(QDialog):
                     layout["bi_line"].setText("")
                     layout["bs_line"].setText("")
                     layout["altura_line"].setText("")
+
+
+
+
+
+
+
 
 if __name__ == "__main__":
     ''' Inicia base de datos catalogo solo en caso de que no exista '''

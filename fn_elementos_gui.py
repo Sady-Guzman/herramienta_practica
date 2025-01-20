@@ -273,7 +273,7 @@ def handle_crear_pieza(self):
 
     if result_data:
         # The dialog was accepted, and result_data is returned
-        print("Data from CrearPiezaDialog:")
+        print("handle_crear_pieza() --> Data from CrearPiezaDialog:")
         print(result_data)
 
         # Example: Process the result_data
@@ -282,8 +282,9 @@ def handle_crear_pieza(self):
         cantidad_secciones = result_data["cantidad_secciones"]
         secciones = result_data["secciones"]
 
-        # Use the data (e.g., store it, update the GUI, etc.)
-        print(f"DEBUG fn_elementos_gui -> Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}")
+
+        ''' print checkear contedino entregado por ventana de crear_pieza '''
+        print(f"handle_crear_pieza() -> Familia: {familia}, Modelo: {modelo}, Cantidad de Secciones: {cantidad_secciones}")
         print("Secciones:")
         for index, seccion in enumerate(secciones, start=1):
             print(f"  Sección {index}: {seccion}")

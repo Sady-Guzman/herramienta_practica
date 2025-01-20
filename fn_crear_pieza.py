@@ -72,6 +72,7 @@ class CrearPiezaDialog(QDialog):
             "cantidad_secciones": cantidad_secciones,
             "secciones": secciones
         }
+        print("fn_crear_pieza() --> Contenido que se entrega a main dialog: ", self.result_data)
         self.accept()
 
     def validate_dynamic_layouts(self):

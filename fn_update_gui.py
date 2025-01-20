@@ -151,8 +151,8 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
 
     self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")
     self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
-    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")
-    # self.ui.result_sum_ponderado.setText(f"{altura_acumulada-producto_ponderado:.7f}")
+    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}") # Y _ inf ?
+    # self.ui.result_sum_ponderado.setText(f"{altura_acumulada-producto_ponderado:.7f}") # Y _ sup ?
     self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
 
 
@@ -161,13 +161,20 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
 ''' Poblar campos de ventana principal para pieza 'temporal' con datos de ventana de creacion '''
 ''' Una pieza temporal es una pieza que existe despues de crearla con ventana de creacion pero aun no es guardada en base de datos '''
 def poblar_datos_pieza_temporal(self, familia, modelo, secciones):
+    
+    print(f"poblar_datos_pieza_temporal() -> Familia: {familia}, Modelo: {modelo}")
+    print("Secciones:")
+    for index, seccion in enumerate(secciones, start=1):
+        print(f"  Sección {index}: {seccion}")
+
+
     ''' limpia y asigna nuevo valor a ComboBox de Familia '''
     self.ui.combo_familia.clear()
-    self.ui.combo_familia.addItems(list(familia))
+    self.ui.combo_familia.addItems([familia])
 
     ''' limpia y asigna nuevo valor a ComboBox de Modelo '''
     self.ui.combo_modelo.clear()
-    self.ui.combo_modelo.addItems(modelo)
+    self.ui.combo_modelo.addItems([modelo])
 
     ''' limpiar y asignar secciones a lista secciones '''
     self.ui.list_tipo_seccion.clear()
