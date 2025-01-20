@@ -127,8 +127,8 @@ class MyDialog(QDialog):
             cantidad_trapecios = len(trapecios)
             secciones_data.append((seccion, cantidad_trapecios))  # Store section name and count
 
-            # Iterate through each trapecio in the section
-            for i, trapecio in enumerate(trapecios, start=1):  # Start trapecio index at 1
+            # Reverse the order of trapecios for database storage
+            for i, trapecio in enumerate(reversed(trapecios), start=1):  # Start trapecio index at 1
                 trapecios_data.append((
                     seccion,       # Nombre de la sección
                     i,             # Posición del trapecio en la sección
@@ -176,32 +176,68 @@ class MyDialog(QDialog):
             # self.aplicar_pieza_temporal()
             self.load_section_data()
 
-    def aplicar_pieza_temporal(self):
-        print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
 
-        # Retrieve the selected family, model, and section
-        familia = self.ui.combo_familia.currentText()
-        modelo = self.ui.combo_modelo.currentText()
-        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()  # variable tipo obj/mem
-
-        # Ensure there is a selection in the list widget
-        if not familia or not modelo or not pieza_seccion_item:
-            print("Debug: No family, model, or section selected.")
+    def load_section_data(self):
+        """
+        Load the dynamic layout data associated with the selected section.
+        """
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+        if not pieza_seccion_item:
+            print("Debug: No section selected to load.")
             return
 
-        pieza_seccion = pieza_seccion_item.text()  # obtiene sección de lista
-        print(f"DEBUG ap_pie_temp() --> contenido pieza_seccion_item: {pieza_seccion_item}, contenido pieza_seccion: {pieza_seccion}")
+        pieza_seccion = pieza_seccion_item.text()
 
-        # Retrieve the number of sections
-        cantidad_secciones = self.ui.list_tipo_seccion.count()
-        cantidad_trapecios = len(self.dynamic_layouts)
-        print(f"DEBUG ap_pie_temp() -> cantidad secciones: {cantidad_secciones} ... cantidad_trapecios: {cantidad_trapecios}")
+        # Retrieve the data for the selected section
+        section_data = self.dynamic_layout_data.get(pieza_seccion, [])
+        cantidad_trapecios_seccion = len(section_data)  # The number of rows in the selected section
 
-        # Store data from the current dynamic layouts before switching sections
-        self.store_dynamic_layout_data(pieza_seccion)
+        print(f"DEBUG: Selected section '{pieza_seccion}' has {cantidad_trapecios_seccion} trapecios.")
 
-        # Repopulate the dynamic layouts with the data for the selected section
-        self.repopulate_dynamic_layouts(pieza_seccion, cantidad_secciones, cantidad_trapecios)
+        # Adjust the dynamic layouts to match the number of trapecios in the selected section
+        ajustar_layouts_dinamicos(self, cantidad_trapecios_seccion)
+
+        # Populate the dynamic layouts with the data for the selected section
+        for i in range(cantidad_trapecios_seccion):
+            if i < len(self.dynamic_layouts):  # Ensure we don’t access out-of-range layouts
+                layout = self.dynamic_layouts[i]
+                if i < len(section_data):  # Populate with stored data if available
+                    data = section_data[i]
+                    layout["bi_line"].setText(data.get("bi_line", ""))
+                    layout["bs_line"].setText(data.get("bs_line", ""))
+                    layout["altura_line"].setText(data.get("altura_line", ""))
+                else:  # Clear the layout fields if no data is available
+                    layout["bi_line"].setText("")
+                    layout["bs_line"].setText("")
+                    layout["altura_line"].setText("")
+
+
+    # def aplicar_pieza_temporal(self):
+    #     print("DEBUG app_pie_temp -> Se aplica seccion pieza temporal")
+
+    #     # Retrieve the selected family, model, and section
+    #     familia = self.ui.combo_familia.currentText()
+    #     modelo = self.ui.combo_modelo.currentText()
+    #     pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()  # variable tipo obj/mem
+
+    #     # Ensure there is a selection in the list widget
+    #     if not familia or not modelo or not pieza_seccion_item:
+    #         print("Debug: No family, model, or section selected.")
+    #         return
+
+    #     pieza_seccion = pieza_seccion_item.text()  # obtiene sección de lista
+    #     print(f"DEBUG ap_pie_temp() --> contenido pieza_seccion_item: {pieza_seccion_item}, contenido pieza_seccion: {pieza_seccion}")
+
+    #     # Retrieve the number of sections
+    #     cantidad_secciones = self.ui.list_tipo_seccion.count()
+    #     cantidad_trapecios = len(self.dynamic_layouts)
+    #     print(f"DEBUG ap_pie_temp() -> cantidad secciones: {cantidad_secciones} ... cantidad_trapecios: {cantidad_trapecios}")
+
+    #     # Store data from the current dynamic layouts before switching sections
+    #     self.store_dynamic_layout_data(pieza_seccion)
+
+    #     # Repopulate the dynamic layouts with the data for the selected section
+    #     self.repopulate_dynamic_layouts(pieza_seccion, cantidad_secciones, cantidad_trapecios)
 
 
     def store_dynamic_layout_data(self, pieza_seccion):
@@ -286,39 +322,7 @@ class MyDialog(QDialog):
         self.dynamic_layout_data[pieza_seccion] = current_section_data
         # print(f"DEBUG save_section_data -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]}")
 
-    def load_section_data(self):
-        """
-        Load the dynamic layout data associated with the selected section.
-        """
-        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
-        if not pieza_seccion_item:
-            print("Debug: No section selected to load.")
-            return
-
-        pieza_seccion = pieza_seccion_item.text()
-
-        # Retrieve the data for the selected section
-        section_data = self.dynamic_layout_data.get(pieza_seccion, [])
-        cantidad_trapecios_seccion = len(section_data)  # The number of rows in the selected section
-
-        print(f"DEBUG: Selected section '{pieza_seccion}' has {cantidad_trapecios_seccion} trapecios.")
-
-        # Adjust the dynamic layouts to match the number of trapecios in the selected section
-        ajustar_layouts_dinamicos(self, cantidad_trapecios_seccion)
-
-        # Populate the dynamic layouts with the data for the selected section
-        for i in range(cantidad_trapecios_seccion):
-            if i < len(self.dynamic_layouts):  # Ensure we don’t access out-of-range layouts
-                layout = self.dynamic_layouts[i]
-                if i < len(section_data):  # Populate with stored data if available
-                    data = section_data[i]
-                    layout["bi_line"].setText(data.get("bi_line", ""))
-                    layout["bs_line"].setText(data.get("bs_line", ""))
-                    layout["altura_line"].setText(data.get("altura_line", ""))
-                else:  # Clear the layout fields if no data is available
-                    layout["bi_line"].setText("")
-                    layout["bs_line"].setText("")
-                    layout["altura_line"].setText("")
+  
 
 
 
@@ -333,29 +337,6 @@ if __name__ == "__main__":
     db_iniciar_database("piezas_creadas.db")
 
     print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
-
-    # Insert/Update de ejemplo para db piezas_creadas.db
-    pieza_data = ("test-familia1", "test-modelo1")  # En implementacion final se obtiene de ComboBoxes
-    parametros_data = [
-        (1, 4),  # (seccion, cant_trapecios en seccion)
-        # (2, 3)
-
-    ]
-    trapecios_data = [
-        # Trapecios primera seccion
-        (1, 1, 11, 22, 33),  # tipo_seccion, posicion, base_inf, base_sup, altura
-        (1, 2, 44, 55, 66),
-        (1, 3, 1111, 2222, 3333),
-        (1, 4, 11, 22, 33)
-        # Trapecios segunda seccion
-        # (2, 1, 0.400, 0.400, 0.100),
-        # (2, 2, 0.400, 0.300, 0.200),
-        # (2, 3, 0.300, 0.300, 0.150)
-    ]
-
-    # Funcion de insert/update correctamente implementada
-    # TODO hacer fetch de valores de GUI y entregarlos como parametros
-    # insert_or_update_pieza(pieza_data, parametros_data, trapecios_data)
 
 
     app = QApplication(sys.argv)   # Crear aplicacion
