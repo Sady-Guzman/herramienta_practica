@@ -464,3 +464,31 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 #     conn.close()
 
 #     print("Operación completada.")
+
+def db_get_all_trapecios_data(pieza_id, es_creada):
+    conn = sqlite3.connect("catalogo.db" if not es_creada else "piezas_creadas.db")
+    cursor = conn.cursor()
+
+    try:
+        # Obtener todas las secciones de la pieza
+        cursor.execute("SELECT DISTINCT tipo_seccion FROM trapecios WHERE pieza_id = ?", (pieza_id[0],))
+        secciones = [row[0] for row in cursor.fetchall()]
+
+        # Crear un diccionario para organizar los datos por sección
+        datos_por_seccion = {}
+        for seccion in secciones:
+            cursor.execute("""
+                SELECT posicion, base_inf, base_sup, altura 
+                FROM trapecios 
+                WHERE pieza_id = ? AND tipo_seccion = ?
+            """, (pieza_id[0], seccion))
+            datos_por_seccion[seccion] = cursor.fetchall()
+
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        datos_por_seccion = {}
+
+    finally:
+        conn.close()
+
+    return datos_por_seccion

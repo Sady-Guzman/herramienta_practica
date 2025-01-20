@@ -238,6 +238,8 @@ def aplicar_pieza_catalogo(self, es_creada):
 
     # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
     pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
+    print(" BBBBBBBBBBBBBBBBBBBBBBBBBBBB: valor pieza_trapecios: ", pieza_trapecios)
+    print("\n\n")
 
     ''' Asigna valores fijos (dimensiones) a layouts dinamicos '''
     # Iguala la cantidad de layouts dinamicos a la cantidad necesaria
@@ -245,6 +247,14 @@ def aplicar_pieza_catalogo(self, es_creada):
 
     # Aplica dimensiones de trapecios a campos        
     aplicar_dimensiones_pieza(self, pieza_trapecios)
+
+    ''' Carga las dimensiones todas las secciones en lista dinamica para poder editar piezas que ya fueron creadas y guardadas en DB '''
+
+    ''' Store the values of all sections (secciones) '''
+    secciones_data = db_get_all_trapecios_data(pieza_id, es_creada)
+    print(" CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", secciones_data)
+    print("\n\n")
+
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)

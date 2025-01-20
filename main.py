@@ -33,7 +33,6 @@ class MyDialog(QDialog):
         self.se_guardaron_cambios = False
         
         
-
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
 
@@ -85,7 +84,7 @@ class MyDialog(QDialog):
 
     def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios):
         print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
-        if se_guardaron_cambios == False:
+        if es_temporal == False:
             aplicar_pieza_catalogo(self, es_creada)
         else:
             # self.aplicar_pieza_temporal()
