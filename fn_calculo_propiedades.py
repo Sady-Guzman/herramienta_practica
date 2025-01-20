@@ -220,7 +220,8 @@ def calcular_nuevos_valores(self):
     valores_areas = calcular_area(valores_dimensiones_dinamicas)
     altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
     valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
-    valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas)
+    # valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y sup ?
+    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y inf ?
     suma_areas = calcular_suma_areas(valores_areas)
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)

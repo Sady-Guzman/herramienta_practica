@@ -247,19 +247,21 @@ def aplicar_pieza_catalogo(self, es_creada):
     # Aplica dimensiones de trapecios a campos        
     aplicar_dimensiones_pieza(self, pieza_trapecios)
 
-    ''' Funciones de cálculo '''
-    valores_areas = calcular_area(pieza_trapecios)
-    altura_acumulada = calcular_altura_acumulada(pieza_trapecios)
-    valores_inercia = calcular_inercia(pieza_trapecios)
-    valores_cg = calcular_centro_gravedad(pieza_trapecios)
-    suma_areas = calcular_suma_areas(valores_areas)
-    producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
-    valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
+    # ''' Funciones de cálculo '''
+    # valores_areas = calcular_area(pieza_trapecios)
+    # altura_acumulada = calcular_altura_acumulada(pieza_trapecios)
+    # valores_inercia = calcular_inercia(pieza_trapecios)
+    # valores_cg = calcular_centro_gravedad(pieza_trapecios)
+    # suma_areas = calcular_suma_areas(valores_areas)
+    # producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
+    # valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
-    print("DEBUG aplicar_pieza_catalogo() -- producto_ponderado: ", producto_ponderado)
+    # print("DEBUG aplicar_pieza_catalogo() -- producto_ponderado: ", producto_ponderado)
 
-    # Aplica resultados a layouts dinámicos + layouts fijos
-    aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+    # # Aplica resultados a layouts dinámicos + layouts fijos
+    # aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
+
+    calcular_nuevos_valores(self)
 
 
 

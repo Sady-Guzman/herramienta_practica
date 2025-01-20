@@ -48,7 +48,7 @@ class MyDialog(QDialog):
         )
 
         # conecta btn calcular propiedades de campos LineEdits
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self))
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
 
         # conecta btn para usar nueva pieza CATALOGO
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ Catalogo
@@ -84,18 +84,6 @@ class MyDialog(QDialog):
         else:
             # self.aplicar_pieza_temporal()
             load_section_data(self)
-
-
-
-
-
-
-
-    
-
-
-
-
 
 
 
