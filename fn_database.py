@@ -1,6 +1,6 @@
 import sqlite3
 
-def db_cargar_familias_modelos(es_catalogo):
+def db_cargar_familias_modelos(self, tipo_db):
     """
         Conecta la base de datos y recupera tuplas para poblar combo_familia y combo_modelo.
         Retorna un diccionario donde cada familia mapea a una lista de modelos.
@@ -9,7 +9,7 @@ def db_cargar_familias_modelos(es_catalogo):
                         False -> Usa base datos creada por usuario (piezas_creadas.db)
     """
 
-    if es_catalogo == True:
+    if tipo_db == True:
         db_path = 'catalogo.db' 
     else:
         db_path = 'piezas_creadas.db'
@@ -39,13 +39,13 @@ def db_cargar_familias_modelos(es_catalogo):
 
     return dict_fam_mod
 
-def db_cargar_tipos_secciones(familia, modelo, es_catalogo):
+def db_cargar_tipos_secciones(familia, modelo, es_creada):
     """
     obtiene tipos de secciones existentes para una pieza seleccionada
     """
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_catalogo: ", es_catalogo)
+    print("XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_creada: ", es_creada)
 
-    if es_catalogo == True:
+    if es_creada == False:
         db_path = 'catalogo.db' 
     else:
         db_path = 'piezas_creadas.db'
@@ -196,8 +196,8 @@ def print_familias_modelos():
             print()
     
 
-    dict_fam_mod_catalogo = db_cargar_familias_modelos(True)
-    dict_fam_mod_creadas = db_cargar_familias_modelos(False)
+    dict_fam_mod_catalogo = db_cargar_familias_modelos()
+    dict_fam_mod_creadas = db_cargar_familias_modelos()
 
     print_families_and_models("Piezas CATALOGO", dict_fam_mod_catalogo)
     print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)

@@ -11,18 +11,19 @@ from fn_database import *
 def poblar_combo_familia(self, tipo_db):
     # tipo_db: true -> catalogo, false -> usuario pieza_creada
 
-    self.family_model_mapping_usuario = db_cargar_familias_modelos(False) # Carga nuevamente mapeo de fam/mod ya que se puede haber creado una pieza nueva
+    self.family_model_mapping_usuario = db_cargar_familias_modelos(self, False) # Carga nuevamente mapeo de fam/mod ya que se puede haber creado una pieza nueva
 
     self.ui.combo_familia.clear()
     if tipo_db == True:
         self.es_creada = False
-        self.db_es_catalogo = True
+        self.es_catalogo = True
         self.es_temporal = False
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_catalogo.keys()))
     else:
         self.db_es_catalogo = False
         self.es_creada = True
         self.es_temporal = False
+        self.es_catalogo = False
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_usuario.keys()))
 
 
@@ -46,16 +47,16 @@ def update_combo_secciones(self):
     else:
         self.ui.combo_tipo_seccion.addItems(["Sin secciones disponibles"])
 
-def update_list_secciones(self, db_es_catalogo):
+def update_list_secciones(self, es_creada):
     # Retrieve the selected family and model
     familia_seleccionada = self.ui.combo_familia.currentText()
     modelo_seleccionado = self.ui.combo_modelo.currentText()
 
     # Load the types of sections from the database
-    if db_es_catalogo == True:
-        tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, True)
-    else:
+    if es_creada == False:
         tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, False)
+    else:
+        tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, True)
     print(tipos_secciones)
 
     # Extract values from the tuples and convert them to strings
@@ -73,14 +74,14 @@ def update_list_secciones(self, db_es_catalogo):
 
 
 ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
-def update_combo_modelo(self, db_es_catalogo):
+def update_combo_modelo(self, es_creada):
     # tipo_db: true -> catalogo, false -> usuario
 
     # Obtiene familia seleccionada
     selected_family = self.ui.combo_familia.currentText()
 
     # obtiene los modelos respectivos de la familia seleccionada
-    if db_es_catalogo == True:
+    if es_creada == False:
         models = self.family_model_mapping_catalogo.get(selected_family, [])
     else:
         models = self.family_model_mapping_usuario.get(selected_family, [])

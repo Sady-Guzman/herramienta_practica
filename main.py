@@ -15,6 +15,7 @@ from fn_pieza_temporal import *
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout
 # family_model_mapping_(catalogo or usuario)        -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
 # db_es_catalogo -> guarda que tipo de catalogo se esta usando (True -> catalogo, False -> usuario)
+# db_es_catalogo se cambia por es_creada (es_creada = TRUE = es de DB piezas_creadas.db, FALSE = es DB catalogo.db)
 
 class MyDialog(QDialog):
 
@@ -24,13 +25,14 @@ class MyDialog(QDialog):
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
 
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
-        self.historial_agregados = 0
+        self.dynamic_layouts_data = []
+        self.historial_agregados = 0 # Se usa para llevar la cuenta de cuantos layouts dinamicos hay generados actualmente
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
-        self.dynamic_layout_data = []
 
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
-        self.es_catalogo = 0
+        # self.es_catalogo = 3 # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
+
         self.se_guardaron_cambios = False
         self.es_primera_vez = True
         
@@ -40,8 +42,8 @@ class MyDialog(QDialog):
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Carga datos de familias/modelos de DB
-        self.family_model_mapping_catalogo = db_cargar_familias_modelos(True) # Usa DB CATALOGO
-        self.family_model_mapping_usuario = db_cargar_familias_modelos(False) # Usa DB PIEZAS_CREADAS
+        self.family_model_mapping_catalogo = db_cargar_familias_modelos(self, True) # Usa DB CATALOGO
+        self.family_model_mapping_usuario = db_cargar_familias_modelos(self, False) # Usa DB PIEZAS_CREADAS
 
 
         # Conecta btn genera layouts dinamicos
@@ -52,23 +54,24 @@ class MyDialog(QDialog):
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
         ) # Elimina Dynamic Row
 
-        # conecta btn calcular propiedades de campos LineEdits
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
-
+        
         # conecta btn para usar nueva pieza CATALOGO
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ CATALOGO
 
         # conecta btn para poblar combo familia con piezas de DB creada por usuario
         self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ PIEZAS_CREADAS
 
+        # conecta btn calcular propiedades de campos LineEdits
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
+
         # Invoca ventana para CREAR NUEVA PIEZA
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.db_es_catalogo)) # Combo Modelos
+        self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.es_creada)) # Combo Modelos
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.db_es_catalogo)) # Lista Secciones
+        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.es_creada)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios, self.es_primera_vez)) # Aplica pieza/seccion
@@ -104,7 +107,7 @@ if __name__ == "__main__":
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
 
-    print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
+    # print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
 
     app = QApplication(sys.argv)   # Crear aplicacion

@@ -228,7 +228,7 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
         return
 
     
-    print(" AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada)
+    print(" aplicar_pieza_catalogo() AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada)
     ''' obtiene ID de pieza, dependiendo de la base de datos '''
     pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
     
@@ -238,7 +238,7 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
 
     # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
     pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
-    print(" BBBBBBBBBBBBBBBBBBBBBBBBBBBB: valor pieza_trapecios: ", pieza_trapecios)
+    print(" aplicar_pieza_catalogo() BBBBBBBBBBBBBBBBBBBBBBBBBBBB: valor pieza_trapecios: ", pieza_trapecios)
     print("\n\n")
 
     ''' Asigna valores fijos (dimensiones) a layouts dinamicos '''
@@ -252,7 +252,7 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
 
     ''' Store the values of all sections (secciones) '''
     secciones_data = db_get_all_trapecios_data(pieza_id, es_creada)
-    print(" CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", secciones_data)
+    print("aplicar_pieza_catalogo () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", secciones_data)
     print("\n\n")
     self.dynamic_layout_data = secciones_data
 
