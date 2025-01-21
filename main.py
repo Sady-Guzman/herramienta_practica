@@ -32,6 +32,7 @@ class MyDialog(QDialog):
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         # self.es_catalogo = 3 # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
+        self.ultima_pieza = ['0', '0'] # Lista que recuerda cual fue la ultima pieza (combinacion de familia/modelo) que el usuario selecciona.
 
         self.se_guardaron_cambios = False
         self.es_primera_vez = True
@@ -87,16 +88,26 @@ class MyDialog(QDialog):
 
 
     def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
-        print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
         if self.es_temporal == False:
-            # self.es_primera_vez = False
             print("MAIN.aplicar_pieza() entra en IF")
-            aplicar_pieza_catalogo(self, es_creada, self.dynamic_layout_data)
-            print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
+
+            familia_seleccionada = self.ui.combo_familia.currentText()
+            modelo_seleccionado = self.ui.combo_modelo.currentText()
+
+            if familia_seleccionada != self.ultima_pieza[0] and familia_seleccionada != self.ultima_pieza[1]:
+                print("\n\n\n\n \t\t >>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
+
+                self.ultima_pieza = [familia_seleccionada, modelo_seleccionado] # Recuerda la pieza que fue seleccionada por ultima vez
+                print(f"MAIN.aplicar_pieza() --> Valor de self.ultima_pieza[0]y[1]: {self.ultima_pieza} \n")
+
+                aplicar_pieza_de_db(self, es_creada, self.dynamic_layout_data)
+
+                print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
+            else:
+                print("\n\n\n\n \t\t >>>>MAIN.aplicar_pieza() -> fig actual = LAST<<<< \n")
+                aplicar_pieza_de_dynamic(self, self.dynamic_layout_data)
         else:
-            print("MAIN.aplicar_pieza() entra en ELSE")
-            # self.aplicar_pieza_temporal()
-            # self.se_guardaron_cambios = False # Re-setea la variable FLAG
+            print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal")
             load_section_data(self, self.dynamic_layout_data)
 
 

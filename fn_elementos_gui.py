@@ -207,7 +207,7 @@ def aplicar_pieza_temporal(self):
     self.repopulate_dynamic_layouts(cantidad_secciones)
 
 
-def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
+def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
     # Retrieve selected family, model, and section type
     pieza_familia = self.ui.combo_familia.currentText()
     pieza_modelo = self.ui.combo_modelo.currentText()
@@ -217,28 +217,28 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
 
     # Ensure there is a selection in the list widget
     if pieza_seccion_item is None:
-        print("Debug: No section selected in the ListWidget.")
+        print("error debug aplicar_pieza_seleccion(): No section selected in the ListWidget.")
         return
 
     pieza_seccion = pieza_seccion_item.text()
-    print("debug_print> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion)  # Debug
+    print("aplicar_pieza_de_db() --> Pieza seleccionada, Familia: ", pieza_familia, " - Modelo: ", pieza_modelo, " - Tipo seccion: ", pieza_seccion, "\n")  # Debug
 
     if not pieza_modelo:
-        print("Debug: No se selecciona ninguna pieza/modelo")
+        print("error debug aplicar_pieza_seleccion(): No se selecciona ninguna pieza/modelo")
         return
 
-    
-    print(" aplicar_pieza_catalogo() AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada)
+    print(" aplicar_pieza_de_db() AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA ---> valor de es_creada: ", es_creada, "\n")
+
+
     ''' obtiene ID de pieza, dependiendo de la base de datos '''
     pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
-    
-    
+
     # Usa tabla Parametros de DB
     trapecios_necesarios = db_get_cant_trapecios(pieza_id, pieza_seccion, es_creada)
 
     # Obtiene informacion (dimensiones) de los trapecios de la seccion consultando tabla Trapecios
     pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
-    print(" aplicar_pieza_catalogo() BBBBBBBBBBBBBBBBBBBBBBBBBBBB: valor pieza_trapecios: ", pieza_trapecios)
+    print(" aplicar_pieza_de_db() BBBBBBBBBBBBBBBBBBBBBBBBBBBB: valor pieza_trapecios: ", pieza_trapecios, "\n")
     print("\n\n")
 
     ''' Asigna valores fijos (dimensiones) a layouts dinamicos '''
@@ -251,10 +251,9 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
     ''' Carga las dimensiones todas las secciones en lista dinamica para poder editar piezas que ya fueron creadas y guardadas en DB '''
 
     ''' Store the values of all sections (secciones) '''
-    secciones_data = db_get_all_trapecios_data(pieza_id, es_creada)
-    print("aplicar_pieza_catalogo () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", secciones_data)
+    self.dynamic_layout_data = db_get_all_trapecios_data(pieza_id, es_creada)
+    print("aplicar_pieza_de_db () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", self.dynamic_layout_data, "\n")
     print("\n\n")
-    self.dynamic_layout_data = secciones_data
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)
@@ -262,6 +261,42 @@ def aplicar_pieza_catalogo(self, es_creada, dynamic_layout_data):
 
 
 
+def aplicar_pieza_de_dynamic(self, dynamic_layout_data):
+    # Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data
+    print("entra a aplicar_pieza_de_dynamic\n")
+    print(f"aplicar_pieza_de_dynamic() --> El contenido dentro de dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
+
+    # Corresponde a la seccion seleccionada
+    pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+    
+    # Ensure there is a selection in the list widget
+    if pieza_seccion_item is None:
+        print("error debug aplicar_pieza_de_dynamic(): No section selected in the ListWidget.")
+        return
+    pieza_seccion = pieza_seccion_item.text()
+
+    # Obtiene y ajusta la cantidad de trapecios para la seccion seleccionada
+    trapecios_necesarios = len(self.dynamic_layout_data[pieza_seccion])
+    print(f"aplicar_pieza_de_dynamic() --> len de dict: {trapecios_necesarios}")
+    ajustar_layouts_dinamicos(self, trapecios_necesarios)
+
+    # pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
+    pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
+    print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
+    aplicar_dimensiones_pieza(self, pieza_trapecios)
+
+
+
+
+
+
+
+
+
+
+
+
+''' ============================================================================================================================ '''
 
 ''' funcion para manejar informacion ingresada por usuario en VENTANA CREACION PIEZA '''
 def handle_crear_pieza(self):
@@ -271,8 +306,8 @@ def handle_crear_pieza(self):
 
     if result_data:
         # The dialog was accepted, and result_data is returned
-        print("handle_crear_pieza() --> Data from CrearPiezaDialog:")
-        print(result_data)
+        print("handle_crear_pieza() --> Data from CrearPiezaDialog:", result_data, "\n")
+
 
         # Example: Process the result_data
         familia = result_data["familia"]

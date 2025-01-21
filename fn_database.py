@@ -43,7 +43,7 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
     """
     obtiene tipos de secciones existentes para una pieza seleccionada
     """
-    print("XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_creada: ", es_creada)
+    print("db_cargar_tipos_secciones() -> XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_creada: ", es_creada)
 
     if es_creada == False:
         db_path = 'catalogo.db' 
