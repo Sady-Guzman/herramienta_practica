@@ -85,8 +85,8 @@ class MyDialog(QDialog):
 
     def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
         print("MAIN aplicar_pieza() --> Se_guardaron_cambios: ", se_guardaron_cambios)
-        if self.es_primera_vez == True:
-            self.es_primera_vez = False
+        if self.es_temporal == False:
+            # self.es_primera_vez = False
             print("MAIN.aplicar_pieza() entra en IF")
             aplicar_pieza_catalogo(self, es_creada, self.dynamic_layout_data)
             print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)

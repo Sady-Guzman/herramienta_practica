@@ -169,6 +169,7 @@ def save_section_data(self, es_temporal, es_creada, es_primera_vez):
         self.es_primera_vez = False
         # Fetch all section data from the database
         if not es_temporal:
+            print("save_section_data() ----> valor de es_temporal: ", es_temporal)
             pieza_familia = self.ui.combo_familia.currentText()
             pieza_modelo = self.ui.combo_modelo.currentText()
             pieza_id = db_get_id_pieza(pieza_familia, pieza_modelo, es_creada)
