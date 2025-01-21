@@ -78,14 +78,43 @@ class MyDialog(QDialog):
         self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios, self.es_primera_vez)) # Aplica pieza/seccion
 
         # Conectar botones a sus métodos
-        # self.ui.btn_acpt_tipo_seccion.clicked.connect(self.load_section_data)  # Cargar datos de sección
-        # self.ui.btn_save_seccion.clicked.connect(lambda: save_section_data(self, self.es_temporal, self.es_creada, self.es_primera_vez))     # Guardar datos de sección
         self.ui.btn_save_seccion.clicked.connect(lambda: self.save_current_section_data())     # Guardar datos de sección
 
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
 
+    def save_current_section_data(self):
+        if self.es_temporal == True:
+            print("save_current_section_data() --> exit porque es pieza temporal\n")
+            return
+        
+        """
+        Save the current dynamic layout data associated with the selected section.
+        """
+        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+        if not pieza_seccion_item:
+            print("Debug: No section selected to save.")
+            return
+
+        pieza_seccion = pieza_seccion_item.text()
+        current_section_data = []
+
+        # Collect data from the dynamic layouts
+        for i, layout in enumerate(reversed(self.dynamic_layouts)):
+            data = (
+                i + 1,  # Position index
+                layout["bi_line"].text(),
+                layout["bs_line"].text(),
+                layout["altura_line"].text()
+            )
+            current_section_data.append(data)
+
+        # Store the data under the selected section name
+        self.dynamic_layout_data[pieza_seccion] = current_section_data
+        print(f"save_current_section_data() -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]} \n\n")
+
+        print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 
 
     def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
@@ -110,40 +139,6 @@ class MyDialog(QDialog):
         else:
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal")
             load_section_data(self, self.dynamic_layout_data)
-
-    def save_current_section_data(self):
-        if self.es_temporal == True:
-            print("save_current_section_data() --> exit porque es pieza temporal\n")
-            return
-        
-        """
-        Save the current dynamic layout data associated with the selected section.
-        """
-        pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
-        if not pieza_seccion_item:
-            print("Debug: No section selected to save.")
-            return
-
-        pieza_seccion = pieza_seccion_item.text()
-        current_section_data = []
-
-        # Collect data from the dynamic layouts
-        i = 1
-        for layout in self.dynamic_layouts:
-            data = (
-                i,   
-                layout["bi_line"].text(),
-                layout["bs_line"].text(),
-                layout["altura_line"].text()
-            )
-            current_section_data.append(data)
-            i += 1
-
-        # Store the data under the selected section name
-        self.dynamic_layout_data[pieza_seccion] = current_section_data
-        print(f"save_current_section_data() -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]} \n\n")
-
-        print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 
 
 if __name__ == "__main__":
