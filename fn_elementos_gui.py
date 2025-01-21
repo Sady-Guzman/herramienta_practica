@@ -261,7 +261,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
 
 
-def aplicar_pieza_de_dynamic(self, dynamic_layout_data):
+def aplicar_pieza_de_dynamic(self):
     # Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data
     print("entra a aplicar_pieza_de_dynamic\n")
     print(f"aplicar_pieza_de_dynamic() --> El contenido dentro de dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
@@ -284,7 +284,6 @@ def aplicar_pieza_de_dynamic(self, dynamic_layout_data):
     pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
     print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
     aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
-
 
     calcular_nuevos_valores(self)
 
