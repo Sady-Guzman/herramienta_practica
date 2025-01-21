@@ -328,71 +328,39 @@ def db_iniciar_database(db_path):
 
 def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
     """
-    Inserts or updates a pieza in the database. If the pieza's modelo already exists, 
-    updates the existing record and its related data.
-    
-    :param db_path: Path to the SQLite database file.
-    :param pieza_data: Tuple containing the familia and modelo for the pieza.
-    :param parametros_data: List of tuples, each representing a (tipo_seccion, trapecios).
-    :param trapecios_data: List of tuples, each representing a (tipo_seccion, posicion, base_inf, base_sup, altura).
+    Insert or update a pieza in the database.
     """
-    # Connect to SQLite database
-    conn = sqlite3.connect("piezas_creadas.db")
+    conn = sqlite3.connect('piezas_creadas.db')
     cursor = conn.cursor()
 
-    # Enable foreign key constraints
-    cursor.execute("PRAGMA foreign_keys = ON;")
+    familia, modelo = pieza_data
 
-    try:
-        # Check if a pieza with the same modelo already exists
-        cursor.execute("SELECT id FROM piezas WHERE modelo = ?;", (pieza_data[1],))
-        existing_pieza = cursor.fetchone()
+    # Check if the pieza already exists
+    cursor.execute("SELECT id FROM piezas WHERE familia = ? AND modelo = ?", (familia, modelo))
+    row = cursor.fetchone()
 
-        if existing_pieza:
-            # If pieza exists, fetch its ID
-            pieza_id = existing_pieza[0]
-            print(f"Pieza with modelo '{pieza_data[1]}' already exists. Updating data.")
+    if row:
+        pieza_id = row[0]
+        print(f"Updating existing pieza: {familia} - {modelo}")
+    else:
+        cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?)", (familia, modelo))
+        pieza_id = cursor.lastrowid
+        print(f"Inserted new pieza: {familia} - {modelo}")
 
-            # Update the familia column for the existing pieza
-            cursor.execute("UPDATE piezas SET familia = ? WHERE id = ?;", (pieza_data[0], pieza_id))
+    # Insert or update parametros
+    for seccion in parametros_data:
+        cursor.execute("INSERT OR IGNORE INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?)", (seccion, len([t for t in trapecios_data if t[0] == seccion]), pieza_id))
 
-            # Delete existing related records in parametros and trapecios
-            cursor.execute("DELETE FROM parametros WHERE pieza_id = ?;", (pieza_id,))
-            cursor.execute("DELETE FROM trapecios WHERE pieza_id = ?;", (pieza_id,))
-        else:
-            # If pieza does not exist, insert it and get the new pieza_id
-            cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", pieza_data)
-            pieza_id = cursor.lastrowid
-            print(f"Inserted new pieza: {pieza_data[0]} - {pieza_data[1]}")
+    # Insert or update trapecios
+    for trapecio in trapecios_data:
+        seccion, posicion, base_inferior, base_superior, altura = trapecio
+        cursor.execute("""
+            INSERT OR REPLACE INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (seccion, posicion, base_inferior, base_superior, altura, pieza_id))
 
-        # Insert data into parametros using the pieza_id
-        parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
-        cursor.executemany(
-            "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
-            parametros_data_with_id,
-        )
-
-        # Insert data into trapecios using the pieza_id
-        trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
-        cursor.executemany(
-            "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
-            trapecios_data_with_id,
-        )
-
-        # Commit the transaction
-        conn.commit()
-        print(f"Data successfully inserted/updated for pieza: {pieza_data[0]} - {pieza_data[1]}")
-
-    except sqlite3.Error as e:
-        print(f"Error inserting/updating data: {e}")
-        conn.rollback()  # Rollback in case of an error
-
-    finally:
-        # Close the connection
-        conn.close()
-
-
-
+    conn.commit()
+    conn.close()
 
 # def insert_or_update_pieza(piezas_data, parametros_data, trapecios_data):
     

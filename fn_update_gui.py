@@ -10,6 +10,15 @@ from fn_database import *
 ''' Poblar combobox famila '''
 def poblar_combo_familia(self, tipo_db):
     # tipo_db: true -> catalogo, false -> usuario pieza_creada
+    
+    ''' Resetea es_temporal, ultima_pieza, y dyn_lay_dat por cambio de tipo de pieza (temporal o no temporal)
+        En este caso no es temporal, y este reset es necesario en caso de que antes de hacer click en un boton
+        de usar piezas de db (de catalogo o creadas por usuario, osea catalogo.db o piezas_creadas.db) el usuario hiciera
+        uso de la funcion de creacion de pieza
+    '''
+    self.es_temporal = False
+    self.dynamic_layout_data = {}
+    self.ultima_pieza = ['0', '0']
 
     self.family_model_mapping_usuario = db_cargar_familias_modelos(self, False) # Carga nuevamente mapeo de fam/mod ya que se puede haber creado una pieza nueva
 

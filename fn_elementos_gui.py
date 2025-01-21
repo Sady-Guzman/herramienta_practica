@@ -276,16 +276,26 @@ def aplicar_pieza_de_dynamic(self):
     pieza_seccion = pieza_seccion_item.text()
 
     # Obtiene y ajusta la cantidad de trapecios para la seccion seleccionada
-    trapecios_necesarios = len(self.dynamic_layout_data[pieza_seccion])
-    print(f"aplicar_pieza_de_dynamic() --> len de dict: {trapecios_necesarios}")
-    ajustar_layouts_dinamicos(self, trapecios_necesarios)
+    try:
+        trapecios_necesarios = len(self.dynamic_layout_data[pieza_seccion])
+        print(f"aplicar_pieza_de_dynamic() --> len de dict: {trapecios_necesarios}")
+        ajustar_layouts_dinamicos(self, trapecios_necesarios)
+    except:
+        print(f"aplicar_pieza_de_dynamic() --> len de dict: error. Se asume que es una pieza temporal")
+        ajustar_layouts_dinamicos(self, 0)
 
     # pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
-    pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
-    print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
-    aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
 
-    calcular_nuevos_valores(self)
+    try:
+        pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
+        print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
+        aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
+        calcular_nuevos_valores(self)
+    except:
+        print("No existe datos para self.dyn_layout_data[pieza_seccion]... Por lo tanto se asume pieza temporal")
+        
+
+    
 
 
 
@@ -307,6 +317,9 @@ def handle_crear_pieza(self):
     result_data = open_crear_pieza_dialog(self)
 
     if result_data:
+
+        self.dynamic_layout_data = {}
+
         # The dialog was accepted, and result_data is returned
         print("handle_crear_pieza() --> Data from CrearPiezaDialog:", result_data, "\n")
 

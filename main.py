@@ -85,13 +85,14 @@ class MyDialog(QDialog):
 
 
     def save_current_section_data(self):
-        if self.es_temporal == True:
-            print("save_current_section_data() --> exit porque es pieza temporal\n")
-            return
+        # if self.es_temporal == True:
+        #     print("save_current_section_data() --> exit porque es pieza temporal\n")
+        #     return
         
         """
         Save the current dynamic layout data associated with the selected section.
         """
+
         pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
         if not pieza_seccion_item:
             print("Debug: No section selected to save.")
@@ -119,7 +120,7 @@ class MyDialog(QDialog):
 
     def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
         if self.es_temporal == False:
-            print("MAIN.aplicar_pieza() entra en IF")
+            print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
             familia_seleccionada = self.ui.combo_familia.currentText()
             modelo_seleccionado = self.ui.combo_modelo.currentText()
@@ -137,8 +138,10 @@ class MyDialog(QDialog):
                 print("\n\n\n\n \t\t >>>>MAIN.aplicar_pieza() -> fig actual = LAST<<<< \n")
                 aplicar_pieza_de_dynamic(self)
         else:
-            print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal")
-            load_section_data(self, self.dynamic_layout_data)
+            print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
+            # load_section_data(self, self.dynamic_layout_data)
+            aplicar_pieza_de_dynamic(self)
+
 
 
 if __name__ == "__main__":

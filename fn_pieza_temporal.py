@@ -5,61 +5,45 @@ from fn_update_gui import *
 
 ''' Guarda informacion de pieza creada de forma temporal en base de datos piezas_creadas.db '''
 def save_pieza_data(self):
+    """
+    Save the current piece data to the database.
+    """
+    # Ensure there is data to save
+    if not self.dynamic_layout_data:
+        print("Debug: No data to save.")
+        return
 
-    # if es_temp == False:
-    #     print(" NO SE PUEDE sobreescribir UNA PIEZA DE CATALOGO ")
-    #     popup_no_temp("No es posible guardar modificaciones de una pieza de catalogo.")
-    # else:
-    #     print("Comienza proceso de guardado a DB")
-    #     print("informacion en self.dynamic_layouts: ", self.dynamic_layout_data)
-    
-    ''' Obtiene str de FAMILIA y MODELO '''
+    # Retrieve the selected family and model
     familia = self.ui.combo_familia.currentText()
     modelo = self.ui.combo_modelo.currentText()
 
+    # Ensure there is a selection in the combo boxes
     if not familia or not modelo:
-        print("Error: Familia o Modelo no seleccionado.")
-        popup_temp("Debe seleccionar una Familia y un Modelo para guardar.")
+        print("Debug: No family or model selected.")
         return
 
-    ''' Obtiene listas con info de secciones y su contenido para hacer insert en base de datos piezas_creadas.db '''
-    secciones_data = []
+    # Prepare the data for insertion
+    secciones_data = list(self.dynamic_layout_data.keys())
     trapecios_data = []
 
-    # Iterate through each section
     for seccion, trapecios in self.dynamic_layout_data.items():
-        cantidad_trapecios = len(trapecios)
-        secciones_data.append((seccion, cantidad_trapecios))  # Store section name and count
-
-        # Reverse the order of trapecios for database storage
-        for i, trapecio in enumerate(reversed(trapecios), start=1):  # Start trapecio index at 1
+        for trapecio in trapecios:
             trapecios_data.append((
-                seccion,       # Nombre de la sección
-                i,             # Posición del trapecio en la sección
-                trapecio["bi_line"],
-                trapecio["bs_line"],
-                trapecio["altura_line"]
+                seccion,
+                trapecio[0],  # Position index
+                float(trapecio[1]),  # Base Inferior
+                float(trapecio[2]),  # Base Superior
+                float(trapecio[3])   # Altura
             ))
 
-    # Debug outputs
-    print("---------\nsave_pieza_data() --> Datos obtenidos para insert: ")
-    print(f"Familia: {familia}, Modelo: {modelo}")
-    print("Secciones:", secciones_data)
-    print("Trapecios:", trapecios_data)
-    print("---------")
+    # Call the database insertion function
+    db_insert_or_update_pieza(
+        pieza_data=(familia, modelo),
+        parametros_data=secciones_data,
+        trapecios_data=trapecios_data
+    )
 
-    try:
-        db_insert_or_update_pieza(
-            pieza_data=(familia, modelo),
-            parametros_data=secciones_data,
-            trapecios_data=trapecios_data
-        )
-        print("Pieza guardada exitosamente en la base de datos.")
-        popup_temp("La pieza ha sido guardada exitosamente.")
-    except Exception as e:
-        print(f"Error al guardar en la base de datos: {e}")
-        popup_temp(f"Error al guardar la pieza: {e}")
-
+    print(f"save_pieza_data() -> Saved data for family '{familia}', model '{modelo}' to the database.")
 
 
 def popup_temp(message):
@@ -76,7 +60,7 @@ def popup_temp(message):
 
 
 ''' Carga la informacion correpondiente de a la seccion de la pieza temporal a layouts dinamicos '''
-def load_section_data(self, dynamic_layout_data):
+def load_section_data(self):
     """
     Load the dynamic layout data associated with the selected section.
     """
@@ -88,7 +72,7 @@ def load_section_data(self, dynamic_layout_data):
     pieza_seccion = pieza_seccion_item.text()
 
     # Retrieve the data for the selected section
-    section_data = dynamic_layout_data.get(pieza_seccion, [])
+    section_data = self.dynamic_layout_data.get(pieza_seccion, [])
     cantidad_trapecios_seccion = len(section_data)  # The number of rows in the selected section
 
     print(f"DEBUG: Selected section '{pieza_seccion}' has {cantidad_trapecios_seccion} trapecios.")
