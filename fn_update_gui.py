@@ -129,6 +129,34 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
         trapecio[1]: [(trapecio[2], trapecio[3], trapecio[4], trapecio[5]) for trapecio in pieza_trapecios]
     }
 
+def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
+    # Check if the number of trapecios matches the layouts
+    if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        return
+
+    # Print for debugging
+    for trapecio in pieza_trapecios:
+        print(f"Posición: {trapecio[0]}, Base Inferior: {trapecio[1]:.2f}, Base Superior: {trapecio[2]:.2f}, Altura: {trapecio[3]:.2f}")
+
+    # Iterate over layouts in reverse order and update widgets
+    for i, trapecio in enumerate(pieza_trapecios):
+        layout = self.dynamic_layouts[len(pieza_trapecios) - 1 - i]
+
+        # Check if the widget is valid (exists)
+        if not layout["bi_line"]:  # You can add similar checks for other widgets if necessary
+            print(f"Error: Widget for layout {i} is missing or deleted.")
+            continue
+
+        # Assign values to QLineEdit widgets
+        layout["bi_line"].setText(f"{trapecio[1]:.3f}")  # Base Inferior
+        layout["bs_line"].setText(f"{trapecio[2]:.3f}")  # Base Superior
+        layout["altura_line"].setText(f"{trapecio[3]:.3f}")  # Altura
+        layout["area_line"].setText("")  # Placeholder
+        layout["cg_line"].setText("")  # Placeholder
+        layout["inercia_line"].setText("")  # Placeholder
+        layout["op_line"].setText("")  # Placeholder
+
     
 ''' Asignar valores calculados en LineEdits dinamicos '''
 def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):

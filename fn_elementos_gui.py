@@ -110,14 +110,14 @@ def confirmar_borrar(self, index):
 
 ''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
 def del_rows(self, index):
-    print("DEBUG del_rows() > valor de Index: ", index)
+    # print("DEBUG del_rows() > valor de Index: ", index)
     
     # Determina cuántos borrar, usando min() para asegurar que no intente borrar más de lo que existe
     num_rows = min(index, self.historial_agregados)
     if num_rows == 0:
         return
 
-    print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
+    # print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
 
     ''' Elimina el vertical stretcher temporalmente '''
     if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
@@ -283,7 +283,10 @@ def aplicar_pieza_de_dynamic(self, dynamic_layout_data):
     # pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
     pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
     print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
-    aplicar_dimensiones_pieza(self, pieza_trapecios)
+    aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
+
+
+    calcular_nuevos_valores(self)
 
 
 
