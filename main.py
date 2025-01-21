@@ -128,13 +128,16 @@ class MyDialog(QDialog):
         current_section_data = []
 
         # Collect data from the dynamic layouts
+        i = 1
         for layout in self.dynamic_layouts:
             data = (
+                i,   
                 layout["bi_line"].text(),
                 layout["bs_line"].text(),
                 layout["altura_line"].text()
             )
             current_section_data.append(data)
+            i += 1
 
         # Store the data under the selected section name
         self.dynamic_layout_data[pieza_seccion] = current_section_data

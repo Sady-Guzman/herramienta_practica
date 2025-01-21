@@ -136,8 +136,10 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
         return
 
     # Print for debugging
-    for trapecio in pieza_trapecios:
-        print(f"Posición: {trapecio[0]}, Base Inferior: {trapecio[1]:.2f}, Base Superior: {trapecio[2]:.2f}, Altura: {trapecio[3]:.2f}")
+    print(f"aplicar_dimensiones_pieza_DYNAMIC() --> valor en pieza_trapecios: {pieza_trapecios}\n")
+    print(f"para DYNAMIC -> Base Inferior: {float(pieza_trapecios[0][0]):.2f}, Base Superior: {float(pieza_trapecios[0][1]):.2f},Altura: {float(pieza_trapecios[0][3]):.2f} ")
+    # for trapecio in pieza_trapecios:
+        # print(f"Base Inferior: {float(trapecio[1]):.2f}, Base Superior: {float(trapecio[2]):.2f}, Altura: {float(trapecio[3]):.2f}")
 
     # Iterate over layouts in reverse order and update widgets
     for i, trapecio in enumerate(pieza_trapecios):
@@ -149,9 +151,9 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
             continue
 
         # Assign values to QLineEdit widgets
-        layout["bi_line"].setText(f"{trapecio[1]:.3f}")  # Base Inferior
-        layout["bs_line"].setText(f"{trapecio[2]:.3f}")  # Base Superior
-        layout["altura_line"].setText(f"{trapecio[3]:.3f}")  # Altura
+        layout["bi_line"].setText(f"{float(trapecio[1]):.3f}")  # Base Inferior
+        layout["bs_line"].setText(f"{float(trapecio[2]):.3f}")  # Base Superior
+        layout["altura_line"].setText(f"{float(trapecio[3]):.3f}")  # Altura
         layout["area_line"].setText("")  # Placeholder
         layout["cg_line"].setText("")  # Placeholder
         layout["inercia_line"].setText("")  # Placeholder

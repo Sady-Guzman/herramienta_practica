@@ -264,7 +264,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 def aplicar_pieza_de_dynamic(self):
     # Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data
     print("entra a aplicar_pieza_de_dynamic\n")
-    print(f"aplicar_pieza_de_dynamic() --> El contenido dentro de dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
+    print(f"aplicar_pieza_de_dynamic() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 
     # Corresponde a la seccion seleccionada
     pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
