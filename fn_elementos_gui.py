@@ -173,16 +173,6 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
 ''' Settea la cantidad correcta de layout dinamicos en layout dinamico '''
 ''' tipo_boton -> 0: usa btn seccion (No pide confirmacion), 1: usa btn pieza (Pide confirmacion) '''
 
-# TODO implementar FLAG true/false para caso de uso
-# TRUE -> Uso normal, aplica pieza/seccion catalogo usando id_DB
-# FALSE -> Uso para pieza temporal. No hace query a DB
-
-# def aplicar_pieza(self, es_temporal):
-#     if es_temporal == False:
-#         aplicar_pieza_catalogo(self)
-#     else:
-#         aplicar_pieza_temporal(self)
-
 
 
 def aplicar_pieza_temporal(self):
@@ -296,16 +286,6 @@ def aplicar_pieza_de_dynamic(self):
         
 
     
-
-
-
-
-
-
-
-
-
-
 
 
 ''' ============================================================================================================================ '''

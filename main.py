@@ -12,9 +12,9 @@ from fn_pieza_temporal import *
 
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
-# historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout
+# historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
 # family_model_mapping_(catalogo or usuario)        -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
-# db_es_catalogo -> guarda que tipo de catalogo se esta usando (True -> catalogo, False -> usuario)
+# es_creada -> guarda que tipo de catalogo se esta usando (False -> catalogo, True -> usuario)
 # db_es_catalogo se cambia por es_creada (es_creada = TRUE = es de DB piezas_creadas.db, FALSE = es DB catalogo.db)
 
 class MyDialog(QDialog):
@@ -145,7 +145,7 @@ class MyDialog(QDialog):
 
 
 if __name__ == "__main__":
-    ''' Inicia base de datos catalogo solo en caso de que no exista '''
+    ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
 

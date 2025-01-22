@@ -5,7 +5,7 @@ def db_cargar_familias_modelos(self, tipo_db):
         Conecta la base de datos y recupera tuplas para poblar combo_familia y combo_modelo.
         Retorna un diccionario donde cada familia mapea a una lista de modelos.
 
-        db_es_catalogo: True -> Usa base datos catalogo.db, donde estan las piezas migradas de Jacena
+        tipo_db: True -> Usa base datos catalogo.db, donde estan las piezas migradas de Jacena
                         False -> Usa base datos creada por usuario (piezas_creadas.db)
     """
 
@@ -40,10 +40,9 @@ def db_cargar_familias_modelos(self, tipo_db):
     return dict_fam_mod
 
 def db_cargar_tipos_secciones(familia, modelo, es_creada):
-    """
-    obtiene tipos de secciones existentes para una pieza seleccionada
-    """
-    print("db_cargar_tipos_secciones() -> XXXXXXXXXXXXXXXXXXXXXXXXXX valor es_creada: ", es_creada)
+    """ obtiene tipos de secciones existentes para una pieza seleccionada """
+
+    print("db_cargar_tipos_secciones() -> valor es_creada: ", es_creada, "\n")
 
     if es_creada == False:
         db_path = 'catalogo.db' 
@@ -79,7 +78,7 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
         # Close the database connection
         conn.close()
 
-    print(tipos_secciones)
+    print("db_cargar_tipos_secciones() --> Contenido de tipos_secciones: ", tipos_secciones ,"\n")
 
     return tipos_secciones
 
@@ -87,9 +86,9 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
 
 
 def db_get_datos_trapecios(pieza_id, seccion, es_creada):
-    # Connect to the database
-    # conn = sqlite3.connect("catalogo.db")  # Replace with your database file
-    # cursor = conn.cursor()
+    '''
+        Con id de pieza + seccion seleccionada en GUI en ese momento, Esta funcion retorna todos los trapecios correspondientes.
+    '''
 
     if es_creada == False:
         conn = sqlite3.connect("catalogo.db")
@@ -118,9 +117,10 @@ def db_get_datos_trapecios(pieza_id, seccion, es_creada):
 
 
 def db_get_cant_trapecios(pieza_id, seccion, es_creada):
-    # Connect to the database
-    # conn = sqlite3.connect("catalogo.db")  # Replace with your database file
-    # cursor = conn.cursor()
+    '''
+        Con id de pieza + seccion seleccionada, Retorna la cantidad de trapecios de esa seccion. 
+        Resultado de usa principalmente como parametro para que funcion ajustar_layouts() sepa cuantas tuplas generar en GUI
+    '''
 
     if es_creada == False:
         conn = sqlite3.connect("catalogo.db")
@@ -149,12 +149,11 @@ def db_get_cant_trapecios(pieza_id, seccion, es_creada):
     return cant_trapecios
 
 def db_get_id_pieza(familia, modelo, es_creada):
-    """
-    Fetch the pieza_id for a given familia and modelo.
-    """
+    ''' Obtiene id de pieza usando los valores de familia + modelo seleccionados en ComboBoxes de GUI '''
 
     # print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB --> Valor es_Creada: ", es_creada)
     # print("valor familia y modelo: ",familia, modelo)
+
     # Connect to the database
     if es_creada == False:
         conn = sqlite3.connect("catalogo.db")
@@ -184,7 +183,7 @@ def db_get_id_pieza(familia, modelo, es_creada):
         conn.close()
 
 
-''' print todas las familias y sus respectivos modelos de forma estructurada'''
+''' print todas las familias y sus respectivos modelos de forma estructurada... Esta en desuso por cambio en db_cargar_familias_modelos()'''
 def print_familias_modelos():
     def print_families_and_models(title, data):
         print(title)
@@ -202,7 +201,11 @@ def print_familias_modelos():
     print_families_and_models("Piezas CATALOGO", dict_fam_mod_catalogo)
     print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
 
-''' init_db '''
+
+''' ==========================================================================================================================='''
+''' Funciones para iniciar estructura (esquema / schema) de bases de datos catalogo.db y piezas_creadas.db 
+    -- Solo ejecuta rutinas si las bases de datos no estan iniciadas, Por lo tanto solo se usa cuando se inicia el software por primera vez'''
+''' INIT para basde de datos de piezas migradas de JACENA (catalogo.db) y de piezas creadas por usuarios (piezas_creadas.db)'''
 def db_iniciar_database(db_path):
     """
     Inicializa la base de datos creando las tablas requeridas si no existen.
@@ -275,61 +278,13 @@ def db_iniciar_database(db_path):
     return
 
 
-''' ==================================================================================================== '''
 
-# def insert_pieza_dynamically(pieza_data, parametros_data, trapecios_data):
-#     """
-#     Inserts a new pieza into the database with a variable number of sections (parametros)
-#     and trapezoids (trapecios).
-    
-#     :param db_path: Path to the SQLite database file.
-#     :param pieza_data: Tuple containing the familia and modelo for the pieza.
-#     :param parametros_data: List of tuples, each representing a (tipo_seccion, trapecios).
-#     :param trapecios_data: List of tuples, each representing a (tipo_seccion, posicion, base_inf, base_sup, altura).
-#     """
-#     # Connect to SQLite database
-#     conn = sqlite3.connect("piezas_creadas.db")
-#     cursor = conn.cursor()
-
-#     # Enable foreign key constraints
-#     cursor.execute("PRAGMA foreign_keys = ON;")
-
-#     try:
-#         # Insert data into piezas and fetch the auto-generated pieza_id
-#         cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", pieza_data)
-#         pieza_id = cursor.lastrowid  # Dynamically fetch the ID of the last inserted row
-
-#         # Insert data into parametros using the fetched pieza_id
-#         parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
-#         cursor.executemany(
-#             "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
-#             parametros_data_with_id,
-#         )
-
-#         # Insert data into trapecios using the fetched pieza_id
-#         trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
-#         cursor.executemany(
-#             "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
-#             trapecios_data_with_id,
-#         )
-
-#         # Commit the transaction
-#         conn.commit()
-#         print(f"Se insertaron los datos de: {pieza_data[0]} - {pieza_data[1]}")
-
-#     except sqlite3.Error as e:
-#         print(f"Error inserting data: {e}")
-#         conn.rollback()  # Rollback in case of an error
-
-#     finally:
-#         # Close the connection
-#         conn.close()
-
-
+ 
 def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
-    """
-    Insert or update a pieza in the database.
-    """
+    '''
+        Funcion usada por btn guardar pieza temporal a base de datos. En caso de ser una pieza nueva hace INSERT.
+        en caso de ya existir y se este haciedo una modificacion, hace UPDATE
+    '''
     conn = sqlite3.connect('piezas_creadas.db')
     cursor = conn.cursor()
 
@@ -362,77 +317,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
     conn.commit()
     conn.close()
 
-# def insert_or_update_pieza(piezas_data, parametros_data, trapecios_data):
-    
-#     # Connect to SQLite database
-#     conn = sqlite3.connect("piezas_creadas.db")
-#     cursor = conn.cursor()
 
-#     # Enable foreign key constraints
-#     cursor.execute("PRAGMA foreign_keys = ON;")
-    
-#     # Insert or update data
-#     for familia, modelo in piezas_data:
-#         # Check if the pieza already exists
-#         cursor.execute("SELECT id FROM piezas WHERE modelo = ?", (modelo,))
-#         result = cursor.fetchone()
-
-#         if result:
-#             # If pieza exists, fetch its ID
-#             pieza_id = result[0]
-
-#             # Update the pieza (optional if familia or other data can change)
-#             cursor.execute(
-#                 "UPDATE piezas SET familia = ? WHERE id = ?;",
-#                 (familia, pieza_id),
-#             )
-
-#             # Update related records in parametros
-#             cursor.execute("DELETE FROM parametros WHERE pieza_id = ?", (pieza_id,))
-#             parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
-#             cursor.executemany(
-#                 "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
-#                 parametros_data_with_id,
-#             )
-
-#             # Update related records in trapecios
-#             cursor.execute("DELETE FROM trapecios WHERE pieza_id = ?", (pieza_id,))
-#             trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
-#             cursor.executemany(
-#                 "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
-#                 trapecios_data_with_id,
-#             )
-
-#             print(f"Pieza existente actualizada: {familia} - {modelo}")
-#         else:
-#             # If pieza doesn't exist, insert it and fetch the new ID
-#             cursor.execute("INSERT INTO piezas (familia, modelo) VALUES (?, ?);", (familia, modelo))
-#             pieza_id = cursor.lastrowid  # Dynamically fetch the ID of the last inserted row
-
-#             # Insert data into parametros
-#             parametros_data_with_id = [(ts, tr, pieza_id) for ts, tr in parametros_data]
-#             cursor.executemany(
-#                 "INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (?, ?, ?);",
-#                 parametros_data_with_id,
-#             )
-
-#             # Insert data into trapecios
-#             trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
-#             cursor.executemany(
-#                 "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
-#                 trapecios_data_with_id,
-#             )
-
-#             print(f"Se insertó una nueva pieza: {familia} - {modelo}")
-
-#     # Commit the transaction
-#     conn.commit()
-
-#     # Close the connection
-#     conn.close()
-
-#     print("Operación completada.")
-
+''' Con id de pieza (que se obtiene anteriormente usando valores de comboBoxes Familia + Modelo) y es_creada (para saber a cual base de datos consultar)
+    se obtienen todas las secciones y todos los trapecios dentro de esas secciones para una pieza.
+    Este resultado luego se carga a una variable que guarda dinamicamente la inforamcion de una pieza mientras esta en uso.
+'''
 def db_get_all_trapecios_data(pieza_id, es_creada):
     if es_creada == False:
         conn = sqlite3.connect("catalogo.db")
@@ -467,5 +356,5 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
     finally:
         conn.close()
 
-    # print(" db_get_all_trapecios_data() ------> Valor de datos_por_seccion: ", datos_por_seccion)
+    # print(" db_get_all_trapecios_data() ------> Valor de datos_por_seccion: ", datos_por_seccion, "\n")
     return datos_por_seccion
