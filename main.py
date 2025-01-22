@@ -75,7 +75,7 @@ class MyDialog(QDialog):
         self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.es_creada)) # Lista Secciones
 
         # Cambia tipo de seccion en layouts dinamicos
-        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada, self.se_guardaron_cambios, self.es_primera_vez)) # Aplica pieza/seccion
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada)) # Aplica pieza/seccion
 
         # Conectar botones a sus métodos
         self.ui.btn_save_seccion.clicked.connect(lambda: self.save_current_section_data())     # Guardar datos de sección
@@ -112,24 +112,28 @@ class MyDialog(QDialog):
         print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 
 
-    def aplicar_pieza(self, es_temporal, es_creada, se_guardaron_cambios, es_primera_vez):
+    def aplicar_pieza(self, es_temporal, es_creada):
         if self.es_temporal == False:
             print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
             familia_seleccionada = self.ui.combo_familia.currentText()
             modelo_seleccionado = self.ui.combo_modelo.currentText()
 
-            if familia_seleccionada != self.ultima_pieza[0] and familia_seleccionada != self.ultima_pieza[1]:
-                print("\n\n\n\n \t\t >>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
+            if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
+                print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
+                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
 
-                self.ultima_pieza = [familia_seleccionada, modelo_seleccionado] # Recuerda la pieza que fue seleccionada por ultima vez
+                ''' # Recuerda la pieza que fue seleccionada por ultima vez '''
+                self.ultima_pieza[0] = familia_seleccionada
+                self.ultima_pieza[1] = modelo_seleccionado
                 print(f"MAIN.aplicar_pieza() --> Valor de self.ultima_pieza[0]y[1]: {self.ultima_pieza} \n")
 
                 aplicar_pieza_de_db(self, es_creada, self.dynamic_layout_data)
 
                 print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
             else:
-                print("\n\n\n\n \t\t >>>>MAIN.aplicar_pieza() -> fig actual = LAST<<<< \n")
+                print("\n\n\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual === LAST<<<< \n")
+                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
                 aplicar_pieza_de_dynamic(self)
         else:
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")

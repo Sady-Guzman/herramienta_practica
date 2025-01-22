@@ -95,6 +95,7 @@ def update_combo_modelo(self, es_creada):
     else:
         models = self.family_model_mapping_usuario.get(selected_family, [])
 
+
     self.ui.combo_modelo.clear()
     self.ui.combo_modelo.addItems(models)
 
