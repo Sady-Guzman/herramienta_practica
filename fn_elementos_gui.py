@@ -95,6 +95,7 @@ def add_rows(self, index):
     self.historial_agregados += 1
 
 
+''' mensaje POP UP '''
 def confirmar_borrar(self, index):
     # Pide confirmacion de usuario antes de borrar layouts
     reply = QMessageBox.question(self, 'Confirmar', 
@@ -160,7 +161,7 @@ def delete_layout_widgets(self, layout):
 def ajustar_layouts_dinamicos(self, cantidad_trapecios):
     # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
     # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
-    print("DEBUG - ajustar_layouts_dinamicos > valor cantidad_trapecios: ", cantidad_trapecios)
+    print("ajustar_layouts_dinamicos() -> valor cantidad_trapecios: ", cantidad_trapecios)
     del_rows(self, 99) # No pide confirmacion
 
     ''' Loop to create the frames '''
@@ -252,7 +253,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
 
 def aplicar_pieza_de_dynamic(self):
-    # Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data
+    ''' Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data '''
     print("entra a aplicar_pieza_de_dynamic\n")
     print(f"aplicar_pieza_de_dynamic() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 

@@ -51,4 +51,30 @@ def popup_temp(message):
     popup.setText(message)  # Main message text
     popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
     popup.exec()  # Displays the popup
-    
+
+''' Guarda la informacion en los layout dinamicos de la seccion cargada actualemente a la variable que guarda los datos de los trapecios de todas las secciones de la pieza cargada. Se usa principalmente para guardar cambios 'insitu' a la pieza '''
+def save_current_section_data(self):
+
+    pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
+    if not pieza_seccion_item:
+        print("Debug: No section selected to save.")
+        return
+
+    pieza_seccion = pieza_seccion_item.text()
+    current_section_data = []
+
+    # Collect data from the dynamic layouts
+    for i, layout in enumerate(reversed(self.dynamic_layouts)):
+        data = (
+            i + 1,  # Position index
+            layout["bi_line"].text(),
+            layout["bs_line"].text(),
+            layout["altura_line"].text()
+        )
+        current_section_data.append(data)
+
+    # Store the data under the selected section name
+    self.dynamic_layout_data[pieza_seccion] = current_section_data
+    print(f"save_current_section_data() -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]} \n\n")
+
+    print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")

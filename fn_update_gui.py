@@ -25,14 +25,16 @@ def poblar_combo_familia(self, tipo_db):
     self.ui.combo_familia.clear()
     if tipo_db == True:
         self.es_creada = False
-        self.es_catalogo = True
+        # self.es_catalogo = True
         self.es_temporal = False
+        ''' usa DB catalogo '''
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_catalogo.keys()))
     else:
         self.db_es_catalogo = False
         self.es_creada = True
         self.es_temporal = False
-        self.es_catalogo = False
+        # self.es_catalogo = False
+        ''' usa DB piezas_creadas '''
         self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping_usuario.keys()))
 
 
