@@ -84,15 +84,9 @@ class MyDialog(QDialog):
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
 
+    ''' Guarda la informacion en los layout dinamicos de la seccion cargada actualemente a la variable que guarda los datos de los trapecios de todas las secciones de la pieza cargada. Se usa principalmente para guardar cambios 'insitu' a la pieza '''
     def save_current_section_data(self):
-        # if self.es_temporal == True:
-        #     print("save_current_section_data() --> exit porque es pieza temporal\n")
-        #     return
-        
-        """
-        Save the current dynamic layout data associated with the selected section.
-        """
-
+    
         pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
         if not pieza_seccion_item:
             print("Debug: No section selected to save.")
@@ -139,7 +133,6 @@ class MyDialog(QDialog):
                 aplicar_pieza_de_dynamic(self)
         else:
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
-            # load_section_data(self, self.dynamic_layout_data)
             aplicar_pieza_de_dynamic(self)
 
 
