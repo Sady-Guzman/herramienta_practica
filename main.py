@@ -2,204 +2,129 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.agrega_trapecios_v2_sinListas import Ui_Dialog  # Import from the ui_files directory
-from db_combobox import cargar_familias_modelos_db # Recupera set de familias y respectivos modelos de DB
+from ui_files.herramienta_trapecios_v7 import Ui_Dialog  # Import from the ui_files directory
+from fn_database import *
+from fn_calculo_propiedades import *
+from fn_update_gui import *
+from fn_elementos_gui import *
+from fn_crear_pieza import open_crear_pieza_dialog
+from fn_pieza_temporal import *
 
 
-# QVLayout: layout_nuevas_row -> Se le agregan tuplas de valor de forma dinamica (manual y selec de catalogo)
-# historial_agregados -> Contador de tuplas que se agregaron dinamicamente a QVlayout
-        
+# QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
+# historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
+# family_model_mapping_(catalogo or usuario)        -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
+# es_creada -> guarda que tipo de catalogo se esta usando (False -> catalogo, True -> usuario)
+# db_es_catalogo se cambia por es_creada (es_creada = TRUE = es de DB piezas_creadas.db, FALSE = es DB catalogo.db)
 
 class MyDialog(QDialog):
-        
+
     def __init__(self):
         super().__init__()
-        self.ui = Ui_Dialog()  # Create an instance of the UI class
-        self.ui.setupUi(self)  # Set up the UI on the dialog window
-        self.dynamic_layouts = []  # Initialize dynamic layouts for row management
-        self.historial_agregados = 0
+        self.ui = Ui_Dialog()          # Crea instancia de clase UI
+        self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
 
-        ''' Inicia variables y conexiones '''
+        self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
+        self.dynamic_layouts_data = []
+        self.historial_agregados = 0 # Se usa para llevar la cuenta de cuantos layouts dinamicos hay generados actualmente
+        self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+
+        self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
+        self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
+        # self.es_catalogo = 3 # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
+        self.ultima_pieza = ['0', '0'] # Lista que recuerda cual fue la ultima pieza (combinacion de familia/modelo) que el usuario selecciona.
+
+        self.se_guardaron_cambios = False
+        self.es_primera_vez = True
+        
+        # Initialize storage for dynamic layout data
+        self.dynamic_layout_data = {}
+
+        ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
+
         # Carga datos de familias/modelos de DB
-        self.family_model_mapping = cargar_familias_modelos_db()
+        self.family_model_mapping_catalogo = db_cargar_familias_modelos(self, True) # Usa DB CATALOGO
+        self.family_model_mapping_usuario = db_cargar_familias_modelos(self, False) # Usa DB PIEZAS_CREADAS
 
-        # Conecta boton que acepta agregar tuplas a func generate_layout()
-        self.ui.btn_acpt_agregar.clicked.connect(self.generate_layout)
 
-        # Conecta boton que aceptar eliminar tuplas func del_rows()
-        self.ui.btn_acpt_eliminar.clicked.connect(self.del_rows)
+        # Conecta btn genera layouts dinamicos
+        self.ui.btn_acpt_agregar.clicked.connect(lambda: generate_layout(self)) # Agrega Dynamic Row
+
+        # conecta btn Elimina layouts dinamicos
+        self.ui.btn_acpt_eliminar.clicked.connect(
+            lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
+        ) # Elimina Dynamic Row
+
+        
+        # conecta btn para usar nueva pieza CATALOGO
+        self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ CATALOGO
+
+        # conecta btn para poblar combo familia con piezas de DB creada por usuario
+        self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ PIEZAS_CREADAS
+
+        # conecta btn calcular propiedades de campos LineEdits
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
+
+        # Invoca ventana para CREAR NUEVA PIEZA
+        self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
 
         # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
-        self.ui.combo_familia.currentIndexChanged.connect(self.update_combo_modelo)
+        self.ui.combo_familia.currentIndexChanged.connect(lambda: update_combo_modelo(self, self.es_creada)) # Combo Modelos
+
+        # Conecta senal de cambio de seleccion en 'comboFamilia' a 'update_combo_modelo'
+        self.ui.combo_modelo.currentIndexChanged.connect(lambda: update_list_secciones(self, self.es_creada)) # Lista Secciones
+
+        # Cambia tipo de seccion en layouts dinamicos
+        self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: self.aplicar_pieza(self.es_temporal, self.es_creada)) # Aplica pieza/seccion
+
+        # Conectar botones a sus métodos
+        self.ui.btn_save_seccion.clicked.connect(lambda: save_current_section_data(self))     # Guardar datos de sección
+
+        # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
+        self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
 
-        ''' llena comboBoxes Familia/Modelo'''
-        # Usa variable iniciada en def__init__()... Siempre esta 'Elegir' como placeholder
-        self.ui.combo_familia.addItems(["Elegir"] + list(self.family_model_mapping.keys()))
-        
-    
-    ''' actualiza contenido de comboBox Modelos en base a seleccion comboBox Familia'''
-    def update_combo_modelo(self):
-        # Obtiene familia seleccionada
-        selected_family = self.ui.combo_familia.currentText()
-
-        # obtiene los modelos respectivos de la familia seleccionada
-        models = self.family_model_mapping.get(selected_family, [])
-
-        # Clear the combo_modelo and populate it with the new models
-        self.ui.combo_modelo.clear()
-        self.ui.combo_modelo.addItems(models)
 
 
-    ''' Genera de manera dinamica tuplas para trapecios '''
-    def generate_layout(self):
-        # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-        num_rows = self.ui.spin_cant_agregar.value()
-        print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
+    def aplicar_pieza(self, es_temporal, es_creada):
+        if self.es_temporal == False:
+            print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
-        # print("elementos dinamicamente agregados: ", self.historial_agregados) # Debug
-        # Obtiene el numero de figuras(tuplas) ya existentes en el QVlayout contenedor, se usa para nombrar correctamente los nuevos elementos
-        tuplas_existentes = self.historial_agregados
+            familia_seleccionada = self.ui.combo_familia.currentText()
+            modelo_seleccionado = self.ui.combo_modelo.currentText()
 
-        ''' Loop to create the frames '''
-        for i in range(num_rows):
-            self.add_rows(self.historial_agregados + 2)  # Starts from trapecio 2 (T2)
-        # Agrega stretch al Vertical Layout que contiene las tuplas de elementos para pegarlos al borde superior
-        # self.ui.layout_nuevas_row.addStretch()
+            if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
+                print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
+                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
 
+                ''' # Recuerda la pieza que fue seleccionada por ultima vez '''
+                self.ultima_pieza[0] = familia_seleccionada
+                self.ultima_pieza[1] = modelo_seleccionado
+                print(f"MAIN.aplicar_pieza() --> Valor de self.ultima_pieza[0]y[1]: {self.ultima_pieza} \n")
 
-    ''' genera nuevo Hlayout y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor'''
-    def add_rows(self, index):
-        
-        ''' maneja vertical stretcher para solo tener 1 y que siempre este abajo'''
-        if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count()-1).spacerItem():
-            # item = ultimo que se encuentra (vertical stretcher)
-            # Lo elimina mientras agrega nuevas tuplas, Lo vuelve a ingresar despues.
-            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count()-1)
-            del item
-        
-        ''' crea un nuevo Hlayout para agregar elementos de nueva tupla '''
-        layout = QHBoxLayout()
-        # Asigna nombre a layout generado dinamicamente
-        layout_name = f"layout_t{index}"
-        
+                aplicar_pieza_de_db(self, es_creada, self.dynamic_layout_data)
 
-        ''' Create the widgets for the row '''
-        name_label = QLabel(f"T{index}\t    ")  # usa tab + 4 espacios( 1/2 tab) para coincidir, Aumenta el numero mostrado iterativamente
-        bi_line = QLineEdit()
-        bs_line = QLineEdit()
-        altura_line = QLineEdit()
-        area_line = QLineEdit()
-        cg_line = QLineEdit()
-        inercia_line = QLineEdit()
-        op_line = QLineEdit()
+                print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
+            else:
+                print("\n\n\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual === LAST<<<< \n")
+                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
+                aplicar_pieza_de_dynamic(self)
+        else:
+            print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
+            aplicar_pieza_de_dynamic(self)
 
-
-        ''' Set object names to refer to them later '''
-        name_label.setObjectName(f"t{index}_name")
-        bi_line.setObjectName(f"t{index}_bs")
-        bs_line.setObjectName(f"t{index}_bi")
-        altura_line.setObjectName(f"t{index}_altura")
-        area_line.setObjectName(f"t{index}_area")
-        cg_line.setObjectName(f"t{index}_cg")
-        inercia_line.setObjectName(f"t{index}_inercia")
-        op_line.setObjectName(f"t{index}_op")
-
-        ''' Add the widgets to the layout '''
-        layout.addWidget(name_label)
-        layout.addWidget(bi_line)
-        layout.addWidget(bs_line)
-        layout.addWidget(altura_line)
-        layout.addWidget(area_line)
-        layout.addWidget(cg_line)
-        layout.addWidget(inercia_line)
-        layout.addWidget(op_line)
-
-        ''' Add the layout to the vertical layout container '''
-        # Este layout vertical esta bajo el layout horizontal predeterminado de T1.
-        self.ui.layout_nuevas_row.addLayout(layout)
-
-        ''' se vuelve a insertar vertical stretcher en posicion inferior de layout vertical '''
-        self.ui.layout_nuevas_row.addStretch()
-
-        # Store the layout reference to avoid duplicates
-        self.dynamic_layouts.append(layout)
-        # self.historial_agregados.append(name_label) # Originalmente se guardaba informacion de Label de cada nueva row, Ahora solo se usa un contador += 1
-        self.historial_agregados += 1
-
-
-    ''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
-    def del_rows(self, index):
-        # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-        num_rows = self.ui.spin_cant_eliminar.value()
-
-        # Asegura que la cantidad de layouts dinamicos que se van a intentar borrar no superen a la cantidad existente
-        # Si usa boton mientras spin=0, sale para evitar bug en contador dinamico
-        if num_rows > self.historial_agregados:
-            num_rows = self.historial_agregados
-        elif num_rows == 0:
-            return
-        
-        # Pide confirmacion de usuario antes de borrar layouts
-        reply = QMessageBox.question(self, 'Confirmar', 
-                                    "Confirmar: Eliminar cantidad de tuplas seleccionadas?", 
-                                    QMessageBox.Yes  | QMessageBox.No, 
-                                    QMessageBox.No)
-        if reply == QMessageBox.No:
-            return  # escapa con NO
-        
-        print("debug_print> SpinBox Cantidad a eliminar value: ", num_rows) # Debug
-
-        
-        ''' Elimina stretcher vertical en ultima posicion, se inserta nuevamente al final de proceso'''
-        if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count()-1).spacerItem():
-            # item = ultimo que se encuentra (vertical stretcher)
-            # Lo elimina mientras agrega nuevas tuplas, Lo vuelve a ingresar despues.
-            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count()-1)
-            del item
-
-
-        ''' Itera por los elementos de layout contenedor 'layout_nuevas_row' eliminando ultimos agregados'''
-        # Usa funcion 'delete_layout_widgets()
-        for _ in range(num_rows):
-            # Elimina la ultima tupla (layout) del layout contenedor
-            if self.ui.layout_nuevas_row.count() > 0:
-                last_item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-                
-                # comprueba que sea un layout (siempre deberia serlo) y usa funcion para eliminar iterando por sus elementos
-                if last_item.layout():
-                    self.delete_layout_widgets(last_item.layout())
-                del last_item  # elimina layout
-
-        ''' disminuye el contador de layouts que existen dinamicamente '''
-        self.historial_agregados -= num_rows
-
-        ''' se vuelve a insertar vertical stretcher en posicion inferior de layout vertical '''
-        self.ui.layout_nuevas_row.addStretch()
-
-    
-    
-    ''' Elimina los widgets dentro de un layout '''
-    def delete_layout_widgets(self, layout):
-        # Iterate through all the widgets in the layout and delete them
-        while layout.count():
-            item = layout.takeAt(0)  # Take the first item
-            if item.widget():  # If it's a widget, delete it
-                item.widget().deleteLater()
-            elif item.layout():  # If it's another layout, recursively delete its widgets
-                self.delete_layout_widgets(item.layout())  # Recursive call to delete nested layouts
 
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)  # Create the application
-    dialog = MyDialog()            # Create the dialog window
-    dialog.show()                  # Show the dialog window
-    sys.exit(app.exec())           # Start the application's event loop
+    ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
+    db_iniciar_database("catalogo.db")
+    db_iniciar_database("piezas_creadas.db")
+
+    # print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
 
-
-
-
-
-
+    app = QApplication(sys.argv)   # Crear aplicacion
+    dialog = MyDialog()            # Crear ventana Dialog
+    dialog.show()                  # Mostrar Dialog
+    sys.exit(app.exec())           # Inicia loop de eventos app

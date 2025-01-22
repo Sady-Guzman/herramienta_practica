@@ -1,0 +1,11 @@
+-- dependencias instaladas
+
+pip install
+- Numpy
+- PySide6 UI
+
+- Enpaquetado con Pyinstaller
+
+- UI construida con QTdesigner
+- Desarrollado usando Python Virtual Enviroment
+- Despues de crear Venv -> source venv/bin/activate
