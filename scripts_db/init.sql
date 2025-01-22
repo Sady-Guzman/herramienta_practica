@@ -20,10 +20,11 @@
 -- SELECT * FROM trapecios;
 -- .output stdout
 
+
 CREATE TABLE IF NOT EXISTS piezas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         familia TEXT NOT NULL,
-        modelo TEXT NOT NULL
+        modelo TEXT NOT NULL UNIQUE
     )
 
 CREATE TABLE IF NOT EXISTS parametros (
@@ -45,27 +46,46 @@ CREATE TABLE IF NOT EXISTS trapecios (
         FOREIGN KEY (pieza_id) REFERENCES piezas (id)
     )
 
+-- Tablas no confirmadas para el schema.
+CREATE TABLE IF NOT EXIST materiales (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL,
+    peso REAL NOT NULL,
+    -- equi_concreto REAL NOT NULL -- Equivalencia en concreto (Es mejor calcular en vez de guardar ??)
+)
 
+-- Nueva tabla TRAPECIOS seria:
+CREATE TABLE IF NOT EXISTS trapecios (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        tipo_seccion TEXT NOT NULL,
+        posicion INTEGER NOT NULL,
+        base_inf REAL NOT NULL,
+        base_sup REAL NOT NULL,
+        altura REAL NOT NULL,
+        pieza_id INTEGER NOT NULL,
+        material_id INTEGER NOT NULL, -- Nueva relacion
+        FOREIGN KEY (pieza_id) REFERENCES piezas (id),
+        FOREIGN KEY (material_id) REFERENCES materiales (id) -- Nueva relacion
+    )
+
+CREATE TABLE IF NOT EXIST armaduras_activas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    material_id INTEGER NOT NULL,
+    trapecio_id INTEGER NOT NULL,
+    cota REAL NOT NULL, -- (Se guarda o define dinamicamente?)
+    cantidad INT NOT NULL, -- numero de cordones
+    tipo TEXT NOT NULL, -- ejem T2, T4, T5 (Que tips de usan?)
+    area REAL NOT NULL, -- Area de cordon (Se guarda o calcula?)
+    tpi REAL NOT NULL, -- se mide en [N/mm2] es resistencia de acero (Se guarda o calcula?)
+    testeto TEXT NOT NULL, -- que tipo de testero de usa (Preguntar Joaquin que tipos usan)
+    FOREIGN KEY (material_id) REFERENCES materiales (id),
+    FOREIGN KEY (trapecio_id) REFERENCES trapecios (id)
+)
+
+
+
+-- reminder
 -- para agregar:
 -- INSERT INTO table_name (Col1, Col2) VALUES (Val1, Val2)
 -- delete
 -- DELETE FROM table WHERE condition;
--- !!!! Piezas de relleno para probar comboBox
--- INSERT INTO piezas (familia, modelo) VALUES ('VS', '4020');
--- INSERT INTO piezas (familia, modelo) VALUES ('VS', '4025');
--- INSERT INTO piezas (familia, modelo) VALUES ('VS', '4027');
--- INSERT INTO piezas (familia, modelo) VALUES ('VR', '1000');
--- INSERT INTO piezas (familia, modelo) VALUES ('VR', '1001');
-
-
--- -- >>> Piezas para catalogo con datos de JACENA
--- INSERT INTO piezas (familia, modelo) VALUES ('JI', '4060_CH');
--- INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (1, 1, 1)
--- INSERT INTO parametros (tipo_seccion, trapecios, pieza_id) VALUES (2, 5, 1)
--- -- 0.400 OR 0.4
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (1, 1, 0.400, 0.400, 0.600, 1)
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (2, 1, 0.400, 0.400, 0.080, 1)
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (2, 2, 0.090, 0.400, 0.080, 1)
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (2, 3, 0.090, 0.090, 0.280, 1)
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (2, 4, 0.400, 0.090, 0.080, 1)
--- INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (2, 5, 0.400, 0.400, 0.080, 1)
