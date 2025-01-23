@@ -2,7 +2,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.herramienta_trapecios_v7 import Ui_Dialog  # Import from the ui_files directory
+from ui_files.herramienta_trapecios_v8 import Ui_Dialog  # Import from the ui_files directory
 from fn_database import *
 from fn_calculo_propiedades import *
 from fn_update_gui import *
