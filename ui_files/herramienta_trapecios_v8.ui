@@ -499,45 +499,6 @@
       </item>
      </layout>
     </widget>
-    <widget class="QLabel" name="tab2_label_cant_cord">
-     <property name="geometry">
-      <rect>
-       <x>190</x>
-       <y>80</y>
-       <width>111</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>N cordones: ej1</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="tab2_label_area_total">
-     <property name="geometry">
-      <rect>
-       <x>310</x>
-       <y>80</y>
-       <width>111</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Area total: ej2</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="tab2_label_cg">
-     <property name="geometry">
-      <rect>
-       <x>440</x>
-       <y>80</y>
-       <width>111</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>c.d.g: ej3</string>
-     </property>
-    </widget>
     <widget class="QPushButton" name="tab2_btn_add_cota">
      <property name="geometry">
       <rect>
@@ -567,8 +528,8 @@
     <widget class="QPushButton" name="tab2_btn_del_cota">
      <property name="geometry">
       <rect>
-       <x>880</x>
-       <y>20</y>
+       <x>20</x>
+       <y>40</y>
        <width>100</width>
        <height>32</height>
       </rect>
@@ -580,14 +541,113 @@
     <widget class="QPushButton" name="tab2_btn_del_cord">
      <property name="geometry">
       <rect>
-       <x>770</x>
-       <y>20</y>
-       <width>100</width>
+       <x>150</x>
+       <y>40</y>
+       <width>111</width>
        <height>32</height>
       </rect>
      </property>
      <property name="text">
       <string>del cord</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>870</x>
+       <y>20</y>
+       <width>160</width>
+       <height>85</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab2_gridLayout_totales">
+      <item row="1" column="0">
+       <widget class="QLabel" name="tab2_label_area_total">
+        <property name="text">
+         <string>Area total:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab2_label_cant_cord">
+        <property name="text">
+         <string>N cordones:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="tab2_label_cdg">
+        <property name="text">
+         <string>c.d.g:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cordones"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_area"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cdg"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_4">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>10</y>
+       <width>231</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab2_gridLayout_combo_tipo">
+      <item row="2" column="1">
+       <widget class="QComboBox" name="tab2_combo_preset">
+        <item>
+         <property name="text">
+          <string>T2</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="tab2_label_preset">
+        <property name="text">
+         <string>Tipo Cableado</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab2_label_testero">
+        <property name="text">
+         <string>Testero</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QComboBox" name="tab2_combo_testero">
+        <item>
+         <property name="text">
+          <string>0.6 ''</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="tab2_btn_valores">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>171</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>obtener valores</string>
      </property>
     </widget>
    </widget>

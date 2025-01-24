@@ -137,9 +137,10 @@ class MyDialog(QDialog):
             cordon['layout_num_cordones'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
             cordon['layout_tpi'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
+
+
     def add_cordon(self):
-        # Determine the new column index using columnCount()
-        index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
+        
 
         # First, delete the existing horizontal spacer in the grid
         if self.ui.gridLayout.itemAtPosition(1, 1):  # Checking if there is an item at position (1, 1)
@@ -147,6 +148,11 @@ class MyDialog(QDialog):
             if item:
                 self.ui.gridLayout.removeItem(item)  # Remove the item from the layout
                 del item  # Remove the item from memory
+
+        # Determine the new column index using columnCount()
+        index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
+
+        index_para_claves = len(self.dynamic_cordones_arm_act)
 
         # Create a new grid layout for this column
         sub_grid_layout = QGridLayout()
@@ -158,9 +164,10 @@ class MyDialog(QDialog):
 
         # Add the ComboBox at (1, 0)
         combo = QComboBox()
-        combo.addItem("Ø 15.42 mm")  # Add item "a"
-        combo.addItem("Ø 13 mm")  # Add item "b"
-        combo.addItem("Ø 9 mm")  # Add item "c"
+        combo.addItem("Ø 15.24 mm")
+        combo.addItem("Ø 12.7 mm")
+        combo.addItem("Ø 9.53 mm")
+        combo.addItem("Ø 4.98 mm")
 
         combo.setMinimumSize(130, 0)  # Min width: 99, height: default (0)
         combo.setMaximumSize(131, 16777215)  # Max width: 100, height: unlimited
@@ -239,12 +246,12 @@ class MyDialog(QDialog):
 
         # Update the dynamic data structures
         self.dynamic_diametros_arm_act.append(combo)
-        self.dynamic_cordones_arm_act[index] = {
+        self.dynamic_cordones_arm_act[index_para_claves] = {
             'layout': layout,
             'layout_num_cordones': layout_num_cordones,
             'layout_tpi': layout_tpi,
-            'num_cordones': num_cordones,
-            'tpi': tpi
+            'num_cordones': num_cordones, # VALUES
+            'tpi': tpi # VALUES
         }
 
         # Re-add the horizontal spacer to the rightmost position in the grid layout

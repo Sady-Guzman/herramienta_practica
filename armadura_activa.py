@@ -27,7 +27,34 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
     self.ui.tab2_btn_add_cord.clicked.connect(self.add_cordon)
 
-    self.ui.tab2_btn_del_cord.clicked.connect(self.del_cordon)
+    self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values())
+
+    def print_all_values():
+        # Print all ComboBox values
+        print("ComboBox Values:")
+        for i, combo in enumerate(self.dynamic_diametros_arm_act):
+            print(f"  ComboBox {i + 1}: {combo.currentText()}")
+
+        # Print all values for num_cordones and tpi
+        print("\nCordones and TPI Values:")
+        for index, cordon in self.dynamic_cordones_arm_act.items():
+            print(f"  Cordon {index + 1}:")
+            
+            # Print num_cordones values
+            print("    Num Cordones:")
+            for j, num_cordon in enumerate(cordon['num_cordones']):
+                print(f"      {j + 1}: {num_cordon.text()}")
+
+            # Print tpi values
+            print("    TPI:")
+            for j, tpi in enumerate(cordon['tpi']):
+                print(f"      {j + 1}: {tpi.text()}")
+
+        # Print all cota values
+        print("\nCotas:")
+        for i, cota in enumerate(self.dynamic_cotas):
+            print(f"  Cota {i + 1}: {cota.text()}")
+        
 
 class ArmaduraActiva:
     def __init__(self):

@@ -303,15 +303,6 @@ class Ui_Dialog(object):
 
         self.gridLayout.addItem(self.horizontalSpacer, 1, 1, 1, 1)
 
-        self.tab2_label_cant_cord = QLabel(self.tab_2)
-        self.tab2_label_cant_cord.setObjectName(u"tab2_label_cant_cord")
-        self.tab2_label_cant_cord.setGeometry(QRect(190, 80, 111, 16))
-        self.tab2_label_area_total = QLabel(self.tab_2)
-        self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
-        self.tab2_label_area_total.setGeometry(QRect(310, 80, 111, 16))
-        self.tab2_label_cg = QLabel(self.tab_2)
-        self.tab2_label_cg.setObjectName(u"tab2_label_cg")
-        self.tab2_label_cg.setGeometry(QRect(440, 80, 111, 16))
         self.tab2_btn_add_cota = QPushButton(self.tab_2)
         self.tab2_btn_add_cota.setObjectName(u"tab2_btn_add_cota")
         self.tab2_btn_add_cota.setGeometry(QRect(20, 10, 100, 32))
@@ -320,10 +311,77 @@ class Ui_Dialog(object):
         self.tab2_btn_add_cord.setGeometry(QRect(150, 10, 111, 32))
         self.tab2_btn_del_cota = QPushButton(self.tab_2)
         self.tab2_btn_del_cota.setObjectName(u"tab2_btn_del_cota")
-        self.tab2_btn_del_cota.setGeometry(QRect(880, 20, 100, 32))
+        self.tab2_btn_del_cota.setGeometry(QRect(20, 40, 100, 32))
         self.tab2_btn_del_cord = QPushButton(self.tab_2)
         self.tab2_btn_del_cord.setObjectName(u"tab2_btn_del_cord")
-        self.tab2_btn_del_cord.setGeometry(QRect(770, 20, 100, 32))
+        self.tab2_btn_del_cord.setGeometry(QRect(150, 40, 111, 32))
+        self.gridLayoutWidget_3 = QWidget(self.tab_2)
+        self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
+        self.gridLayoutWidget_3.setGeometry(QRect(870, 20, 160, 85))
+        self.tab2_gridLayout_totales = QGridLayout(self.gridLayoutWidget_3)
+        self.tab2_gridLayout_totales.setObjectName(u"tab2_gridLayout_totales")
+        self.tab2_gridLayout_totales.setContentsMargins(0, 0, 0, 0)
+        self.tab2_label_area_total = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_area_total, 1, 0, 1, 1)
+
+        self.tab2_label_cant_cord = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cant_cord.setObjectName(u"tab2_label_cant_cord")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cant_cord, 0, 0, 1, 1)
+
+        self.tab2_label_cdg = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cdg.setObjectName(u"tab2_label_cdg")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg, 2, 0, 1, 1)
+
+        self.tab2_line_total_cordones = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_cordones.setObjectName(u"tab2_line_total_cordones")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cordones, 0, 1, 1, 1)
+
+        self.tab2_line_total_area = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_area.setObjectName(u"tab2_line_total_area")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_area, 1, 1, 1, 1)
+
+        self.tab2_line_total_cdg = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_cdg.setObjectName(u"tab2_line_total_cdg")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg, 2, 1, 1, 1)
+
+        self.gridLayoutWidget_4 = QWidget(self.tab_2)
+        self.gridLayoutWidget_4.setObjectName(u"gridLayoutWidget_4")
+        self.gridLayoutWidget_4.setGeometry(QRect(290, 10, 231, 57))
+        self.tab2_gridLayout_combo_tipo = QGridLayout(self.gridLayoutWidget_4)
+        self.tab2_gridLayout_combo_tipo.setObjectName(u"tab2_gridLayout_combo_tipo")
+        self.tab2_gridLayout_combo_tipo.setContentsMargins(0, 0, 0, 0)
+        self.tab2_combo_preset = QComboBox(self.gridLayoutWidget_4)
+        self.tab2_combo_preset.addItem("")
+        self.tab2_combo_preset.setObjectName(u"tab2_combo_preset")
+
+        self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_combo_preset, 2, 1, 1, 1)
+
+        self.tab2_label_preset = QLabel(self.gridLayoutWidget_4)
+        self.tab2_label_preset.setObjectName(u"tab2_label_preset")
+
+        self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_label_preset, 0, 1, 1, 1)
+
+        self.tab2_label_testero = QLabel(self.gridLayoutWidget_4)
+        self.tab2_label_testero.setObjectName(u"tab2_label_testero")
+
+        self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_label_testero, 0, 0, 1, 1)
+
+        self.tab2_combo_testero = QComboBox(self.gridLayoutWidget_4)
+        self.tab2_combo_testero.addItem("")
+        self.tab2_combo_testero.setObjectName(u"tab2_combo_testero")
+
+        self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_combo_testero, 2, 0, 1, 1)
+
+        self.tab2_btn_valores = QPushButton(self.tab_2)
+        self.tab2_btn_valores.setObjectName(u"tab2_btn_valores")
+        self.tab2_btn_valores.setGeometry(QRect(10, 100, 171, 32))
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(Dialog)
@@ -368,13 +426,20 @@ class Ui_Dialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Tab 1", None))
         self.tab2_label_cota.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
         self.tab2_relleno_layout_armaduras.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
-        self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones: ej1", None))
-        self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total: ej2", None))
-        self.tab2_label_cg.setText(QCoreApplication.translate("Dialog", u"c.d.g: ej3", None))
         self.tab2_btn_add_cota.setText(QCoreApplication.translate("Dialog", u"agrega cota", None))
         self.tab2_btn_add_cord.setText(QCoreApplication.translate("Dialog", u"agrega cordon", None))
         self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"del cota", None))
         self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"del cord", None))
+        self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total:", None))
+        self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones:", None))
+        self.tab2_label_cdg.setText(QCoreApplication.translate("Dialog", u"c.d.g:", None))
+        self.tab2_combo_preset.setItemText(0, QCoreApplication.translate("Dialog", u"T2", None))
+
+        self.tab2_label_preset.setText(QCoreApplication.translate("Dialog", u"Tipo Cableado", None))
+        self.tab2_label_testero.setText(QCoreApplication.translate("Dialog", u"Testero", None))
+        self.tab2_combo_testero.setItemText(0, QCoreApplication.translate("Dialog", u"0.6 ''", None))
+
+        self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"obtener valores", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Dialog", u"Tab 2", None))
     # retranslateUi
 

@@ -92,3 +92,43 @@ if __name__ == "__main__":
     Form.show()
 
     app.exec()
+
+
+'''
+
+        # Create a new grid layout for this column
+        sub_grid_layout = QGridLayout()
+
+        # Add the "Tipo" label at (0, 0)
+        label_tipo = QLabel("Tipo")
+        label_tipo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        sub_grid_layout.addWidget(label_tipo, 0, 0)
+
+        # Add the ComboBox at (1, 0)
+        combo = QComboBox()
+        combo.addItem("Ø 15.42 mm")  # Add item "a"
+        combo.addItem("Ø 13 mm")  # Add item "b"
+        combo.addItem("Ø 9 mm")  # Add item "c"
+
+        combo.setMinimumSize(99, 0)  # Min width: 99, height: default (0)
+        combo.setMaximumSize(130, 16777215)  # Max width: 100, height: unlimited
+        sub_grid_layout.addWidget(combo, 1, 0)
+
+        # Add the "Area" label at (0, 1)
+        label_area = QLabel("Area")
+        label_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        sub_grid_layout.addWidget(label_area, 0, 1)
+
+        # Add a QLineEdit at (1, 1)
+        line_edit_area = QLineEdit()
+        line_edit_area.setMinimumSize(70, 0)
+        line_edit_area.setMaximumSize(100, 16777215)
+        sub_grid_layout.addWidget(line_edit_area, 1, 1)
+
+        # Add the new sub-grid layout to the main grid layout in the new column
+        self.ui.gridLayout.addLayout(sub_grid_layout, 0, index)
+
+        # Set stretch for the new column to allow resizing
+        self.ui.gridLayout.setColumnStretch(index, 1)
+
+'''
