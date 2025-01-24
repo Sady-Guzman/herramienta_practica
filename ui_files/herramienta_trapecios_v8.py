@@ -271,9 +271,10 @@ class Ui_Dialog(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayoutWidget_2 = QWidget(self.tab_2)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(10, 80, 331, 351))
+        self.gridLayoutWidget_2.setGeometry(QRect(10, 130, 1021, 351))
         self.gridLayout = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.gridLayout.setHorizontalSpacing(-1)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setSpacing(0)
@@ -291,11 +292,6 @@ class Ui_Dialog(object):
 
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 1)
 
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-
-        self.gridLayout.addLayout(self.gridLayout_2, 0, 1, 1, 1)
-
         self.tab2_relleno_layout_armaduras = QPushButton(self.gridLayoutWidget_2)
         self.tab2_relleno_layout_armaduras.setObjectName(u"tab2_relleno_layout_armaduras")
         self.tab2_relleno_layout_armaduras.setEnabled(True)
@@ -303,27 +299,31 @@ class Ui_Dialog(object):
 
         self.gridLayout.addWidget(self.tab2_relleno_layout_armaduras, 0, 0, 1, 1)
 
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.gridLayout.addItem(self.horizontalSpacer, 1, 1, 1, 1)
+
         self.tab2_label_cant_cord = QLabel(self.tab_2)
         self.tab2_label_cant_cord.setObjectName(u"tab2_label_cant_cord")
-        self.tab2_label_cant_cord.setGeometry(QRect(30, 10, 111, 16))
+        self.tab2_label_cant_cord.setGeometry(QRect(190, 80, 111, 16))
         self.tab2_label_area_total = QLabel(self.tab_2)
         self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
-        self.tab2_label_area_total.setGeometry(QRect(200, 10, 111, 16))
+        self.tab2_label_area_total.setGeometry(QRect(310, 80, 111, 16))
         self.tab2_label_cg = QLabel(self.tab_2)
         self.tab2_label_cg.setObjectName(u"tab2_label_cg")
-        self.tab2_label_cg.setGeometry(QRect(340, 10, 111, 16))
+        self.tab2_label_cg.setGeometry(QRect(440, 80, 111, 16))
         self.tab2_btn_add_cota = QPushButton(self.tab_2)
         self.tab2_btn_add_cota.setObjectName(u"tab2_btn_add_cota")
-        self.tab2_btn_add_cota.setGeometry(QRect(30, 40, 100, 32))
+        self.tab2_btn_add_cota.setGeometry(QRect(20, 10, 100, 32))
         self.tab2_btn_add_cord = QPushButton(self.tab_2)
         self.tab2_btn_add_cord.setObjectName(u"tab2_btn_add_cord")
-        self.tab2_btn_add_cord.setGeometry(QRect(140, 40, 111, 32))
+        self.tab2_btn_add_cord.setGeometry(QRect(150, 10, 111, 32))
         self.tab2_btn_del_cota = QPushButton(self.tab_2)
         self.tab2_btn_del_cota.setObjectName(u"tab2_btn_del_cota")
-        self.tab2_btn_del_cota.setGeometry(QRect(300, 40, 100, 32))
+        self.tab2_btn_del_cota.setGeometry(QRect(880, 20, 100, 32))
         self.tab2_btn_del_cord = QPushButton(self.tab_2)
         self.tab2_btn_del_cord.setObjectName(u"tab2_btn_del_cord")
-        self.tab2_btn_del_cord.setGeometry(QRect(460, 30, 100, 32))
+        self.tab2_btn_del_cord.setGeometry(QRect(770, 20, 100, 32))
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(Dialog)

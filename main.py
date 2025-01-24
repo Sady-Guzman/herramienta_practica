@@ -100,7 +100,10 @@ class MyDialog(QDialog):
             item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
             del item
 
+        # Create the QLineEdit for 'cota'
         cota_line = QLineEdit()
+        cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
+        cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
         self.dynamic_cotas.append(cota_line)
         self.ui.verticalLayout.addWidget(cota_line)
 
@@ -111,6 +114,12 @@ class MyDialog(QDialog):
             cordon['num_cordones'].append(QLineEdit())
             cordon['tpi'].append(QLineEdit())
 
+            # Set minimum and maximum size for the new QLineEdits
+            cordon['num_cordones'][-1].setMinimumSize(70, 0)
+            cordon['num_cordones'][-1].setMaximumSize(70, 16777215)
+            cordon['tpi'][-1].setMinimumSize(70, 0)
+            cordon['tpi'][-1].setMaximumSize(70, 16777215)
+
             # Remove existing spacer in the vertical layouts
             if cordon['layout_num_cordones'].itemAt(cordon['layout_num_cordones'].count() - 1).spacerItem():
                 item = cordon['layout_num_cordones'].takeAt(cordon['layout_num_cordones'].count() - 1)
@@ -119,7 +128,7 @@ class MyDialog(QDialog):
                 item = cordon['layout_tpi'].takeAt(cordon['layout_tpi'].count() - 1)
                 del item
 
-            # Add new widgets
+            # Add new widgets to layouts
             cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1])
             cordon['layout_tpi'].addWidget(cordon['tpi'][-1])
 
@@ -128,10 +137,21 @@ class MyDialog(QDialog):
             cordon['layout_tpi'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
     def add_cordon(self):
-        index = len(self.dynamic_diametros_arm_act)  # Determine the new column index
-        combo = QComboBox()
-        self.ui.gridLayout.addWidget(combo, 0, index + 1)  # Add ComboBox in the new column
+        # Determine the new column index using columnCount()
+        index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
 
+        # First, delete the existing horizontal spacer in the grid
+        if self.ui.gridLayout.itemAtPosition(1, 1):  # Checking if there is an item at position (1, 1)
+            item = self.ui.gridLayout.itemAtPosition(1, 1)  # Remove the item at this position (the horizontal spacer)
+            if item:
+                self.ui.gridLayout.removeItem(item)  # Remove the item from the layout
+                del item  # Remove the item from memory
+
+        # Add ComboBox in the new column
+        combo = QComboBox()
+        self.ui.gridLayout.addWidget(combo, 0, index)  # Add ComboBox at the correct column index
+
+        # Create layouts for 'num_cordones' and 'tpi'
         layout = QHBoxLayout()
         layout_num_cordones = QVBoxLayout()
         layout_tpi = QVBoxLayout()
@@ -140,33 +160,47 @@ class MyDialog(QDialog):
         layout_num_cordones.setSpacing(0)
         layout_tpi.setSpacing(0)
 
+        # Labels for 'num_cordones' and 'tpi'
         label_num_cordones = QLabel("Num Cordones")
         label_tpi = QLabel("TPI")
 
         layout_num_cordones.addWidget(label_num_cordones)
         layout_tpi.addWidget(label_tpi)
 
+        # Create QLineEdits for each 'cota'
         num_cordones = [QLineEdit() for _ in self.dynamic_cotas]
         tpi = [QLineEdit() for _ in self.dynamic_cotas]
 
-        # Add QLineEdit widgets to the layouts
+        # Set min and max size for the QLineEdits
         for nc, tp in zip(num_cordones, tpi):
+            nc.setMinimumSize(70, 0)
+            nc.setMaximumSize(71, 16777215)
+            tp.setMinimumSize(70, 0)
+            tp.setMaximumSize(71, 16777215)
+
             layout_num_cordones.addWidget(nc)
             layout_tpi.addWidget(tp)
 
-        # Always add the vertical spacer as the last item in the layout
+        # Add spacers to ensure items align properly at the bottom
         layout_num_cordones.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
         layout_tpi.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
+        # Add the layouts to the main layout
         layout.addLayout(layout_num_cordones)
         layout.addLayout(layout_tpi)
 
         # Add the new layout to the grid layout in the new column
-        self.ui.gridLayout.addLayout(layout, 1, index + 1, 1, 1)  
+        self.ui.gridLayout.addLayout(layout, 1, index)
 
-        # Add a stretch factor to the new column to ensure it expands
-        self.ui.gridLayout.setColumnStretch(index + 1, 1)  # Set stretch for the new column
+        # Set stretch for the new column to allow resizing
+        self.ui.gridLayout.setColumnStretch(index, 1)
 
+        # Ensure that the layout grows with the new column
+        self.ui.gridLayoutWidget.adjustSize()
+        self.ui.gridLayoutWidget.resize(self.ui.gridLayoutWidget.sizeHint())
+        self.ui.gridLayoutWidget.setMinimumSize(self.ui.gridLayoutWidget.sizeHint())
+
+        # Update the dynamic data structures
         self.dynamic_diametros_arm_act.append(combo)
         self.dynamic_cordones_arm_act[index] = {
             'layout': layout,
@@ -176,8 +210,12 @@ class MyDialog(QDialog):
             'tpi': tpi
         }
 
-        # Adjust stretch for all previous columns to balance the layout (optional)
-        for col in range(index + 2):  # Includes the new column
+        # Re-add the horizontal spacer to the rightmost position in the grid layout
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)  # Add it to the rightmost side of the grid
+
+        # Adjust the stretch for all columns to maintain balance
+        for col in range(index + 2):  # Adjusts stretching for all columns, including the new one and the spacer
             self.ui.gridLayout.setColumnStretch(col, 1)
 
     

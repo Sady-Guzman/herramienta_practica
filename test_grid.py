@@ -57,7 +57,7 @@ class Ui_Form(object):
 
     def add_column(self):
         # Determine the next available column index
-        current_column_count = self.gridLayout.columnCount()
+        current_column_count = self.gridLayout.columnCount() # IMPORTANT
 
         # Add a new label in the first row
         new_label = QLabel(f"Label {current_column_count + 1}")
@@ -67,8 +67,8 @@ class Ui_Form(object):
         new_lineedit = QLineEdit()
         self.gridLayout.addWidget(new_lineedit, 1, current_column_count)
 
-        # Optionally, set column stretch to allow resizing
-        self.gridLayout.setColumnStretch(current_column_count, 1)
+        # set column stretch to allow resizing
+        self.gridLayout.setColumnStretch(current_column_count, 1) # IMPORTANT
 
         # Ensure the layout adjusts with the window size after adding the column
         self.gridLayoutWidget.adjustSize()
