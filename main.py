@@ -10,7 +10,7 @@ from fn_elementos_gui import *
 from fn_crear_pieza import open_crear_pieza_dialog
 from fn_pieza_temporal import *
 from armadura_activa import setup_armadura_activa
-
+from PySide6.QtCore import Qt
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
@@ -92,6 +92,7 @@ class MyDialog(QDialog):
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
         setup_armadura_activa(self)
+        self.ui.tab2_relleno_layout_armaduras.setVisible(False)
 
     def add_cota(self):
         ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
@@ -129,8 +130,8 @@ class MyDialog(QDialog):
                 del item
 
             # Add new widgets to layouts
-            cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1])
-            cordon['layout_tpi'].addWidget(cordon['tpi'][-1])
+            cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
+            cordon['layout_tpi'].addWidget(cordon['tpi'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
 
             # Re-add the spacer to ensure it is always at the bottom
             cordon['layout_num_cordones'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -149,6 +150,13 @@ class MyDialog(QDialog):
 
         # Add ComboBox in the new column
         combo = QComboBox()
+        combo.addItem("Ø 15.42 mm")  # Add item "a"
+        combo.addItem("Ø 13 mm")  # Add item "b"
+        combo.addItem("Ø 9 mm")  # Add item "c"
+
+        combo.setMinimumSize(99, 0)  # Min width: 99, height: default (0)
+        combo.setMaximumSize(130, 16777215)  # Max width: 100, height: unlimited
+
         self.ui.gridLayout.addWidget(combo, 0, index)  # Add ComboBox at the correct column index
 
         # Create layouts for 'num_cordones' and 'tpi'
@@ -164,6 +172,10 @@ class MyDialog(QDialog):
         label_num_cordones = QLabel("Num Cordones")
         label_tpi = QLabel("TPI")
 
+        # Align the labels to the center
+        label_num_cordones.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        label_tpi.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         layout_num_cordones.addWidget(label_num_cordones)
         layout_tpi.addWidget(label_tpi)
 
@@ -178,8 +190,9 @@ class MyDialog(QDialog):
             tp.setMinimumSize(70, 0)
             tp.setMaximumSize(71, 16777215)
 
-            layout_num_cordones.addWidget(nc)
-            layout_tpi.addWidget(tp)
+            # Add QLineEdits to the layouts with centered alignment
+            layout_num_cordones.addWidget(nc, alignment=Qt.AlignmentFlag.AlignCenter)
+            layout_tpi.addWidget(tp, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Add spacers to ensure items align properly at the bottom
         layout_num_cordones.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
