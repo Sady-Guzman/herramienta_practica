@@ -55,6 +55,8 @@ class MyDialog(QDialog):
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
         ) # Elimina Dynamic Row
 
+        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n"))
+
         
         # conecta btn para usar nueva pieza CATALOGO
         self.ui.btn_usar_pieza_catalogo.clicked.connect(lambda: poblar_combo_familia(self, True)) # Combo familia w/ CATALOGO
