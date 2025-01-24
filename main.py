@@ -140,8 +140,6 @@ class MyDialog(QDialog):
 
 
     def add_cordon(self):
-        
-
         # First, delete the existing horizontal spacer in the grid
         if self.ui.gridLayout.itemAtPosition(1, 1):  # Checking if there is an item at position (1, 1)
             item = self.ui.gridLayout.itemAtPosition(1, 1)  # Remove the item at this position (the horizontal spacer)
@@ -152,7 +150,7 @@ class MyDialog(QDialog):
         # Determine the new column index using columnCount()
         index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
 
-        index_para_claves = len(self.dynamic_cordones_arm_act)
+        index_para_clave = len(self.dynamic_cordones_arm_act)
 
         # Create a new grid layout for this column
         sub_grid_layout = QGridLayout()
@@ -246,12 +244,17 @@ class MyDialog(QDialog):
 
         # Update the dynamic data structures
         self.dynamic_diametros_arm_act.append(combo)
-        self.dynamic_cordones_arm_act[index_para_claves] = {
+        # self.dynamic_areas_arm_act.append(line_edit_area)
+
+        # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
+        self.dynamic_cordones_arm_act[index_para_clave] = {
             'layout': layout,
             'layout_num_cordones': layout_num_cordones,
             'layout_tpi': layout_tpi,
-            'num_cordones': num_cordones, # VALUES
-            'tpi': tpi # VALUES
+            'num_cordones': num_cordones,  # Store QLineEdits for num_cordones
+            'tpi': tpi,  # Store QLineEdits for tpi
+            'diametro': combo,  # Store ComboBox for diameter
+            'area': line_edit_area  # Store QLineEdit for area
         }
 
         # Re-add the horizontal spacer to the rightmost position in the grid layout
