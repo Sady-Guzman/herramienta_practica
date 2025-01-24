@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
-from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
+from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QMessageBox, QApplication, QDialog, QComboBox
 from ui_files.herramienta_trapecios_v8 import Ui_Dialog  # Import from the ui_files directory
 from fn_database import *
 from fn_calculo_propiedades import *
@@ -9,6 +9,7 @@ from fn_update_gui import *
 from fn_elementos_gui import *
 from fn_crear_pieza import open_crear_pieza_dialog
 from fn_pieza_temporal import *
+from armadura_activa import setup_armadura_activa
 
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
@@ -39,6 +40,11 @@ class MyDialog(QDialog):
         
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
+
+        self.dynamic_cotas = []
+        self.dynamic_diametros_arm_act = []
+        self.dynamic_cordones_arm_act = {}
+        self.dynamic_tpi_arm_act = {}
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
@@ -85,9 +91,110 @@ class MyDialog(QDialog):
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
+        setup_armadura_activa(self)
+
+    def add_cota(self):
+        ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+        if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
+            # Elimina el último item si es el vertical stretcher
+            item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
+            del item
+
+        cota_line = QLineEdit()
+        self.dynamic_cotas.append(cota_line)
+        self.ui.verticalLayout.addWidget(cota_line)
+
+        ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
+        self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        for cordon in self.dynamic_cordones_arm_act.values():
+            cordon['num_cordones'].append(QLineEdit())
+            cordon['tpi'].append(QLineEdit())
+
+            # Remove existing spacer in the vertical layouts
+            if cordon['layout_num_cordones'].itemAt(cordon['layout_num_cordones'].count() - 1).spacerItem():
+                item = cordon['layout_num_cordones'].takeAt(cordon['layout_num_cordones'].count() - 1)
+                del item
+            if cordon['layout_tpi'].itemAt(cordon['layout_tpi'].count() - 1).spacerItem():
+                item = cordon['layout_tpi'].takeAt(cordon['layout_tpi'].count() - 1)
+                del item
+
+            # Add new widgets
+            cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1])
+            cordon['layout_tpi'].addWidget(cordon['tpi'][-1])
+
+            # Re-add the spacer to ensure it is always at the bottom
+            cordon['layout_num_cordones'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+            cordon['layout_tpi'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+    def add_cordon(self):
+        index = len(self.dynamic_diametros_arm_act)  # Determine the new column index
+        combo = QComboBox()
+        self.ui.gridLayout.addWidget(combo, 0, index + 1)  # Add ComboBox in the new column
+
+        layout = QHBoxLayout()
+        layout_num_cordones = QVBoxLayout()
+        layout_tpi = QVBoxLayout()
+
+        # Set the spacing to 0 for the dynamically generated layouts
+        layout_num_cordones.setSpacing(0)
+        layout_tpi.setSpacing(0)
+
+        label_num_cordones = QLabel("Num Cordones")
+        label_tpi = QLabel("TPI")
+
+        layout_num_cordones.addWidget(label_num_cordones)
+        layout_tpi.addWidget(label_tpi)
+
+        num_cordones = [QLineEdit() for _ in self.dynamic_cotas]
+        tpi = [QLineEdit() for _ in self.dynamic_cotas]
+
+        # Add QLineEdit widgets to the layouts
+        for nc, tp in zip(num_cordones, tpi):
+            layout_num_cordones.addWidget(nc)
+            layout_tpi.addWidget(tp)
+
+        # Always add the vertical spacer as the last item in the layout
+        layout_num_cordones.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        layout_tpi.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+        layout.addLayout(layout_num_cordones)
+        layout.addLayout(layout_tpi)
+
+        # Add the new layout to the grid layout in the new column
+        self.ui.gridLayout.addLayout(layout, 1, index + 1, 1, 1)  
+
+        # Add a stretch factor to the new column to ensure it expands
+        self.ui.gridLayout.setColumnStretch(index + 1, 1)  # Set stretch for the new column
+
+        self.dynamic_diametros_arm_act.append(combo)
+        self.dynamic_cordones_arm_act[index] = {
+            'layout': layout,
+            'layout_num_cordones': layout_num_cordones,
+            'layout_tpi': layout_tpi,
+            'num_cordones': num_cordones,
+            'tpi': tpi
+        }
+
+        # Adjust stretch for all previous columns to balance the layout (optional)
+        for col in range(index + 2):  # Includes the new column
+            self.ui.gridLayout.setColumnStretch(col, 1)
+
+    
 
 
 
+    def del_cordon(self, index):
+        if index in self.dynamic_cordones_arm_act:
+            cordon = self.dynamic_cordones_arm_act.pop(index)
+            for widget in cordon['num_cordones'] + cordon['tpi']:
+                widget.deleteLater()
+            cordon['layout'].deleteLater()
+            self.dynamic_diametros_arm_act.pop(index)
+
+    ''' ======================================================================================================================================================'''
+
+    # Boton aplicar seccion
     def aplicar_pieza(self, es_temporal, es_creada):
         if self.es_temporal == False:
             print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")

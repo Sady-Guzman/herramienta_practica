@@ -15,10 +15,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QListWidget,
-    QListWidgetItem, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QTabWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
+    QGridLayout, QHBoxLayout, QLabel, QLineEdit,
+    QListWidget, QListWidgetItem, QPushButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
+    QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -33,9 +34,6 @@ class Ui_Dialog(object):
         self.tabWidget = QTabWidget(Dialog)
         self.tabWidget.setObjectName(u"tabWidget")
         self.tabWidget.setGeometry(QRect(10, 0, 1061, 661))
-        self.tabWidget.setDocumentMode(False)
-        self.tabWidget.setTabsClosable(False)
-        self.tabWidget.setTabBarAutoHide(False)
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.btn_save_pieza = QPushButton(self.tab)
@@ -271,18 +269,174 @@ class Ui_Dialog(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayoutWidget_2 = QWidget(self.tab_2)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(10, 80, 331, 351))
+        self.gridLayoutWidget_2.setGeometry(QRect(10, 40, 701, 351))
         self.gridLayout = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout_3 = QGridLayout()
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.label_8 = QLabel(self.gridLayoutWidget_2)
+        self.label_8.setObjectName(u"label_8")
+
+        self.gridLayout_3.addWidget(self.label_8, 0, 1, 1, 1)
+
+        self.label_9 = QLabel(self.gridLayoutWidget_2)
+        self.label_9.setObjectName(u"label_9")
+
+        self.gridLayout_3.addWidget(self.label_9, 0, 0, 1, 1)
+
+        self.comboBox_2 = QComboBox(self.gridLayoutWidget_2)
+        self.comboBox_2.setObjectName(u"comboBox_2")
+
+        self.gridLayout_3.addWidget(self.comboBox_2, 1, 0, 1, 1)
+
+        self.lineEdit_17 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_17.setObjectName(u"lineEdit_17")
+
+        self.gridLayout_3.addWidget(self.lineEdit_17, 1, 1, 1, 1)
+
+
+        self.gridLayout.addLayout(self.gridLayout_3, 0, 2, 1, 1)
+
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.lineEdit_10 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_10.setObjectName(u"lineEdit_10")
+
+        self.gridLayout_2.addWidget(self.lineEdit_10, 1, 1, 1, 1)
+
+        self.label_5 = QLabel(self.gridLayoutWidget_2)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_2.addWidget(self.label_5, 0, 1, 1, 1)
+
+        self.label_4 = QLabel(self.gridLayoutWidget_2)
+        self.label_4.setObjectName(u"label_4")
+
+        self.gridLayout_2.addWidget(self.label_4, 0, 0, 1, 1)
+
+        self.comboBox = QComboBox(self.gridLayoutWidget_2)
+        self.comboBox.setObjectName(u"comboBox")
+
+        self.gridLayout_2.addWidget(self.comboBox, 1, 0, 1, 1)
+
+
+        self.gridLayout.addLayout(self.gridLayout_2, 0, 1, 1, 1)
+
+        self.formLayout_2 = QFormLayout()
+        self.formLayout_2.setObjectName(u"formLayout_2")
+        self.formLayout_2.setVerticalSpacing(0)
+        self.label_6 = QLabel(self.gridLayoutWidget_2)
+        self.label_6.setObjectName(u"label_6")
+
+        self.formLayout_2.setWidget(0, QFormLayout.LabelRole, self.label_6)
+
+        self.label_7 = QLabel(self.gridLayoutWidget_2)
+        self.label_7.setObjectName(u"label_7")
+
+        self.formLayout_2.setWidget(0, QFormLayout.FieldRole, self.label_7)
+
+        self.lineEdit_11 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_11.setObjectName(u"lineEdit_11")
+
+        self.formLayout_2.setWidget(1, QFormLayout.LabelRole, self.lineEdit_11)
+
+        self.lineEdit_12 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_12.setObjectName(u"lineEdit_12")
+
+        self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.lineEdit_12)
+
+        self.lineEdit_13 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_13.setObjectName(u"lineEdit_13")
+
+        self.formLayout_2.setWidget(2, QFormLayout.LabelRole, self.lineEdit_13)
+
+        self.lineEdit_14 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_14.setObjectName(u"lineEdit_14")
+
+        self.formLayout_2.setWidget(2, QFormLayout.FieldRole, self.lineEdit_14)
+
+        self.lineEdit_15 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_15.setObjectName(u"lineEdit_15")
+
+        self.formLayout_2.setWidget(3, QFormLayout.LabelRole, self.lineEdit_15)
+
+        self.lineEdit_16 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_16.setObjectName(u"lineEdit_16")
+
+        self.formLayout_2.setWidget(3, QFormLayout.FieldRole, self.lineEdit_16)
+
+
+        self.gridLayout.addLayout(self.formLayout_2, 1, 2, 1, 1)
+
+        self.formLayout = QFormLayout()
+        self.formLayout.setObjectName(u"formLayout")
+        self.formLayout.setVerticalSpacing(0)
+        self.label_2 = QLabel(self.gridLayoutWidget_2)
+        self.label_2.setObjectName(u"label_2")
+
+        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_2)
+
+        self.label_3 = QLabel(self.gridLayoutWidget_2)
+        self.label_3.setObjectName(u"label_3")
+
+        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.label_3)
+
+        self.lineEdit_5 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_5.setObjectName(u"lineEdit_5")
+
+        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.lineEdit_5)
+
+        self.lineEdit_6 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_6.setObjectName(u"lineEdit_6")
+
+        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.lineEdit_6)
+
+        self.lineEdit_4 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_4.setObjectName(u"lineEdit_4")
+
+        self.formLayout.setWidget(2, QFormLayout.LabelRole, self.lineEdit_4)
+
+        self.lineEdit_7 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_7.setObjectName(u"lineEdit_7")
+
+        self.formLayout.setWidget(2, QFormLayout.FieldRole, self.lineEdit_7)
+
+        self.lineEdit_8 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_8.setObjectName(u"lineEdit_8")
+
+        self.formLayout.setWidget(3, QFormLayout.LabelRole, self.lineEdit_8)
+
+        self.lineEdit_9 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_9.setObjectName(u"lineEdit_9")
+
+        self.formLayout.setWidget(3, QFormLayout.FieldRole, self.lineEdit_9)
+
+
+        self.gridLayout.addLayout(self.formLayout, 1, 1, 1, 1)
+
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.tab2_label_cota = QLabel(self.gridLayoutWidget_2)
-        self.tab2_label_cota.setObjectName(u"tab2_label_cota")
-        self.tab2_label_cota.setMaximumSize(QSize(100, 16777215))
+        self.label = QLabel(self.gridLayoutWidget_2)
+        self.label.setObjectName(u"label")
 
-        self.verticalLayout.addWidget(self.tab2_label_cota)
+        self.verticalLayout.addWidget(self.label)
+
+        self.lineEdit = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit.setObjectName(u"lineEdit")
+
+        self.verticalLayout.addWidget(self.lineEdit)
+
+        self.lineEdit_3 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_3.setObjectName(u"lineEdit_3")
+
+        self.verticalLayout.addWidget(self.lineEdit_3)
+
+        self.lineEdit_2 = QLineEdit(self.gridLayoutWidget_2)
+        self.lineEdit_2.setObjectName(u"lineEdit_2")
+
+        self.verticalLayout.addWidget(self.lineEdit_2)
 
         self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
@@ -291,44 +445,11 @@ class Ui_Dialog(object):
 
         self.gridLayout.addLayout(self.verticalLayout, 1, 0, 1, 1)
 
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-
-        self.gridLayout.addLayout(self.gridLayout_2, 0, 1, 1, 1)
-
-        self.tab2_relleno_layout_armaduras = QPushButton(self.gridLayoutWidget_2)
-        self.tab2_relleno_layout_armaduras.setObjectName(u"tab2_relleno_layout_armaduras")
-        self.tab2_relleno_layout_armaduras.setEnabled(True)
-        self.tab2_relleno_layout_armaduras.setMaximumSize(QSize(75, 16777215))
-
-        self.gridLayout.addWidget(self.tab2_relleno_layout_armaduras, 0, 0, 1, 1)
-
-        self.tab2_label_cant_cord = QLabel(self.tab_2)
-        self.tab2_label_cant_cord.setObjectName(u"tab2_label_cant_cord")
-        self.tab2_label_cant_cord.setGeometry(QRect(30, 10, 111, 16))
-        self.tab2_label_area_total = QLabel(self.tab_2)
-        self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
-        self.tab2_label_area_total.setGeometry(QRect(200, 10, 111, 16))
-        self.tab2_label_cg = QLabel(self.tab_2)
-        self.tab2_label_cg.setObjectName(u"tab2_label_cg")
-        self.tab2_label_cg.setGeometry(QRect(340, 10, 111, 16))
-        self.tab2_btn_add_cota = QPushButton(self.tab_2)
-        self.tab2_btn_add_cota.setObjectName(u"tab2_btn_add_cota")
-        self.tab2_btn_add_cota.setGeometry(QRect(30, 40, 100, 32))
-        self.tab2_btn_add_cord = QPushButton(self.tab_2)
-        self.tab2_btn_add_cord.setObjectName(u"tab2_btn_add_cord")
-        self.tab2_btn_add_cord.setGeometry(QRect(140, 40, 111, 32))
-        self.tab2_btn_del_cota = QPushButton(self.tab_2)
-        self.tab2_btn_del_cota.setObjectName(u"tab2_btn_del_cota")
-        self.tab2_btn_del_cota.setGeometry(QRect(300, 40, 100, 32))
-        self.tab2_btn_del_cord = QPushButton(self.tab_2)
-        self.tab2_btn_del_cord.setObjectName(u"tab2_btn_del_cord")
-        self.tab2_btn_del_cord.setGeometry(QRect(460, 30, 100, 32))
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.btn_calcular_nuevos_valores.setDefault(True)
 
 
@@ -366,15 +487,15 @@ class Ui_Dialog(object):
         self.label_sum_op.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
         self.btn_salto_linea.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Tab 1", None))
-        self.tab2_label_cota.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
-        self.tab2_relleno_layout_armaduras.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
-        self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones: ej1", None))
-        self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total: ej2", None))
-        self.tab2_label_cg.setText(QCoreApplication.translate("Dialog", u"c.d.g: ej3", None))
-        self.tab2_btn_add_cota.setText(QCoreApplication.translate("Dialog", u"agrega cota", None))
-        self.tab2_btn_add_cord.setText(QCoreApplication.translate("Dialog", u"agrega cordon", None))
-        self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"del cota", None))
-        self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"del cord", None))
+        self.label_8.setText(QCoreApplication.translate("Dialog", u"Area Cordon", None))
+        self.label_9.setText(QCoreApplication.translate("Dialog", u"Tipo Cordon", None))
+        self.label_5.setText(QCoreApplication.translate("Dialog", u"Area Cordon", None))
+        self.label_4.setText(QCoreApplication.translate("Dialog", u"Tipo Cordon", None))
+        self.label_6.setText(QCoreApplication.translate("Dialog", u"N Cordones", None))
+        self.label_7.setText(QCoreApplication.translate("Dialog", u"Tpi (N/mm2)", None))
+        self.label_2.setText(QCoreApplication.translate("Dialog", u"N Cordones", None))
+        self.label_3.setText(QCoreApplication.translate("Dialog", u"Tpi (N/mm2)", None))
+        self.label.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Dialog", u"Tab 2", None))
     # retranslateUi
 

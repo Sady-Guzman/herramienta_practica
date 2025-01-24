@@ -19,21 +19,38 @@
     TPI se guardan de la misma manera que numero de cordones, en su propio diccionario: self.dynamic_tpi{}, index y listas de cada indice se maneja de la misma forma que numero de cordones.
 
     tipos de cordones se manejan con self.dynamic_diametros_arm_act{}, donde cada indice corresponde a un tipo de cordon y dentro esta el valor actual de ComboBox
-
 '''
 
-def foo():
+from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox
 
-    # Definir variables que llevan cuenta de componentes dinamicamente generados. Los valores de estos se usan como indice en variables definidas abajo
+def setup_armadura_activa(self):
+    self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
+    self.ui.tab2_btn_add_cord.clicked.connect(self.add_cordon)
 
-    self.dynamic_cotas_arm_act = []
-    self.dynamic_diametros_arm_act = [] # usar dict o list?
-    self.dynamic_cordones_arm_act = {}
-    self.dynamic_tpi_arm_act = {}
+    self.ui.tab2_btn_del_cord.clicked.connect(self.del_cordon)
 
-    # cada vez que se preciona btn calcular/almacenar se actualizan valores de listas/diccionarios.
-    # al cambiar index de comboBox de tipoCordon se actualiza lista en posicion correspondiente. (Como saber cual posicion editar?, recordar comboBoxes creados dinamicamente en variable.)
+class ArmaduraActiva:
+    def __init__(self):
+        self.dynamic_cotas = []
+        self.dynamic_diametros_arm_act = []
+        self.dynamic_cordones_arm_act = {}
+        self.dynamic_tpi_arm_act = {}
 
-    # Implementar btn para agregar cota, Al agregar cota tambien hay que agregar un LineEdit a cada Vlayout de la pestana.
-    # Impleentar btn para agregar tipo de cordon, Se genera nuevo Glayout con comboBox, Vlayout con lineEdits = a cantidad de cotas existentes.
+    # def setupUi(self, Dialog):
+    #     # ...existing code...
+    #     self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
+    #     self.ui.tab2_btn_add_cord.clicked.connect(self.add_cordon)
+    #     # Add buttons to the layout
+    #     self.verticalLayout.addWidget(self.ui.tab2_btn_add_cota)
+    #     self.verticalLayout.addWidget(self.ui.tab2_btn_add_cord)
+    #     # ...existing code...
+
+    def confirmar_borrar(self, index):
+        reply = QMessageBox.question(self, 'Confirmar', "Confirmar acción?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.No:
+            return 0
+        else:
+            self.del_cordon(index)
+
     
+
