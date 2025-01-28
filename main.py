@@ -181,7 +181,7 @@ class MyDialog(QDialog):
         sub_grid_layout.addWidget(combo, 1, 0)
 
         # Add the "Area" label at (0, 1)
-        label_area = QLabel("Area")
+        label_area = QLabel("Area cm2")
         label_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
         sub_grid_layout.addWidget(label_area, 0, 1)
 
@@ -207,8 +207,8 @@ class MyDialog(QDialog):
         layout_tpi.setSpacing(0)
 
         # Labels for 'num_cordones' and 'tpi'
-        label_num_cordones = QLabel("Num Cordones")
-        label_tpi = QLabel("TPI")
+        label_num_cordones = QLabel("Nº Cordones")
+        label_tpi = QLabel("TPI (N/mm2)")
 
         # Align the labels to the center
         label_num_cordones.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -219,7 +219,7 @@ class MyDialog(QDialog):
 
         # Create QLineEdits for each 'cota'
         num_cordones = [QLineEdit() for _ in self.dynamic_cotas]
-        tpi = [QLineEdit() for _ in self.dynamic_cotas]
+        tpi = [QLineEdit("1400") for _ in self.dynamic_cotas]
 
         # Set min and max size for the QLineEdits
         for nc, tp in zip(num_cordones, tpi):

@@ -124,7 +124,6 @@ def print_all_values(self):
 
 ''' Calcula el area total de los cordones, multiplicando la cantidad de cordones por el area asignada segun el tipo de cordon '''
 def armact_calcular_total_area(self):
-    
     total_area = 0.0
 
     for index, cordon in self.dynamic_cordones_arm_act.items():
