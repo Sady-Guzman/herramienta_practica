@@ -26,6 +26,7 @@ from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessag
 def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
     self.ui.tab2_btn_add_cord.clicked.connect(self.add_cordon)
+    self.ui.tab2_btn_del_cord.clicked.connect(self.del_cordon)
 
     self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values(self))
 

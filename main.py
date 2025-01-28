@@ -92,6 +92,7 @@ class MyDialog(QDialog):
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
+        ''' ===============================================  TAB2  Armaduras Activas  ================================================== '''
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRID
 
@@ -149,6 +150,8 @@ class MyDialog(QDialog):
 
 
     def add_cordon(self):
+        
+        print("add_cordon() --> Cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
         # Se asegura de que no se generen mas d4 tipos de corodnes (porque en documentacion solo existen 4)
         if len(self.dynamic_cordones_arm_act) >= 4:
             # Se mantiene cantidad hard-coded, Si en un futuro hay mas tipos de cordones hay que editar esta condicional
@@ -272,7 +275,11 @@ class MyDialog(QDialog):
             'num_cordones': num_cordones,  # Store QLineEdits for num_cordones
             'tpi': tpi,  # Store QLineEdits for tpi
             'diametro': combo,  # Store ComboBox for diameter
-            'area': line_edit_area  # Store QLineEdit for area
+            'area': line_edit_area,  # Store QLineEdit for area
+            'label_tipo': label_tipo,  # Store QLabel for tipo
+            'label_area': label_area,  # Store QLabel for area
+            'label_num_cordones': label_num_cordones,  # Store QLabel for num_cordones
+            'label_tpi': label_tpi  # Store QLabel for tpi
         }
 
         # Re-add the horizontal spacer to the rightmost position in the grid layout
@@ -290,13 +297,37 @@ class MyDialog(QDialog):
     def del_cordon(self, index):
         if index in self.dynamic_cordones_arm_act:
             cordon = self.dynamic_cordones_arm_act.pop(index)
+
+            # Delete widgets (QLineEdit and QComboBox)
             for widget in cordon['num_cordones'] + cordon['tpi']:
                 widget.deleteLater()
+            cordon['diametro'].deleteLater()
+            cordon['area'].deleteLater()
+
+            # Delete labels
+            cordon['label_tipo'].deleteLater()
+            cordon['label_area'].deleteLater()
+            cordon['label_num_cordones'].deleteLater()
+            cordon['label_tpi'].deleteLater()
+
+            # Remove layout from the grid
+            self.ui.gridLayout.removeItem(cordon['layout'])
             cordon['layout'].deleteLater()
-            self.dynamic_diametros_arm_act.pop(index)
+
+            # Remove the entry from the list of dynamically generated diameters
+            del self.dynamic_diametros_arm_act[index]
+
+            # Remove the column from the grid layout
+            for i in reversed(range(self.ui.gridLayout.count())):
+                item = self.ui.gridLayout.itemAt(i)
+                if item and item.widget() in cordon.values():
+                    self.ui.gridLayout.removeWidget(item.widget())
+                    item.widget().deleteLater()
 
 
     # Boton aplicar seccion
+    ''' Aplica pieza en espacio dinamico de trapecios. Maneja el caso de pieza de catalogo, creada por usuario, o temporal'''
+    # Diferencia entre creada por usuario y temporal es que las piezas en base de datos 'piezas_creadas.db' fueron temporales en algun momento y fueron guardadas a la base de datos con btn de guardado
     def aplicar_pieza(self, es_temporal, es_creada):
         if self.es_temporal == False:
             print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
@@ -334,11 +365,11 @@ class MyDialog(QDialog):
 ''' Muestra mensaje en ventana emergente al usuario'''
 def popup_msg(message):
     popup = QMessageBox()
-    popup.setIcon(QMessageBox.Warning)  # Warning icon
-    popup.setWindowTitle("Alerta")  # Popup window title
+    popup.setIcon(QMessageBox.Warning)  # ICONO
+    popup.setWindowTitle("Mensaje")  # title
     popup.setText(message)  # Main message text
-    popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
-    popup.exec()  # Displays the popup
+    popup.setStandardButtons(QMessageBox.Ok)  # agrega btn OK
+    popup.exec()  # muestra ventana PopUp
 
 
 if __name__ == "__main__":
