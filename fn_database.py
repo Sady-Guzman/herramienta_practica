@@ -377,5 +377,5 @@ def db_recuperar_diametros_cordones():
     finally:
         conn.close()
 
-    print("db_recuperar_diametros_cordones() -> contenido de consulta: ", diametros, "\n")
+    # print("db_recuperar_diametros_cordones() -> contenido de consulta: ", diametros, "\n")
     return diametros

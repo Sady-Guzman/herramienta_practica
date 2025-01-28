@@ -122,7 +122,7 @@ def print_all_values(self):
 
     update_area_values(self)
     print_cordon_values(self)
-    # db_recuperar_diametros_cordones()
+
     
 
 

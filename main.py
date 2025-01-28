@@ -151,24 +151,22 @@ class MyDialog(QDialog):
 
     def add_cordon(self):
         diametros_en_db = db_recuperar_diametros_cordones()
-        
-        print("add_cordon() --> Cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
-        # Se asegura de que no se generen mas d4 tipos de corodnes (porque en documentacion solo existen 4)
+        ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
         if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
             popup_msg("Solo hay 4 tipos de cordones en base de datos")
             return 
-
-
-        # First, delete the existing horizontal spacer in the grid
-        if self.ui.gridLayout.itemAtPosition(1, 1):  # Checking if there is an item at position (1, 1)
-            item = self.ui.gridLayout.itemAtPosition(1, 1)  # Remove the item at this position (the horizontal spacer)
-            if item:
-                self.ui.gridLayout.removeItem(item)  # Remove the item from the layout
-                del item  # Remove the item from memory
-
+        
         # Determine the new column index using columnCount()
         index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
 
+        ''' elimina spacer al final de gridLayout. (No funciona bien) '''
+        last_column = index - 1  # Last column index before adding a new one
+        if self.ui.gridLayout.itemAtPosition(1, last_column):  # Row 1, Last column
+            item = self.ui.gridLayout.itemAtPosition(1, last_column)
+            if isinstance(item, QSpacerItem):
+                self.ui.gridLayout.removeItem(item)
+
+        # variable 'index' no es precisa en real cantidad de cordones
         index_para_clave = len(self.dynamic_cordones_arm_act)
 
         # Create a new grid layout for this column
@@ -279,21 +277,21 @@ class MyDialog(QDialog):
             'label_tpi': label_tpi  # Store QLabel for tpi
         }
 
-        # Re-add the horizontal spacer to the rightmost position in the grid layout
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-        self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)  # Add it to the rightmost side of the grid
+        ''' Agrega nuevamente Spacer al final de GridLayout. (No funciona bien) '''
+        # self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+        # self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)  # Add it to the rightmost side of the grid
 
         # Adjust the stretch for all columns to maintain balance
         for col in range(index + 2):  # Adjusts stretching for all columns, including the new one and the spacer
             self.ui.gridLayout.setColumnStretch(col, 1)
 
+        print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
 
-    ''' ====================================================================================================================================================== '''
 
 
-    def del_cordon(self, index):
+
+    def del_cordon(self):
         if self.dynamic_cordones_arm_act:
-            # Get the last cordon
             last_index = max(self.dynamic_cordones_arm_act.keys())
             cordon = self.dynamic_cordones_arm_act.pop(last_index)
 
@@ -309,20 +307,21 @@ class MyDialog(QDialog):
             cordon['label_num_cordones'].deleteLater()
             cordon['label_tpi'].deleteLater()
 
-            # Remove layout from the grid
+            # Remove layout from grid
             self.ui.gridLayout.removeItem(cordon['layout'])
             cordon['layout'].deleteLater()
 
-            # Remove the entry from the list of dynamically generated diameters
+            # Remove from list of dynamically generated diameters
             self.dynamic_diametros_arm_act.pop()
 
-            # Remove the column from the grid layout
-            for i in reversed(range(self.ui.gridLayout.count())):
-                item = self.ui.gridLayout.itemAt(i)
-                if item and item.widget() in cordon.values():
-                    self.ui.gridLayout.removeWidget(item.widget())
-                    item.widget().deleteLater()
+            ''' Agrega spacer al final de GridLayout (No funciona bien) '''
+            # last_column = self.ui.gridLayout.columnCount() - 1
+            # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
+        else:
+            print("del_cordon() --> No existen cordones que borrar \n")
 
+
+    ''' ====================================================================================================================================================== '''
 
     # Boton aplicar seccion
     ''' Aplica pieza en espacio dinamico de trapecios. Maneja el caso de pieza de catalogo, creada por usuario, o temporal'''
