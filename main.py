@@ -45,8 +45,8 @@ class MyDialog(QDialog):
         ''' Inicia variables para guardar informacion dinamica de pestana armaduras activas '''
         self.dynamic_cotas = []
         self.dynamic_diametros_arm_act = []
-        self.dynamic_cordones_arm_act = {}
         self.dynamic_tpi_arm_act = {}
+        self.dynamic_cordones_arm_act = {}
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
@@ -95,7 +95,7 @@ class MyDialog(QDialog):
 
         ''' ===============================================  TAB2  Armaduras Activas  ================================================== '''
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
-        self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRID
+        self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
 
 

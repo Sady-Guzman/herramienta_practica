@@ -1,24 +1,14 @@
-''' codigo para manejar armaduras activas de forma finamica '''
+''' codigo para manejar armaduras activas de forma dinamica '''
 
 '''
-    Se generan y manejan componentes dinamicamente usando listas y diccionarios.
+    Se generan y manejan componentes dinamicamente usando diccionario self.dynamic_cordones_arm_act = {} que guarda las referencias necesarias a los widgets generados para cada cota/cordon de armadura
 
-    En tab2 se define un Grid_Layout como contenedor para los elementos que estaran dentro de 
-    nuevos layouts dinamicamente generados segun la necesidad del usario.
-
-    Cotas se manejan en un VerticalLayout al que se le agregan dinamicamente LineEdits usando un boton 
-    (El usuario puede elegir que cota agregar, Usando una lista con las cotas disponibles en el testero seleccionado, 
-    Puede ser en una ventana emergente como en JACENA).
-    Al agregar una cota hay que agregar un lineEdit a todos los otros VerticalLayouts que existen (Numero cordones y TPI, de cada tipo de corodon).
-    Los valores de las cotas se guardan en lista self.dynamic_cotas[]
-
-    Numero de cordones por cota se especifican en lineEdits que son agregados alineados con la posicion de las cotas. Se agregan a un VerticalLayout que es dinamicamente generado cuando el usuario agrega un tipo de cordon.
-    Valores de estos lineEdits se almacenan en diccionario self.dynamic_cant_ordones{}. Un index de diccionario para cada tipo de cordon, dentro del index la lista guarda los valores de los lineEdits de esa columna (Vlayout).
-    Este diccionario guarda los valores de todos los distintos tipos de cordones, Asignando un indice para cada tipo de cordon y usando la lista correspondiente a ese indice para almacenar los valores de ese cordon.
-
-    TPI se guardan de la misma manera que numero de cordones, en su propio diccionario: self.dynamic_tpi{}, index y listas de cada indice se maneja de la misma forma que numero de cordones.
-
-    tipos de cordones se manejan con self.dynamic_diametros_arm_act{}, donde cada indice corresponde a un tipo de cordon y dentro esta el valor actual de ComboBox
+    tambien se usan listas y diccionarios: 
+        self.dynamic_cotas = []
+        self.dynamic_diametros_arm_act = []
+        self.dynamic_tpi_arm_act = {}
+        self.dynamic_cordones_arm_act = {}
+    para guardar los valores ingresados por el usuario en los campos de cada variable.
 '''
 
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
@@ -369,24 +359,5 @@ def del_cordon(self):
         # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
-
-
-
-
-
-# class ArmaduraActiva:
-#     def __init__(self):
-#         self.dynamic_cotas = []
-#         self.dynamic_diametros_arm_act = []
-#         self.dynamic_cordones_arm_act = {}
-#         self.dynamic_tpi_arm_act = {}
-
-
-#     def confirmar_borrar(self, index):
-#         reply = QMessageBox.question(self, 'Confirmar', "Confirmar acción?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-#         if reply == QMessageBox.No:
-#             return 0
-#         else:
-#             self.del_cordon(index)
 
 
