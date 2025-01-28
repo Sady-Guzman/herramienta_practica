@@ -41,6 +41,7 @@ class MyDialog(QDialog):
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
 
+        ''' Inicia variables para guardar informacion dinamica de pestana armaduras activas '''
         self.dynamic_cotas = []
         self.dynamic_diametros_arm_act = []
         self.dynamic_cordones_arm_act = {}
@@ -93,6 +94,14 @@ class MyDialog(QDialog):
 
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRID
+
+
+
+
+
+
+
+
 
     def add_cota(self):
         ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
@@ -266,7 +275,7 @@ class MyDialog(QDialog):
             self.ui.gridLayout.setColumnStretch(col, 1)
 
 
-
+    ''' ====================================================================================================================================================== '''
 
 
     def del_cordon(self, index):
@@ -277,7 +286,6 @@ class MyDialog(QDialog):
             cordon['layout'].deleteLater()
             self.dynamic_diametros_arm_act.pop(index)
 
-    ''' ======================================================================================================================================================'''
 
     # Boton aplicar seccion
     def aplicar_pieza(self, es_temporal, es_creada):
@@ -306,6 +314,13 @@ class MyDialog(QDialog):
         else:
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
             aplicar_pieza_de_dynamic(self)
+
+
+
+
+
+
+    ''' ======================================================================================================================================================'''
 
 
 

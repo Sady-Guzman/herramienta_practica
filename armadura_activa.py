@@ -29,7 +29,7 @@ def setup_armadura_activa(self):
 
     self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values(self))
 
-        
+    
 
 ''' EN DESARROLLO ASIGNAR AREA SEGUN COMBO '''
 def update_area_values(self):
@@ -81,6 +81,7 @@ def print_cordon_values(self):
         line_edit_value = data['area'].text()
         print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
 
+
 def print_all_values(self):
     # Print all ComboBox values
     print("ComboBox Values:")
@@ -111,10 +112,41 @@ def print_all_values(self):
     total_num_cordones = calculate_total_num_cordones(self)
     print(f"\nTotal Num Cordones: {total_num_cordones}")
 
+    total_area = armact_calcular_total_area(self)
+
     # Assign the total to the QLineEdit
     self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
+    self.ui.tab2_line_total_area.setText(str(total_area))
     print_cordon_values(self)
     update_area_values(self)
+
+
+
+''' Calcula el area total de los cordones, multiplicando la cantidad de cordones por el area asignada segun el tipo de cordon '''
+def armact_calcular_total_area(self):
+    
+    total_area = 0.0
+
+    for index, cordon in self.dynamic_cordones_arm_act.items():
+        # Get the ComboBox value (diameter)
+        diametro_value = cordon['diametro'].currentText()
+        # Get the area per cordon based on diameter
+        area_per_cordon = float(ac_transformar_area_cordon(self, diametro_value))
+
+        # Sum the number of cordones
+        total_num_cordones = sum(
+            int(num_cordon.text()) if num_cordon.text().isdigit() else 0
+            for num_cordon in cordon['num_cordones']
+        )
+
+        # Multiply num_cordones by area per cordon
+        total_area += total_num_cordones * area_per_cordon
+
+    return round(total_area, 3)  # Round for better readability
+
+
+
+
 
 # class ArmaduraActiva:
 #     def __init__(self):
