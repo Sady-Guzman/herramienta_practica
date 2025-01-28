@@ -27,9 +27,9 @@ from fn_database import db_recuperar_diametros_cordones
 from utils import popup_msg
 
 def setup_armadura_activa(self):
-    self.ui.tab2_btn_add_cota.clicked.connect(add_cota)
-    self.ui.tab2_btn_add_cord.clicked.connect(add_cordon)
-    self.ui.tab2_btn_del_cord.clicked.connect(del_cordon)
+    self.ui.tab2_btn_add_cota.clicked.connect(lambda: add_cota(self))
+    self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
+    self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
 
     self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values(self))
 
