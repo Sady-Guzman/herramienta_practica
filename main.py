@@ -149,6 +149,15 @@ class MyDialog(QDialog):
 
 
     def add_cordon(self):
+        # Se asegura de que no se generen mas d4 tipos de corodnes (porque en documentacion solo existen 4)
+        if len(self.dynamic_cordones_arm_act) >= 4:
+            # Se mantiene cantidad hard-coded, Si en un futuro hay mas tipos de cordones hay que editar esta condicional
+            # En vez de comprar con un '4' se deberia comparar con la cantidad de cordones existentes en DB.
+            # TODO
+            popup_msg("Solo hay 4 tipos de cordones en base de datos")
+            return 
+
+
         # First, delete the existing horizontal spacer in the grid
         if self.ui.gridLayout.itemAtPosition(1, 1):  # Checking if there is an item at position (1, 1)
             item = self.ui.gridLayout.itemAtPosition(1, 1)  # Remove the item at this position (the horizontal spacer)
@@ -322,7 +331,14 @@ class MyDialog(QDialog):
 
     ''' ======================================================================================================================================================'''
 
-
+''' Muestra mensaje en ventana emergente al usuario'''
+def popup_msg(message):
+    popup = QMessageBox()
+    popup.setIcon(QMessageBox.Warning)  # Warning icon
+    popup.setWindowTitle("Alerta")  # Popup window title
+    popup.setText(message)  # Main message text
+    popup.setStandardButtons(QMessageBox.Ok)  # Adds an "OK" button
+    popup.exec()  # Displays the popup
 
 
 if __name__ == "__main__":
