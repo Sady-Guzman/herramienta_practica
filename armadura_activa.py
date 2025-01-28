@@ -62,21 +62,37 @@ def setup_armadura_activa(self):
         # Assign the total to the QLineEdit
         self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
         print_cordon_values(self)
+        update_area_values(self)
 
-        ''' EN DESARROLLO ASIGNAR AREA SEGUN COMBO '''
-        def update_area_value(self, index):
-            # Get the ComboBox for diametro and the corresponding QLineEdit for area
-            combo_value = self.dynamic_diametros_arm_act['area'][index]
+        
+
+''' EN DESARROLLO ASIGNAR AREA SEGUN COMBO '''
+def update_area_values(self):
+    """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
+    print("update_area_values() -> Entra func \n")
+    for index, combo in enumerate(self.dynamic_diametros_arm_act):
+        if index in self.dynamic_cordones_arm_act:  # Ensure there's a corresponding cordon entry
             line_edit_area = self.dynamic_cordones_arm_act[index].get('area')
 
-            # Define a mapping of ComboBox values to Area values (customize this logic as needed)
-            diametro_value = combo.currentText()
-            area_value = self.get_area_value_from_diametro(diametro_value)
-
-            # Update the QLineEdit with the new value
             if line_edit_area:
+                diametro_value = combo.currentText()
+                area_value = ac_transformar_area_cordon(self, diametro_value)
+                # area_value = diametro_value
                 line_edit_area.setText(area_value)
 
+def ac_transformar_area_cordon(self, diametro_cordon):
+    ''' Asigna un valor de area a cada tipo de cordon (diametro), El valor esta definido en Documentacion General 1.'''
+
+    if diametro_cordon == "Ø 15.24 mm":
+        return "1400"
+    elif diametro_cordon == "Ø 12.7 mm":
+        return "0.987"
+    elif diametro_cordon == "Ø 9.53 mm":
+        return "0.548"
+    elif diametro_cordon == "Ø 4.98 mm":
+        return "0.195"
+    else:
+        return "error"
 
 def calculate_total_num_cordones(self):
     total = 0
@@ -88,12 +104,14 @@ def calculate_total_num_cordones(self):
                 pass  # Ignore non-integer values
     return total
 
+
 def print_cordon_values(self):
     print("Cordones Values:")
     for index, data in self.dynamic_cordones_arm_act.items():
         diametro = data['diametro'].currentText()
         line_edit_value = data['area'].text()
         print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
+
 
 ''' EN DESARROLLO ASIGNAR AREA SEGUN COMBO '''
 def get_area_value_from_diametro(self, diametro_value):
@@ -116,14 +134,6 @@ class ArmaduraActiva:
         self.dynamic_cordones_arm_act = {}
         self.dynamic_tpi_arm_act = {}
 
-    # def setupUi(self, Dialog):
-    #     # ...existing code...
-    #     self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
-    #     self.ui.tab2_btn_add_cord.clicked.connect(self.add_cordon)
-    #     # Add buttons to the layout
-    #     self.verticalLayout.addWidget(self.ui.tab2_btn_add_cota)
-    #     self.verticalLayout.addWidget(self.ui.tab2_btn_add_cord)
-    #     # ...existing code...
 
     def confirmar_borrar(self, index):
         reply = QMessageBox.question(self, 'Confirmar', "Confirmar acción?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
@@ -131,6 +141,20 @@ class ArmaduraActiva:
             return 0
         else:
             self.del_cordon(index)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -92,7 +92,7 @@ class MyDialog(QDialog):
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
         setup_armadura_activa(self)
-        self.ui.tab2_relleno_layout_armaduras.setVisible(False)
+        self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRID
 
     def add_cota(self):
         ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
