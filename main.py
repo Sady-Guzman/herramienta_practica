@@ -123,7 +123,7 @@ class MyDialog(QDialog):
 
         for cordon in self.dynamic_cordones_arm_act.values():
             cordon['num_cordones'].append(QLineEdit())
-            cordon['tpi'].append(QLineEdit())
+            cordon['tpi'].append(QLineEdit("1400"))
 
             # Set minimum and maximum size for the new QLineEdits
             cordon['num_cordones'][-1].setMinimumSize(70, 0)
