@@ -150,13 +150,11 @@ class MyDialog(QDialog):
 
 
     def add_cordon(self):
+        diametros_en_db = db_recuperar_diametros_cordones()
         
         print("add_cordon() --> Cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
         # Se asegura de que no se generen mas d4 tipos de corodnes (porque en documentacion solo existen 4)
-        if len(self.dynamic_cordones_arm_act) >= 4:
-            # Se mantiene cantidad hard-coded, Si en un futuro hay mas tipos de cordones hay que editar esta condicional
-            # En vez de comprar con un '4' se deberia comparar con la cantidad de cordones existentes en DB.
-            # TODO
+        if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
             popup_msg("Solo hay 4 tipos de cordones en base de datos")
             return 
 
@@ -183,11 +181,10 @@ class MyDialog(QDialog):
 
         # Add the ComboBox at (1, 0)
         combo = QComboBox()
-        combo.addItem("Ø 15.24 mm")
-        combo.addItem("Ø 12.7 mm")
-        combo.addItem("Ø 9.53 mm")
-        combo.addItem("Ø 4.98 mm")
-
+        ''' Poblar comboBox generada dimamicamente con diametros disponibles en DB '''
+        for diametro in diametros_en_db:
+            combo.addItem(f"Ø {diametro} mm")
+        
         combo.setMinimumSize(130, 0)  # Min width: 99, height: default (0)
         combo.setMaximumSize(131, 16777215)  # Max width: 100, height: unlimited
         sub_grid_layout.addWidget(combo, 1, 0)

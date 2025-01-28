@@ -22,6 +22,7 @@
 '''
 
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox
+from fn_database import *
 
 def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota.clicked.connect(self.add_cota)
@@ -32,7 +33,6 @@ def setup_armadura_activa(self):
 
     
 
-''' EN DESARROLLO ASIGNAR AREA SEGUN COMBO '''
 def update_area_values(self):
     """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
     print("update_area_values() -> Entra func \n")
@@ -43,7 +43,6 @@ def update_area_values(self):
             if line_edit_area:
                 diametro_value = combo.currentText()
                 area_value = ac_transformar_area_cordon(self, diametro_value)
-                # area_value = diametro_value
                 line_edit_area.setText(area_value)
 
 def ac_transformar_area_cordon(self, diametro_cordon):
@@ -123,6 +122,7 @@ def print_all_values(self):
 
     update_area_values(self)
     print_cordon_values(self)
+    # db_recuperar_diametros_cordones()
     
 
 

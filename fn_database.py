@@ -358,3 +358,24 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
 
     # print(" db_get_all_trapecios_data() ------> Valor de datos_por_seccion: ", datos_por_seccion, "\n")
     return datos_por_seccion
+
+''' ========================================= consulta para TAB2 Armdura Activa ================================================='''
+
+def db_recuperar_diametros_cordones():
+    ''' Retorna la cantidad de tuplas que hay en tabla propiedades_armadura_activa en armaduras.db '''
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        # Obtener todas las secciones de la pieza
+        cursor.execute("SELECT DISTINCT diametro FROM propiedades_armadura_activa")
+        diametros = [row[0] for row in cursor.fetchall()]
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        diametros = []
+
+    finally:
+        conn.close()
+
+    print("db_recuperar_diametros_cordones() -> contenido de consulta: ", diametros, "\n")
+    return diametros
