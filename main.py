@@ -295,8 +295,10 @@ class MyDialog(QDialog):
 
 
     def del_cordon(self, index):
-        if index in self.dynamic_cordones_arm_act:
-            cordon = self.dynamic_cordones_arm_act.pop(index)
+        if self.dynamic_cordones_arm_act:
+            # Get the last cordon
+            last_index = max(self.dynamic_cordones_arm_act.keys())
+            cordon = self.dynamic_cordones_arm_act.pop(last_index)
 
             # Delete widgets (QLineEdit and QComboBox)
             for widget in cordon['num_cordones'] + cordon['tpi']:
@@ -315,7 +317,7 @@ class MyDialog(QDialog):
             cordon['layout'].deleteLater()
 
             # Remove the entry from the list of dynamically generated diameters
-            del self.dynamic_diametros_arm_act[index]
+            self.dynamic_diametros_arm_act.pop()
 
             # Remove the column from the grid layout
             for i in reversed(range(self.ui.gridLayout.count())):
