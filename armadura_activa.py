@@ -113,13 +113,17 @@ def print_all_values(self):
     total_num_cordones = calculate_total_num_cordones(self)
     print(f"\nTotal Num Cordones: {total_num_cordones}")
 
+    
+
     total_area = armact_calcular_total_area(self)
 
     # Assign the total to the QLineEdit
     self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
     self.ui.tab2_line_total_area.setText(str(total_area))
-    print_cordon_values(self)
+
     update_area_values(self)
+    print_cordon_values(self)
+    
 
 
 
