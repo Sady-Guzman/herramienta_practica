@@ -1,7 +1,7 @@
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel, QSpacerItem, QSizePolicy
-from PySide6.QtWidgets import QMessageBox, QApplication, QDialog, QComboBox, QGridLayout
+from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QSpacerItem, QSizePolicy, QMessageBox, QComboBox, QGridLayout
+from PySide6.QtCore import Qt
 from ui_files.herramienta_trapecios_v8 import Ui_Dialog  # Import from the ui_files directory
 from fn_database import *
 from fn_calculo_propiedades import *
@@ -11,7 +11,12 @@ from fn_crear_pieza import open_crear_pieza_dialog
 from fn_pieza_temporal import *
 from utils import popup_msg
 from armadura_activa import setup_armadura_activa
-from PySide6.QtCore import Qt
+import sqlite3
+import random
+import matplotlib.pyplot as plt  # Add this import statement
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from matplotlib.patches import Polygon
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
@@ -50,8 +55,11 @@ class MyDialog(QDialog):
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
+        
+
         # Connect tab change signal to function
         # self.ui.tabWidget.currentChanged.connect(lambda index: self.set_default_button(index))
+        ''' Default pushBtn en cada TAB '''
         self.ui.btn_calcular_nuevos_valores.setDefault(True)
         self.ui.tabWidget.currentChanged.connect(self.set_default_button)
 
@@ -70,7 +78,9 @@ class MyDialog(QDialog):
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
         ) # Elimina Dynamic Row
 
-        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n"))
+
+        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
+        
 
         
         # conecta btn para usar nueva pieza CATALOGO
@@ -110,8 +120,6 @@ class MyDialog(QDialog):
 
 
 
-
-
     ''' ====================================================================================================================================================== '''
 
     # Boton aplicar seccion
@@ -123,6 +131,11 @@ class MyDialog(QDialog):
 
             familia_seleccionada = self.ui.combo_familia.currentText()
             modelo_seleccionado = self.ui.combo_modelo.currentText()
+            seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
+
+            pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
+            plot_trapecios(pieza_id[0], seccion_seleccionada)
+
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
                 print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
@@ -165,7 +178,7 @@ class MyDialog(QDialog):
 
         
 
-    ''' ======================================================================================================================================================'''
+''' ======================================================================================================================================================'''
 
 ''' Muestra mensaje en ventana emergente al usuario'''
 def popup_msg(message):
@@ -177,6 +190,58 @@ def popup_msg(message):
     popup.exec()  # muestra ventana PopUp
 
 
+''' ======================================================================================================================================================'''
+''' plot '''
+
+# Function to generate random colors
+def random_color():
+    return [random.random(), random.random(), random.random()]
+
+# Function to plot the trapezoids from the database
+def plot_trapecios(pieza_id, seccion):
+    # Connect to the database
+    conn = sqlite3.connect("catalogo.db")
+    cursor = conn.cursor()
+    print(pieza_id, seccion)
+    cursor.execute("SELECT base_inf, base_sup, altura FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ? ORDER BY posicion", (pieza_id, seccion))
+    trapecios = cursor.fetchall()
+    conn.close()
+
+    # Create the figure and axis for plotting
+    fig, ax = plt.subplots()
+
+    y_offset = 0  # Offset to align the trapezoids vertically
+    max_base_inf = max(base_inf for base_inf, _, _ in trapecios)  # Find the largest bottom base to center other trapezoids
+
+    # Iterate over all trapezoids and plot them
+    for base_inf, base_sup, altura in trapecios:
+        # Calculate the horizontal offset to center the trapezoid
+        horizontal_offset = (max_base_inf - base_inf) / 2
+
+        # Define the coordinates of the trapezoid
+        vertices = [
+            (horizontal_offset, y_offset),  # Bottom-left
+            (horizontal_offset + base_inf, y_offset),  # Bottom-right
+            (horizontal_offset + base_inf - (base_inf - base_sup) / 2, y_offset + altura),  # Top-right
+            (horizontal_offset + (base_inf - base_sup) / 2, y_offset + altura)  # Top-left
+        ]
+
+        # Generate random color for each trapezoid
+        color = random_color()
+
+        # Add the trapezoid to the plot
+        trapezoid = Polygon(vertices, closed=True, edgecolor='blue', facecolor=color)
+        ax.add_patch(trapezoid)
+
+        # Move the offset up to the top of the current trapezoid
+        y_offset += altura
+
+    # Set plot limits and aspect
+    ax.set_xlim(0, max_base_inf + 0.1)
+    ax.set_ylim(0, y_offset + 0.1)
+    ax.set_aspect('equal')
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == "__main__":
