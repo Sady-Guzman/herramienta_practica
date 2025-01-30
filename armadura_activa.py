@@ -142,7 +142,7 @@ def print_all_values(self):
 
     update_area_values(self)
     print_cordon_values(self)
-    arm_act_obtener_datos_formula(self)
+    # arm_act_obtener_datos_formula(self)
     arm_act_cdg(self)
 
 def arm_act_cdg(self):
@@ -189,20 +189,26 @@ def arm_act_cdg(self):
             n_cords = cordon['num_cordones'][y].text()
             tpi = cordon['tpi'][y].text()
 
-            # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
-            numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
-            print(f"Valor numerador: {numerador}")
-            numerador_acum += numerador
-            print(f"Valor numerador acumulado: {numerador_acum}\n")
+            try:
+                # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
+                numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
+                print(f"Valor numerador: {numerador}")
+                numerador_acum += numerador
+                print(f"Valor numerador acumulado: {numerador_acum}\n")
 
-            denominador = (float(area) * float(n_cords) * float(tpi))
-            print(f"valor de denominador: {denominador}")
-            denominador_acum += denominador
-            print(f"valor de denominador acumulado: {denominador_acum}\n")
+                denominador = (float(area) * float(n_cords) * float(tpi))
+                print(f"valor de denominador: {denominador}")
+                denominador_acum += denominador
+                print(f"valor de denominador acumulado: {denominador_acum}\n")
+            except Exception as error:
+                print("Se encuentra error en calculo: ", error, "\n")
 
+    try:
+        cdg = (numerador_acum / denominador_acum)
+    except Exception as error:
+        print("Se encuentra error en calculo: ", error, "\n")
     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     print("\t\t\t RESULTADO CDG con TPI")
-    cdg = (numerador_acum / denominador_acum)
     print(f"CDG = {cdg}\n\n\n")
 
     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 3)))
@@ -226,18 +232,23 @@ def arm_act_cdg(self):
             
             area = cordon['area'].text()
             n_cords = cordon['num_cordones'][y].text()
+            try:
+                numerador = (float(cota) * (float(n_cords))*float(area))
+                print(f"Valor numerador: {numerador}")
+                numerador_acum += numerador
+                print(f"Valor numerador acumulado: {numerador_acum}\n")
 
-            numerador = (float(cota) * (float(n_cords))*float(area))
-            print(f"Valor numerador: {numerador}")
-            numerador_acum += numerador
-            print(f"Valor numerador acumulado: {numerador_acum}\n")
-
-            denominador = (float(area) * float(n_cords))
-            print(f"valor de denominador: {denominador}")
-            denominador_acum += denominador
-            print(f"valor de denominador acumulado: {denominador_acum}\n")
+                denominador = (float(area) * float(n_cords))
+                print(f"valor de denominador: {denominador}")
+                denominador_acum += denominador
+                print(f"valor de denominador acumulado: {denominador_acum}\n")
+            except Exception as error:
+                print("Se encuentra error en calculo: ", error, "\n")
     
-    cdg = (numerador_acum / denominador_acum)
+    try:
+        cdg = (numerador_acum / denominador_acum)
+    except Exception as error:
+                print("Se encuentra error en calculo: ", error, "\n")
 
     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     print("\t\t\t RESULTADO CDG sin TPI")
@@ -246,27 +257,27 @@ def arm_act_cdg(self):
 
 
 
-def arm_act_obtener_datos_formula(self):
-    print("******************************\n")
+# def arm_act_obtener_datos_formula(self):
+#     print("******************************\n")
 
-    cant_cotas = len(self.dynamic_cotas)
-    print(f"Cantidad Cotas: {cant_cotas}\n")
+#     cant_cotas = len(self.dynamic_cotas)
+#     print(f"Cantidad Cotas: {cant_cotas}\n")
 
-    cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
-    print(f"Cantidad tipo cordones: {cant_tipos_cordones}\n")
+#     cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
+#     print(f"Cantidad tipo cordones: {cant_tipos_cordones}\n")
 
 
-    for z in range(cant_cotas):
-        print("\n")
-        for x in range(cant_tipos_cordones):
-            cordon = self.dynamic_cordones_arm_act.get(x)
-            cota = self.dynamic_cotas[z].text()
+#     for z in range(cant_cotas):
+#         print("\n")
+#         for x in range(cant_tipos_cordones):
+#             cordon = self.dynamic_cordones_arm_act.get(x)
+#             cota = self.dynamic_cotas[z].text()
             
-            area = cordon['area'].text()
-            n_cords = cordon['num_cordones'][z].text()
-            tpi = cordon['tpi'][z].text()
+#             area = cordon['area'].text()
+#             n_cords = cordon['num_cordones'][z].text()
+#             tpi = cordon['tpi'][z].text()
 
-            print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
+#             print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
 
 
 
