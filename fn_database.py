@@ -379,3 +379,23 @@ def db_recuperar_diametros_cordones():
 
     # print("db_recuperar_diametros_cordones() -> contenido de consulta: ", diametros, "\n")
     return diametros
+
+
+def db_area_cordon(diametro):
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        # Obtener todas las secciones de la pieza
+        cursor.execute("SELECT area FROM propiedades_armadura_activa WHERE diametro = ?", (diametro,))
+        area = cursor.fetchone()
+        area = area[0]
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        area = 0
+
+    finally:
+        conn.close()
+
+    # print("db_area_de_cordon() -> contenido de consulta: ", area, "\n")
+    return area

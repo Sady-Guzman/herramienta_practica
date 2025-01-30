@@ -13,8 +13,9 @@
 
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
-from fn_database import db_recuperar_diametros_cordones
+from fn_database import db_recuperar_diametros_cordones, db_area_cordon
 from utils import popup_msg
+import re
 
 def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota.clicked.connect(lambda: add_cota(self))
@@ -177,17 +178,34 @@ def update_area_values(self):
 
 def ac_transformar_area_cordon(self, diametro_cordon):
     ''' Asigna un valor de area a cada tipo de cordon (diametro), El valor esta definido en Documentacion General 1.'''
-
-    if diametro_cordon == "Ø 15.24 mm":
-        return "1400"
-    elif diametro_cordon == "Ø 12.7 mm":
-        return "0.987"
-    elif diametro_cordon == "Ø 9.53 mm":
-        return "0.548"
-    elif diametro_cordon == "Ø 4.98 mm":
-        return "0.195"
+    ''' diametros se obtienen en formato: Ø 15.24 mm
+        primero se transformar a formato con solo numero: 15.24 y se entrega como parametro a db_area_cordon para hacer consulta en DB'''
+    # Extraer solo el numero de seleccion de comboBox
+    diametro_numerico = re.search(r"[\d.]+", diametro_cordon)
+    
+    if diametro_numerico:
+        diametro_numerico = diametro_numerico.group()  # extrae numero
     else:
-        return "error"
+        return "error" 
+    
+    area = db_area_cordon(diametro_numerico)
+
+    if area:
+        return str(area)
+
+    # En caso de probleas con base de datos usar valores fijos
+    # if diametro_cordon == "Ø 15.24 mm":
+    #     return "1400"
+    # elif diametro_cordon == "Ø 12.7 mm":
+    #     return "0.987"
+    # elif diametro_cordon == "Ø 9.53 mm":
+    #     return "0.548"
+    # elif diametro_cordon == "Ø 4.98 mm":
+    #     return "0.195"
+    # else:
+    #     return "error"
+
+
 
 def calculate_total_num_cordones(self):
     total = 0
@@ -253,6 +271,7 @@ def print_all_values(self):
     update_area_values(self)
     print_cordon_values(self)
     arm_act_cdg(self)
+    db_area_cordon("9.53")
 
     
 
