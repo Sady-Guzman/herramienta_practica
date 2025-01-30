@@ -99,6 +99,10 @@ def print_cordon_values(self):
 
 
 def print_all_values(self):
+
+    if not self.dynamic_cotas:
+        print("ERROR: No se encontrarron cotas en GUI")
+        return
     # Print all ComboBox values
     print("ComboBox Values:")
     for i, combo in enumerate(self.dynamic_diametros_arm_act):

@@ -51,7 +51,10 @@ class MyDialog(QDialog):
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
         # Connect tab change signal to function
-        self.ui.tabWidget.currentChanged.connect(lambda index: self.set_default_button(index))
+        # self.ui.tabWidget.currentChanged.connect(lambda index: self.set_default_button(index))
+        self.ui.btn_calcular_nuevos_valores.setDefault(True)
+        self.ui.tabWidget.currentChanged.connect(self.set_default_button)
+
 
 
         # Carga datos de familias/modelos de DB
@@ -148,6 +151,7 @@ class MyDialog(QDialog):
         # Remove default from all buttons first
         self.ui.btn_calcular_nuevos_valores.setDefault(False)
         self.ui.tab2_btn_valores.setDefault(False)
+        self.ui.tabWidget.widget(index).setFocus()
 
         # Set default only for the current tab
         if index == 0:
@@ -159,7 +163,7 @@ class MyDialog(QDialog):
             self.ui.tab2_btn_valores.setAutoDefault(True)
             print("index 1. btn2 default")
 
-        self.ui.tabWidget.widget(index).setFocus()
+        
 
     ''' ======================================================================================================================================================'''
 
