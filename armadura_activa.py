@@ -17,6 +17,9 @@ from fn_database import db_recuperar_diametros_cordones, db_area_cordon
 from utils import popup_msg
 import re
 
+
+
+
 def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota.clicked.connect(lambda: add_cota(self))
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
@@ -25,142 +28,7 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values(self))
 
 
-def arm_act_cdg2(self):
-    ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) '''
-    ''' Cálculo: ((área para tipo de cordón * cota) * cantidad de cordones de ese tipo) + (repite para cada tipo de cordón) / área total de los cordones existentes'''
 
-    # Inicializamos las variables para el cálculo
-    suma_numerador = 0.0
-    suma_denominador = 0.0
-
-    # Iteramos sobre los cordones en self.dynamic_cordones_arm_act
-    for index, cordon in self.dynamic_cordones_arm_act.items():
-        # 1. Obtener el valor del diámetro (para usarlo en la referencia al área)
-        diametro_value = cordon['diametro'].currentText()
-        # 2. Obtener el área correspondiente según el diámetro
-        area_per_cordon = float(ac_transformar_area_cordon(self, diametro_value))  # Asegúrate de que esta función devuelva el área correcta
-
-        # 3. Obtener la cota del cordón correspondiente (debe ser un valor numérico)
-        cota_value = float(self.dynamic_cotas[index].text())  # Esto depende de cómo estén distribuidos los valores de cota
-
-        # 4. Obtener la cantidad de cordones de este tipo
-        num_cordones = sum(
-            int(num_cordon.text()) if num_cordon.text().isdigit() else 0
-            for num_cordon in cordon['num_cordones']
-        )
-
-        # 5. Calcular el numerador: (área * cota * cantidad)
-        suma_numerador += (area_per_cordon * cota_value * num_cordones)
-
-        # 6. Calcular el denominador: (área * cantidad)
-        suma_denominador += (area_per_cordon * num_cordones)
-
-        # Imprimir valores intermedios (opcional para depuración)
-        print(f"Cordon {index + 1}: Area = {area_per_cordon}, Cota = {cota_value}, Num Cordones = {num_cordones}")
-    
-    # 7. Calcular el centro de gravedad (centro de gravedad = suma_numerador / suma_denominador)
-    if suma_denominador == 0:  # Para evitar división por cero
-        centro_gravedad = 0.0
-    else:
-        centro_gravedad = suma_numerador / suma_denominador
-
-    print(f"Centro de Gravedad: {centro_gravedad} m")
-
-    # Si quieres usar el valor de centro_gravedad en algún QLineEdit o widget:
-    # self.ui.tab2_line_centro_gravedad.setText(str(centro_gravedad))
-
-def arm_act_cdg(self):
-    ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) '''
-    ''' calculo: ((area para tipo de cordon * cota) * cantidad cordones de ese tipo) + (repite para cada tipo de cordon que existe agregado) / area total cordones existenes'''
-    
-    ''' Ejemplo: 1 cordon de 9.52mm en cota 0.170 m y 2 cordones 15.24 mm en cota 0.05 m 
-
-        se calcula: (((0.548 * 0.170) * 1) + ((1.400 * 0.05) *2)) / ((1.400 * 2) + (0.548 * 1))
-
-         # 0.548 cm2 y 1.400 cm2 son areas correspondientes para esos cordones en documentacion general
-    '''
-
-    print("====================================================================")
-    # Get the first cordon (index 0)
-    first_cordon = self.dynamic_cordones_arm_act.get(0)
-
-    # Retrieve the area value from the QLineEdit
-    area_value = first_cordon['area'].text()
-    print(f"first Cordon Area: {area_value}")
-    
-    first_cordon_first_cota_num_cordones = first_cordon['num_cordones'][0].text()
-    print(f"First Num Cordones in first Cordon: {first_cordon_first_cota_num_cordones}")
-
-    # Get the second cota value from dynamic_cotas
-    second_cota = self.dynamic_cotas[1].text()  # Index 1 for the second cota
-    print(f"Second Cota: {second_cota}")
-
-    # Cantidad de tipos de cordones agregados
-    tipos_cordones = len(self.dynamic_cordones_arm_act)
-    print(f"Cantidad de tipos de cordones: {tipos_cordones} \n")
-    
-    # Debug prints
-    # print("\n--- DEBUG: Verificando variables antes de cálculo ---")
-    # print("self.dynamic_cotas:")
-    # print(self.dynamic_cotas)
-    
-    # print("\nself.dynamic_diametros_arm_act:")
-    # print(self.dynamic_diametros_arm_act)
-    
-    # print("\nself.dynamic_tpi_arm_act:")
-    # print(self.dynamic_tpi_arm_act)
-    
-    # print("\nself.dynamic_cordones_arm_act:")
-    # print(self.dynamic_cordones_arm_act)
-
-    # Diccionario con las áreas correspondientes a cada tipo de cordón 
-    # TODO cambiar a usar metodo ac_transformar_area_cordon para obtener area
-    # areas_cordones = {
-    #     "9.52mm": 0.548,
-    #     "12.7mm": 0.98,
-    #     "Ø 15.24 mm": 1.400
-    # }
-
-    # suma_numerador = 0  # Σ(A * Cota * Cantidad)
-    # suma_denominador = 0  # Σ(A * Cantidad)
-
-    # Iterar sobre cada fila de cordones en la interfaz
-    # for row in range(self.tableWidget.rowCount()):
-    #     # Obtener el tipo de cordón seleccionado en el comboBox de esa fila
-    #     comboBox = self.tableWidget.cellWidget(row, 0)  # Suponiendo que la columna 0 tiene los comboBoxes
-    #     if not comboBox:
-    #         continue  # Saltar si no hay comboBox en esta fila
-
-    #     tipo_cordon = comboBox.currentText()
-    #     if tipo_cordon not in areas_cordones:
-    #         continue  # Saltar si el tipo de cordón no está en el diccionario
-
-    #     area = areas_cordones[tipo_cordon]
-
-    #     # Obtener la cantidad de cordones y la cota desde los lineEdits
-    #     cantidad_lineEdit = self.tableWidget.cellWidget(row, 1)  # Suponiendo que la columna 1 tiene las cantidades
-    #     cota_lineEdit = self.tableWidget.cellWidget(row, 2)  # Suponiendo que la columna 2 tiene las cotas
-
-    #     if not cantidad_lineEdit or not cota_lineEdit:
-    #         continue  # Saltar si los lineEdits no existen en esta fila
-
-    #     try:
-    #         cantidad = int(cantidad_lineEdit.text())  # Número de cordones
-    #         cota = float(cota_lineEdit.text())  # Altura (cota)
-    #     except ValueError:
-    #         continue  # Saltar si los valores no son números válidos
-
-    #     # Aplicar la fórmula del centro de gravedad
-    #     suma_numerador += (area * cota * cantidad)
-    #     suma_denominador += (area * cantidad)
-
-    # # Calcular el centro de gravedad
-    # if suma_denominador == 0:
-    #     return None  # Evitar división por cero
-
-    # resultado = suma_numerador / suma_denominador
-    # print("arm_act_cdg() --> result: ", resultado, "\n")
-    # return resultado
 
     
 
@@ -270,10 +138,128 @@ def print_all_values(self):
 
     update_area_values(self)
     print_cordon_values(self)
+    arm_act_obtener_datos_formula(self)
     arm_act_cdg(self)
-    db_area_cordon("9.53")
 
+def arm_act_cdg(self):
+
+    ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) 
+        Calcula cdg con y sin TPI considerado en formula
+    '''
+    ''' calculo: ((area para tipo de cordon * cota * tpi) * cantidad cordones de ese tipo en esa cota) +... (repite para cada tipo de cordon que existe agregado) / area de cordon * cantidad de cordones * tpi ... repetir para cada tipo de cordon'''
+    ''' Ejemplo: 1 cordon de 9.52mm en cota 0.170 m con un tpi de 900 y 2 cordones 15.24 mm en cota 0.05 m con tpi 1200
+
+        se calcula: (((0.548 * 0.170 * 900) * 1) + ((1.400 * 0.05 * 1200) * 2)) / ((1.400 * 2 * 1200) + (0.548 * 1 * 900))
+
+         # 0.548 cm2 y 1.400 cm2 son areas correspondientes para esos cordones en documentacion general
+
+        Formula para calcular sin tpi es igual, solo hay que sacar tpi de parentesis
+    '''
+
+    print("\n************************************************************\n")
+    print("************************************************************\n")
+    cant_cotas = len(self.dynamic_cotas)
+    # print(f"Cantidad Cotas: {cant_cotas}\n")
+
+    cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
+    # print(f"Cantidad tipo cordones: {cant_tipos_cordones}\n")
+
+    numerador = 0
+    numerador_acum = 0
+
+    denominador = 0
+    denominador_acum = 0
+
+    cdg = 0
+
+    ''' calculo considerando TPI '''
+    for y in range(cant_cotas):
+        print("\n")
+        for x in range(cant_tipos_cordones):
+            print(f"**************** \nen cota:{y} en cordon:{x}\n")
+
+            cordon = self.dynamic_cordones_arm_act.get(x)
+            cota = self.dynamic_cotas[y].text()
+            
+            area = cordon['area'].text()
+            n_cords = cordon['num_cordones'][y].text()
+            tpi = cordon['tpi'][y].text()
+
+            # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
+            numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
+            print(f"Valor numerador: {numerador}")
+            numerador_acum += numerador
+            print(f"Valor numerador acumulado: {numerador_acum}\n")
+
+            denominador = (float(area) * float(n_cords) * float(tpi))
+            print(f"valor de denominador: {denominador}")
+            denominador_acum += denominador
+            print(f"valor de denominador acumulado: {denominador_acum}\n")
+
+    print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
+    print("\t\t\t RESULTADO CDG con TPI")
+    cdg = (numerador_acum / denominador_acum)
+    print(f"CDG = {cdg}\n\n\n")
     
+    numerador = 0
+    numerador_acum = 0
+
+    denominador = 0
+    denominador_acum = 0
+
+    cdg = 0
+
+    ''' calculo SIN  TPI '''
+    for y in range(cant_cotas):
+        print("\n")
+        for x in range(cant_tipos_cordones):
+            print(f"**************** \nen cota:{y} en cordon:{x}\n")
+
+            cordon = self.dynamic_cordones_arm_act.get(x)
+            cota = self.dynamic_cotas[y].text()
+            
+            area = cordon['area'].text()
+            n_cords = cordon['num_cordones'][y].text()
+
+            numerador = (float(cota) * (float(n_cords))*float(area))
+            print(f"Valor numerador: {numerador}")
+            numerador_acum += numerador
+            print(f"Valor numerador acumulado: {numerador_acum}\n")
+
+            denominador = (float(area) * float(n_cords))
+            print(f"valor de denominador: {denominador}")
+            denominador_acum += denominador
+            print(f"valor de denominador acumulado: {denominador_acum}\n")
+    
+    cdg = (numerador_acum / denominador_acum)
+
+    print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
+    print("\t\t\t RESULTADO CDG sin TPI")
+    print(f"CDG = {cdg}\n\n\n")
+
+
+
+def arm_act_obtener_datos_formula(self):
+    print("******************************\n")
+
+    cant_cotas = len(self.dynamic_cotas)
+    print(f"Cantidad Cotas: {cant_cotas}\n")
+
+    cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
+    print(f"Cantidad tipo cordones: {cant_tipos_cordones}\n")
+
+
+    for z in range(cant_cotas):
+        print("\n")
+        for x in range(cant_tipos_cordones):
+            cordon = self.dynamic_cordones_arm_act.get(x)
+            cota = self.dynamic_cotas[z].text()
+            
+            area = cordon['area'].text()
+            n_cords = cordon['num_cordones'][z].text()
+            tpi = cordon['tpi'][z].text()
+
+            print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
 
 
 
