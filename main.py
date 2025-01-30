@@ -50,6 +50,10 @@ class MyDialog(QDialog):
 
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
 
+        # Connect tab change signal to function
+        self.ui.tabWidget.currentChanged.connect(lambda index: self.set_default_button(index))
+
+
         # Carga datos de familias/modelos de DB
         self.family_model_mapping_catalogo = db_cargar_familias_modelos(self, True) # Usa DB CATALOGO
         self.family_model_mapping_usuario = db_cargar_familias_modelos(self, False) # Usa DB PIEZAS_CREADAS
@@ -140,7 +144,22 @@ class MyDialog(QDialog):
 
 
 
+    def set_default_button(self, index):
+        # Remove default from all buttons first
+        self.ui.btn_calcular_nuevos_valores.setDefault(False)
+        self.ui.tab2_btn_valores.setDefault(False)
 
+        # Set default only for the current tab
+        if index == 0:
+            self.ui.btn_calcular_nuevos_valores.setDefault(True)
+            self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
+            print("index 0. btn default")
+        elif index == 1:
+            self.ui.tab2_btn_valores.setDefault(True)
+            self.ui.tab2_btn_valores.setAutoDefault(True)
+            print("index 1. btn2 default")
+
+        self.ui.tabWidget.widget(index).setFocus()
 
     ''' ======================================================================================================================================================'''
 
@@ -152,6 +171,8 @@ def popup_msg(message):
     popup.setText(message)  # Main message text
     popup.setStandardButtons(QMessageBox.Ok)  # agrega btn OK
     popup.exec()  # muestra ventana PopUp
+
+
 
 
 if __name__ == "__main__":
