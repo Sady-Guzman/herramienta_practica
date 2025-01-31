@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt  # Add this import statement
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.patches import Polygon
+from dibujo import plot_trapecios
+
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
@@ -189,69 +191,6 @@ def popup_msg(message):
     popup.setStandardButtons(QMessageBox.Ok)  # agrega btn OK
     popup.exec()  # muestra ventana PopUp
 
-
-''' ======================================================================================================================================================'''
-''' plot '''
-
-# Function to generate random colors
-def random_color():
-    green_intensity = random.uniform(0.6, 0.9)  # Varies from dark green (0.4) to bright green (1.0)
-    red_intensity = green_intensity * random.uniform(0.0, 0.15)  # Slight red tint (but very low)
-    blue_intensity = green_intensity * random.uniform(0.0, 0.15)  # Slight blue tint (but very low)
-    return [red_intensity, green_intensity, blue_intensity]
-    # return [random.random(), random.random(), random.random()] # random
-
-# Function to plot the trapezoids from the database
-def plot_trapecios(pieza_id, seccion, familia, modelo, es_creada):
-    # Connect to the database
-
-    if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
-    else:
-        conn = sqlite3.connect("piezas_creadas.db")
-
-    cursor = conn.cursor()
-    print(pieza_id, seccion)
-    cursor.execute("SELECT base_inf, base_sup, altura FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ? ORDER BY posicion", (pieza_id, seccion))
-    trapecios = cursor.fetchall()
-    conn.close()
-
-    # Create the figure and axis for plotting
-    fig, ax = plt.subplots()
-
-    y_offset = 0  # Offset to align the trapezoids vertically
-    max_base_inf = max(base_inf for base_inf, _, _ in trapecios)  # Find the largest bottom base to center other trapezoids
-
-    # Iterate over all trapezoids and plot them
-    for base_inf, base_sup, altura in trapecios:
-        # Calculate the horizontal offset to center the trapezoid
-        horizontal_offset = (max_base_inf - base_inf) / 2
-
-        # Define the coordinates of the trapezoid
-        vertices = [
-            (horizontal_offset, y_offset),  # Bottom-left
-            (horizontal_offset + base_inf, y_offset),  # Bottom-right
-            (horizontal_offset + base_inf - (base_inf - base_sup) / 2, y_offset + altura),  # Top-right
-            (horizontal_offset + (base_inf - base_sup) / 2, y_offset + altura)  # Top-left
-        ]
-
-        # Generate random color for each trapezoid
-        color = random_color()
-
-        # Add the trapezoid to the plot
-        trapezoid = Polygon(vertices, closed=True, edgecolor='blue', facecolor=color)
-        ax.add_patch(trapezoid)
-
-        # Move the offset up to the top of the current trapezoid
-        y_offset += altura
-
-    # Set plot limits and aspect
-    ax.set_xlim(0, max_base_inf + 0.1)
-    ax.set_ylim(0, y_offset + 0.1)
-    ax.set_aspect('equal')
-    plt.title(f"Familia: {familia}, Modelo: {modelo}")
-    plt.grid(True)
-    plt.show()
 
 
 if __name__ == "__main__":
