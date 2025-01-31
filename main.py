@@ -195,7 +195,11 @@ def popup_msg(message):
 
 # Function to generate random colors
 def random_color():
-    return [random.random(), random.random(), random.random()]
+    green_intensity = random.uniform(0.6, 0.9)  # Varies from dark green (0.4) to bright green (1.0)
+    red_intensity = green_intensity * random.uniform(0.0, 0.15)  # Slight red tint (but very low)
+    blue_intensity = green_intensity * random.uniform(0.0, 0.15)  # Slight blue tint (but very low)
+    return [red_intensity, green_intensity, blue_intensity]
+    # return [random.random(), random.random(), random.random()] # random
 
 # Function to plot the trapezoids from the database
 def plot_trapecios(pieza_id, seccion, familia, modelo):
