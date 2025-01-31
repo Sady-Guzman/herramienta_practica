@@ -245,21 +245,25 @@ class Ui_Dialog(object):
         self.Vlayout_label_resultados.setContentsMargins(0, 0, 0, 0)
         self.label_sum_altura = QLabel(self.verticalLayoutWidget_3)
         self.label_sum_altura.setObjectName(u"label_sum_altura")
+        self.label_sum_altura.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.Vlayout_label_resultados.addWidget(self.label_sum_altura)
 
         self.label_sum_area = QLabel(self.verticalLayoutWidget_3)
         self.label_sum_area.setObjectName(u"label_sum_area")
+        self.label_sum_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.Vlayout_label_resultados.addWidget(self.label_sum_area)
 
         self.label_sum_ponderado = QLabel(self.verticalLayoutWidget_3)
         self.label_sum_ponderado.setObjectName(u"label_sum_ponderado")
+        self.label_sum_ponderado.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.Vlayout_label_resultados.addWidget(self.label_sum_ponderado)
 
         self.label_sum_op = QLabel(self.verticalLayoutWidget_3)
         self.label_sum_op.setObjectName(u"label_sum_op")
+        self.label_sum_op.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.Vlayout_label_resultados.addWidget(self.label_sum_op)
 
@@ -271,7 +275,7 @@ class Ui_Dialog(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayoutWidget_2 = QWidget(self.tab_2)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(10, 140, 1061, 351))
+        self.gridLayoutWidget_2.setGeometry(QRect(10, 190, 1061, 351))
         self.gridLayout = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setHorizontalSpacing(-1)
@@ -303,18 +307,18 @@ class Ui_Dialog(object):
 
         self.gridLayout.addItem(self.horizontalSpacer, 1, 1, 1, 1)
 
-        self.tab2_btn_add_cota = QPushButton(self.tab_2)
-        self.tab2_btn_add_cota.setObjectName(u"tab2_btn_add_cota")
-        self.tab2_btn_add_cota.setGeometry(QRect(20, 10, 100, 32))
+        self.tab2_btn_add_cota_custom = QPushButton(self.tab_2)
+        self.tab2_btn_add_cota_custom.setObjectName(u"tab2_btn_add_cota_custom")
+        self.tab2_btn_add_cota_custom.setGeometry(QRect(60, 30, 101, 32))
         self.tab2_btn_add_cord = QPushButton(self.tab_2)
         self.tab2_btn_add_cord.setObjectName(u"tab2_btn_add_cord")
-        self.tab2_btn_add_cord.setGeometry(QRect(150, 10, 111, 32))
+        self.tab2_btn_add_cord.setGeometry(QRect(280, 30, 111, 32))
         self.tab2_btn_del_cota = QPushButton(self.tab_2)
         self.tab2_btn_del_cota.setObjectName(u"tab2_btn_del_cota")
-        self.tab2_btn_del_cota.setGeometry(QRect(20, 40, 100, 32))
+        self.tab2_btn_del_cota.setGeometry(QRect(170, 30, 100, 32))
         self.tab2_btn_del_cord = QPushButton(self.tab_2)
         self.tab2_btn_del_cord.setObjectName(u"tab2_btn_del_cord")
-        self.tab2_btn_del_cord.setGeometry(QRect(150, 40, 111, 32))
+        self.tab2_btn_del_cord.setGeometry(QRect(280, 60, 111, 32))
         self.gridLayoutWidget_3 = QWidget(self.tab_2)
         self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
         self.gridLayoutWidget_3.setGeometry(QRect(899, 10, 171, 116))
@@ -323,16 +327,19 @@ class Ui_Dialog(object):
         self.tab2_gridLayout_totales.setContentsMargins(0, 0, 0, 0)
         self.tab2_label_cant_cord = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_cant_cord.setObjectName(u"tab2_label_cant_cord")
+        self.tab2_label_cant_cord.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_cant_cord, 0, 0, 1, 1)
 
         self.tab2_label_cdg_area = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_cdg_area.setObjectName(u"tab2_label_cdg_area")
+        self.tab2_label_cdg_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_area, 2, 0, 1, 1)
 
         self.tab2_label_area_total = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
+        self.tab2_label_area_total.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_area_total, 1, 0, 1, 1)
 
@@ -353,6 +360,7 @@ class Ui_Dialog(object):
 
         self.tab2_label_cdg_fuerza = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_cdg_fuerza.setObjectName(u"tab2_label_cdg_fuerza")
+        self.tab2_label_cdg_fuerza.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_fuerza, 3, 0, 1, 1)
 
@@ -363,12 +371,11 @@ class Ui_Dialog(object):
 
         self.gridLayoutWidget_4 = QWidget(self.tab_2)
         self.gridLayoutWidget_4.setObjectName(u"gridLayoutWidget_4")
-        self.gridLayoutWidget_4.setGeometry(QRect(290, 10, 231, 57))
+        self.gridLayoutWidget_4.setGeometry(QRect(630, 10, 231, 57))
         self.tab2_gridLayout_combo_tipo = QGridLayout(self.gridLayoutWidget_4)
         self.tab2_gridLayout_combo_tipo.setObjectName(u"tab2_gridLayout_combo_tipo")
         self.tab2_gridLayout_combo_tipo.setContentsMargins(0, 0, 0, 0)
         self.tab2_combo_preset = QComboBox(self.gridLayoutWidget_4)
-        self.tab2_combo_preset.addItem("")
         self.tab2_combo_preset.setObjectName(u"tab2_combo_preset")
 
         self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_combo_preset, 2, 1, 1, 1)
@@ -384,14 +391,22 @@ class Ui_Dialog(object):
         self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_label_testero, 0, 0, 1, 1)
 
         self.tab2_combo_testero = QComboBox(self.gridLayoutWidget_4)
-        self.tab2_combo_testero.addItem("")
         self.tab2_combo_testero.setObjectName(u"tab2_combo_testero")
 
         self.tab2_gridLayout_combo_tipo.addWidget(self.tab2_combo_testero, 2, 0, 1, 1)
 
         self.tab2_btn_valores = QPushButton(self.tab_2)
         self.tab2_btn_valores.setObjectName(u"tab2_btn_valores")
-        self.tab2_btn_valores.setGeometry(QRect(10, 110, 171, 32))
+        self.tab2_btn_valores.setGeometry(QRect(10, 150, 171, 32))
+        self.tab2_label_cota_dinamica = QLabel(self.tab_2)
+        self.tab2_label_cota_dinamica.setObjectName(u"tab2_label_cota_dinamica")
+        self.tab2_label_cota_dinamica.setGeometry(QRect(60, 10, 101, 16))
+        self.tab2_btn_add_cota_testero = QPushButton(self.tab_2)
+        self.tab2_btn_add_cota_testero.setObjectName(u"tab2_btn_add_cota_testero")
+        self.tab2_btn_add_cota_testero.setGeometry(QRect(60, 60, 101, 32))
+        self.tab2_label_cota_dinamica_2 = QLabel(self.tab_2)
+        self.tab2_label_cota_dinamica_2.setObjectName(u"tab2_label_cota_dinamica_2")
+        self.tab2_label_cota_dinamica_2.setGeometry(QRect(280, 10, 101, 16))
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(Dialog)
@@ -428,29 +443,28 @@ class Ui_Dialog(object):
         self.label_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Tipo secci\u00f3n", None))
         self.btn_acpt_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Aplicar secci\u00f3n", None))
         self.btn_save_seccion.setText(QCoreApplication.translate("Dialog", u"Guardar datos secci\u00f3n", None))
-        self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Altura", None))
-        self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Area", None))
-        self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Y Inf", None))
-        self.label_sum_op.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
+        self.label_sum_altura.setText(QCoreApplication.translate("Dialog", u"Altura: ", None))
+        self.label_sum_area.setText(QCoreApplication.translate("Dialog", u"Area: ", None))
+        self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Y Inf: ", None))
+        self.label_sum_op.setText(QCoreApplication.translate("Dialog", u"Inercia: ", None))
         self.btn_salto_linea.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Tab 1", None))
         self.tab2_label_cota.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
         self.tab2_relleno_layout_armaduras.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
-        self.tab2_btn_add_cota.setText(QCoreApplication.translate("Dialog", u"agrega cota", None))
+        self.tab2_btn_add_cota_custom.setText(QCoreApplication.translate("Dialog", u"Cota Custom", None))
         self.tab2_btn_add_cord.setText(QCoreApplication.translate("Dialog", u"agrega cordon", None))
-        self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"del cota", None))
-        self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"del cord", None))
+        self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"Borrar Cota", None))
+        self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"eliminar cordon", None))
         self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones:", None))
         self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area:", None))
         self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total:", None))
         self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza:", None))
-        self.tab2_combo_preset.setItemText(0, QCoreApplication.translate("Dialog", u"T2", None))
-
         self.tab2_label_preset.setText(QCoreApplication.translate("Dialog", u"Tipo Cableado", None))
         self.tab2_label_testero.setText(QCoreApplication.translate("Dialog", u"Testero", None))
-        self.tab2_combo_testero.setItemText(0, QCoreApplication.translate("Dialog", u"0.6 ''", None))
-
         self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"obtener valores", None))
+        self.tab2_label_cota_dinamica.setText(QCoreApplication.translate("Dialog", u"Agregar Cotas", None))
+        self.tab2_btn_add_cota_testero.setText(QCoreApplication.translate("Dialog", u"Cota Testero", None))
+        self.tab2_label_cota_dinamica_2.setText(QCoreApplication.translate("Dialog", u"Tipo de Cordon", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Dialog", u"Tab 2", None))
     # retranslateUi
 

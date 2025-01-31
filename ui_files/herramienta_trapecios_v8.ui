@@ -269,7 +269,7 @@
       <bool>false</bool>
      </property>
      <property name="default">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
     <widget class="QWidget" name="verticalLayoutWidget">
@@ -377,28 +377,40 @@
       <item>
        <widget class="QLabel" name="label_sum_altura">
         <property name="text">
-         <string>Altura</string>
+         <string>Altura: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_sum_area">
         <property name="text">
-         <string>Area</string>
+         <string>Area: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_sum_ponderado">
         <property name="text">
-         <string>Y Inf</string>
+         <string>Y Inf: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_sum_op">
         <property name="text">
-         <string>Inercia</string>
+         <string>Inercia: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -426,7 +438,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>140</y>
+       <y>190</y>
        <width>1061</width>
        <height>351</height>
       </rect>
@@ -499,24 +511,24 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="tab2_btn_add_cota">
+    <widget class="QPushButton" name="tab2_btn_add_cota_custom">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>100</width>
+       <x>60</x>
+       <y>30</y>
+       <width>101</width>
        <height>32</height>
       </rect>
      </property>
      <property name="text">
-      <string>agrega cota</string>
+      <string>Cota Custom</string>
      </property>
     </widget>
     <widget class="QPushButton" name="tab2_btn_add_cord">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>10</y>
+       <x>280</x>
+       <y>30</y>
        <width>111</width>
        <height>32</height>
       </rect>
@@ -528,27 +540,27 @@
     <widget class="QPushButton" name="tab2_btn_del_cota">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>40</y>
+       <x>170</x>
+       <y>30</y>
        <width>100</width>
        <height>32</height>
       </rect>
      </property>
      <property name="text">
-      <string>del cota</string>
+      <string>Borrar Cota</string>
      </property>
     </widget>
     <widget class="QPushButton" name="tab2_btn_del_cord">
      <property name="geometry">
       <rect>
-       <x>150</x>
-       <y>40</y>
+       <x>280</x>
+       <y>60</y>
        <width>111</width>
        <height>32</height>
       </rect>
      </property>
      <property name="text">
-      <string>del cord</string>
+      <string>eliminar cordon</string>
      </property>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget_3">
@@ -566,6 +578,9 @@
         <property name="text">
          <string>N cordones:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
@@ -573,12 +588,18 @@
         <property name="text">
          <string>c.d.g area:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="tab2_label_area_total">
         <property name="text">
          <string>Area total:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -596,6 +617,9 @@
         <property name="text">
          <string>c.d.g fuerza:</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
        </widget>
       </item>
       <item row="3" column="1">
@@ -606,7 +630,7 @@
     <widget class="QWidget" name="gridLayoutWidget_4">
      <property name="geometry">
       <rect>
-       <x>290</x>
+       <x>630</x>
        <y>10</y>
        <width>231</width>
        <height>57</height>
@@ -614,13 +638,7 @@
      </property>
      <layout class="QGridLayout" name="tab2_gridLayout_combo_tipo">
       <item row="2" column="1">
-       <widget class="QComboBox" name="tab2_combo_preset">
-        <item>
-         <property name="text">
-          <string>T2</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="tab2_combo_preset"/>
       </item>
       <item row="0" column="1">
        <widget class="QLabel" name="tab2_label_preset">
@@ -637,13 +655,7 @@
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QComboBox" name="tab2_combo_testero">
-        <item>
-         <property name="text">
-          <string>0.6 ''</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="tab2_combo_testero"/>
       </item>
      </layout>
     </widget>
@@ -651,13 +663,52 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>110</y>
+       <y>150</y>
        <width>171</width>
        <height>32</height>
       </rect>
      </property>
      <property name="text">
       <string>obtener valores</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab2_label_cota_dinamica">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>10</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Agregar Cotas</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="tab2_btn_add_cota_testero">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>60</y>
+       <width>101</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Cota Testero</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab2_label_cota_dinamica_2">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>10</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Tipo de Cordon</string>
      </property>
     </widget>
    </widget>

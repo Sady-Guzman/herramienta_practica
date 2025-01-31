@@ -21,7 +21,7 @@ import re
 
 
 def setup_armadura_activa(self):
-    self.ui.tab2_btn_add_cota.clicked.connect(lambda: add_cota(self))
+    self.ui.tab2_btn_add_cota_custom.clicked.connect(lambda: add_cota(self))
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
 
@@ -431,7 +431,7 @@ def add_cota(self):
     self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
     for cordon in self.dynamic_cordones_arm_act.values():
-        cordon['num_cordones'].append(QLineEdit())
+        cordon['num_cordones'].append(QLineEdit("0"))
         cordon['tpi'].append(QLineEdit("1400"))
 
         # Set minimum and maximum size for the new QLineEdits
@@ -534,7 +534,7 @@ def add_cordon(self):
     layout_tpi.addWidget(label_tpi)
 
     # Create QLineEdits for each 'cota'
-    num_cordones = [QLineEdit() for _ in self.dynamic_cotas]
+    num_cordones = [QLineEdit("0") for _ in self.dynamic_cotas]
     tpi = [QLineEdit("1400") for _ in self.dynamic_cotas]
 
     # Set min and max size for the QLineEdits
