@@ -211,7 +211,7 @@ def arm_act_cdg(self):
     print("\t\t\t RESULTADO CDG con TPI")
     print(f"CDG = {cdg}\n\n\n")
 
-    self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 3)))
+    self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
     
     numerador = 0
     numerador_acum = 0
@@ -253,7 +253,7 @@ def arm_act_cdg(self):
     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     print("\t\t\t RESULTADO CDG sin TPI")
     print(f"CDG = {cdg}\n\n\n")
-    self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 3)))
+    self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 4)))
 
 
 

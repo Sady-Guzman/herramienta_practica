@@ -134,7 +134,7 @@ class MyDialog(QDialog):
             seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
-            plot_trapecios(pieza_id[0], seccion_seleccionada)
+            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado)
 
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
@@ -198,7 +198,7 @@ def random_color():
     return [random.random(), random.random(), random.random()]
 
 # Function to plot the trapezoids from the database
-def plot_trapecios(pieza_id, seccion):
+def plot_trapecios(pieza_id, seccion, familia, modelo):
     # Connect to the database
     conn = sqlite3.connect("catalogo.db")
     cursor = conn.cursor()
@@ -240,6 +240,7 @@ def plot_trapecios(pieza_id, seccion):
     ax.set_xlim(0, max_base_inf + 0.1)
     ax.set_ylim(0, y_offset + 0.1)
     ax.set_aspect('equal')
+    plt.title(f"Familia: {familia}, Modelo: {modelo}")
     plt.grid(True)
     plt.show()
 
