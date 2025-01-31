@@ -25,7 +25,7 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
 
-    self.ui.tab2_btn_valores.clicked.connect(lambda: print_all_values(self))
+    self.ui.tab2_btn_valores.clicked.connect(lambda: arm_act_btn_calcular(self))
 
 
 
@@ -98,7 +98,7 @@ def print_cordon_values(self):
         print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
 
 
-def print_all_values(self):
+def arm_act_btn_calcular(self):
 
     if not self.dynamic_cotas:
         print("ERROR: No se encontrarron cotas en GUI")
@@ -140,6 +140,11 @@ def print_all_values(self):
     self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
     self.ui.tab2_line_total_area.setText(str(total_area))
 
+    ''' Asegura que si un lineEdit de Cotas aun no tine ningun valor o un valor no-numerico no pase nada '''
+    for i in range(len(self.dynamic_cotas)):
+        if self.dynamic_cotas[i].text().isdigit() == False:
+            return
+    
     update_area_values(self)
     print_cordon_values(self)
     # arm_act_obtener_datos_formula(self)
@@ -289,9 +294,9 @@ def armact_cargar_datos_dict(self):
     ''' Carga todos los datos de armaduras activas a una lista para cotas y 
         un diccionario para n_cordones y tpi, ordenándolos por cota.
     '''
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
-    print_dynamic_cordones_values(self)
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print_dynamic_cordones_values(self)
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
 
     lista_cotas = []  # Lista que guarda solo los valores de cotas
     dict_cordones = {}  # Diccionario con el índice del cordón como clave
@@ -344,9 +349,9 @@ def armact_cargar_datos_dict(self):
     for i, cota in enumerate(lista_cotas):
         self.dynamic_cotas[i].setText(cota)
 
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
-    print_dynamic_cordones_values(self)
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print_dynamic_cordones_values(self)
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
     
 
     # Reasignar los valores de num_cordones y tpi a las posiciones correctas según el nuevo orden de las cotas
@@ -374,10 +379,10 @@ def armact_cargar_datos_dict(self):
 
 
     # Verificar si las actualizaciones a la GUI se han realizado correctamente
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
-    print_dynamic_cordones_values(self)
-    print("[][][][][][][][][][][][][][][[][][][][][][]")
-    print(f"\nSe han reasignado los valores en la GUI en el nuevo orden.\n")
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print_dynamic_cordones_values(self)
+    # print("[][][][][][][][][][][][][][][[][][][][][][]")
+    # print(f"\nSe han reasignado los valores en la GUI en el nuevo orden.\n")
 
 
 
