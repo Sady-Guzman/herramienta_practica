@@ -13,7 +13,7 @@
 
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
-from fn_database import db_recuperar_diametros_cordones, db_area_cordon
+from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes
 from utils import popup_msg
 import re
 
@@ -21,16 +21,52 @@ import re
 
 
 def setup_armadura_activa(self):
-    self.ui.tab2_btn_add_cota_custom.clicked.connect(lambda: add_cota(self))
+    self.ui.tab2_btn_add_cota_custom.clicked.connect(lambda: add_cota(self, False)) # Se llama con FALSE para que LineEdit se genere vacio
+    self.ui.tab2_btn_add_cota_testero.clicked.connect(lambda: arm_act_add_cota_tesero(self)) # al usar btn cota de testero, Primero se buscan las cotas disponibles para testero seleccoinado y pieza seleccoinada
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
+    # TODO implementar del_cota
+
+    arm_act_poblar_combo_testeros(self)
 
     self.ui.tab2_btn_valores.clicked.connect(lambda: arm_act_btn_calcular(self))
 
 
+def arm_act_poblar_combo_testeros(self):
+    ''' usa valores db armaduras.db pra poblar comboBox '''
+    # Distinct testeros in testeros
+
+    testeros = db_testeros_existentes()
+
+    for testero in testeros:
+        self.ui.tab2_combo_testero.addItem(f"{testero}")
 
 
+
+
+def arm_act_add_cota_tesero(self):
+    ''' se usa cota disponible en testero seleccinado en vez de agregar cota vacia '''
+
+    # Obtener cotas en testero seleccionado
+    # Guardar en variable
+    # Inicializar variable de items seleccionados con False (cantidad igual a cotas cargas de DB)
+    # renderizar nueva ventana
+    # implementar btns para cancelar y aceptar
+    # Generar tantos checkBoxes como cotas cargadas
+    # Leer cuales CheckBoxes fueron seleccionadas
+    # Asignar valores True en indices correspondientes para variable Seleccionados.
+    # Comparar indices de Cotas  y Seleccionas. Dejar solo cotas correspondientes a seleccionadas
+    # llamar add_cota(VALOR DE COTA A AGREGAR) dentro de loop
+
+    ''' Variabes para guardar cotas y selecciones '''
+    cotas_testero = []
+    indices_seleccionados = []
+
+    testero_seleccionado = self.ui.tab2_combo_testero.currentIndex()
+    cotas_testero = db_cotas_testero("ESTANDAR/0.6''")
     
+
+
 
 def update_area_values(self):
     """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
@@ -145,11 +181,11 @@ def arm_act_btn_calcular(self):
         if self.dynamic_cotas[i].text().isdigit() == False:
             return
     
-    update_area_values(self)
-    print_cordon_values(self)
+    # print_cordon_values(self)
     # arm_act_obtener_datos_formula(self)
-    arm_act_cdg(self)
-    armact_cargar_datos_dict(self)
+    update_area_values(self) # asigna area segun diametro cordon
+    arm_act_cdg(self) # Centro de gravedad
+    armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
 
 def arm_act_cdg(self):
 
@@ -290,7 +326,7 @@ def arm_act_cdg(self):
 #             print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
 
 
-def armact_cargar_datos_dict(self):
+def armact_ordena_cotas(self):
     ''' Carga todos los datos de armaduras activas a una lista para cotas y 
         un diccionario para n_cordones y tpi, ordenándolos por cota.
     '''
@@ -418,15 +454,18 @@ def armact_calcular_total_area(self):
 
 
 
-def add_cota(self):
+def add_cota(self, metros):
     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
     if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
         # Elimina el último item si es el vertical stretcher
         item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
         del item
 
-    # Create the QLineEdit for 'cota'
-    cota_line = QLineEdit()
+    # Crea lineEdit de cota vacio o con valor segun parametro
+    if metros == False:
+        cota_line = QLineEdit()
+    else:
+        cota_line = QLineEdit(f"{metros}")
     cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
     cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
     self.dynamic_cotas.append(cota_line)

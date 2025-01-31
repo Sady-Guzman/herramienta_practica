@@ -148,28 +148,28 @@ CREATE TABLE IF NOT EXIST testero_06 (
 )
 
 -- Inserts de pos/cota de TESTERO 0.60 PULGADAS
-INSERT INTO testero_06 (posicion, cota) VALUES (1, 0.050);
-INSERT INTO testero_06 (posicion, cota) VALUES (2, 0.110);
-INSERT INTO testero_06 (posicion, cota) VALUES (3, 0.170);
-INSERT INTO testero_06 (posicion, cota) VALUES (3, 0.230);
-INSERT INTO testero_06 (posicion, cota) VALUES (4, 0.290);
-INSERT INTO testero_06 (posicion, cota) VALUES (5, 0.350);
-INSERT INTO testero_06 (posicion, cota) VALUES (6, 0.410);
-INSERT INTO testero_06 (posicion, cota) VALUES (7, 0.470);
-INSERT INTO testero_06 (posicion, cota) VALUES (8, 0.530);
-INSERT INTO testero_06 (posicion, cota) VALUES (9, 0.590);
-INSERT INTO testero_06 (posicion, cota) VALUES (10, 0.650);
-INSERT INTO testero_06 (posicion, cota) VALUES (11, 0.710);
-INSERT INTO testero_06 (posicion, cota) VALUES (12, 0.770);
-INSERT INTO testero_06 (posicion, cota) VALUES (13, 0.830);
-INSERT INTO testero_06 (posicion, cota) VALUES (14, 0.890);
-INSERT INTO testero_06 (posicion, cota) VALUES (15, 0.950);
-INSERT INTO testero_06 (posicion, cota) VALUES (16, 1.010);
-INSERT INTO testero_06 (posicion, cota) VALUES (17, 1.070);
-INSERT INTO testero_06 (posicion, cota) VALUES (18, 1.130);
-INSERT INTO testero_06 (posicion, cota) VALUES (19, 1.190);
-INSERT INTO testero_06 (posicion, cota) VALUES (20, 1.250);
-INSERT INTO testero_06 (posicion, cota) VALUES (21, 1.310);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 1, 0.050);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 2, 0.110);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 3, 0.170);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 3, 0.230);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 4, 0.290);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 5, 0.350);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 6, 0.410);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 7, 0.470);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 8, 0.530);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 9, 0.590);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 10, 0.650);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 11, 0.710);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 12, 0.770);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 13, 0.830);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 14, 0.890);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 15, 0.950);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 16, 1.010);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 17, 1.070);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 18, 1.130);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 19, 1.190);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 20, 1.250);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 21, 1.310);
 
 
 
@@ -202,3 +202,12 @@ INSERT INTO unidades (nombre_medida, unidad) VALUES ('masa', 'kilogramos/metro [
 INSERT INTO unidades (nombre_medida, unidad) VALUES ('area', 'centrimetros cuadrados [cm2]');
 INSERT INTO unidades (nombre_medida, unidad) VALUES ('carga de rotura', 'Kilo Newton [kN]');
 INSERT INTO unidades (nombre_medida, unidad) VALUES ('limite elastico', 'Kilo Newton [kN]');
+
+
+
+-- RELACION TESTEROS
+CREATE TABLE testeros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    testero TEXT NOT NULL,
+    posicion INTEGER UNIQUE NOT NULL, 
+    cota REAL UNIQUE NOT NULL);

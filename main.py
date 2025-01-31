@@ -195,8 +195,11 @@ def popup_msg(message):
 
 if __name__ == "__main__":
     ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
+    print("=========================================================================================")
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
+    print("=========================================================================================\n\n\n")
+    
 
     # print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 

@@ -399,3 +399,41 @@ def db_area_cordon(diametro):
 
     # print("db_area_de_cordon() -> contenido de consulta: ", area, "\n")
     return area
+
+
+''' Consulta cotas existente en testero seleccionado en ComboBox '''
+def db_cotas_testero(testero):
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        # Use a parameterized query to avoid SQL syntax issues
+        query = "SELECT cota FROM testeros WHERE testero = ?"
+        cursor.execute(query, (testero,))  # Pass testero as a parameter
+        cotas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        cotas = 0
+    finally:
+        conn.close()
+
+    print(f"db_cotas_testero() -> contenido de consulta: {cotas} \n")
+    return cotas
+
+''' fetch los testeros distintos en tabla testeros '''
+def db_testeros_existentes():
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT DISTINCT testero FROM testeros"
+        cursor.execute(query)
+        testeros = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        testeros = 0
+    finally:
+        conn.close()
+
+    print(f"db_cotas_testero() -> contenido de consulta: {testeros} \n")
+    return testeros
