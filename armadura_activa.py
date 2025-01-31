@@ -144,6 +144,7 @@ def print_all_values(self):
     print_cordon_values(self)
     # arm_act_obtener_datos_formula(self)
     arm_act_cdg(self)
+    armact_cargar_datos_dict(self)
 
 def arm_act_cdg(self):
 
@@ -176,11 +177,12 @@ def arm_act_cdg(self):
 
     cdg = 0
 
+    ''' -------------------------------------'''
     ''' calculo considerando TPI '''
     for y in range(cant_cotas):
-        print("\n")
+        # print("\n")
         for x in range(cant_tipos_cordones):
-            print(f"**************** \nen cota:{y} en cordon:{x}\n")
+            # print(f"**************** \nen cota:{y} en cordon:{x}\n")
 
             cordon = self.dynamic_cordones_arm_act.get(x)
             cota = self.dynamic_cotas[y].text()
@@ -192,20 +194,21 @@ def arm_act_cdg(self):
             try:
                 # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
                 numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
-                print(f"Valor numerador: {numerador}")
+                # print(f"Valor numerador: {numerador}")
                 numerador_acum += numerador
-                print(f"Valor numerador acumulado: {numerador_acum}\n")
+                # print(f"Valor numerador acumulado: {numerador_acum}\n")
 
                 denominador = (float(area) * float(n_cords) * float(tpi))
-                print(f"valor de denominador: {denominador}")
+                # print(f"valor de denominador: {denominador}")
                 denominador_acum += denominador
-                print(f"valor de denominador acumulado: {denominador_acum}\n")
+                # print(f"valor de denominador acumulado: {denominador_acum}\n")
             except Exception as error:
                 print("Se encuentra error en calculo: ", error, "\n")
 
     try:
         cdg = (numerador_acum / denominador_acum)
     except Exception as error:
+        cdg = 0
         print("Se encuentra error en calculo: ", error, "\n")
     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     print("\t\t\t RESULTADO CDG con TPI")
@@ -221,11 +224,12 @@ def arm_act_cdg(self):
 
     cdg = 0
 
+    ''' -------------------------------------'''
     ''' calculo SIN  TPI '''
     for y in range(cant_cotas):
-        print("\n")
+        # print("\n")
         for x in range(cant_tipos_cordones):
-            print(f"**************** \nen cota:{y} en cordon:{x}\n")
+            # print(f"**************** \nen cota:{y} en cordon:{x}\n")
 
             cordon = self.dynamic_cordones_arm_act.get(x)
             cota = self.dynamic_cotas[y].text()
@@ -234,21 +238,22 @@ def arm_act_cdg(self):
             n_cords = cordon['num_cordones'][y].text()
             try:
                 numerador = (float(cota) * (float(n_cords))*float(area))
-                print(f"Valor numerador: {numerador}")
+                # print(f"Valor numerador: {numerador}")
                 numerador_acum += numerador
-                print(f"Valor numerador acumulado: {numerador_acum}\n")
+                # print(f"Valor numerador acumulado: {numerador_acum}\n")
 
                 denominador = (float(area) * float(n_cords))
-                print(f"valor de denominador: {denominador}")
+                # print(f"valor de denominador: {denominador}")
                 denominador_acum += denominador
-                print(f"valor de denominador acumulado: {denominador_acum}\n")
+                # print(f"valor de denominador acumulado: {denominador_acum}\n")
             except Exception as error:
                 print("Se encuentra error en calculo: ", error, "\n")
     
     try:
         cdg = (numerador_acum / denominador_acum)
     except Exception as error:
-                print("Se encuentra error en calculo: ", error, "\n")
+        cdg = 0
+        print("Se encuentra error en calculo: ", error, "\n")
 
     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     print("\t\t\t RESULTADO CDG sin TPI")
@@ -279,6 +284,198 @@ def arm_act_cdg(self):
 
 #             print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
 
+# def armact_cargar_datos_dict(self):
+#     ''' Carga todos los datos de armaduras activas a una lista para cotas, y diccionario para n_cordones y tpi.
+#         Esto se hace para cambiar el orden de los datos una vez cargados en estas variables. Tambien para insertar nuevas cotas en la posicion correcta.
+#         Despues de hacer estas operaciones, Se vuelven a cargar a la GUI en el nuevo orden
+#     '''
+#     print("[][][][][][][][][][][][][][][[][][][][][][]")
+
+#     lista_cotas = [] # Vector solo olo guarda valores cotas
+#     dict_cordones = {} # Diccionario guarda numero cordones (por cota), TPI, Tipo cordon al que corresponde
+
+#     cant_cotas = len(self.dynamic_cotas)
+#     print(f"Cantidad Cotas: {cant_cotas} \n")
+
+#     cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
+#     print(f"Cantidad tipo cordones: {cant_tipos_cordones} \n")
+
+#     # print(f"Contenido de dyn_cotas: {self.dynamic_cotas} \n")
+#     # print(f"Contenido de dyn_cordones: {self.dynamic_cordones_arm_act} \n")
+
+#     for i in range(cant_cotas):
+#         # print(f"Contenido en cota {i}: {self.dynamic_cotas[i].text()}")
+#         lista_cotas.append(self.dynamic_cotas[i].text())
+
+#     print(f"Contenido de lista_cotas: {lista_cotas} \n")
+#     # lista_cotas.reverse()
+
+
+#     # Guardar datos en dict_cordones
+#     for x in range(cant_tipos_cordones):
+#         cordon = self.dynamic_cordones_arm_act.get(x)
+#         tipo_cordon = cordon['area'].text()  # Identificador del tipo de cordón (puede cambiarse si hay otro identificador)
+        
+#         if tipo_cordon not in dict_cordones:
+#             dict_cordones[tipo_cordon] = []  # Inicializar lista para el tipo de cordón
+
+#         for z in range(cant_cotas):
+#             cota = self.dynamic_cotas[z].text()
+#             num_cords = cordon['num_cordones'][z].text()
+#             tpi = cordon['tpi'][z].text()
+            
+#             dict_cordones[tipo_cordon].append((cota, num_cords, tpi))
+
+
+
+
+#     ''' Motrar y ordenar contenido en diccionario '''
+#     print("\nContenido de dict_cordones:")
+#     for tipo, valores in dict_cordones.items():
+#         print(f"{tipo}: {valores}")
+
+#     # Ordenar por cota [0]
+#     for tipo_cordon in dict_cordones:
+#         dict_cordones[tipo_cordon] = sorted(dict_cordones[tipo_cordon], key=lambda x: x[0])
+
+    
+
+#     print("\nContenido de dict_cordones ORDENADO:")
+#     for tipo, valores in dict_cordones.items():
+#         print(f"{tipo}: {valores}")
+
+
+
+
+
+#     ''' Limpiar GUI'''
+#     for cota in self.dynamic_cotas:
+#         cota.deleteLater()
+#     self.dynamic_cotas.clear()
+
+#     for cordon in self.dynamic_cordones_arm_act.values():
+#         for widget in cordon['num_cordones'] + cordon['tpi']:
+#             widget.deleteLater()
+#         cordon['num_cordones'].clear()
+#         cordon['tpi'].clear()
+
+
+#     ''' Insertar datos en nuevo orden a GUI'''
+#     for cota in lista_cotas:
+#         add_cota(self)
+#         self.dynamic_cotas[-1].setText(cota)
+
+#     for tipo_cordon, valores in dict_cordones.items():
+#         add_cordon(self)
+#         index = len(self.dynamic_cordones_arm_act) - 1
+#         cordon = self.dynamic_cordones_arm_act[index]
+#         for i, (cota, num_cords, tpi) in enumerate(valores):
+#             cordon['num_cordones'][i].setText(num_cords)
+#             cordon['tpi'][i].setText(tpi)
+
+
+def armact_cargar_datos_dict(self):
+    ''' Carga todos los datos de armaduras activas a una lista para cotas y 
+        un diccionario para n_cordones y tpi, ordenándolos por cota.
+    '''
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    print_dynamic_cordones_values(self)
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+
+    lista_cotas = []  # Lista que guarda solo los valores de cotas
+    dict_cordones = {}  # Diccionario con tipo_cordon como clave
+
+    cant_cotas = len(self.dynamic_cotas)
+    cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
+
+    print(f"Cantidad Cotas: {cant_cotas} \n")
+    print(f"Cantidad tipo cordones: {cant_tipos_cordones} \n")
+
+    # Extraer valores de las cotas
+    for i in range(cant_cotas):
+        lista_cotas.append(self.dynamic_cotas[i].text())
+
+    print(f"Contenido de lista_cotas antes de ordenar: {lista_cotas} \n")
+
+    # Ordenar lista_cotas en orden descendente
+    lista_cotas.sort(key=lambda x: float(x), reverse=True)  
+
+    print(f"Contenido de lista_cotas ordenado de mayor a menor: {lista_cotas} \n")
+
+    # Crear diccionario de cordones ordenados por cota
+    for x in range(cant_tipos_cordones):
+        cordon = self.dynamic_cordones_arm_act.get(x)
+        tipo_cordon = cordon['area'].text()  # Clave del diccionario
+        
+        if tipo_cordon not in dict_cordones:
+            dict_cordones[tipo_cordon] = []
+
+        # Asociar valores de num_cordones y tpi con cota
+        for z in range(cant_cotas):
+            cota = self.dynamic_cotas[z].text()
+            num_cords = cordon['num_cordones'][z].text()
+            tpi = cordon['tpi'][z].text()
+            dict_cordones[tipo_cordon].append((cota, num_cords, tpi))
+
+    print("\nContenido de dict_cordones ORIGINAL:")
+    for tipo_cordon, valores in dict_cordones.items():
+        print(f"{tipo_cordon}: {valores}")
+
+    # Ordenar valores dentro del diccionario por cota (de mayor a menor)
+    for tipo_cordon in dict_cordones:
+        dict_cordones[tipo_cordon] = sorted(dict_cordones[tipo_cordon], key=lambda x: float(x[0]), reverse=True)
+
+    print("\nContenido de dict_cordones ordenado de mayor a menor:")
+    for tipo_cordon, valores in dict_cordones.items():
+        print(f"{tipo_cordon}: {valores}")
+
+    # Asignar los valores ordenados a los QLineEdit en la GUI
+    for i, cota in enumerate(lista_cotas):
+        self.dynamic_cotas[i].setText(cota)
+
+
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    print_dynamic_cordones_values(self)
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    
+
+
+    # Reasignar los valores de num_cordones y tpi a las posiciones correctas según el nuevo orden de las cotas
+    for tipo_cordon, valores in dict_cordones.items():
+        print(f"Procesando tipo_cordon: {tipo_cordon}")
+        
+        # Obtener el cordón correcto para este tipo de cordón
+        for i, (cota, num_cords, tpi) in enumerate(valores):
+            print(f"Iteración {i}: Cota {cota}, Num_Cordones {num_cords}, TPI {tpi}")
+
+            # Acceder al cordón correcto en dynamic_cordones_arm_act usando el tipo_cordon
+            cordon = None
+            for idx, cordon_data in self.dynamic_cordones_arm_act.items():
+                if cordon_data['area'].text() == tipo_cordon:
+                    cordon = cordon_data
+                    break
+            
+            if cordon is None:
+                print(f"No se encontró el cordón con tipo {tipo_cordon}")
+                continue
+            
+            # Acceder a los QLineEdits de num_cordones y tpi para este cordón
+            num_cord = cordon['num_cordones'][i]  # i para acceder al elemento correcto
+            tpi_cord = cordon['tpi'][i]  # i para acceder al elemento correcto
+            
+            # Actualizar los valores de num_cordones y tpi en la GUI
+            print(f"Actualizando QLineEdit: num_cord {num_cords} y tpi {tpi}")
+            num_cord.setText(num_cords)  # Actualiza el valor de num_cordones
+            tpi_cord.setText(tpi)  # Actualiza el valor de tpi
+
+
+    # Verificar si las actualizaciones a la GUI se han realizado correctamente
+    # print(f"Contenido actualizado de self.dynamic_cordones_arm_act: {self.dynamic_cordones_arm_act}")
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    print_dynamic_cordones_values(self)
+    print("[][][][][][][][][][][][][][][[][][][][][][]")
+    print(f"\nSe han reasignado los valores en la GUI en el nuevo orden.\n")
+
 
 
 ''' Calcula el area total de los cordones, multiplicando la cantidad de cordones por el area asignada segun el tipo de cordon '''
@@ -302,7 +499,14 @@ def armact_calcular_total_area(self):
 
     return round(total_area, 3)  # Round for better readability
 
-''' ========================= metodos para manejo de generacion/eliminacion dinamica de cordones y cotas =================='''
+
+
+
+
+
+
+''' ================================================================================================================================ '''
+''' ============================ metodos para manejo de generacion/eliminacion dinamica de cordones y cotas ======================== '''
 
 
 
@@ -489,6 +693,8 @@ def add_cordon(self):
 
     print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
 
+    
+
 
 
 
@@ -521,5 +727,16 @@ def del_cordon(self):
         # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
+
+def print_dynamic_cordones_values(self):
+    """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
+    for index, cordon in self.dynamic_cordones_arm_act.items():
+        print(f"Cordon {index + 1}:")
+        for i, num_cordon in enumerate(cordon['num_cordones']):
+            print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
+        for i, tpi in enumerate(cordon['tpi']):
+            print(f"  TPI {i + 1}: {tpi.text()}")
+
+
 
 
