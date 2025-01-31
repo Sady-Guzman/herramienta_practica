@@ -134,7 +134,7 @@ class MyDialog(QDialog):
             seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
-            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado)
+            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)
 
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
@@ -202,9 +202,14 @@ def random_color():
     # return [random.random(), random.random(), random.random()] # random
 
 # Function to plot the trapezoids from the database
-def plot_trapecios(pieza_id, seccion, familia, modelo):
+def plot_trapecios(pieza_id, seccion, familia, modelo, es_creada):
     # Connect to the database
-    conn = sqlite3.connect("catalogo.db")
+
+    if es_creada == False:
+        conn = sqlite3.connect("catalogo.db")
+    else:
+        conn = sqlite3.connect("piezas_creadas.db")
+
     cursor = conn.cursor()
     print(pieza_id, seccion)
     cursor.execute("SELECT base_inf, base_sup, altura FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ? ORDER BY posicion", (pieza_id, seccion))

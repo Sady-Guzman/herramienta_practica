@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 import random
 
+''' Grafico de pieza completa seccionada con trapecios de tuplas en DB. '''
 
 conn = sqlite3.connect("catalogo.db")
 cursor = conn.cursor()
