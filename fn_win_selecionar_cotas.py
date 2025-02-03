@@ -68,7 +68,7 @@ class cotasTesteroDialog(QDialog):
         cotas_existetes = [float(cota) for cota in cotas_existetes]
 
         for cota in cotas_testero:
-            checkBox = QCheckBox(f"{cota[0]}", self)
+            checkBox = QCheckBox(f"{cota[0]:.3f}", self)
 
             # Compare after converting to float
             if cota[0] > altura_pieza or cota[0] in cotas_existetes:
