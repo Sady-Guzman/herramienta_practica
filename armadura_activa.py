@@ -533,8 +533,10 @@ def add_cota(self, metros):
         cota_line = QLineEdit(f"{metros}")
     cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
     cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
+
     self.dynamic_cotas.append(cota_line)
-    self.ui.verticalLayout.addWidget(cota_line)
+
+    self.ui.verticalLayout.insertWidget(self.ui.verticalLayout.count(), cota_line)
 
     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
     self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
@@ -707,32 +709,42 @@ def add_cordon(self):
 
     
 
-
 def del_cota(self):
-    ''' Elimina la ultima cota en GUI '''
-    if self.dynamic_cotas:
-        # Remove the last QLineEdit from the dynamic_cotas list and delete it
-        last_cota = self.dynamic_cotas.pop()
-        last_cota.deleteLater()
-
-        # Remove the corresponding QLineEdits for num_cordones and tpi in each cordon
-        for cordon in self.dynamic_cordones_arm_act.values():
-            if cordon['num_cordones']:
-                last_num_cordon = cordon['num_cordones'].pop()
-                last_num_cordon.deleteLater()
-            if cordon['tpi']:
-                last_tpi = cordon['tpi'].pop()
-                last_tpi.deleteLater()
-
-        # Remove the last spacer item from the vertical layout
-        if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
-            item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
-            del item
-
-        # Re-add the vertical spacer item to ensure it is always at the bottom
-        self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-    else:
+    ''' Elimina la cota específica con el valor "4.3" en la GUI '''
+    
+    if not self.dynamic_cotas:
         print("del_cota() --> No existen cotas que borrar \n")
+        return
+
+    # Find index of the cota with value "4.3"
+    index_to_remove = next((i for i, cota in enumerate(self.dynamic_cotas) if cota.text() == "4.3"), None)
+
+    if index_to_remove is None:
+        print('del_cota() --> No se encontró la cota con valor "4.3" \n')
+        return
+
+    # Remove the specified QLineEdit from the dynamic_cotas list and delete it
+    cota_to_remove = self.dynamic_cotas.pop(index_to_remove)
+    cota_to_remove.deleteLater()
+
+    # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
+    for cordon in self.dynamic_cordones_arm_act.values():
+        if index_to_remove < len(cordon['num_cordones']):
+            num_cordon_to_remove = cordon['num_cordones'].pop(index_to_remove)
+            num_cordon_to_remove.deleteLater()
+        
+        if index_to_remove < len(cordon['tpi']):
+            tpi_to_remove = cordon['tpi'].pop(index_to_remove)
+            tpi_to_remove.deleteLater()
+
+    # Ensure the layout maintains proper spacing
+    # self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+    print(f'del_cota() --> Cota con valor "4.3" eliminada correctamente \n')
+
+    ''' Carga cotas existentes a ventana para ser seleccionadas y que proceso sepa cual cotas eliminar '''
+
+
 
 def del_cordon(self):
     if self.dynamic_cordones_arm_act:
@@ -772,7 +784,5 @@ def print_dynamic_cordones_values(self):
             print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
         for i, tpi in enumerate(cordon['tpi']):
             print(f"  TPI {i + 1}: {tpi.text()}")
-
-
 
 
