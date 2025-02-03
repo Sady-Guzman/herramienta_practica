@@ -501,7 +501,7 @@ def add_cota(self, metros):
 
     # Crea lineEdit de cota vacio o con valor segun parametro
     if metros == False:
-        cota_line = QLineEdit()
+        cota_line = QLineEdit("0")
     else:
         cota_line = QLineEdit(f"{metros}")
     cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
