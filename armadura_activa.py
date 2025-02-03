@@ -71,21 +71,32 @@ def arm_act_add_cota_tesero(self):
 
     # ---
     # TODO verificar cuales cotas ya estan agregadas para no mostrarlas como opcion en ventana de seleccion de cotas testero
+    # TODO Ordenar por cota despues de agregar cota testero
 
     ''' Variabes para guardar cotas y selecciones '''
     cotas_testero = []
     cotas_seleccinadas = []
+    cotas_existentes = []
+
+    # Obtener valores de cotas existentes en la GUI
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+        print(cota.text())
 
     testero_seleccionado = self.ui.tab2_combo_testero.currentIndex()
     cotas_testero = db_cotas_testero(self.ui.tab2_combo_testero.currentText())
 
     # Obtener el valor de altura_acumulada
-    altura_pieza = float(self.ui.result_sum_altura.text())
+    try:
+        altura_pieza = float(self.ui.result_sum_altura.text())
+    except Exception as e:
+        print("No se encuentra altura de pieza asignada, se usa valor 99 por defecto. error: ", e)
+        altura_pieza = 99
 
     cotas_testero.reverse()
     print(cotas_testero)
 
-    cotas_seleccinadas = open_cotas_dialog(self, cotas_testero, altura_pieza)
+    cotas_seleccinadas = open_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
 
     if cotas_seleccinadas:
         print("Selected cotas:", cotas_seleccinadas)

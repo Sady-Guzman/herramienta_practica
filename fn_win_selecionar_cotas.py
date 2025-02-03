@@ -17,7 +17,7 @@ from fn_update_gui import *
 
 
 class cotasTesteroDialog(QDialog):
-    def __init__(self, cotas_testero, altura_pieza, parent=None):
+    def __init__(self, cotas_testero, altura_pieza, cotas_existentes, parent=None):
         super().__init__(parent)
         self.ui_cotas = Ui_Dialog()
         self.ui_cotas.setupUi(self)
@@ -25,7 +25,7 @@ class cotasTesteroDialog(QDialog):
         self.result_data = []
 
         y_position = 60 # OFFSET desde donde se agregan los widgets. (bajo de label y botones)
-        self.add_cotas(cotas_testero, altura_pieza, y_position)
+        self.add_cotas(cotas_testero, altura_pieza, cotas_existentes, y_position)
         
         # Ajusta tamano ventana
         self.adjustSize()
@@ -58,23 +58,31 @@ class cotasTesteroDialog(QDialog):
         self.result_data = selected
         self.accept()
 
-    def add_cotas(self, cotas_testero, altura_pieza, y_position):
+    def add_cotas(self, cotas_testero, altura_pieza, cotas_existetes, y_position):
         ''' Agrega dinamicamente checkBoxes para mostrar cotas disponibles a seleccionar '''
         
+        print("Contenido de cotas_existentes: ", cotas_existetes)
+        print("Contenido de cotas_testero: ", cotas_testero)
+
+        # Convert cotas_existetes to floats for comparison
+        cotas_existetes = [float(cota) for cota in cotas_existetes]
+
         for cota in cotas_testero:
             checkBox = QCheckBox(f"{cota[0]}", self)
-            if cota[0] > altura_pieza:
+
+            # Compare after converting to float
+            if cota[0] > altura_pieza or cota[0] in cotas_existetes:
                 checkBox.setDisabled(True)
 
-            # NO se usa verticalLayout para adaptar dinamicamente el tamano de la vetana al necesario (segun la cantidad de cotas en testero)
-            checkBox.setGeometry(20, y_position, 150, 30)  # Set x=20, y=y_position, width=150, height=30
+            # Set the checkbox position manually
+            checkBox.setGeometry(20, y_position, 150, 30)
             
-            # Agrega checkBox generada a lista de referencia
+            # Add the checkbox to the list of references
             self.checkBoxes_cotas.append(checkBox)
             
             y_position += 20  # Increment Y to position the next checkbox below
 
-        # Ajusta tamano vetana
+        # Adjust the window size after adding all checkboxes
         self.adjustSize()
         
     
@@ -82,9 +90,9 @@ class cotasTesteroDialog(QDialog):
 
 
 ''' Se llama por btn desde armaduras_activas.py '''
-def open_cotas_dialog(parent, cotas_testero, altura_pieza):
+def open_cotas_dialog(parent, cotas_testero, altura_pieza, cotas_existentes):
     # Open the CrearPiezaDialog
-    dialog_cotas = cotasTesteroDialog(cotas_testero, altura_pieza, parent)
+    dialog_cotas = cotasTesteroDialog(cotas_testero, altura_pieza, cotas_existentes, parent)
     if dialog_cotas.exec():  # Open dialog and wait for user action
         print("Dialog accepted!")
         return dialog_cotas.result_data
