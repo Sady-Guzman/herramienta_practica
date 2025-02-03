@@ -75,7 +75,7 @@ def arm_act_add_cota_tesero(self):
 
     ''' Variabes para guardar cotas y selecciones '''
     cotas_testero = []
-    cotas_seleccinadas = []
+    cotas_seleccionadas = []
     cotas_existentes = []
 
     # Obtener valores de cotas existentes en la GUI
@@ -96,14 +96,17 @@ def arm_act_add_cota_tesero(self):
     cotas_testero.reverse()
     print(cotas_testero)
 
-    cotas_seleccinadas = open_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
+    cotas_seleccionadas = open_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
 
-    if cotas_seleccinadas:
-        print("Selected cotas:", cotas_seleccinadas)
-        for cota in cotas_seleccinadas:
+    if cotas_seleccionadas:
+        print("Selected cotas:", cotas_seleccionadas)
+        for cota in cotas_seleccionadas:
             add_cota(self, cota)
     else:
         print("No cotas selected.")
+
+    armact_ordena_cotas(self) # Ordena cotas despues de insertar nuevas cotas de testero
+
 
 
 def update_area_values(self):
@@ -172,6 +175,8 @@ def print_cordon_values(self):
         print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
 
 
+
+
 def arm_act_btn_calcular(self):
 
     if not self.dynamic_cotas:
@@ -214,9 +219,15 @@ def arm_act_btn_calcular(self):
     self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
     self.ui.tab2_line_total_area.setText(str(total_area))
 
-    ''' Asegura que si un lineEdit de Cotas aun no tine ningun valor o un valor no-numerico no pase nada '''
+    ''' Asegura que si un lineEdit de Cotas aún no tiene ningún valor o un valor no-numerico no pase nada '''
     for i in range(len(self.dynamic_cotas)):
-        if self.dynamic_cotas[i].text().isdigit() == False:
+        cota_text = self.dynamic_cotas[i].text().strip()  # Get the text from the QLineEdit and strip spaces
+        try:
+            # Try converting the text to a float
+            float(cota_text)
+        except ValueError:
+            # If conversion fails, it's not a valid number, so return
+            print(f"Invalid value in Cota {i + 1}: '{cota_text}'. Skipping.")
             return
     
     # print_cordon_values(self)
@@ -224,6 +235,9 @@ def arm_act_btn_calcular(self):
     update_area_values(self) # asigna area segun diametro cordon
     arm_act_cdg(self) # Centro de gravedad
     armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
+
+
+
 
 def arm_act_cdg(self):
 
@@ -378,17 +392,30 @@ def armact_ordena_cotas(self):
     cant_cotas = len(self.dynamic_cotas)
     cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
 
+
     print(f"Cantidad Cotas: {cant_cotas} \n")
     print(f"Cantidad tipo cordones: {cant_tipos_cordones} \n")
 
+
     # Extraer valores de las cotas
     for i in range(cant_cotas):
-        lista_cotas.append(self.dynamic_cotas[i].text())
+        cota_text = self.dynamic_cotas[i].text().strip()  # Ensure we remove any surrounding spaces
+        print(f"Text from QLineEdit {i}: '{cota_text}'")
+        try:
+            lista_cotas.append(float(cota_text))  # Convert to float safely
+        except ValueError:
+            print(f"Input invalido para cota {cota_text}. Ignorando.")
 
-    print(f"Contenido de lista_cotas antes de ordenar: {lista_cotas} \n")
+    # print(f"Contenido de lista_cotas antes de ordenar: {lista_cotas} \n")
+
+    # Convertir valores a float antes de ordenar
+    lista_cotas = [float(cota) for cota in lista_cotas]
 
     # Ordenar lista_cotas en orden descendente
-    lista_cotas.sort(key=lambda x: float(x), reverse=True)  
+    lista_cotas.sort(reverse=True)  
+
+    # Convertir valores de vuelta a string después de ordenar
+    lista_cotas = [str(cota) for cota in lista_cotas]
 
     print(f"Contenido de lista_cotas ordenado de mayor a menor: {lista_cotas} \n")
 
@@ -407,17 +434,17 @@ def armact_ordena_cotas(self):
             tpi = cordon['tpi'][z].text()
             dict_cordones[x].append((cota, num_cords, tpi))
 
-    print("\nContenido de dict_cordones ORIGINAL:")
-    for tipo_cordon, valores in dict_cordones.items():
-        print(f"Índice {tipo_cordon}: {valores}")
+    # print("\nContenido de dict_cordones ORIGINAL:")
+    # for tipo_cordon, valores in dict_cordones.items():
+    #     print(f"Índice {tipo_cordon}: {valores}")
 
     # Ordenar valores dentro del diccionario por cota (de mayor a menor)
     for tipo_cordon in dict_cordones:
         dict_cordones[tipo_cordon] = sorted(dict_cordones[tipo_cordon], key=lambda x: float(x[0]), reverse=True)
 
-    print("\nContenido de dict_cordones ordenado de mayor a menor:")
-    for tipo_cordon, valores in dict_cordones.items():
-        print(f"Índice {tipo_cordon}: {valores}")
+    # # print("\nContenido de dict_cordones ordenado de mayor a menor:")
+    # for tipo_cordon, valores in dict_cordones.items():
+    #     print(f"Índice {tipo_cordon}: {valores}")
 
     # Asignar los valores ordenados a los QLineEdit en la GUI
     for i, cota in enumerate(lista_cotas):
