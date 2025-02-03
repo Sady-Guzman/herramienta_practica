@@ -257,6 +257,6 @@ CREATE TABLE testeros (
 
 CREATE TABLE IF NOT EXISTS "testeros" (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    testero TEXT UNIQUE NOT NULL,
+    testero TEXT NOT NULL,
     posicion INTEGER NOT NULL, 
     cota REAL NOT NULL);

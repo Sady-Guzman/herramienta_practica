@@ -26,7 +26,7 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota_testero.clicked.connect(lambda: arm_act_add_cota_tesero(self)) # al usar btn cota de testero, Primero se buscan las cotas disponibles para testero seleccoinado y pieza seleccoinada
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
-    # TODO implementar del_cota
+    self.ui.tab2_btn_del_cota.clicked.connect(lambda: del_cota(self))
 
     arm_act_poblar_combo_testeros(self)
 
@@ -708,7 +708,31 @@ def add_cordon(self):
     
 
 
+def del_cota(self):
+    ''' Elimina la ultima cota en GUI '''
+    if self.dynamic_cotas:
+        # Remove the last QLineEdit from the dynamic_cotas list and delete it
+        last_cota = self.dynamic_cotas.pop()
+        last_cota.deleteLater()
 
+        # Remove the corresponding QLineEdits for num_cordones and tpi in each cordon
+        for cordon in self.dynamic_cordones_arm_act.values():
+            if cordon['num_cordones']:
+                last_num_cordon = cordon['num_cordones'].pop()
+                last_num_cordon.deleteLater()
+            if cordon['tpi']:
+                last_tpi = cordon['tpi'].pop()
+                last_tpi.deleteLater()
+
+        # Remove the last spacer item from the vertical layout
+        if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
+            item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
+            del item
+
+        # Re-add the vertical spacer item to ensure it is always at the bottom
+        self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+    else:
+        print("del_cota() --> No existen cotas que borrar \n")
 
 def del_cordon(self):
     if self.dynamic_cordones_arm_act:
