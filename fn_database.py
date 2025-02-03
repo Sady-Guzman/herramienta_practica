@@ -417,7 +417,7 @@ def db_cotas_testero(testero):
     finally:
         conn.close()
 
-    print(f"db_cotas_testero() -> contenido de consulta: {cotas} \n")
+    # print(f"db_cotas_testero() -> contenido de consulta: {cotas} \n")
     return cotas
 
 ''' fetch los testeros distintos en tabla testeros '''
@@ -435,5 +435,5 @@ def db_testeros_existentes():
     finally:
         conn.close()
 
-    print(f"db_cotas_testero() -> contenido de consulta: {testeros} \n")
+    # print(f"db_cotas_testero() -> contenido de consulta: {testeros} \n")
     return testeros

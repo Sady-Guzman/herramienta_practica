@@ -13,10 +13,11 @@
 
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
 from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes
 from utils import popup_msg
 import re
-
+from fn_win_selecionar_cotas import open_cotas_dialog
 
 
 
@@ -34,12 +35,20 @@ def setup_armadura_activa(self):
 
 def arm_act_poblar_combo_testeros(self):
     ''' usa valores db armaduras.db pra poblar comboBox '''
+    
     # Distinct testeros in testeros
-
     testeros = db_testeros_existentes()
 
+    # print(testeros)
+
     for testero in testeros:
-        self.ui.tab2_combo_testero.addItem(f"{testero}")
+        self.ui.tab2_combo_testero.addItem(f"{testero[0]}")
+    
+    # Ajusta tamano de letrs en ComboB
+    font = QFont()
+    font.setPointSize(12)
+    self.ui.tab2_combo_testero.setFont(font)
+        
 
 
 
@@ -50,20 +59,35 @@ def arm_act_add_cota_tesero(self):
     # Obtener cotas en testero seleccionado
     # Guardar en variable
     # Inicializar variable de items seleccionados con False (cantidad igual a cotas cargas de DB)
+
     # renderizar nueva ventana
     # implementar btns para cancelar y aceptar
+
     # Generar tantos checkBoxes como cotas cargadas
     # Leer cuales CheckBoxes fueron seleccionadas
     # Asignar valores True en indices correspondientes para variable Seleccionados.
     # Comparar indices de Cotas  y Seleccionas. Dejar solo cotas correspondientes a seleccionadas
     # llamar add_cota(VALOR DE COTA A AGREGAR) dentro de loop
 
+    # ---
+    # TODO verificar cuales cotas ya estan agregadas para no mostrarlas como opcion en ventana de seleccion de cotas testero
+
     ''' Variabes para guardar cotas y selecciones '''
     cotas_testero = []
-    indices_seleccionados = []
+    cotas_seleccinadas = []
 
     testero_seleccionado = self.ui.tab2_combo_testero.currentIndex()
-    cotas_testero = db_cotas_testero("ESTANDAR/0.6''")
+    cotas_testero = db_cotas_testero(self.ui.tab2_combo_testero.currentText())
+
+    altura_pieza = 0.80
+
+    print(cotas_testero)
+    
+    cotas_seleccinadas = open_cotas_dialog(self, cotas_testero, altura_pieza)
+
+    print(cotas_seleccinadas)
+
+
     
 
 
