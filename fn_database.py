@@ -437,3 +437,52 @@ def db_testeros_existentes():
 
     # print(f"db_cotas_testero() -> contenido de consulta: {testeros} \n")
     return testeros
+
+''' ================================================================================================================================================================= '''
+''' ============================   Funciones para feature de presets de armadura activa (Tipos Cableados, T2, T4, T6)  ============================================== '''
+
+def db_tipos_cableado_pieza(familia, modelo):
+    ''' Obtiene los tipos de cableado que existen como Preset para una pieza '''
+
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT DISTINCT tipo_cableado FROM cableado_tipos"
+        cursor.execute(query)
+        tipos = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        tipos = 0
+    finally:
+        conn.close()
+
+    print(f"db_tipos_cableados_pieza() -> contenido de consulta: {tipos} \n")
+    return tipos
+    
+
+import sqlite3
+
+def db_cables_tipo_cableado(tipo_cableado):
+    ''' Obtiene los tipos de cableado que existen como Preset para una pieza '''
+
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT cota, diametro, num_cord, tpi 
+        FROM cableado_cables 
+        JOIN cableado_tipos ON cableado_cables.tipo_cableado = cableado_tipos.id
+        WHERE cableado_tipos.tipo_cableado = ?;
+        """
+        cursor.execute(query, (tipo_cableado,))
+        tipos = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        tipos = 0
+    finally:
+        conn.close()
+
+    print(f"db_cables_tipo_cableado() -> contenido de consulta: {tipos} \n")
+    return tipos

@@ -83,6 +83,8 @@ class MyDialog(QDialog):
 
         self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
         
+        
+        
 
         
         # conecta btn para usar nueva pieza CATALOGO
