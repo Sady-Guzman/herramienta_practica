@@ -1,176 +1,115 @@
-''' 
-    Maneja funcionamiento de ventana para seleccionar cotas a agregar en TAB2 (Armadura Activa).
-    Lista de cotas depende de Testero seleccionado en ese momento en ComboBox
-
-    La ventana crear_pieza se invoca al hacer click en btn para cargar cotas de testero (En vez de custom, osea sin cota pre-definida) en la ventana principal-TAB2.
-
-    obtiene las cotas mostradas de query a base de datos.
-    
-    Luego de que el usuario elige las cotas y usa btn aceptar, Los checkboxes marcados se pasan a funcion que invoca esta clase
-'''
-
-from PySide6.QtWidgets import QDialog, QCheckBox  # Add QCheckBox to the import statement
+from PySide6.QtWidgets import QDialog, QCheckBox  
 from ui_files.ui_seleccionar_cotas import Ui_Dialog
 
 from fn_elementos_gui import *
 from fn_update_gui import *
 
-
-class add_cotasTesteroDialog(QDialog):
-    def __init__(self, cotas_testero, altura_pieza, cotas_existentes, parent=None):
+class CotasDialog(QDialog):
+    """Base class for handling Cotas selection dialogs."""
+    def __init__(self, cotas, parent=None):
         super().__init__(parent)
         self.ui_cotas = Ui_Dialog()
         self.ui_cotas.setupUi(self)
         self.checkBoxes_cotas = []
         self.result_data = []
-
-        y_position = 60 # OFFSET desde donde se agregan los widgets. (bajo de label y botones)
-        self.add_cotas(cotas_testero, altura_pieza, cotas_existentes, y_position)
         
-        # Ajusta tamano ventana
+        y_position = 60  # Variable de Offset inicial para agregrar CheckBoxes bajo de Label/Btns y espacio entre ellas
+        self.setup_cotas(cotas, y_position)
+
+        # Adjust window size
         self.adjustSize()
-        # Tamano minimo que puede tener la ventana
         self.setMinimumSize(380, 340)
 
-        self.ui_cotas.btn_aceptar.clicked.connect(lambda: self.aceptar())
-        self.ui_cotas.btn_cancelar.clicked.connect(lambda: self.cancelar())
-
-    ''' Btns Cancelar y Aceptar '''
+        # Connect buttons
+        self.ui_cotas.btn_aceptar.clicked.connect(self.aceptar)
+        self.ui_cotas.btn_cancelar.clicked.connect(self.cancelar)
 
     def cancelar(self):
-        ''' Handles the action when the cancel button is clicked '''
-        print("Cancel button clicked. Closing window.")
-        self.close()  # Closes the window when cancel is clicked
-    
+        ''' btn cancelar no hace nada (solo cierra ventana)'''
+        self.close()
+
     def aceptar(self):
-        # Retrieve the data entered by the userss
-        # Function to check which checkboxes are selected
-
-        selected = []
-        for checkbox in self.checkBoxes_cotas:
-            if checkbox.isChecked():  # Check if the checkbox is selected
-                selected.append(checkbox.text())
-
-        # Print selected checkboxes after the GUI is shown
-        print("Selected checkboxes:", selected)
-        
-        # Recuperar datos
-        self.result_data = selected
+        ''' maneja btn aceptar. Obtiene checkboxes marcadas para retornarlas a armadura_activa.py'''
+        self.result_data = [cb.text() for cb in self.checkBoxes_cotas if cb.isChecked()]
+        # print("Checkboxes seleccionadas:", self.result_data)
         self.accept()
 
-    def add_cotas(self, cotas_testero, altura_pieza, cotas_existetes, y_position):
-        ''' Agrega dinamicamente checkBoxes para mostrar cotas disponibles a seleccionar '''
-        
-        print("Contenido de cotas_existentes: ", cotas_existetes)
-        print("Contenido de cotas_testero: ", cotas_testero)
+    def setup_cotas(self, cotas, y_position):
+        ''' Metodo implementado en subclases'''
+        raise NotImplementedError("Este metodo se implementa en sub-clases")
 
-        # Convert cotas_existetes to floats for comparison
-        cotas_existetes = [float(cota) for cota in cotas_existetes]
+
+
+
+
+class AddCotasTesteroDialog(CotasDialog):
+    ''' Dialogo (ventana) para anadir cotas, se dejan sombreadas las cotas que exceden el alto total de la pieza o que ya estan agregadas'''
+    def __init__(self, cotas_testero, altura_pieza, cotas_existentes, parent=None):
+        self.altura_pieza = altura_pieza
+        self.cotas_existentes = [float(c) for c in cotas_existentes]
+        super().__init__(cotas_testero, parent)
+
+    def setup_cotas(self, cotas_testero, y_position):
+        ''' genera checkboxes '''
+        # print("Contenido de cotas_existentes:", self.cotas_existentes)
+        # print("Contenido de cotas_testero:", cotas_testero)
 
         for cota in cotas_testero:
             checkBox = QCheckBox(f"{cota[0]:.3f}", self)
 
-            # Compare after converting to float
-            if cota[0] > altura_pieza or cota[0] in cotas_existetes:
+            # Disable checkbox if the cota already exists or exceeds the height limit
+            if cota[0] > self.altura_pieza or cota[0] in self.cotas_existentes:
                 checkBox.setDisabled(True)
 
-            # Set the checkbox position manually
             checkBox.setGeometry(20, y_position, 150, 30)
-            
-            # Add the checkbox to the list of references
             self.checkBoxes_cotas.append(checkBox)
-            
-            y_position += 20  # Increment Y to position the next checkbox below
+            y_position += 20  
 
-        # Adjust the window size after adding all checkboxes
         self.adjustSize()
 
-class del_cotasTesteroDialog(QDialog):
+
+
+
+
+
+class DelCotasTesteroDialog(CotasDialog):
+    ''' Dialogo (ventana) para borrar cotas, Muestra cotas que ya existen en GUI'''
     def __init__(self, cotas_existentes, parent=None):
-        super().__init__(parent)
-        self.ui_cotas = Ui_Dialog()
-        self.ui_cotas.setupUi(self)
-        self.checkBoxes_cotas = []
-        self.result_data = []
+        self.cotas_existentes = [float(c) for c in cotas_existentes]
+        super().__init__(self.cotas_existentes, parent)
 
-        y_position = 60 # OFFSET desde donde se agregan los widgets. (bajo de label y botones)
-        self.del_cotas(cotas_existentes, y_position)
-        
-        # Ajusta tamano ventana
-        self.adjustSize()
-        # Tamano minimo que puede tener la ventana
-        self.setMinimumSize(380, 340)
+    def setup_cotas(self, cotas_existentes, y_position):
+        ''' Genera checkboxes '''
+        print("Contenido de cotas_existentes:", cotas_existentes)
 
-        self.ui_cotas.btn_aceptar.clicked.connect(lambda: self.aceptar())
-        self.ui_cotas.btn_cancelar.clicked.connect(lambda: self.cancelar())
-
-    ''' Btns Cancelar y Aceptar '''
-
-    def cancelar(self):
-        ''' Handles the action when the cancel button is clicked '''
-        print("Cancel button clicked. Closing window.")
-        self.close()  # Closes the window when cancel is clicked
-    
-    def aceptar(self):
-        # Retrieve the data entered by the userss
-        # Function to check which checkboxes are selected
-
-        selected = []
-        for checkbox in self.checkBoxes_cotas:
-            if checkbox.isChecked():  # Check if the checkbox is selected
-                selected.append(checkbox.text())
-
-        # Print selected checkboxes after the GUI is shown
-        print("Selected checkboxes:", selected)
-        
-        # Recuperar datos
-        self.result_data = selected
-        self.accept()
-    
-    def del_cotas(self, cotas_existetes, y_position):
-        ''' Agrega dinamicamente checkBoxes para mostrar cotas disponibles a seleccionar '''
-        
-        print("Contenido de cotas_existentes: ", cotas_existetes)
-
-        # Convert cotas_existetes to floats for comparison
-        cotas_existetes = [float(cota) for cota in cotas_existetes]
-
-        for cota in cotas_existetes:
+        for cota in cotas_existentes:
             checkBox = QCheckBox(f"{cota:.3f}", self)
-
-            # Set the checkbox position manually
             checkBox.setGeometry(20, y_position, 150, 30)
-            
-            # Add the checkbox to the list of references
             self.checkBoxes_cotas.append(checkBox)
-            
-            y_position += 20  # Increment Y to position the next checkbox below
+            y_position += 20  
 
-        # Adjust the window size after adding all checkboxes
         self.adjustSize()
-        
-    
 
 
 
-''' Se llama por btn desde armaduras_activas.py '''
-def open_cotas_dialog(parent, cotas_testero, altura_pieza, cotas_existentes):
-    # Open the CrearPiezaDialog
-    dialog_cotas = add_cotasTesteroDialog(cotas_testero, altura_pieza, cotas_existentes, parent)
-    if dialog_cotas.exec():  # Open dialog and wait for user action
-        print("Dialog accepted!")
+
+
+
+
+''' Se llama esta funcion para agregar cotas'''
+def open_add_cotas_dialog(parent, cotas_testero, altura_pieza, cotas_existentes):
+    dialog_cotas = AddCotasTesteroDialog(cotas_testero, altura_pieza, cotas_existentes, parent)
+    if dialog_cotas.exec():
+        # print("Dialog accepted!")
         return dialog_cotas.result_data
-    else:
-        print("Dialog canceled.")
-        return None
-    
-''' Se llama por btn desde armaduras_activas.py '''
+    # print("Dialog canceled.")
+    return None
+
+''' Dialogo para borrar cotas'''
 def open_del_cotas_dialog(parent, cotas_existentes):
-    # Open the CrearPiezaDialog
-    dialog_cotas = del_cotasTesteroDialog(cotas_existentes, parent)
-    if dialog_cotas.exec():  # Open dialog and wait for user action
-        print("Dialog accepted!")
+    dialog_cotas = DelCotasTesteroDialog(cotas_existentes, parent)
+    if dialog_cotas.exec():
+        # print("Dialog accepted!")
         return dialog_cotas.result_data
-    else:
-        print("Dialog canceled.")
-        return None
+    # print("Dialog canceled.")
+    return None

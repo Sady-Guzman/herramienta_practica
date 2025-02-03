@@ -17,7 +17,7 @@ from PySide6.QtGui import QFont
 from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes
 from utils import popup_msg
 import re
-from fn_win_selecionar_cotas import open_cotas_dialog, open_del_cotas_dialog
+from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
 
 
 
@@ -96,12 +96,14 @@ def arm_act_add_cota_tesero(self):
     cotas_testero.reverse()
     print(cotas_testero)
 
-    cotas_seleccionadas = open_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
+    cotas_seleccionadas = open_add_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
 
     if cotas_seleccionadas:
         print("Selected cotas:", cotas_seleccionadas)
         for cota in cotas_seleccionadas:
-            add_cota(self, cota)
+            add_cota(self, float(cota))
+
+            
     else:
         print("No cotas selected.")
 
@@ -448,7 +450,8 @@ def armact_ordena_cotas(self):
 
     # Asignar los valores ordenados a los QLineEdit en la GUI
     for i, cota in enumerate(lista_cotas):
-        self.dynamic_cotas[i].setText(cota)
+        cota = float(cota)
+        self.dynamic_cotas[i].setText(f"{cota:.3f}") # Asegura decimales
 
     # print("[][][][][][][][][][][][][][][[][][][][][][]")
     # print_dynamic_cordones_values(self)
@@ -531,6 +534,8 @@ def add_cota(self, metros):
         cota_line = QLineEdit("0")
     else:
         cota_line = QLineEdit(f"{metros}")
+        # cota_line = QLineEdit(f"{metros:.7f}")
+        # cota_line = QLineEdit(metros)
     cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
     cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
 
@@ -727,17 +732,17 @@ def del_cota(self):
     # Obtener valores de cotas existentes en la GUI
     for cota in self.dynamic_cotas:
         cotas_existentes.append(cota.text())
-        print(cota.text())
+        # print(cota.text())
 
     cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
 
     if cotas_seleccionadas:
-        print("Selected cotas:", cotas_seleccionadas)
-        print(f"Contenido de dynamic_cotas: {self.dynamic_cotas} \n")
+        # print("Selected cotas:", cotas_seleccionadas)
+        # print(f"Contenido de dynamic_cotas: {self.dynamic_cotas} \n")
         for i, cota in enumerate(self.dynamic_cotas):
-                print(f"Cota existente actual: {cota.text()}")
+                # print(f"Cota existente actual: {cota.text()}")
                 for seleccion in cotas_seleccionadas:
-                    print(f"Comparando seleccion:: {seleccion}")
+                    # print(f"Comparando seleccion:: {seleccion}")
 
                     if float(cota.text()) == float(seleccion):
                         cota_to_remove = self.dynamic_cotas.pop(i)
@@ -752,11 +757,8 @@ def del_cota(self):
                             if i < len(cordon['tpi']):
                                 tpi_to_remove = cordon['tpi'].pop(i)
                                 tpi_to_remove.deleteLater()
-                    else:
-                        print("No coinciden contenidos")
-                        
     else:
-        print("No cotas selected.")
+        print("No se seleccionan cotas.")
 
 
 
