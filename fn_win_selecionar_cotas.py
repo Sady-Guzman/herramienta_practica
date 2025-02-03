@@ -22,38 +22,60 @@ class cotasTesteroDialog(QDialog):
         self.ui_cotas = Ui_Dialog()
         self.ui_cotas.setupUi(self)
         self.checkBoxes_cotas = []
+        self.result_data = []
 
-        self.add_cotas(cotas_testero, altura_pieza)
+        y_position = 60 # OFFSET desde donde se agregan los widgets. (bajo de label y botones)
+        self.add_cotas(cotas_testero, altura_pieza, y_position)
         
-        # Automatically adjust the size to fit the number of checkboxes
+        # Ajusta tamano ventana
         self.adjustSize()
-        # Optionally set a minimum size for the dialog
-        self.setMinimumSize(200, 100)
+        # Tamano minimo que puede tener la ventana
+        self.setMinimumSize(380, 340)
+
+        self.ui_cotas.btn_aceptar.clicked.connect(lambda: self.aceptar())
+        self.ui_cotas.btn_cancelar.clicked.connect(lambda: self.cancelar())
 
     ''' Btns Cancelar y Aceptar '''
 
-    # def cancelar(self):
-    #     ''' Handles the action when the cancel button is clicked '''
-    #     print("Cancel button clicked. Closing window.")
-    #     self.close()  # Closes the window when cancel is clicked
+    def cancelar(self):
+        ''' Handles the action when the cancel button is clicked '''
+        print("Cancel button clicked. Closing window.")
+        self.close()  # Closes the window when cancel is clicked
     
-    # def aceptar(self):
-    #     # Retrieve the data entered by the user
+    def aceptar(self):
+        # Retrieve the data entered by the userss
+        # Function to check which checkboxes are selected
+
+        selected = []
+        for checkbox in self.checkBoxes_cotas:
+            if checkbox.isChecked():  # Check if the checkbox is selected
+                selected.append(checkbox.text())
+
+        # Print selected checkboxes after the GUI is shown
+        print("Selected checkboxes:", selected)
         
-    #     # Recuperar datos
+        # Recuperar datos
+        self.result_data = selected
+        self.accept()
 
-    #     self.accept()
-
-    def add_cotas(self, cotas_testero, altura_pieza):
-        ''' agrega dinamicamente checkBoxes para mostrar cotas disponibles a seleccionar '''
-
+    def add_cotas(self, cotas_testero, altura_pieza, y_position):
+        ''' Agrega dinamicamente checkBoxes para mostrar cotas disponibles a seleccionar '''
+        
         for cota in cotas_testero:
             checkBox = QCheckBox(f"{cota[0]}", self)
             if cota[0] > altura_pieza:
                 checkBox.setDisabled(True)
-            self.ui_cotas.layout_cotas.addWidget(checkBox)
+
+            # NO se usa verticalLayout para adaptar dinamicamente el tamano de la vetana al necesario (segun la cantidad de cotas en testero)
+            checkBox.setGeometry(20, y_position, 150, 30)  # Set x=20, y=y_position, width=150, height=30
+            
+            # Agrega checkBox generada a lista de referencia
             self.checkBoxes_cotas.append(checkBox)
-        
+            
+            y_position += 20  # Increment Y to position the next checkbox below
+
+        # Ajusta tamano vetana
+        self.adjustSize()
         
     
 

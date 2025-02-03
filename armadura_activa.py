@@ -79,17 +79,20 @@ def arm_act_add_cota_tesero(self):
     testero_seleccionado = self.ui.tab2_combo_testero.currentIndex()
     cotas_testero = db_cotas_testero(self.ui.tab2_combo_testero.currentText())
 
-    altura_pieza = 0.80
+    # Obtener el valor de altura_acumulada
+    altura_pieza = float(self.ui.result_sum_altura.text())
 
+    cotas_testero.reverse()
     print(cotas_testero)
-    
+
     cotas_seleccinadas = open_cotas_dialog(self, cotas_testero, altura_pieza)
 
-    print(cotas_seleccinadas)
-
-
-    
-
+    if cotas_seleccinadas:
+        print("Selected cotas:", cotas_seleccinadas)
+        for cota in cotas_seleccinadas:
+            add_cota(self, cota)
+    else:
+        print("No cotas selected.")
 
 
 def update_area_values(self):

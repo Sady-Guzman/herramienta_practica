@@ -22,7 +22,7 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
-        Dialog.resize(413, 333)
+        Dialog.resize(379, 340)
         font = QFont()
         font.setFamilies([u"Verdana"])
         font.setBold(False)
@@ -30,20 +30,20 @@ class Ui_Dialog(object):
         Dialog.setFont(font)
         self.verticalLayoutWidget_5 = QWidget(Dialog)
         self.verticalLayoutWidget_5.setObjectName(u"verticalLayoutWidget_5")
-        self.verticalLayoutWidget_5.setGeometry(QRect(20, 40, 171, 41))
+        self.verticalLayoutWidget_5.setGeometry(QRect(20, 70, 171, 41))
         self.layout_cotas = QVBoxLayout(self.verticalLayoutWidget_5)
         self.layout_cotas.setObjectName(u"layout_cotas")
         self.layout_cotas.setContentsMargins(0, 0, 0, 0)
         self.btn_aceptar = QPushButton(Dialog)
         self.btn_aceptar.setObjectName(u"btn_aceptar")
-        self.btn_aceptar.setGeometry(QRect(330, 290, 71, 32))
+        self.btn_aceptar.setGeometry(QRect(100, 30, 71, 32))
         self.btn_aceptar.setAutoDefault(False)
         self.label_titulo = QLabel(Dialog)
         self.label_titulo.setObjectName(u"label_titulo")
         self.label_titulo.setGeometry(QRect(20, 10, 301, 16))
         self.btn_cancelar = QPushButton(Dialog)
         self.btn_cancelar.setObjectName(u"btn_cancelar")
-        self.btn_cancelar.setGeometry(QRect(250, 290, 71, 32))
+        self.btn_cancelar.setGeometry(QRect(20, 30, 71, 32))
 
         self.retranslateUi(Dialog)
 
