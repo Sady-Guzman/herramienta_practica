@@ -173,6 +173,43 @@ INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.6''", 21, 1.3
 
 
 
+-- Inserts de pos/cota de TESTERO 0.50 PULGADAS
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 1, 0.040);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 2, 0.090);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 3, 0.140);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 4, 0.190);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 5, 0.240);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 6, 0.290);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 7, 0.340);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 8, 0.390);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 9, 0.440);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 10, 0.490);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 11, 0.540);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 12, 0.590);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 13, 0.640);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 14, 0.690);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 15, 0.740);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 16, 0.790);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 17, 0.840);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 18, 0.890);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 19, 0.940);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 20, 0.990);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 21, 1.040);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 22, 1.090);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 23, 1.140);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 24, 1.190);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 25, 1.240);
+INSERT INTO testeros (testero, posicion, cota) VALUES ("ESTANDAR/0.5''", 26, 1.290);
+
+--  generado con:
+-- altura = 0.040
+
+-- for i in range(30):
+--     print(f"INSERT INTO testeros (testero, posicion, cota) VALUES (\"ESTANDAR/0.5\'\'\", {i+1}, {altura:.3f});")
+--     altura += 0.050
+
+
+
 -- INSERTS PARA tabla de propiedades de armaduras activas:
 
 INSERT INTO propiedades_armadura_activa (nombre_comun, acero_completo, acero_corto, diametro, masa, area, carga_rotura, limmite_elastico)
@@ -211,3 +248,15 @@ CREATE TABLE testeros (
     testero TEXT NOT NULL,
     posicion INTEGER UNIQUE NOT NULL, 
     cota REAL UNIQUE NOT NULL);
+
+
+
+
+
+
+
+CREATE TABLE IF NOT EXISTS "testeros" (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    testero TEXT UNIQUE NOT NULL,
+    posicion INTEGER NOT NULL, 
+    cota REAL NOT NULL);
