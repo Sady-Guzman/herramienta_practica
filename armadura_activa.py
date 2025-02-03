@@ -17,7 +17,7 @@ from PySide6.QtGui import QFont
 from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes
 from utils import popup_msg
 import re
-from fn_win_selecionar_cotas import open_cotas_dialog
+from fn_win_selecionar_cotas import open_cotas_dialog, open_del_cotas_dialog
 
 
 
@@ -712,37 +712,55 @@ def add_cordon(self):
 def del_cota(self):
     ''' Elimina la cota específica con el valor "4.3" en la GUI '''
     
-    if not self.dynamic_cotas:
-        print("del_cota() --> No existen cotas que borrar \n")
-        return
-
-    # Find index of the cota with value "4.3"
-    index_to_remove = next((i for i, cota in enumerate(self.dynamic_cotas) if cota.text() == "4.3"), None)
-
-    if index_to_remove is None:
-        print('del_cota() --> No se encontró la cota con valor "4.3" \n')
-        return
-
-    # Remove the specified QLineEdit from the dynamic_cotas list and delete it
-    cota_to_remove = self.dynamic_cotas.pop(index_to_remove)
-    cota_to_remove.deleteLater()
-
-    # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
-    for cordon in self.dynamic_cordones_arm_act.values():
-        if index_to_remove < len(cordon['num_cordones']):
-            num_cordon_to_remove = cordon['num_cordones'].pop(index_to_remove)
-            num_cordon_to_remove.deleteLater()
-        
-        if index_to_remove < len(cordon['tpi']):
-            tpi_to_remove = cordon['tpi'].pop(index_to_remove)
-            tpi_to_remove.deleteLater()
+    
 
     # Ensure the layout maintains proper spacing
     # self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
 
-    print(f'del_cota() --> Cota con valor "4.3" eliminada correctamente \n')
+
 
     ''' Carga cotas existentes a ventana para ser seleccionadas y que proceso sepa cual cotas eliminar '''
+    ''' Variabes para guardar cotas y selecciones '''
+    cotas_seleccionadas = []
+    cotas_existentes = []
+
+    # Obtener valores de cotas existentes en la GUI
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+        print(cota.text())
+
+    cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
+
+    if cotas_seleccionadas:
+        print("Selected cotas:", cotas_seleccionadas)
+        print(f"Contenido de dynamic_cotas: {self.dynamic_cotas} \n")
+        for i, cota in enumerate(self.dynamic_cotas):
+                print(f"Cota existente actual: {cota.text()}")
+                for seleccion in cotas_seleccionadas:
+                    print(f"Comparando seleccion:: {seleccion}")
+
+                    if float(cota.text()) == float(seleccion):
+                        cota_to_remove = self.dynamic_cotas.pop(i)
+                        cota_to_remove.deleteLater()
+
+                        # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
+                        for cordon in self.dynamic_cordones_arm_act.values():
+                            if i < len(cordon['num_cordones']):
+                                num_cordon_to_remove = cordon['num_cordones'].pop(i)
+                                num_cordon_to_remove.deleteLater()
+                            
+                            if i < len(cordon['tpi']):
+                                tpi_to_remove = cordon['tpi'].pop(i)
+                                tpi_to_remove.deleteLater()
+                    else:
+                        print("No coinciden contenidos")
+                        
+    else:
+        print("No cotas selected.")
+
+
+
+    # armact_ordena_cotas(self) # Ordena cotas despues de insertar nuevas cotas de testero
 
 
 

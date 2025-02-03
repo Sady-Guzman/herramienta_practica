@@ -56,7 +56,7 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.btn_aceptar.setText(QCoreApplication.translate("Dialog", u"Aceptar", None))
-        self.label_titulo.setText(QCoreApplication.translate("Dialog", u"Seleccionar las cotas que se quieren agregar", None))
+        self.label_titulo.setText(QCoreApplication.translate("Dialog", u"Seleccionar las cotas para aplicar cambios.", None))
         self.btn_cancelar.setText(QCoreApplication.translate("Dialog", u"Cancelar", None))
     # retranslateUi
 
