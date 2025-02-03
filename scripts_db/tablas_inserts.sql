@@ -260,3 +260,55 @@ CREATE TABLE IF NOT EXISTS "testeros" (
     testero TEXT NOT NULL,
     posicion INTEGER NOT NULL, 
     cota REAL NOT NULL);
+
+
+
+-- ===================================================
+
+
+-- RELACION para tipos de cableado para cada pieza (PRESETS de armadura activa)
+CREATE TABLE cableado_tipos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    familia TEXT NOT NULL,
+    modelo TEXT NOT NULL, 
+    tipo_cableado TEXT NOT NULL);
+
+
+CREATE TABLE cableado_cables (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    tipo_cableado TEXT NOT NULL,
+    cota REAL NOT NULL,
+    diametro REAL NOT NULL,
+    num_cord INTEGER NOT NULL,
+    tpi REAL NOT NULL,
+    FOREIGN KEY (tipo_cableado) REFERENCES cableado_tipos(id)
+);
+
+-- =========
+
+-- Inserts para cableado_tipos y cableado_cables para pieza VI 4060.
+
+INSERT INTO cableado_tipos (familia, modelo, tipo_cableado) VALUES ('VI', '4060', 'T6');
+INSERT INTO cableado_tipos (familia, modelo, tipo_cableado) VALUES ('VI', '4060', 'T8');
+INSERT INTO cableado_tipos (familia, modelo, tipo_cableado) VALUES ('VI', '4060', 'T10');
+
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.050', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.110', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.530', '9.53', '2', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.050', '15.24', '4', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.110', '15.24', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('1', '0.530', '15.24', '0', '1400');
+
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.050', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.110', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.530', '9.53', '2', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.050', '15.24', '5', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.110', '15.24', '1', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('2', '0.530', '15.24', '0', '1400');
+
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.050', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.110', '9.53', '0', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.530', '9.53', '2', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.050', '15.24', '5', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.110', '15.24', '3', '1400');
+INSERT INTO cableado_cables (tipo_cableado, cota, diametro, num_cord, tpi) VALUES ('3', '0.530', '15.24', '0', '1400');
