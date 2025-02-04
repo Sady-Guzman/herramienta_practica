@@ -69,6 +69,8 @@ class MyDialog(QDialog):
         self.ui.btn_calcular_nuevos_valores.setDefault(True)
         self.ui.tabWidget.currentChanged.connect(self.set_default_button)
 
+        
+
 
 
         # Carga datos de familias/modelos de DB
@@ -137,14 +139,29 @@ class MyDialog(QDialog):
         if self.es_temporal == False:
             print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
-            familia_seleccionada = self.ui.combo_familia.currentText()
-            modelo_seleccionado = self.ui.combo_modelo.currentText()
-            seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
-
-            ''' global para otras features '''
-            self.familia_pieza_cargada = self.ui.combo_familia.currentText()
-            self.modelo_pieza_cargada = self.ui.combo_modelo.currentText()
-            self.seccion_pieza_cargada = self.ui.list_tipo_seccion.currentItem().text()
+            ''' Juntar variables eventualmente. Por ahora se sigue con desarrollo por tiempo '''
+            try:
+                familia_seleccionada = self.ui.combo_familia.currentText()
+                self.familia_pieza_cargada = self.ui.combo_familia.currentText()
+            except:
+                familia_seleccionada = 0
+                self.familia_pieza_cargada = 0
+            
+            try:
+                modelo_seleccionado = self.ui.combo_modelo.currentText()
+                self.modelo_pieza_cargada = self.ui.combo_modelo.currentText()
+            except:
+                modelo_seleccionado = 0
+                self.modelo_pieza_cargada = 0
+            
+            try:
+                seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
+                self.seccion_pieza_cargada = self.ui.list_tipo_seccion.currentItem().text()
+            except:
+                seccion_seleccionada = 0
+                self.seccion_pieza_cargada = 0            
+            
+            
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
             plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)

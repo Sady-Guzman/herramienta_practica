@@ -14,6 +14,10 @@ def color_personalizado():
 
 def plot_trapecios(pieza_id, seccion, familia, modelo, es_creada):
 
+    print(f"{familia} -- {modelo} -- {seccion}")
+    if familia == 0 or modelo == 0 or seccion == 0:
+        return
+
     # conecta a DB dependiendo de flag
     if es_creada == False:
         conn = sqlite3.connect("catalogo.db")
