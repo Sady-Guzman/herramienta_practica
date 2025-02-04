@@ -578,8 +578,8 @@ def add_cota(self, metros):
 
 
 def add_cordon(self):
-    print(" \n\n\n\n\n*** ESTADO ANTES DE AGREGAR CORDON***\n\n")
-    print_grid_layout_state(self)
+    # print(" \n\n\n\n\n*** ESTADO ANTES DE AGREGAR CORDON***\n\n")
+    # print_grid_layout_state(self)
 
     diametros_en_db = db_recuperar_diametros_cordones()
     ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
@@ -718,8 +718,8 @@ def add_cordon(self):
 
     print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
 
-    print(" \n\n\n\n\n*** ESTADO DESPUES DE AGREGAR CORDON***\n\n")
-    print_grid_layout_state(self)
+    # print(" \n\n\n\n\n*** ESTADO DESPUES DE AGREGAR CORDON***\n\n")
+    # print_grid_layout_state(self)
 
     
 
@@ -773,8 +773,8 @@ def del_cota(self, target):
 
 
 def del_cordon(self):
-    print(" \n\n\n\n*** ESTADO ANTES DE BORRAR CORDON***\n\n")
-    print_grid_layout_state(self)
+    # print(" \n\n\n\n*** ESTADO ANTES DE BORRAR CORDON***\n\n")
+    # print_grid_layout_state(self)
     if self.dynamic_cordones_arm_act:
         last_index = max(self.dynamic_cordones_arm_act.keys())
         cordon = self.dynamic_cordones_arm_act.pop(last_index)
@@ -802,8 +802,8 @@ def del_cordon(self):
         # last_column = self.ui.gridLayout.columnCount() - 1
         # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
         
-        print(" \n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
-        print_grid_layout_state(self)
+        # print(" \n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
+        # print_grid_layout_state(self)
         remove_empty_columns(self.ui.gridLayout)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
@@ -874,11 +874,10 @@ def armact_tipos_cableados(self):
     ''' Agrega cordones '''
     configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
 
-    print(f"Contenido en configuracion_cordones:")
-    for cota, diametro, num_cord, tpi in configuracion_cableado:
-        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
-    
-    
+    ''' Muestra en terminal configuracion de preset en DB '''
+    # print(f"Contenido en configuracion_cordones:")
+    # for cota, diametro, num_cord, tpi in configuracion_cableado:
+    #     print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
 
     cordones_por_diametro = {}
 
@@ -894,15 +893,13 @@ def armact_tipos_cableados(self):
         print(f"\nDiametro: {diametro}")
         for cota, num_cord, tpi in cordones:
             print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
-    
-    print(f"Cantidad distinta de cordones es: ", len(cordones_por_diametro))
 
     ''' AJUSTAR CORDONES A CANTIDAD NECESARIA '''
     cantidad_cordones_necesarios = db_cantidad_cordones_tipo_cableado(id_tipo_cableado) 
     cantidad_cordones_necesarios = cantidad_cordones_necesarios[0][0] # Cantidad necesaria
 
     diferencia_cantidad_cordones = len(self.dynamic_cordones_arm_act) - cantidad_cordones_necesarios
-    print(f"OPERACION: Cordones existentes - nuevos: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
+    print(f"OPERACION: Cordones existentes - Necesarios para preset: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
 
     if diferencia_cantidad_cordones < 0:
         for _ in range(diferencia_cantidad_cordones * -1):
