@@ -14,7 +14,7 @@
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
-from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes, db_tipos_cableado_pieza, db_cables_tipo_cableado, db_cantidad_cotas_tipo_cableado, db_id_tipo_cableado_pieza
+from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes, db_tipos_cableado_pieza, db_cables_tipo_cableado, db_cantidad_cotas_tipo_cableado, db_id_tipo_cableado_pieza, db_cantidad_cordones_tipo_cableado
 from utils import popup_msg
 import re
 from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
@@ -841,11 +841,7 @@ def armact_tipos_cableados(self):
     id_tipo_cableado = id_tipo_cableado[0][0]
     cotas_existentes = []
 
-    # Maximo numero de cordones es 4, Asi que se usa loop 5 veces para asegurar de que no queden cordones en GUI
-    # Borra cordones
-    for i in range (5):
-        del_cordon(self)
-
+    
     # Obtiene todas las cotas existentes
     for cota in self.dynamic_cotas:
         cotas_existentes.append(cota.text())
@@ -882,6 +878,7 @@ def armact_tipos_cableados(self):
     for cota, diametro, num_cord, tpi in configuracion_cableado:
         print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
     
+    
 
     cordones_por_diametro = {}
 
@@ -900,10 +897,24 @@ def armact_tipos_cableados(self):
     
     print(f"Cantidad distinta de cordones es: ", len(cordones_por_diametro))
 
-    # Genera cantidad de cordones necesaria
-    for _ in range(len(cordones_por_diametro)):
-        add_cordon(self)
-    
+    ''' AJUSTAR CORDONES A CANTIDAD NECESARIA '''
+    cantidad_cordones_necesarios = db_cantidad_cordones_tipo_cableado(id_tipo_cableado) 
+    cantidad_cordones_necesarios = cantidad_cordones_necesarios[0][0] # Cantidad necesaria
+
+    diferencia_cantidad_cordones = len(self.dynamic_cordones_arm_act) - cantidad_cordones_necesarios
+    print(f"OPERACION: Cordones existentes - nuevos: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
+
+    if diferencia_cantidad_cordones < 0:
+        for _ in range(diferencia_cantidad_cordones * -1):
+            add_cordon(self)
+    elif diferencia_cantidad_cordones > 0:
+        for i in range(diferencia_cantidad_cordones):
+            del_cordon(self)
+    elif diferencia_cantidad_cordones == 0:
+        print("")   
+
+
+
     print("Claves disponibles en self.dynamic_cordones_arm_act:", self.dynamic_cordones_arm_act.keys())
 
     for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
@@ -953,54 +964,58 @@ def armact_llena_tipos_cableado(self):
 
 
 
-def print_grid_layout_state(self):
-    rows = self.ui.gridLayout.rowCount()
-    cols = self.ui.gridLayout.columnCount()
-    
-    print("\nGrid Layout State:")
-    print(f"Total Rows: {rows}, Total Columns: {cols}")
+''' ======== DEBUGGING DEL_CORD ========='''
 
-    for row in range(rows):
-        for col in range(cols):
-            item = self.ui.gridLayout.itemAtPosition(row, col)
-            if item:
-                widget = item.widget()
-                if widget:
-                    print(f"Position ({row}, {col}): {widget.__class__.__name__} - {widget.objectName()}")
-                else:
-                    print(f"Position ({row}, {col}): Layout or Spacer")
-            else:
-                print(f"Position ({row}, {col}): Empty")
+def print_grid_layout_state(self):
+    # rows = self.ui.gridLayout.rowCount()
+    # cols = self.ui.gridLayout.columnCount()
     
-    print("-" * 30)
+    # print("\nGrid Layout State:")
+    # print(f"Total Rows: {rows}, Total Columns: {cols}")
+
+    # for row in range(rows):
+    #     for col in range(cols):
+    #         item = self.ui.gridLayout.itemAtPosition(row, col)
+    #         if item:
+    #             widget = item.widget()
+    #             if widget:
+    #                 print(f"Position ({row}, {col}): {widget.__class__.__name__} - {widget.objectName()}")
+    #             else:
+    #                 print(f"Position ({row}, {col}): Layout or Spacer")
+    #         else:
+    #             print(f"Position ({row}, {col}): Empty")
+    
+    # print("-" * 30)
+    print("")
 
 def remove_empty_columns(grid_layout):
-    """Removes any column that has at least one empty row."""
-    column_count = grid_layout.columnCount()
-    row_count = grid_layout.rowCount()
+    print("")
+    # """Removes any column that has at least one empty row."""
+    # column_count = grid_layout.columnCount()
+    # row_count = grid_layout.rowCount()
 
-    print("\n\n\n\n\n\n\n\n\n\n contenido de grid_lauout", grid_layout)
+    # print("\n\n\n\n\n\n\n\n\n\n contenido de grid_lauout", grid_layout)
 
-    columns_to_remove = set()  # Use a set to avoid duplicates
+    # columns_to_remove = set()  # Use a set to avoid duplicates
 
-    # Identify columns that have empty spaces
-    for col in range(column_count):
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if not item:  # If there's an empty spot, mark the column for removal
-                columns_to_remove.add(col)
-                break  # No need to check the rest of this column
+    # # Identify columns that have empty spaces
+    # for col in range(column_count):
+    #     for row in range(row_count):
+    #         item = grid_layout.itemAtPosition(row, col)
+    #         if not item:  # If there's an empty spot, mark the column for removal
+    #             columns_to_remove.add(col)
+    #             break  # No need to check the rest of this column
     
-    # Remove identified columns in reverse order to avoid shifting issues
-    for col in sorted(columns_to_remove, reverse=True):
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if item:
-                widget = item.widget()
-                if widget:
-                    grid_layout.removeWidget(widget)
-                    widget.deleteLater()
-                else:
-                    grid_layout.removeItem(item)
+    # # Remove identified columns in reverse order to avoid shifting issues
+    # for col in sorted(columns_to_remove, reverse=True):
+    #     for row in range(row_count):
+    #         item = grid_layout.itemAtPosition(row, col)
+    #         if item:
+    #             widget = item.widget()
+    #             if widget:
+    #                 grid_layout.removeWidget(widget)
+    #                 widget.deleteLater()
+    #             else:
+    #                 grid_layout.removeItem(item)
     
-    grid_layout.update()
+    # grid_layout.update()

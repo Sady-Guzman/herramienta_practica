@@ -514,11 +514,7 @@ def db_cables_tipo_cableado(tipo_cableado):
     return tipos
 
 
-
-
-
-
-def db_cantidad_cotas_tipo_cableado(tipo_cableado):
+def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
     ''' Usa como parametro ID de cableado_tipos '''
 
     conn = sqlite3.connect("armaduras.db")
@@ -531,7 +527,7 @@ def db_cantidad_cotas_tipo_cableado(tipo_cableado):
         JOIN cableado_tipos ON cableado_cables.tipo_cableado = cableado_tipos.id
         WHERE cableado_tipos.id = ?;
         """
-        cursor.execute(query, (tipo_cableado,))
+        cursor.execute(query, (id_tipo_cableado,))
         cotas = cursor.fetchall()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
@@ -540,4 +536,28 @@ def db_cantidad_cotas_tipo_cableado(tipo_cableado):
         conn.close()
 
     print(f"db_cantidad_cotas_tipo_cableado() -> contenido de consulta: {cotas}")
+    return cotas
+
+def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
+    ''' Usa como parametro ID de cableado_tipos '''
+
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT COUNT(DISTINCT diametro)
+        FROM cableado_cables 
+        JOIN cableado_tipos ON cableado_cables.tipo_cableado = cableado_tipos.id
+        WHERE cableado_tipos.id = ?;
+        """
+        cursor.execute(query, (id_tipo_cableado,))
+        cotas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        cotas = 0
+    finally:
+        conn.close()
+
+    print(f"db_cantidad_cordones_tipo_cableado() -> contenido de consulta: {cotas}")
     return cotas
