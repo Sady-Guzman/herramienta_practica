@@ -33,9 +33,9 @@ def setup_armadura_activa(self):
     arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
 
     # self.ui.tabWidget.currentChanged.connect(lambda: armact_llena_tipos_cableado(self)) # Forma sin uso (Llena tipos al cambiar tab)
-    # self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
+    self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
     # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
-    armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
+    # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
 
 
 
@@ -915,27 +915,14 @@ def armact_tipos_cableados(self):
             cordon["tpi"][i].setText(str(tpi))
 
 
-
-
-
-    
-
-
-    
-
-
-
-
-
-
 def armact_llena_tipos_cableado(self):
 
     familia = self.familia_pieza_cargada
     modelo = self.modelo_pieza_cargada
     
     ''' para desarrollo'''
-    familia = 'VI'
-    modelo = "4060"
+    # familia = 'VI'
+    # modelo = "4060"
 
     # print (f" contenido familia {familia}, contenido modelo: {modelo}")
     tipos = db_tipos_cableado_pieza(familia, modelo)
