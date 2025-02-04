@@ -276,7 +276,7 @@ CREATE TABLE cableado_tipos (
 
 CREATE TABLE cableado_cables (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    tipo_cableado TEXT NOT NULL,
+    tipo_cableado INTEGER NOT NULL,
     cota REAL NOT NULL,
     diametro REAL NOT NULL,
     num_cord INTEGER NOT NULL,

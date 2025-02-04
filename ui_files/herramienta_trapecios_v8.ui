@@ -682,7 +682,7 @@
     <widget class="QLabel" name="tab2_label_testero">
      <property name="geometry">
       <rect>
-       <x>620</x>
+       <x>610</x>
        <y>20</y>
        <width>113</width>
        <height>18</height>
@@ -695,7 +695,7 @@
     <widget class="QComboBox" name="tab2_combo_testero">
      <property name="geometry">
       <rect>
-       <x>617</x>
+       <x>610</x>
        <y>44</y>
        <width>141</width>
        <height>32</height>
@@ -705,9 +705,9 @@
     <widget class="QComboBox" name="tab2_combo_preset">
      <property name="geometry">
       <rect>
-       <x>757</x>
+       <x>747</x>
        <y>44</y>
-       <width>111</width>
+       <width>121</width>
        <height>32</height>
       </rect>
      </property>
@@ -715,7 +715,7 @@
     <widget class="QLabel" name="tab2_label_preset">
      <property name="geometry">
       <rect>
-       <x>760</x>
+       <x>750</x>
        <y>20</y>
        <width>112</width>
        <height>18</height>
@@ -723,6 +723,19 @@
      </property>
      <property name="text">
       <string>Tipo Cableado</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="tab2_btn_aplicar_preset">
+     <property name="geometry">
+      <rect>
+       <x>750</x>
+       <y>70</y>
+       <width>111</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Usar Cableado</string>
      </property>
     </widget>
    </widget>

@@ -14,7 +14,7 @@
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
-from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes
+from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes, db_tipos_cableado_pieza, db_cables_tipo_cableado
 from utils import popup_msg
 import re
 from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
@@ -27,10 +27,17 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
     self.ui.tab2_btn_del_cota.clicked.connect(lambda: del_cota(self))
-
-    arm_act_poblar_combo_testeros(self)
-
+    self.ui.tab2_btn_aplicar_preset.clicked.connect(lambda: armact_tipos_cableados(self))
     self.ui.tab2_btn_valores.clicked.connect(lambda: arm_act_btn_calcular(self))
+
+    arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
+
+    # self.ui.tabWidget.currentChanged.connect(lambda: armact_llena_tipos_cableado(self)) # Forma sin uso (Llena tipos al cambiar tab)
+    self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
+    
+    # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
+
+
 
 
 def arm_act_poblar_combo_testeros(self):
@@ -802,3 +809,41 @@ def print_dynamic_cordones_values(self):
             print(f"  TPI {i + 1}: {tpi.text()}")
 
 
+''' ====================================================================================================================================== '''
+''' ========================================= TIPOS DE CABLEADOS (PRESETS T2, T4,...) ==================================================== '''
+# Numero despuse de T representa cantidad de cordones totales en preset 
+
+
+def armact_tipos_cableados(self):
+    ''' Maneja presets de cableados para cada pieza, 
+    Se guardan usando 2 tablas en DB armaduras.db (cableado_tipos, cableado_cables) 
+
+    Los presets se cargan dinamicamente a un ComboBox dependiendo de la pieza seleccionada.
+    '''
+    '''
+        tab2_combo_preset (Seleccionar)
+        tab2_btn_aplicar_preset (Aplicar)
+    '''
+    # db_tipos_cableado_pieza("VI", "4060")
+    # db_cables_tipo_cableado("T6")
+
+
+
+
+
+def armact_llena_tipos_cableado(self):
+
+    familia = self.familia_pieza_cargada
+    modelo = self.modelo_pieza_cargada
+    
+    ''' para desarrollo'''
+    # familia = 'VI'
+    # modelo = "4060"
+
+    # print (f" contenido familia {familia}, contenido modelo: {modelo}")
+    tipos = db_tipos_cableado_pieza(familia, modelo)
+    # print(f"contenido de tipos: {tipos}")
+
+    ''' Llena con T2, T4, T6, Tx..... Numero representa cantidad de cordones totales en preset '''
+    for tipo in tipos:
+        self.ui.tab2_combo_preset.addItems({tipo[0]})

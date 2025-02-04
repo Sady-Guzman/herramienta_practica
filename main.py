@@ -33,6 +33,10 @@ class MyDialog(QDialog):
         self.ui = Ui_Dialog()          # Crea instancia de clase UI
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
 
+        self.familia_pieza_cargada = 0
+        self.modelo_pieza_cargada = 0
+        self.seccion_pieza_cargada = 0
+
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.dynamic_layouts_data = []
         self.historial_agregados = 0 # Se usa para llevar la cuenta de cuantos layouts dinamicos hay generados actualmente
@@ -136,6 +140,11 @@ class MyDialog(QDialog):
             familia_seleccionada = self.ui.combo_familia.currentText()
             modelo_seleccionado = self.ui.combo_modelo.currentText()
             seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
+
+            ''' global para otras features '''
+            self.familia_pieza_cargada = self.ui.combo_familia.currentText()
+            self.modelo_pieza_cargada = self.ui.combo_modelo.currentText()
+            self.seccion_pieza_cargada = self.ui.list_tipo_seccion.currentItem().text()
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
             plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)
