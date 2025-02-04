@@ -779,7 +779,7 @@ def del_cordon(self):
         last_index = max(self.dynamic_cordones_arm_act.keys())
         cordon = self.dynamic_cordones_arm_act.pop(last_index)
 
-        # Delete widgets (QLineEdit and QComboBox)
+        # Delete widgets
         for widget in cordon['num_cordones'] + cordon['tpi']:
             if widget:
                 widget.setParent(None)
@@ -806,21 +806,21 @@ def del_cordon(self):
         # Remove from list of dynamically generated diameters
         self.dynamic_diametros_arm_act.pop()
 
-        # Remove the last two columns (cordon and spacer)
+        # Remove last two columns (cordon + spacer)
         last_column = self.ui.gridLayout.columnCount() - 1
         if last_column >= 0:
-            remove_column(self, last_column)  # Remove last column
+            # remove_column(self, last_column)
+            pass
         if last_column - 1 >= 0:
-            remove_column(self, last_column - 1)  # Remove second last column
+            remove_column(self, last_column - 1)
 
         print("\n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
         print_grid_layout_state(self)
-        
-        # Ensure any remaining empty columns are removed
-        # remove_empty_columns(self.ui.gridLayout)
 
-        remove_empty_columns(self.ui.gridLayout)
+        # Change order: shift columns first, then remove empty ones
         shift_columns_left(self, last_column)
+        remove_empty_columns(self.ui.gridLayout)  # Now remove any leftover gaps
+        
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
 
