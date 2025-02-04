@@ -459,14 +459,34 @@ def db_tipos_cableado_pieza(familia, modelo):
     finally:
         conn.close()
 
-    # print(f"db_tipos_cableados_pieza() -> contenido de consulta: {tipos} \n")
+    print(f"db_tipos_cableados_pieza() -> contenido de consulta: {tipos} \n")
     return tipos
+
+def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
+    " Usando familia, modelo, y seleccion en comboBox obtiene ID correspondiente a ese tipo de cableado para esa pieza "
     
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    # print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}")
+
+    try:
+        query = "SELECT id FROM cableado_tipos WHERE familia = ? AND modelo = ? AND tipo_cableado = ?"
+        cursor.execute(query, (familia, modelo, seleccion,))
+        id_tipo = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        id_tipo = 0
+    finally:
+        conn.close()
+
+    print(f"db_id_tipo_cableado_pieza() -> ID de tipo cableado seleccionado : {id_tipo} \n")
+    return id_tipo
+
 
 
 
 def db_cables_tipo_cableado(tipo_cableado):
-    ''' Obtiene los tipos de cableado que existen como Preset para una pieza '''
     ''' usa ID de tipo cableado obtenido de cableado_tipos y compara en col tipo_cableado de cableado_cables '''
 
     conn = sqlite3.connect("armaduras.db")
@@ -487,8 +507,37 @@ def db_cables_tipo_cableado(tipo_cableado):
     finally:
         conn.close()
 
-    print(f"db_cables_tipo_cableado() -> contenido de consulta dentro de tuplas:")
-    for cota, diametro, num_cord, tpi in tipos:
-        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
+    # print(f"db_cables_tipo_cableado() -> contenido de consulta dentro de tuplas:")
+    # for cota, diametro, num_cord, tpi in tipos:
+    #     print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
 
     return tipos
+
+
+
+
+
+
+def db_cantidad_cotas_tipo_cableado(tipo_cableado):
+    ''' Usa como parametro ID de cableado_tipos '''
+
+    conn = sqlite3.connect("armaduras.db")
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT DISTINCT cota 
+        FROM cableado_cables 
+        JOIN cableado_tipos ON cableado_cables.tipo_cableado = cableado_tipos.id
+        WHERE cableado_tipos.id = ?;
+        """
+        cursor.execute(query, (tipo_cableado,))
+        cotas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        cotas = 0
+    finally:
+        conn.close()
+
+    print(f"db_cantidad_cotas_tipo_cableado() -> contenido de consulta: {cotas}")
+    return cotas

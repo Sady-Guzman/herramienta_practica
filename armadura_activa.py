@@ -14,11 +14,11 @@
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
-from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes, db_tipos_cableado_pieza, db_cables_tipo_cableado
+from fn_database import db_recuperar_diametros_cordones, db_area_cordon, db_cotas_testero, db_testeros_existentes, db_tipos_cableado_pieza, db_cables_tipo_cableado, db_cantidad_cotas_tipo_cableado, db_id_tipo_cableado_pieza
 from utils import popup_msg
 import re
 from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
-
+from PySide6 import QtCore
 
 
 def setup_armadura_activa(self):
@@ -26,7 +26,7 @@ def setup_armadura_activa(self):
     self.ui.tab2_btn_add_cota_testero.clicked.connect(lambda: arm_act_add_cota_tesero(self)) # al usar btn cota de testero, Primero se buscan las cotas disponibles para testero seleccoinado y pieza seleccoinada
     self.ui.tab2_btn_add_cord.clicked.connect(lambda: add_cordon(self))
     self.ui.tab2_btn_del_cord.clicked.connect(lambda: del_cordon(self))
-    self.ui.tab2_btn_del_cota.clicked.connect(lambda: del_cota(self))
+    self.ui.tab2_btn_del_cota.clicked.connect(lambda: armact_manage_del_cota(self))
     self.ui.tab2_btn_aplicar_preset.clicked.connect(lambda: armact_tipos_cableados(self))
     self.ui.tab2_btn_valores.clicked.connect(lambda: arm_act_btn_calcular(self))
 
@@ -717,20 +717,21 @@ def add_cordon(self):
 
     
 
-def del_cota(self):
-    ''' Elimina la cota específica con el valor "4.3" en la GUI '''
-    
-    
+def armact_manage_del_cota(self):
+    # Llama a obtener_cotas_borrar, Con ese resultado se llama a funcion que borra cota especificada.
+    # Metodo originalmente era uno solo, Se divide en 2 partes para usar segunda parte en proceso de aplicar Tipo cableado Preset
 
-    # Ensure the layout maintains proper spacing
-    # self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+    cotas_seleccionadas = armact_get_cotas_borrar(self)
 
+    if cotas_seleccionadas:
+        for cota in cotas_seleccionadas:
+            del_cota(self, cota)
+    else:
+        print("No se seleccionan cotas.")
 
-
-    ''' Carga cotas existentes a ventana para ser seleccionadas y que proceso sepa cual cotas eliminar '''
-    ''' Variabes para guardar cotas y selecciones '''
-    cotas_seleccionadas = []
+def armact_get_cotas_borrar(self):
     cotas_existentes = []
+    cotas_seleccionadas = []
 
     # Obtener valores de cotas existentes en la GUI
     for cota in self.dynamic_cotas:
@@ -738,34 +739,30 @@ def del_cota(self):
         # print(cota.text())
 
     cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
+    
+    return cotas_seleccionadas
 
-    if cotas_seleccionadas:
-        # print("Selected cotas:", cotas_seleccionadas)
-        # print(f"Contenido de dynamic_cotas: {self.dynamic_cotas} \n")
-        for i, cota in enumerate(self.dynamic_cotas):
-                # print(f"Cota existente actual: {cota.text()}")
-                for seleccion in cotas_seleccionadas:
-                    # print(f"Comparando seleccion:: {seleccion}")
+def del_cota(self, target):
+    
+    for i, cota in enumerate(self.dynamic_cotas):
+        print(f"Cota existente actual: {cota.text()}")
+        print(f"Comparando target: {target}")
 
-                    if float(cota.text()) == float(seleccion):
-                        cota_to_remove = self.dynamic_cotas.pop(i)
-                        cota_to_remove.deleteLater()
+        if float(cota.text()) == float(target):
 
-                        # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
-                        for cordon in self.dynamic_cordones_arm_act.values():
-                            if i < len(cordon['num_cordones']):
-                                num_cordon_to_remove = cordon['num_cordones'].pop(i)
-                                num_cordon_to_remove.deleteLater()
-                            
-                            if i < len(cordon['tpi']):
-                                tpi_to_remove = cordon['tpi'].pop(i)
-                                tpi_to_remove.deleteLater()
-    else:
-        print("No se seleccionan cotas.")
+            cota_to_remove = self.dynamic_cotas.pop(i)
+            cota_to_remove.deleteLater()
 
-
-
-    # armact_ordena_cotas(self) # Ordena cotas despues de insertar nuevas cotas de testero
+            # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
+            for cordon in self.dynamic_cordones_arm_act.values():
+                if i < len(cordon['num_cordones']):
+                    num_cordon_to_remove = cordon['num_cordones'].pop(i)
+                    num_cordon_to_remove.deleteLater()
+                
+                if i < len(cordon['tpi']):
+                    tpi_to_remove = cordon['tpi'].pop(i)
+                    tpi_to_remove.deleteLater()
+    
 
 
 
@@ -820,12 +817,112 @@ def armact_tipos_cableados(self):
 
     Los presets se cargan dinamicamente a un ComboBox dependiendo de la pieza seleccionada.
     '''
-    '''
+    ''' WIDGETS
         tab2_combo_preset (Seleccionar)
         tab2_btn_aplicar_preset (Aplicar)
     '''
-    # db_tipos_cableado_pieza("VI", "4060")
-    # db_cables_tipo_cableado("T6")
+    tipo_cableado_seleccionado = self.ui.tab2_combo_preset.currentText()
+    # id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
+    id_tipo_cableado = db_id_tipo_cableado_pieza("VI", "4060", tipo_cableado_seleccionado)
+    id_tipo_cableado = id_tipo_cableado[0][0]
+    cotas_existentes = []
+
+    # Maximo numero de cordones es 4, Asi que se usa loop 5 veces para asegurar de que no queden cordones en GUI
+    # Borra cordones
+    for i in range (5):
+        del_cordon(self)
+
+    # Obtiene todas las cotas existentes
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+
+    # Borra todas las cotas existentes    
+    for cota in cotas_existentes:
+        del_cota(self, cota)
+    
+
+    # Obtener ID de tipo de cableado con contenido de ComboBox (Se usa id desde ese punto)
+    # Obtener cantidad de cotas en tipo cableado seleccionado en comboBox
+    # Invocar add_cota con metro como parametro
+    # Obtener cantidad de cordones y sus diametros, num_cord, tpi
+    # Llamar add_cord()
+    # Editar diametros, num_cord, y tpi de cada cordon agregado segun tipo cableado
+
+
+
+    db_tipos_cableado_pieza("VI", "4060") # Familia // Modelo
+    # print(f"Contenido tipo_cableado_seleccionado: {tipo_cableado_seleccionado}\n") # Contenido en comboBox
+    cotas_cableado = db_cantidad_cotas_tipo_cableado(id_tipo_cableado)
+    cotas_cableado.reverse()
+
+    ''' Agrega cotas '''
+    for cota in cotas_cableado:
+        cota = f"{float(cota[0]):.3f}"  # fuerza 3 decimales (usa str)
+        add_cota(self, cota)
+
+    
+    ''' Agrega cordones '''
+    configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
+
+    print(f"Contenido en configuracion_cordones:")
+    for cota, diametro, num_cord, tpi in configuracion_cableado:
+        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
+    
+
+    cordones_por_diametro = {}
+
+    # Group data by `diametro`
+    for cota, diametro, num_cord, tpi in configuracion_cableado:
+        if diametro not in cordones_por_diametro:
+            cordones_por_diametro[diametro] = []  # Inicia lista para key de dicc (diametro)
+        
+        cordones_por_diametro[diametro].append((cota, num_cord, tpi))  # guarda parametros
+
+    # Print grouped data
+    for diametro, cordones in cordones_por_diametro.items():
+        print(f"\nDiametro: {diametro}")
+        for cota, num_cord, tpi in cordones:
+            print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
+    
+    print(f"Cantidad distinta de cordones es: ", len(cordones_por_diametro))
+
+    # Genera cantidad de cordones necesaria
+    for _ in range(len(cordones_por_diametro)):
+        add_cordon(self)
+    
+    print("Claves disponibles en self.dynamic_cordones_arm_act:", self.dynamic_cordones_arm_act.keys())
+
+    for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
+        if index not in self.dynamic_cordones_arm_act:
+            print(f"Error: No existe índice '{index}' en dynamic_cordones_arm_act")
+            continue
+
+        cordon = self.dynamic_cordones_arm_act[index]
+        print(f"Editando cordón en índice {index} con diámetro {diametro}")
+
+        # Configurar el ComboBox con el diámetro correcto
+        combobox_diametro = cordon['diametro']
+        combo_index = self.dynamic_cordones_arm_act[index]['diametro'].findText(f"Ø {diametro} mm")
+
+        if combo_index != -1:
+            self.dynamic_cordones_arm_act[index]['diametro'].setCurrentIndex(combo_index)
+        else:
+            print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
+
+        # Asignar num_cordones y tpi
+        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):  # Reverse the order
+            cordon["num_cordones"][i].setText(str(num_cords))
+            cordon["tpi"][i].setText(str(tpi))
+
+
+
+
+
+    
+
+
+    
+
 
 
 
