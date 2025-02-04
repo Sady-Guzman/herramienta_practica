@@ -578,6 +578,9 @@ def add_cota(self, metros):
 
 
 def add_cordon(self):
+    print(" \n\n\n\n\n*** ESTADO ANTES DE AGREGAR CORDON***\n\n")
+    print_grid_layout_state(self)
+
     diametros_en_db = db_recuperar_diametros_cordones()
     ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
     if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
@@ -715,6 +718,9 @@ def add_cordon(self):
 
     print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
 
+    print(" \n\n\n\n\n*** ESTADO DESPUES DE AGREGAR CORDON***\n\n")
+    print_grid_layout_state(self)
+
     
 
 def armact_manage_del_cota(self):
@@ -767,6 +773,8 @@ def del_cota(self, target):
 
 
 def del_cordon(self):
+    print(" \n\n\n\n*** ESTADO ANTES DE BORRAR CORDON***\n\n")
+    print_grid_layout_state(self)
     if self.dynamic_cordones_arm_act:
         last_index = max(self.dynamic_cordones_arm_act.keys())
         cordon = self.dynamic_cordones_arm_act.pop(last_index)
@@ -793,8 +801,14 @@ def del_cordon(self):
         ''' Agrega spacer al final de GridLayout (No funciona bien) '''
         # last_column = self.ui.gridLayout.columnCount() - 1
         # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
+        
+        print(" \n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
+        print_grid_layout_state(self)
+        remove_empty_columns(self.ui.gridLayout)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
+
+
 
 def print_dynamic_cordones_values(self):
     """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
@@ -934,3 +948,59 @@ def armact_llena_tipos_cableado(self):
     self.ui.tab2_combo_preset.clear()
     for tipo in tipos:
         self.ui.tab2_combo_preset.addItems({tipo[0]})
+
+
+
+
+
+def print_grid_layout_state(self):
+    rows = self.ui.gridLayout.rowCount()
+    cols = self.ui.gridLayout.columnCount()
+    
+    print("\nGrid Layout State:")
+    print(f"Total Rows: {rows}, Total Columns: {cols}")
+
+    for row in range(rows):
+        for col in range(cols):
+            item = self.ui.gridLayout.itemAtPosition(row, col)
+            if item:
+                widget = item.widget()
+                if widget:
+                    print(f"Position ({row}, {col}): {widget.__class__.__name__} - {widget.objectName()}")
+                else:
+                    print(f"Position ({row}, {col}): Layout or Spacer")
+            else:
+                print(f"Position ({row}, {col}): Empty")
+    
+    print("-" * 30)
+
+def remove_empty_columns(grid_layout):
+    """Removes any column that has at least one empty row."""
+    column_count = grid_layout.columnCount()
+    row_count = grid_layout.rowCount()
+
+    print("\n\n\n\n\n\n\n\n\n\n contenido de grid_lauout", grid_layout)
+
+    columns_to_remove = set()  # Use a set to avoid duplicates
+
+    # Identify columns that have empty spaces
+    for col in range(column_count):
+        for row in range(row_count):
+            item = grid_layout.itemAtPosition(row, col)
+            if not item:  # If there's an empty spot, mark the column for removal
+                columns_to_remove.add(col)
+                break  # No need to check the rest of this column
+    
+    # Remove identified columns in reverse order to avoid shifting issues
+    for col in sorted(columns_to_remove, reverse=True):
+        for row in range(row_count):
+            item = grid_layout.itemAtPosition(row, col)
+            if item:
+                widget = item.widget()
+                if widget:
+                    grid_layout.removeWidget(widget)
+                    widget.deleteLater()
+                else:
+                    grid_layout.removeItem(item)
+    
+    grid_layout.update()
