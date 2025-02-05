@@ -729,7 +729,7 @@ def armact_tipos_cableados(self):
 
 
     for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
-        actual_index = index + 1  # Adjust index to match the keys in dynamic_cordones_arm_act
+        actual_index = index  # Adjust index to match the keys in dynamic_cordones_arm_act
         if actual_index not in self.dynamic_cordones_arm_act:
             print(f"Error: No existe índice '{actual_index}' en dynamic_cordones_arm_act")
             continue
@@ -747,7 +747,7 @@ def armact_tipos_cableados(self):
             print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
 
         # Asignar num_cordones y tpi
-        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):
+        for i, (cota, num_cords, tpi) in enumerate(valores):
             cordon["num_cordones"][i].setText(str(num_cords))
             cordon["tpi"][i].setText(str(tpi))
 
@@ -1040,7 +1040,8 @@ def add_cordon(self):
     self.dynamic_diametros_arm_act.append(combo)
 
     # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
-    self.dynamic_cordones_arm_act[index] = {
+    actual_index = index - 1
+    self.dynamic_cordones_arm_act[actual_index] = {
         'layout': layout,
         'layout_num_cordones': layout_num_cordones,
         'layout_tpi': layout_tpi,
