@@ -728,22 +728,14 @@ def armact_tipos_cableados(self):
 
 
 
-    print("Claves disponibles en self.dynamic_cordones_arm_act:", self.dynamic_cordones_arm_act.keys())
-    print("contenido de self.dynamic_cordones_arm_act: ", self.dynamic_cordones_arm_act)
-
-    print("Cordones Values:")
-    for index, data in self.dynamic_cordones_arm_act.items():
-        diametro = data['diametro'].currentText()
-        line_edit_value = data['area'].text()
-        print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
-
     for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
-        if index not in self.dynamic_cordones_arm_act:
-            print(f"Error: No existe índice '{index}' en dynamic_cordones_arm_act")
+        actual_index = index + 1  # Adjust index to match the keys in dynamic_cordones_arm_act
+        if actual_index not in self.dynamic_cordones_arm_act:
+            print(f"Error: No existe índice '{actual_index}' en dynamic_cordones_arm_act")
             continue
 
-        cordon = self.dynamic_cordones_arm_act[index]
-        print(f"Editando cordón en índice {index} con diámetro {diametro}")
+        cordon = self.dynamic_cordones_arm_act[actual_index]
+        print(f"Editando cordón en índice {actual_index} con diámetro {diametro}")
 
         # Configurar el ComboBox con el diámetro correcto
         combobox_diametro = cordon['diametro']
@@ -755,7 +747,7 @@ def armact_tipos_cableados(self):
             print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
 
         # Asignar num_cordones y tpi
-        for i, (cota, num_cords, tpi) in enumerate(valores):
+        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):
             cordon["num_cordones"][i].setText(str(num_cords))
             cordon["tpi"][i].setText(str(tpi))
 
