@@ -33,9 +33,9 @@ def setup_armadura_activa(self):
     arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
 
 
-    # self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
+    self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
     # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
-    armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
+    # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
 
 
 
@@ -747,10 +747,13 @@ def armact_tipos_cableados(self):
             print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
 
         # Asignar num_cordones y tpi
-        for i, (cota, num_cords, tpi) in enumerate(valores):
+        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):
             cordon["num_cordones"][i].setText(str(num_cords))
             cordon["tpi"][i].setText(str(tpi))
-
+    
+    arm_act_btn_calcular(self)
+    
+    
 
 def armact_llena_tipos_cableado(self):
 
@@ -759,8 +762,8 @@ def armact_llena_tipos_cableado(self):
     
     ''' para desarrollo'''
     # TODO comentar
-    familia = 'VI'
-    modelo = "4060"
+    # familia = 'VI'
+    # modelo = "4060"
 
     # print (f" contenido familia {familia}, contenido modelo: {modelo}")
     tipos = db_tipos_cableado_pieza(familia, modelo)
