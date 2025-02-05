@@ -466,59 +466,6 @@ class Ui_Dialog(object):
         self.tab3_Vlayout_barras = QVBoxLayout(self.verticalLayoutWidget_2)
         self.tab3_Vlayout_barras.setObjectName(u"tab3_Vlayout_barras")
         self.tab3_Vlayout_barras.setContentsMargins(0, 0, 0, 0)
-        self.tab3_horizontal_layout = QHBoxLayout()
-        self.tab3_horizontal_layout.setObjectName(u"tab3_horizontal_layout")
-        self.tab3_line_pos1 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos1.setObjectName(u"tab3_line_pos1")
-        self.tab3_line_pos1.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos1)
-
-        self.tab3_combo_pos2 = QComboBox(self.verticalLayoutWidget_2)
-        self.tab3_combo_pos2.addItem("")
-        self.tab3_combo_pos2.setObjectName(u"tab3_combo_pos2")
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_combo_pos2)
-
-        self.tab3_line_pos3 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos3.setObjectName(u"tab3_line_pos3")
-        self.tab3_line_pos3.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos3)
-
-        self.tab3_line_pos4 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos4.setObjectName(u"tab3_line_pos4")
-        self.tab3_line_pos4.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos4)
-
-        self.tab3_line_pos5 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos5.setObjectName(u"tab3_line_pos5")
-        self.tab3_line_pos5.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos5)
-
-        self.tab3_line_pos6 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos6.setObjectName(u"tab3_line_pos6")
-        self.tab3_line_pos6.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos6)
-
-        self.tab3_line_pos7 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos7.setObjectName(u"tab3_line_pos7")
-        self.tab3_line_pos7.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos7)
-
-        self.tab3_line_pos8 = QLineEdit(self.verticalLayoutWidget_2)
-        self.tab3_line_pos8.setObjectName(u"tab3_line_pos8")
-        self.tab3_line_pos8.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.tab3_horizontal_layout.addWidget(self.tab3_line_pos8)
-
-
-        self.tab3_Vlayout_barras.addLayout(self.tab3_horizontal_layout)
-
         self.tab3_Vspacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.tab3_Vlayout_barras.addItem(self.tab3_Vspacer)
@@ -565,7 +512,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -637,15 +584,6 @@ class Ui_Dialog(object):
         self.tab3_btn_del_cercos.setText(QCoreApplication.translate("Dialog", u"Del", None))
         self.tab3_btn_add_mallas.setText(QCoreApplication.translate("Dialog", u"Add", None))
         self.tab3_btn_del_mallas.setText(QCoreApplication.translate("Dialog", u"Del", None))
-        self.tab3_line_pos1.setText(QCoreApplication.translate("Dialog", u"10", None))
-        self.tab3_combo_pos2.setItemText(0, QCoreApplication.translate("Dialog", u"Flexion", None))
-
-        self.tab3_line_pos3.setText(QCoreApplication.translate("Dialog", u"2", None))
-        self.tab3_line_pos4.setText(QCoreApplication.translate("Dialog", u"2", None))
-        self.tab3_line_pos5.setText(QCoreApplication.translate("Dialog", u"12", None))
-        self.tab3_line_pos6.setText(QCoreApplication.translate("Dialog", u"20", None))
-        self.tab3_line_pos7.setText(QCoreApplication.translate("Dialog", u"0.560", None))
-        self.tab3_line_pos8.setText(QCoreApplication.translate("Dialog", u"L-0.04", None))
         self.tab3_label_barras.setText(QCoreApplication.translate("Dialog", u"BARRAS CORRUGADAS", None))
         self.tab3_label_posicion.setText(QCoreApplication.translate("Dialog", u"Posici\u00f3n", None))
         self.tab3_label_uso.setText(QCoreApplication.translate("Dialog", u"Uso", None))
