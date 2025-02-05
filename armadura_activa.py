@@ -647,7 +647,6 @@ def print_dynamic_cordones_values(self):
 
 ''' ====================================================================================================================================== '''
 ''' ========================================= TIPOS DE CABLEADOS (PRESETS T2, T4,...) ==================================================== '''
-# Numero despuse de T representa cantidad de cordones totales en preset 
 
 
 def armact_tipos_cableados(self):
@@ -674,14 +673,6 @@ def armact_tipos_cableados(self):
     # Borra todas las cotas existentes    
     for cota in cotas_existentes:
         del_cota(self, cota)
-    
-
-    # Obtener ID de tipo de cableado con contenido de ComboBox (Se usa id desde ese punto)
-    # Obtener cantidad de cotas en tipo cableado seleccionado en comboBox
-    # Invocar add_cota con metro como parametro
-    # Obtener cantidad de cordones y sus diametros, num_cord, tpi
-    # Llamar add_cord()
-    # Editar diametros, num_cord, y tpi de cada cordon agregado segun tipo cableado
 
 
 
@@ -700,9 +691,9 @@ def armact_tipos_cableados(self):
     configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
 
     ''' Muestra en terminal configuracion de preset en DB '''
-    # print(f"Contenido en configuracion_cordones:")
-    # for cota, diametro, num_cord, tpi in configuracion_cableado:
-    #     print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
+    print(f"Contenido en configuracion_cordones:")
+    for cota, diametro, num_cord, tpi in configuracion_cableado:
+        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
 
     cordones_por_diametro = {}
 
@@ -738,6 +729,13 @@ def armact_tipos_cableados(self):
 
 
     print("Claves disponibles en self.dynamic_cordones_arm_act:", self.dynamic_cordones_arm_act.keys())
+    print("contenido de self.dynamic_cordones_arm_act: ", self.dynamic_cordones_arm_act)
+
+    print("Cordones Values:")
+    for index, data in self.dynamic_cordones_arm_act.items():
+        diametro = data['diametro'].currentText()
+        line_edit_value = data['area'].text()
+        print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
 
     for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
         if index not in self.dynamic_cordones_arm_act:
@@ -749,15 +747,15 @@ def armact_tipos_cableados(self):
 
         # Configurar el ComboBox con el diámetro correcto
         combobox_diametro = cordon['diametro']
-        combo_index = self.dynamic_cordones_arm_act[index]['diametro'].findText(f"Ø {diametro} mm")
+        combo_index = combobox_diametro.findText(f"Ø {diametro} mm")
 
         if combo_index != -1:
-            self.dynamic_cordones_arm_act[index]['diametro'].setCurrentIndex(combo_index)
+            combobox_diametro.setCurrentIndex(combo_index)
         else:
             print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
 
         # Asignar num_cordones y tpi
-        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):  # Reverse the order
+        for i, (cota, num_cords, tpi) in enumerate(valores):
             cordon["num_cordones"][i].setText(str(num_cords))
             cordon["tpi"][i].setText(str(tpi))
 
@@ -1071,6 +1069,8 @@ def add_cordon(self):
     # Adjust the stretch for all columns to maintain balance
     for col in range(index + 2):
         self.ui.gridLayout.setColumnStretch(col, 1)
+    
+    print_grid_layout_state(self)
 
 def del_cordon(self):
     if self.dynamic_cordones_arm_act:
@@ -1114,4 +1114,6 @@ def del_cordon(self):
             self.ui.gridLayout.setColumnStretch(col, 1)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
+
+    print_grid_layout_state(self)
 
