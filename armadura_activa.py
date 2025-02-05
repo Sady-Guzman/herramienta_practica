@@ -38,8 +38,6 @@ def setup_armadura_activa(self):
     # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
 
 
-
-
 def arm_act_poblar_combo_testeros(self):
     ''' usa valores db armaduras.db pra poblar comboBox '''
     
@@ -55,9 +53,6 @@ def arm_act_poblar_combo_testeros(self):
     font = QFont()
     font.setPointSize(12)
     self.ui.tab2_combo_testero.setFont(font)
-        
-
-
 
 
 def arm_act_add_cota_tesero(self):
@@ -117,7 +112,6 @@ def arm_act_add_cota_tesero(self):
     armact_ordena_cotas(self) # Ordena cotas despues de insertar nuevas cotas de testero
 
 
-
 def update_area_values(self):
     """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
     print("update_area_values() -> Entra func \n")
@@ -129,6 +123,7 @@ def update_area_values(self):
                 diametro_value = combo.currentText()
                 area_value = ac_transformar_area_cordon(self, diametro_value)
                 line_edit_area.setText(area_value)
+
 
 def ac_transformar_area_cordon(self, diametro_cordon):
     ''' Asigna un valor de area a cada tipo de cordon (diametro), El valor esta definido en Documentacion General 1.'''
@@ -170,20 +165,6 @@ def calculate_total_num_cordones(self):
             except ValueError:
                 pass  # Ignore non-integer values
     return total
-
-
-
-
-
-
-def print_cordon_values(self):
-    print("Cordones Values:")
-    for index, data in self.dynamic_cordones_arm_act.items():
-        diametro = data['diametro'].currentText()
-        line_edit_value = data['area'].text()
-        print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
-
-
 
 
 def arm_act_btn_calcular(self):
@@ -364,28 +345,6 @@ def arm_act_cdg(self):
 
 
 
-# def arm_act_obtener_datos_formula(self):
-#     print("******************************\n")
-
-#     cant_cotas = len(self.dynamic_cotas)
-#     print(f"Cantidad Cotas: {cant_cotas}\n")
-
-#     cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
-#     print(f"Cantidad tipo cordones: {cant_tipos_cordones}\n")
-
-
-#     for z in range(cant_cotas):
-#         print("\n")
-#         for x in range(cant_tipos_cordones):
-#             cordon = self.dynamic_cordones_arm_act.get(x)
-#             cota = self.dynamic_cotas[z].text()
-            
-#             area = cordon['area'].text()
-#             n_cords = cordon['num_cordones'][z].text()
-#             tpi = cordon['tpi'][z].text()
-
-#             print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
-
 
 def armact_ordena_cotas(self):
     ''' Carga todos los datos de armaduras activas a una lista para cotas y 
@@ -520,129 +479,8 @@ def armact_calcular_total_area(self):
 
 
 
-''' ================================================================================================================================ '''
-''' ============================ metodos para manejo de generacion/eliminacion dinamica de cordones y cotas ======================== '''
-
-
-
-def add_cota(self, metros):
-    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
-    if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
-        # Elimina el último item si es el vertical stretcher
-        item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
-        del item
-
-    # Crea lineEdit de cota vacio o con valor segun parametro
-    if metros == False:
-        cota_line = QLineEdit("0")
-    else:
-        cota_line = QLineEdit(f"{metros}")
-        # cota_line = QLineEdit(f"{metros:.7f}")
-        # cota_line = QLineEdit(metros)
-    cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
-    cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
-
-    self.dynamic_cotas.append(cota_line)
-
-    self.ui.verticalLayout.insertWidget(self.ui.verticalLayout.count(), cota_line)
-
-    ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
-    self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-
-    for cordon in self.dynamic_cordones_arm_act.values():
-        cordon['num_cordones'].append(QLineEdit("0"))
-        cordon['tpi'].append(QLineEdit("1400"))
-
-        # Set minimum and maximum size for the new QLineEdits
-        cordon['num_cordones'][-1].setMinimumSize(70, 0)
-        cordon['num_cordones'][-1].setMaximumSize(70, 16777215)
-        cordon['tpi'][-1].setMinimumSize(70, 0)
-        cordon['tpi'][-1].setMaximumSize(70, 16777215)
-
-        # Remove existing spacer in the vertical layouts
-        if cordon['layout_num_cordones'].itemAt(cordon['layout_num_cordones'].count() - 1).spacerItem():
-            item = cordon['layout_num_cordones'].takeAt(cordon['layout_num_cordones'].count() - 1)
-            del item
-        if cordon['layout_tpi'].itemAt(cordon['layout_tpi'].count() - 1).spacerItem():
-            item = cordon['layout_tpi'].takeAt(cordon['layout_tpi'].count() - 1)
-            del item
-
-        # Add new widgets to layouts
-        cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
-        cordon['layout_tpi'].addWidget(cordon['tpi'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
-
-        # Re-add the spacer to ensure it is always at the bottom
-        cordon['layout_num_cordones'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-        cordon['layout_tpi'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-
-
-
-
-
     
 
-def armact_manage_del_cota(self):
-    # Llama a obtener_cotas_borrar, Con ese resultado se llama a funcion que borra cota especificada.
-    # Metodo originalmente era uno solo, Se divide en 2 partes para usar segunda parte en proceso de aplicar Tipo cableado Preset
-
-    cotas_seleccionadas = armact_get_cotas_borrar(self)
-
-    if cotas_seleccionadas:
-        for cota in cotas_seleccionadas:
-            del_cota(self, cota)
-    else:
-        print("No se seleccionan cotas.")
-
-def armact_get_cotas_borrar(self):
-    cotas_existentes = []
-    cotas_seleccionadas = []
-
-    # Obtener valores de cotas existentes en la GUI
-    for cota in self.dynamic_cotas:
-        cotas_existentes.append(cota.text())
-        # print(cota.text())
-
-    cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
-    
-    return cotas_seleccionadas
-
-def del_cota(self, target):
-    
-    for i, cota in enumerate(self.dynamic_cotas):
-        print(f"Cota existente actual: {cota.text()}")
-        print(f"Comparando target: {target}")
-
-        if float(cota.text()) == float(target):
-
-            cota_to_remove = self.dynamic_cotas.pop(i)
-            cota_to_remove.deleteLater()
-
-            # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
-            for cordon in self.dynamic_cordones_arm_act.values():
-                if i < len(cordon['num_cordones']):
-                    num_cordon_to_remove = cordon['num_cordones'].pop(i)
-                    num_cordon_to_remove.deleteLater()
-                
-                if i < len(cordon['tpi']):
-                    tpi_to_remove = cordon['tpi'].pop(i)
-                    tpi_to_remove.deleteLater()
-    
-
-''' ============================================================================================================================================== '''
-
-
-
-
-''' ====================================================================================================================================== '''
-
-def print_dynamic_cordones_values(self):
-    """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
-    for index, cordon in self.dynamic_cordones_arm_act.items():
-        print(f"Cordon {index + 1}:")
-        for i, num_cordon in enumerate(cordon['num_cordones']):
-            print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
-        for i, tpi in enumerate(cordon['tpi']):
-            print(f"  TPI {i + 1}: {tpi.text()}")
 
 
 ''' ====================================================================================================================================== '''
@@ -660,9 +498,15 @@ def armact_tipos_cableados(self):
         tab2_btn_aplicar_preset (Aplicar)
     '''
     tipo_cableado_seleccionado = self.ui.tab2_combo_preset.currentText()
-    # id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
-    id_tipo_cableado = db_id_tipo_cableado_pieza("VI", "4060", tipo_cableado_seleccionado)
-    id_tipo_cableado = id_tipo_cableado[0][0]
+
+    ''' Asegura que exista una pieza seleccionada antes de seguir con funcion '''
+    if self.familia_pieza_cargada == 0 or self.modelo_pieza_cargada == 0 or tipo_cableado_seleccionado == 0:
+        print("No hay pieza seleccionada para aplicar Tipo de Cableado")
+        return
+    else:
+        id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
+        id_tipo_cableado = id_tipo_cableado[0][0]
+
     cotas_existentes = []
 
     
@@ -675,9 +519,6 @@ def armact_tipos_cableados(self):
         del_cota(self, cota)
 
 
-
-    db_tipos_cableado_pieza("VI", "4060") # Familia // Modelo
-    # print(f"Contenido tipo_cableado_seleccionado: {tipo_cableado_seleccionado}\n") # Contenido en comboBox
     cotas_cableado = db_cantidad_cotas_tipo_cableado(id_tipo_cableado)
     cotas_cableado.reverse()
 
@@ -780,7 +621,24 @@ def armact_llena_tipos_cableado(self):
 
 
 
-''' ======== DEBUGGING DEL_CORD ========='''
+''' ==================================== DEBUGGING  ====================================='''
+
+def print_dynamic_cordones_values(self):
+    """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
+    for index, cordon in self.dynamic_cordones_arm_act.items():
+        print(f"Cordon {index + 1}:")
+        for i, num_cordon in enumerate(cordon['num_cordones']):
+            print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
+        for i, tpi in enumerate(cordon['tpi']):
+            print(f"  TPI {i + 1}: {tpi.text()}")
+
+def print_cordon_values(self):
+    print("Cordones Values:")
+    for index, data in self.dynamic_cordones_arm_act.items():
+        diametro = data['diametro'].currentText()
+        line_edit_value = data['area'].text()
+        print(f"Cordon {index + 1}: Diametro = {diametro}, Area = {line_edit_value}")
+
 
 def print_grid_layout_state(self):
     rows = self.ui.gridLayout.rowCount()
@@ -804,6 +662,116 @@ def print_grid_layout_state(self):
     print("-" * 30)
 
 
+
+
+
+''' ================================================================================================================================ '''
+''' ============================ metodos para manejo de generacion/eliminacion dinamica de cordones y cotas ======================== '''
+''' agrega/ elimina cotas, cordones de TAB 2 (ARMADURA ACTIVA) '''
+
+
+def add_cota(self, metros):
+    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+    if self.ui.verticalLayout.itemAt(self.ui.verticalLayout.count() - 1).spacerItem():
+        # Elimina el último item si es el vertical stretcher
+        item = self.ui.verticalLayout.takeAt(self.ui.verticalLayout.count() - 1)
+        del item
+
+    # Crea lineEdit de cota vacio o con valor segun parametro
+    if metros == False:
+        cota_line = QLineEdit("0")
+    else:
+        cota_line = QLineEdit(f"{metros}")
+        # cota_line = QLineEdit(f"{metros:.7f}")
+        # cota_line = QLineEdit(metros)
+    cota_line.setMinimumSize(70, 0)  # Set minimum width to 70 units
+    cota_line.setMaximumSize(70, 16777215)  # Set maximum width to 70 units, height can be unlimited
+
+    self.dynamic_cotas.append(cota_line)
+
+    self.ui.verticalLayout.insertWidget(self.ui.verticalLayout.count(), cota_line)
+
+    ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
+    self.ui.verticalLayout.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+    for cordon in self.dynamic_cordones_arm_act.values():
+        cordon['num_cordones'].append(QLineEdit("0"))
+        cordon['tpi'].append(QLineEdit("1400"))
+
+        # Set minimum and maximum size for the new QLineEdits
+        cordon['num_cordones'][-1].setMinimumSize(70, 0)
+        cordon['num_cordones'][-1].setMaximumSize(70, 16777215)
+        cordon['tpi'][-1].setMinimumSize(70, 0)
+        cordon['tpi'][-1].setMaximumSize(70, 16777215)
+
+        # Remove existing spacer in the vertical layouts
+        if cordon['layout_num_cordones'].itemAt(cordon['layout_num_cordones'].count() - 1).spacerItem():
+            item = cordon['layout_num_cordones'].takeAt(cordon['layout_num_cordones'].count() - 1)
+            del item
+        if cordon['layout_tpi'].itemAt(cordon['layout_tpi'].count() - 1).spacerItem():
+            item = cordon['layout_tpi'].takeAt(cordon['layout_tpi'].count() - 1)
+            del item
+
+        # Add new widgets to layouts
+        cordon['layout_num_cordones'].addWidget(cordon['num_cordones'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
+        cordon['layout_tpi'].addWidget(cordon['tpi'][-1], alignment=Qt.AlignmentFlag.AlignCenter)  # Align to center
+
+        # Re-add the spacer to ensure it is always at the bottom
+        cordon['layout_num_cordones'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+        cordon['layout_tpi'].addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+
+
+def armact_manage_del_cota(self):
+    # Llama a obtener_cotas_borrar, Con ese resultado se llama a funcion que borra cota especificada.
+    # Metodo originalmente era uno solo, Se divide en 2 partes para usar segunda parte en proceso de aplicar Tipo cableado Preset
+
+    cotas_seleccionadas = armact_get_cotas_borrar(self)
+
+    if cotas_seleccionadas:
+        for cota in cotas_seleccionadas:
+            del_cota(self, cota)
+    else:
+        print("No se seleccionan cotas.")
+
+
+def del_cota(self, target):
+    
+    for i, cota in enumerate(self.dynamic_cotas):
+        print(f"Cota existente actual: {cota.text()}")
+        print(f"Comparando target: {target}")
+
+        if float(cota.text()) == float(target):
+
+            cota_to_remove = self.dynamic_cotas.pop(i)
+            cota_to_remove.deleteLater()
+
+            # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
+            for cordon in self.dynamic_cordones_arm_act.values():
+                if i < len(cordon['num_cordones']):
+                    num_cordon_to_remove = cordon['num_cordones'].pop(i)
+                    num_cordon_to_remove.deleteLater()
+                
+                if i < len(cordon['tpi']):
+                    tpi_to_remove = cordon['tpi'].pop(i)
+                    tpi_to_remove.deleteLater()
+    
+
+def armact_get_cotas_borrar(self):
+    cotas_existentes = []
+    cotas_seleccionadas = []
+
+    # Obtener valores de cotas existentes en la GUI
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+        # print(cota.text())
+
+    cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
+    
+    return cotas_seleccionadas
+
+
+''' ============================== CORDONES ============================== '''
 
 
 def add_cordon(self):
@@ -978,4 +946,5 @@ def del_cordon(self):
         print("del_cordon() --> No existen cordones que borrar \n")
 
     print_grid_layout_state(self)
+
 
