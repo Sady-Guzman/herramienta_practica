@@ -1,14 +1,29 @@
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
-from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
-from ui_files.herramienta_trapecios_v7 import Ui_Dialog  # Import from the ui_files directory
+from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QSpacerItem, QSizePolicy, QMessageBox, QComboBox, QGridLayout
+from PySide6.QtCore import Qt
+from ui_files.herramienta_trapecios_v9 import Ui_Dialog  # Import from the ui_files directory
 from fn_database import *
 from fn_calculo_propiedades import *
 from fn_update_gui import *
 from fn_elementos_gui import *
 from fn_crear_pieza import open_crear_pieza_dialog
 from fn_pieza_temporal import *
+from utils import popup_msg
+from armadura_activa import setup_armadura_activa
+import sqlite3
+import random
+import matplotlib.pyplot as plt  # Add this import statement
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+from matplotlib.patches import Polygon
+from dibujo import plot_trapecios
+
+
+from PySide6.QtWidgets import QDialog
+from PySide6.QtGui import QKeyEvent
+from PySide6.QtCore import Qt
+
 
 
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
@@ -19,10 +34,21 @@ from fn_pieza_temporal import *
 
 class MyDialog(QDialog):
 
+    ''' Previene cierre de aplicacion al presionar tecla escape '''
+    # def keyPressEvent(self, event: QKeyEvent):
+    #     if event.key() == Qt.Key_Escape:
+    #         print("Escape key.")
+    #     else:
+    #         super().keyPressEvent(event)
+
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog()          # Crea instancia de clase UI
         self.ui.setupUi(self)         # Aplica UI a Dialog (ventana)
+
+        self.familia_pieza_cargada = 0
+        self.modelo_pieza_cargada = 0
+        self.seccion_pieza_cargada = 0
 
         self.dynamic_layouts = []    # Inicia variable para guardar layouts dinamicos
         self.dynamic_layouts_data = []
@@ -40,7 +66,25 @@ class MyDialog(QDialog):
         # Initialize storage for dynamic layout data
         self.dynamic_layout_data = {}
 
+        ''' Inicia variables para guardar informacion dinamica de pestana armaduras activas '''
+        self.dynamic_cotas = []
+        self.dynamic_diametros_arm_act = []
+        self.dynamic_tpi_arm_act = {}
+        self.dynamic_cordones_arm_act = {}
+
         ''' >>>> Inicia variables y conexiones de elementos fijos <<<< '''
+
+        
+
+        # Connect tab change signal to function
+        # self.ui.tabWidget.currentChanged.connect(lambda index: self.set_default_button(index))
+        ''' Default pushBtn en cada TAB '''
+        self.ui.btn_calcular_nuevos_valores.setDefault(True)
+        self.ui.tabWidget.currentChanged.connect(self.set_default_button)
+
+        
+
+
 
         # Carga datos de familias/modelos de DB
         self.family_model_mapping_catalogo = db_cargar_familias_modelos(self, True) # Usa DB CATALOGO
@@ -52,8 +96,15 @@ class MyDialog(QDialog):
 
         # conecta btn Elimina layouts dinamicos
         self.ui.btn_acpt_eliminar.clicked.connect(
+            # print("USA btn eliminar trapecio")
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
         ) # Elimina Dynamic Row
+
+
+        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
+        
+        
+        
 
         
         # conecta btn para usar nueva pieza CATALOGO
@@ -83,15 +134,52 @@ class MyDialog(QDialog):
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
+        ''' ===============================================  TAB2  Armaduras Activas  ================================================== '''
+        setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
+        self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
 
 
+
+
+
+
+    ''' ====================================================================================================================================================== '''
+
+    # Boton aplicar seccion
+    ''' Aplica pieza en espacio dinamico de trapecios. Maneja el caso de pieza de catalogo, creada por usuario, o temporal'''
+    # Diferencia entre creada por usuario y temporal es que las piezas en base de datos 'piezas_creadas.db' fueron temporales en algun momento y fueron guardadas a la base de datos con btn de guardado
     def aplicar_pieza(self, es_temporal, es_creada):
         if self.es_temporal == False:
             print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
-            familia_seleccionada = self.ui.combo_familia.currentText()
-            modelo_seleccionado = self.ui.combo_modelo.currentText()
+            ''' Juntar variables eventualmente. Por ahora se sigue con desarrollo por tiempo '''
+            try:
+                familia_seleccionada = self.ui.combo_familia.currentText()
+                self.familia_pieza_cargada = self.ui.combo_familia.currentText()
+            except:
+                familia_seleccionada = 0
+                self.familia_pieza_cargada = 0
+            
+            try:
+                modelo_seleccionado = self.ui.combo_modelo.currentText()
+                self.modelo_pieza_cargada = self.ui.combo_modelo.currentText()
+            except:
+                modelo_seleccionado = 0
+                self.modelo_pieza_cargada = 0
+            
+            try:
+                seccion_seleccionada = self.ui.list_tipo_seccion.currentItem().text()
+                self.seccion_pieza_cargada = self.ui.list_tipo_seccion.currentItem().text()
+            except:
+                seccion_seleccionada = 0
+                self.seccion_pieza_cargada = 0            
+            
+            
+
+            pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
+            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)
+
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
                 print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
@@ -116,10 +204,44 @@ class MyDialog(QDialog):
 
 
 
+    def set_default_button(self, index):
+        # Remove default from all buttons first
+        self.ui.btn_calcular_nuevos_valores.setDefault(False)
+        self.ui.tab2_btn_valores.setDefault(False)
+        self.ui.tabWidget.widget(index).setFocus()
+
+        # Set default only for the current tab
+        if index == 0:
+            self.ui.btn_calcular_nuevos_valores.setDefault(True)
+            self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
+            print("index 0. btn default")
+        elif index == 1:
+            self.ui.tab2_btn_valores.setDefault(True)
+            self.ui.tab2_btn_valores.setAutoDefault(True)
+            print("index 1. btn2 default")
+
+        
+
+''' ======================================================================================================================================================'''
+
+''' Muestra mensaje en ventana emergente al usuario'''
+def popup_msg(message):
+    popup = QMessageBox()
+    popup.setIcon(QMessageBox.Warning)  # ICONO
+    popup.setWindowTitle("Mensaje")  # title
+    popup.setText(message)  # Main message text
+    popup.setStandardButtons(QMessageBox.Ok)  # agrega btn OK
+    popup.exec()  # muestra ventana PopUp
+
+
+
 if __name__ == "__main__":
     ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
+    print("=========================================================================================")
     db_iniciar_database("catalogo.db")
     db_iniciar_database("piezas_creadas.db")
+    print("=========================================================================================\n\n\n")
+    
 
     # print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
