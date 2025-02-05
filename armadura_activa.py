@@ -630,274 +630,7 @@ def del_cota(self, target):
 
 ''' ============================================================================================================================================== '''
 
-def add_cordon(self):
-    print(" \n\n\n\n\n*** ESTADO ANTES DE AGREGAR CORDON***\n\n")
-    print_grid_layout_state(self)
 
-    diametros_en_db = db_recuperar_diametros_cordones()
-    ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
-    if (len(self.dynamic_cordones_arm_act) >= len(diametros_en_db)):
-        popup_msg(f"Solo hay {len(diametros_en_db)} tipos de cordones en base de datos")
-        return 
-    
-    # Determine the new column index using columnCount()
-    index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
-    print(f"INDEX ORIGINAL: {index}")
-    index = get_next_available_column(self)
-    print(f"INDEX con FUNCION HELPER: {index}")
-
-    # variable 'index' no es precisa en real cantidad de cordones
-    index_para_clave = len(self.dynamic_cordones_arm_act)
-
-    # Create a new grid layout for this column
-    sub_grid_layout = QGridLayout()
-
-    # Add the "Tipo" label at (0, 0)
-    label_tipo = QLabel("Tipo")
-    label_tipo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    sub_grid_layout.addWidget(label_tipo, 0, 0)
-
-    # Add the ComboBox at (1, 0)
-    combo = QComboBox()
-    ''' Poblar comboBox generada dimamicamente con diametros disponibles en DB '''
-    for diametro in diametros_en_db:
-        combo.addItem(f"Ø {diametro} mm")
-    
-    combo.setMinimumSize(130, 0)  # Min width: 99, height: default (0)
-    combo.setMaximumSize(131, 16777215)  # Max width: 100, height: unlimited
-    sub_grid_layout.addWidget(combo, 1, 0)
-
-    # Add the "Area" label at (0, 1)
-    label_area = QLabel("Area cm2")
-    label_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    sub_grid_layout.addWidget(label_area, 0, 1)
-
-    # Add a QLineEdit at (1, 1)
-    line_edit_area = QLineEdit()
-    line_edit_area.setMinimumSize(70, 0)
-    line_edit_area.setMaximumSize(100, 16777215)
-    sub_grid_layout.addWidget(line_edit_area, 1, 1)
-
-    # Add the new sub-grid layout to the main grid layout in the new column
-    self.ui.gridLayout.addLayout(sub_grid_layout, 0, index)
-
-    # Set stretch for the new column to allow resizing
-    self.ui.gridLayout.setColumnStretch(index, 1)
-
-    # Create layouts for 'num_cordones' and 'tpi'
-    layout = QHBoxLayout()
-    layout_num_cordones = QVBoxLayout()
-    layout_tpi = QVBoxLayout()
-
-    # Set the spacing to 0 for the dynamically generated layouts
-    layout_num_cordones.setSpacing(0)
-    layout_tpi.setSpacing(0)
-
-    # Labels for 'num_cordones' and 'tpi'
-    label_num_cordones = QLabel("Nº Cordones")
-    label_tpi = QLabel("TPI (N/mm2)")
-
-    # Align the labels to the center
-    label_num_cordones.setAlignment(Qt.AlignmentFlag.AlignCenter)
-    label_tpi.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-    layout_num_cordones.addWidget(label_num_cordones)
-    layout_tpi.addWidget(label_tpi)
-
-    # Create QLineEdits for each 'cota'
-    num_cordones = [QLineEdit("0") for _ in self.dynamic_cotas]
-    tpi = [QLineEdit("1400") for _ in self.dynamic_cotas]
-
-    # Set min and max size for the QLineEdits
-    for nc, tp in zip(num_cordones, tpi):
-        nc.setMinimumSize(70, 0)
-        nc.setMaximumSize(71, 16777215)
-        tp.setMinimumSize(70, 0)
-        tp.setMaximumSize(71, 16777215)
-
-        # Add QLineEdits to the layouts with centered alignment
-        layout_num_cordones.addWidget(nc, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout_tpi.addWidget(tp, alignment=Qt.AlignmentFlag.AlignCenter)
-
-    # Add spacers to ensure items align properly at the bottom
-    layout_num_cordones.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-    layout_tpi.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
-
-    # Add the layouts to the main layout
-    layout.addLayout(layout_num_cordones)
-    layout.addLayout(layout_tpi)
-
-    # Add the new layout to the grid layout in the new column
-    self.ui.gridLayout.addLayout(layout, 1, index)
-
-    # Set stretch for the new column to allow resizing
-    self.ui.gridLayout.setColumnStretch(index, 1)
-
-    # Ensure that the layout grows with the new column
-    self.ui.gridLayoutWidget.adjustSize()
-    self.ui.gridLayoutWidget.resize(self.ui.gridLayoutWidget.sizeHint())
-    self.ui.gridLayoutWidget.setMinimumSize(self.ui.gridLayoutWidget.sizeHint())
-
-    # Update the dynamic data structures
-    self.dynamic_diametros_arm_act.append(combo)
-    # self.dynamic_areas_arm_act.append(line_edit_area)
-
-    # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
-    self.dynamic_cordones_arm_act[index_para_clave] = {
-        'layout': layout,
-        'layout_num_cordones': layout_num_cordones,
-        'layout_tpi': layout_tpi,
-        'num_cordones': num_cordones,  # Store QLineEdits for num_cordones
-        'tpi': tpi,  # Store QLineEdits for tpi
-        'diametro': combo,  # Store ComboBox for diameter
-        'area': line_edit_area,  # Store QLineEdit for area
-        'label_tipo': label_tipo,  # Store QLabel for tipo
-        'label_area': label_area,  # Store QLabel for area
-        'label_num_cordones': label_num_cordones,  # Store QLabel for num_cordones
-        'label_tpi': label_tpi  # Store QLabel for tpi
-    }
-
-    # Add a horizontal spacer at the right end
-    self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-    self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)  # Add it to the rightmost side of the grid
-
-    # Adjust the stretch for all columns to maintain balance
-    for col in range(index + 2):  # Adjusts stretching for all columns, including the new one and the spacer
-        self.ui.gridLayout.setColumnStretch(col, 1)
-
-    print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
-
-    print(" \n\n\n\n\n*** ESTADO DESPUES DE AGREGAR CORDON***\n\n")
-    print_grid_layout_state(self)
-
-
-def del_cordon(self):
-    print("\n\n\n\n*** ESTADO ANTES DE BORRAR CORDON***\n\n")
-    print_grid_layout_state(self)
-    
-    if self.dynamic_cordones_arm_act:
-        last_index = max(self.dynamic_cordones_arm_act.keys())
-        cordon = self.dynamic_cordones_arm_act.pop(last_index)
-
-        # Delete widgets
-        for widget in cordon['num_cordones'] + cordon['tpi']:
-            if widget:
-                widget.setParent(None)
-                widget.deleteLater()
-        
-        cordon['diametro'].setParent(None)
-        cordon['diametro'].deleteLater()
-        
-        cordon['area'].setParent(None)
-        cordon['area'].deleteLater()
-
-        # Delete labels
-        for label in [cordon['label_tipo'], cordon['label_area'], 
-                      cordon['label_num_cordones'], cordon['label_tpi']]:
-            if label:
-                label.setParent(None)
-                label.deleteLater()
-
-        # Remove layout from grid
-        if cordon['layout']:
-            self.ui.gridLayout.removeItem(cordon['layout'])
-            cordon['layout'].deleteLater()
-
-        # Remove from list of dynamically generated diameters
-        self.dynamic_diametros_arm_act.pop()
-
-        # Remove last two columns (cordon + spacer)
-        last_column = self.ui.gridLayout.columnCount() - 1
-        if last_column >= 0:
-            # remove_column(self, last_column)
-            pass
-        if last_column - 1 >= 0:
-            remove_column(self, last_column - 1)
-
-        print("\n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
-        print_grid_layout_state(self)
-
-        # Change order: shift columns first, then remove empty ones
-        shift_columns_left(self, last_column)
-        remove_empty_columns(self.ui.gridLayout)  # Now remove any leftover gaps
-        
-    else:
-        print("del_cordon() --> No existen cordones que borrar \n")
-
-def remove_column(self, column_index):
-    """Removes a full column from the grid layout."""
-    for row in range(self.ui.gridLayout.rowCount()):
-        item = self.ui.gridLayout.itemAtPosition(row, column_index)
-        if item:
-            widget = item.widget()
-            if widget:
-                widget.setParent(None)  # Detach from layout
-                widget.deleteLater()
-            self.ui.gridLayout.removeItem(item)
-
-    # Shift remaining elements to close the gap
-    shift_columns_left(self, column_index)
-
-
-def remove_empty_columns(self, grid_layout):
-    """Removes any column that has an empty cell in any row."""
-    column_count = grid_layout.columnCount()
-    row_count = grid_layout.rowCount()
-    empty_columns = set()
-
-    # Identify empty columns
-    for col in range(column_count):
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if item is None:  # If any row in this column is empty, mark the column
-                empty_columns.add(col)
-                break
-
-    # Remove widgets from empty columns
-    for col in sorted(empty_columns, reverse=True):  # Reverse order to avoid shifting issues
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if item:
-                grid_layout.removeItem(item)
-                widget = item.widget()
-                if widget:
-                    widget.deleteLater()
-
-    # Force UI refresh
-    grid_layout.update()
-
-
-
-def shift_columns_left(self, removed_column):
-    """Shifts all columns left after deleting one or more columns."""
-    column_count = self.ui.gridLayout.columnCount()
-    row_count = self.ui.gridLayout.rowCount()
-
-    for col in range(removed_column + 1, column_count):
-        for row in range(row_count):
-            item = self.ui.gridLayout.itemAtPosition(row, col)
-            if item:
-                self.ui.gridLayout.removeItem(item)
-                self.ui.gridLayout.addItem(item, row, col - 2)  # Move two steps left to compensate
-
-    self.ui.gridLayout.update()  # Force UI refresh
-
-def get_next_available_column(self):
-    """Finds the first completely empty column to insert a new cordón."""
-    column_count = self.ui.gridLayout.columnCount()
-    occupied_columns = set()
-
-    for row in range(self.ui.gridLayout.rowCount()):
-        for col in range(column_count):
-            if self.ui.gridLayout.itemAtPosition(row, col) is not None:
-                occupied_columns.add(col)
-
-    # The next available column is the first unoccupied one
-    for col in range(column_count):
-        if col not in occupied_columns:
-            return col
-
-    return column_count  # Default to appending at the end if all are occupied
 
 
 ''' ====================================================================================================================================== '''
@@ -1078,36 +811,7 @@ def print_grid_layout_state(self):
     print("-" * 30)
 
 
-def remove_empty_columns(grid_layout):
-    """Removes any column that has at least one empty row."""
-    column_count = grid_layout.columnCount()
-    row_count = grid_layout.rowCount()
 
-    # print("\n\n\n\n\n\n\n contenido de grid_lauout", grid_layout)
-
-    columns_to_remove = set()  # Use a set to avoid duplicates
-
-    # Identify columns that have empty spaces
-    for col in range(column_count):
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if not item:  # If there's an empty spot, mark the column for removal
-                columns_to_remove.add(col)
-                break  # No need to check the rest of this column
-    
-    # Remove identified columns in reverse order to avoid shifting issues
-    for col in sorted(columns_to_remove, reverse=True):
-        for row in range(row_count):
-            item = grid_layout.itemAtPosition(row, col)
-            if item:
-                widget = item.widget()
-                if widget:
-                    grid_layout.removeWidget(widget)
-                    widget.deleteLater()
-                else:
-                    grid_layout.removeItem(item)
-    
-    grid_layout.update()
 
 
 
@@ -1235,4 +939,178 @@ def delete_layout_widgets(self, layout):
             item.widget().deleteLater()
         elif item.layout():  # If it's another layout, recursively delete its widgets
             self.delete_layout_widgets(item.layout())  # Recursive call to delete nested layouts
+
+
+
+''' functions to change: '''
+
+
+
+
+def add_cordon(self):
+    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+    if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+        # Elimina el último item si es el vertical stretcher
+        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+        del item
+
+    # Determine the new column index using the number of existing cordones
+    index = len(self.dynamic_cordones_arm_act)
+
+    # Create a new grid layout for this column
+    sub_grid_layout = QGridLayout()
+
+    # Add the "Tipo" label at (0, 0)
+    label_tipo = QLabel("Tipo")
+    label_tipo.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    sub_grid_layout.addWidget(label_tipo, 0, 0)
+
+    # Add the ComboBox at (1, 0)
+    combo = QComboBox()
+    diametros_en_db = db_recuperar_diametros_cordones()
+    for diametro in diametros_en_db:
+        combo.addItem(f"Ø {diametro} mm")
+    combo.setMinimumSize(130, 0)
+    combo.setMaximumSize(131, 16777215)
+    sub_grid_layout.addWidget(combo, 1, 0)
+
+    # Add the "Area" label at (0, 1)
+    label_area = QLabel("Area cm2")
+    label_area.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    sub_grid_layout.addWidget(label_area, 0, 1)
+
+    # Add a QLineEdit at (1, 1)
+    line_edit_area = QLineEdit()
+    line_edit_area.setMinimumSize(70, 0)
+    line_edit_area.setMaximumSize(100, 16777215)
+    sub_grid_layout.addWidget(line_edit_area, 1, 1)
+
+    # Add the new sub-grid layout to the main grid layout in the new column
+    self.ui.gridLayout.addLayout(sub_grid_layout, 0, index)
+
+    # Set stretch for the new column to allow resizing
+    self.ui.gridLayout.setColumnStretch(index, 1)
+
+    # Create layouts for 'num_cordones' and 'tpi'
+    layout = QHBoxLayout()
+    layout_num_cordones = QVBoxLayout()
+    layout_tpi = QVBoxLayout()
+
+    # Set the spacing to 0 for the dynamically generated layouts
+    layout_num_cordones.setSpacing(0)
+    layout_tpi.setSpacing(0)
+
+    # Labels for 'num_cordones' and 'tpi'
+    label_num_cordones = QLabel("Nº Cordones")
+    label_tpi = QLabel("TPI (N/mm2)")
+
+    # Align the labels to the center
+    label_num_cordones.setAlignment(Qt.AlignmentFlag.AlignCenter)
+    label_tpi.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    layout_num_cordones.addWidget(label_num_cordones)
+    layout_tpi.addWidget(label_tpi)
+
+    # Create QLineEdits for each 'cota'
+    num_cordones = [QLineEdit("0") for _ in self.dynamic_cotas]
+    tpi = [QLineEdit("1400") for _ in self.dynamic_cotas]
+
+    # Set min and max size for the QLineEdits
+    for nc, tp in zip(num_cordones, tpi):
+        nc.setMinimumSize(70, 0)
+        nc.setMaximumSize(71, 16777215)
+        tp.setMinimumSize(70, 0)
+        tp.setMaximumSize(71, 16777215)
+
+        # Add QLineEdits to the layouts with centered alignment
+        layout_num_cordones.addWidget(nc, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout_tpi.addWidget(tp, alignment=Qt.AlignmentFlag.AlignCenter)
+
+    # Add spacers to ensure items align properly at the bottom
+    layout_num_cordones.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+    layout_tpi.addSpacerItem(QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding))
+
+    # Add the layouts to the main layout
+    layout.addLayout(layout_num_cordones)
+    layout.addLayout(layout_tpi)
+
+    # Add the new layout to the grid layout in the new column
+    self.ui.gridLayout.addLayout(layout, 1, index)
+
+    # Set stretch for the new column to allow resizing
+    self.ui.gridLayout.setColumnStretch(index, 1)
+
+    # Ensure that the layout grows with the new column
+    self.ui.gridLayoutWidget.adjustSize()
+    self.ui.gridLayoutWidget.resize(self.ui.gridLayoutWidget.sizeHint())
+    self.ui.gridLayoutWidget.setMinimumSize(self.ui.gridLayoutWidget.sizeHint())
+
+    # Update the dynamic data structures
+    self.dynamic_diametros_arm_act.append(combo)
+
+    # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
+    self.dynamic_cordones_arm_act[index] = {
+        'layout': layout,
+        'layout_num_cordones': layout_num_cordones,
+        'layout_tpi': layout_tpi,
+        'num_cordones': num_cordones,
+        'tpi': tpi,
+        'diametro': combo,
+        'area': line_edit_area,
+        'label_tipo': label_tipo,
+        'label_area': label_area,
+        'label_num_cordones': label_num_cordones,
+        'label_tpi': label_tpi
+    }
+
+    # Add a horizontal spacer at the right end
+    self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+    self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)
+
+    # Adjust the stretch for all columns to maintain balance
+    for col in range(index + 2):
+        self.ui.gridLayout.setColumnStretch(col, 1)
+
+def del_cordon(self):
+    if self.dynamic_cordones_arm_act:
+        last_index = max(self.dynamic_cordones_arm_act.keys())
+        cordon = self.dynamic_cordones_arm_act.pop(last_index)
+
+        # Delete widgets
+        for widget in cordon['num_cordones'] + cordon['tpi']:
+            if widget:
+                widget.setParent(None)
+                widget.deleteLater()
+        
+        cordon['diametro'].setParent(None)
+        cordon['diametro'].deleteLater()
+        
+        cordon['area'].setParent(None)
+        cordon['area'].deleteLater()
+
+        # Delete labels
+        for label in [cordon['label_tipo'], cordon['label_area'], 
+                      cordon['label_num_cordones'], cordon['label_tpi']]:
+            if label:
+                label.setParent(None)
+                label.deleteLater()
+
+        # Remove layout from grid
+        if cordon['layout']:
+            self.ui.gridLayout.removeItem(cordon['layout'])
+            cordon['layout'].deleteLater()
+
+        # Remove from list of dynamically generated diameters
+        self.dynamic_diametros_arm_act.pop()
+
+        # Remove the horizontal spacer if it exists
+        if self.horizontalSpacer:
+            self.ui.gridLayout.removeItem(self.horizontalSpacer)
+            self.horizontalSpacer = None
+
+        # Adjust the stretch for all columns to maintain balance
+        for col in range(self.ui.gridLayout.columnCount()):
+            self.ui.gridLayout.setColumnStretch(col, 1)
+    else:
+        print("del_cordon() --> No existen cordones que borrar \n")
 
