@@ -956,6 +956,7 @@ def add_cordon(self):
 
     # Determine the new column index using the number of existing cordones
     index = len(self.dynamic_cordones_arm_act)
+    index += 1
 
     # Create a new grid layout for this column
     sub_grid_layout = QGridLayout()
