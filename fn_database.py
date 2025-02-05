@@ -468,7 +468,7 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
     conn = sqlite3.connect("armaduras.db")
     cursor = conn.cursor()
 
-    # print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}")
+    print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}, seleccion es: {seleccion}\n\n\n\n")
 
     try:
         query = "SELECT id FROM cableado_tipos WHERE familia = ? AND modelo = ? AND tipo_cableado = ?"
@@ -486,7 +486,7 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
 
 
 
-def db_cables_tipo_cableado(tipo_cableado):
+def db_cables_tipo_cableado(tipo_cableado, familia, modelo):
     ''' usa ID de tipo cableado obtenido de cableado_tipos y compara en col tipo_cableado de cableado_cables '''
 
     conn = sqlite3.connect("armaduras.db")
@@ -497,9 +497,9 @@ def db_cables_tipo_cableado(tipo_cableado):
         SELECT cota, diametro, num_cord, tpi 
         FROM cableado_cables 
         JOIN cableado_tipos ON cableado_cables.tipo_cableado = cableado_tipos.id
-        WHERE cableado_tipos.tipo_cableado = ?;
+        WHERE cableado_tipos.tipo_cableado = ? AND familia = ? and modelo = ?;
         """
-        cursor.execute(query, (tipo_cableado,))
+        cursor.execute(query, (tipo_cableado, familia, modelo))
         tipos = cursor.fetchall()
     except sqlite3.Error as e:
         print(f"Database error: {e}")

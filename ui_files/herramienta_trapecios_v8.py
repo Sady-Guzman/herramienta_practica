@@ -400,7 +400,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 

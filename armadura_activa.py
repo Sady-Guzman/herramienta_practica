@@ -529,7 +529,8 @@ def armact_tipos_cableados(self):
 
     
     ''' Agrega cordones '''
-    configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
+    print(f"\n\n\nDEBUG DEBUG, valor de tipo_cableado_seleccionado: {tipo_cableado_seleccionado}")
+    configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado, self.familia_pieza_cargada, self.modelo_pieza_cargada) # Usa contenido ComboB
 
     ''' Muestra en terminal configuracion de preset en DB '''
     print(f"Contenido en configuracion_cordones:")
@@ -900,7 +901,7 @@ def add_cordon(self):
     for col in range(index + 2):
         self.ui.gridLayout.setColumnStretch(col, 1)
     
-    print_grid_layout_state(self)
+    # print_grid_layout_state(self)
 
 def del_cordon(self):
     if self.dynamic_cordones_arm_act:
@@ -945,6 +946,6 @@ def del_cordon(self):
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
 
-    print_grid_layout_state(self)
+    # print_grid_layout_state(self)
 
 
