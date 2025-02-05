@@ -20,6 +20,12 @@ from matplotlib.patches import Polygon
 from dibujo import plot_trapecios
 
 
+from PySide6.QtWidgets import QDialog
+from PySide6.QtGui import QKeyEvent
+from PySide6.QtCore import Qt
+
+
+
 # QVLayout: layout_nuevas_row  -> Se le agregan Layouts dinamicos (manual y selec de catalogo)
 # historial_agregados          -> Contador de tuplas que se agregaron dinamicamente a QVlayout. Se usa para sabe en que numero iterar para la creacion de layouts dinamicos
 # family_model_mapping_(catalogo or usuario)        -> Diccionario que mapea cada familia de piezas con sus respectivos modelos
@@ -27,6 +33,13 @@ from dibujo import plot_trapecios
 # db_es_catalogo se cambia por es_creada (es_creada = TRUE = es de DB piezas_creadas.db, FALSE = es DB catalogo.db)
 
 class MyDialog(QDialog):
+
+    ''' Previene cierre de aplicacion al presionar tecla escape '''
+    # def keyPressEvent(self, event: QKeyEvent):
+    #     if event.key() == Qt.Key_Escape:
+    #         print("Escape key.")
+    #     else:
+    #         super().keyPressEvent(event)
 
     def __init__(self):
         super().__init__()
@@ -83,6 +96,7 @@ class MyDialog(QDialog):
 
         # conecta btn Elimina layouts dinamicos
         self.ui.btn_acpt_eliminar.clicked.connect(
+            # print("USA btn eliminar trapecio")
             lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
         ) # Elimina Dynamic Row
 
