@@ -32,7 +32,7 @@ def setup_armadura_activa(self):
 
     arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
 
-    # self.ui.tabWidget.currentChanged.connect(lambda: armact_llena_tipos_cableado(self)) # Forma sin uso (Llena tipos al cambiar tab)
+
     self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
     # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
     # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
@@ -577,28 +577,245 @@ def add_cota(self, metros):
 
 
 
-def add_cordon(self):
-    # print(" \n\n\n\n\n*** ESTADO ANTES DE AGREGAR CORDON***\n\n")
-    # print_grid_layout_state(self)
 
-    diametros_en_db = db_recuperar_diametros_cordones()
-    ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
-    if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
-        popup_msg("Solo hay 4 tipos de cordones en base de datos")
-        return 
+
     
-    # Determine the new column index using columnCount()
-    index = self.ui.gridLayout.columnCount()  # Use columnCount to get the current number of columns
 
-    ''' elimina spacer al final de gridLayout. (No funciona bien) '''
-    last_column = index - 1  # Last column index before adding a new one
-    if self.ui.gridLayout.itemAtPosition(1, last_column):  # Row 1, Last column
-        item = self.ui.gridLayout.itemAtPosition(1, last_column)
-        if isinstance(item, QSpacerItem):
-            self.ui.gridLayout.removeItem(item)
+def armact_manage_del_cota(self):
+    # Llama a obtener_cotas_borrar, Con ese resultado se llama a funcion que borra cota especificada.
+    # Metodo originalmente era uno solo, Se divide en 2 partes para usar segunda parte en proceso de aplicar Tipo cableado Preset
 
-    # variable 'index' no es precisa en real cantidad de cordones
-    index_para_clave = len(self.dynamic_cordones_arm_act)
+    cotas_seleccionadas = armact_get_cotas_borrar(self)
+
+    if cotas_seleccionadas:
+        for cota in cotas_seleccionadas:
+            del_cota(self, cota)
+    else:
+        print("No se seleccionan cotas.")
+
+def armact_get_cotas_borrar(self):
+    cotas_existentes = []
+    cotas_seleccionadas = []
+
+    # Obtener valores de cotas existentes en la GUI
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+        # print(cota.text())
+
+    cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
+    
+    return cotas_seleccionadas
+
+def del_cota(self, target):
+    
+    for i, cota in enumerate(self.dynamic_cotas):
+        print(f"Cota existente actual: {cota.text()}")
+        print(f"Comparando target: {target}")
+
+        if float(cota.text()) == float(target):
+
+            cota_to_remove = self.dynamic_cotas.pop(i)
+            cota_to_remove.deleteLater()
+
+            # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
+            for cordon in self.dynamic_cordones_arm_act.values():
+                if i < len(cordon['num_cordones']):
+                    num_cordon_to_remove = cordon['num_cordones'].pop(i)
+                    num_cordon_to_remove.deleteLater()
+                
+                if i < len(cordon['tpi']):
+                    tpi_to_remove = cordon['tpi'].pop(i)
+                    tpi_to_remove.deleteLater()
+    
+
+''' ============================================================================================================================================== '''
+
+
+
+
+''' ====================================================================================================================================== '''
+
+def print_dynamic_cordones_values(self):
+    """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
+    for index, cordon in self.dynamic_cordones_arm_act.items():
+        print(f"Cordon {index + 1}:")
+        for i, num_cordon in enumerate(cordon['num_cordones']):
+            print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
+        for i, tpi in enumerate(cordon['tpi']):
+            print(f"  TPI {i + 1}: {tpi.text()}")
+
+
+''' ====================================================================================================================================== '''
+''' ========================================= TIPOS DE CABLEADOS (PRESETS T2, T4,...) ==================================================== '''
+
+
+def armact_tipos_cableados(self):
+    ''' Maneja presets de cableados para cada pieza, 
+    Se guardan usando 2 tablas en DB armaduras.db (cableado_tipos, cableado_cables) 
+
+    Los presets se cargan dinamicamente a un ComboBox dependiendo de la pieza seleccionada.
+    '''
+    ''' WIDGETS
+        tab2_combo_preset (Seleccionar)
+        tab2_btn_aplicar_preset (Aplicar)
+    '''
+    tipo_cableado_seleccionado = self.ui.tab2_combo_preset.currentText()
+    # id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
+    id_tipo_cableado = db_id_tipo_cableado_pieza("VI", "4060", tipo_cableado_seleccionado)
+    id_tipo_cableado = id_tipo_cableado[0][0]
+    cotas_existentes = []
+
+    
+    # Obtiene todas las cotas existentes
+    for cota in self.dynamic_cotas:
+        cotas_existentes.append(cota.text())
+
+    # Borra todas las cotas existentes    
+    for cota in cotas_existentes:
+        del_cota(self, cota)
+
+
+
+    db_tipos_cableado_pieza("VI", "4060") # Familia // Modelo
+    # print(f"Contenido tipo_cableado_seleccionado: {tipo_cableado_seleccionado}\n") # Contenido en comboBox
+    cotas_cableado = db_cantidad_cotas_tipo_cableado(id_tipo_cableado)
+    cotas_cableado.reverse()
+
+    ''' Agrega cotas '''
+    for cota in cotas_cableado:
+        cota = f"{float(cota[0]):.3f}"  # fuerza 3 decimales (usa str)
+        add_cota(self, cota)
+
+    
+    ''' Agrega cordones '''
+    configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
+
+    ''' Muestra en terminal configuracion de preset en DB '''
+    print(f"Contenido en configuracion_cordones:")
+    for cota, diametro, num_cord, tpi in configuracion_cableado:
+        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
+
+    cordones_por_diametro = {}
+
+    # Group data by `diametro`
+    for cota, diametro, num_cord, tpi in configuracion_cableado:
+        if diametro not in cordones_por_diametro:
+            cordones_por_diametro[diametro] = []  # Inicia lista para key de dicc (diametro)
+        
+        cordones_por_diametro[diametro].append((cota, num_cord, tpi))  # guarda parametros
+
+    # Print grouped data
+    for diametro, cordones in cordones_por_diametro.items():
+        print(f"\nDiametro: {diametro}")
+        for cota, num_cord, tpi in cordones:
+            print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
+
+    ''' AJUSTAR CORDONES A CANTIDAD NECESARIA '''
+    cantidad_cordones_necesarios = db_cantidad_cordones_tipo_cableado(id_tipo_cableado) 
+    cantidad_cordones_necesarios = cantidad_cordones_necesarios[0][0] # Cantidad necesaria
+
+    diferencia_cantidad_cordones = len(self.dynamic_cordones_arm_act) - cantidad_cordones_necesarios
+    print(f"OPERACION: Cordones existentes - Necesarios para preset: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
+
+    if diferencia_cantidad_cordones < 0:
+        for _ in range(diferencia_cantidad_cordones * -1):
+            add_cordon(self)
+    elif diferencia_cantidad_cordones > 0:
+        for i in range(diferencia_cantidad_cordones):
+            del_cordon(self)
+    elif diferencia_cantidad_cordones == 0:
+        print("")   
+
+
+
+    for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
+        actual_index = index  # Adjust index to match the keys in dynamic_cordones_arm_act
+        if actual_index not in self.dynamic_cordones_arm_act:
+            print(f"Error: No existe índice '{actual_index}' en dynamic_cordones_arm_act")
+            continue
+
+        cordon = self.dynamic_cordones_arm_act[actual_index]
+        print(f"Editando cordón en índice {actual_index} con diámetro {diametro}")
+
+        # Configurar el ComboBox con el diámetro correcto
+        combobox_diametro = cordon['diametro']
+        combo_index = combobox_diametro.findText(f"Ø {diametro} mm")
+
+        if combo_index != -1:
+            combobox_diametro.setCurrentIndex(combo_index)
+        else:
+            print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
+
+        # Asignar num_cordones y tpi
+        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):
+            cordon["num_cordones"][i].setText(str(num_cords))
+            cordon["tpi"][i].setText(str(tpi))
+    
+    arm_act_btn_calcular(self)
+    
+    
+
+def armact_llena_tipos_cableado(self):
+
+    familia = self.familia_pieza_cargada
+    modelo = self.modelo_pieza_cargada
+    
+    ''' para desarrollo'''
+    # TODO comentar
+    # familia = 'VI'
+    # modelo = "4060"
+
+    # print (f" contenido familia {familia}, contenido modelo: {modelo}")
+    tipos = db_tipos_cableado_pieza(familia, modelo)
+    # print(f"contenido de tipos: {tipos}")
+
+
+
+    ''' Llena con T2, T4, T6, Tx..... Numero representa cantidad de cordones totales en preset '''
+    self.ui.tab2_combo_preset.clear()
+    for tipo in tipos:
+        self.ui.tab2_combo_preset.addItems({tipo[0]})
+
+
+
+
+
+''' ======== DEBUGGING DEL_CORD ========='''
+
+def print_grid_layout_state(self):
+    rows = self.ui.gridLayout.rowCount()
+    cols = self.ui.gridLayout.columnCount()
+    
+    print("\nGrid Layout State:")
+    print(f"Total Rows: {rows}, Total Columns: {cols}")
+
+    for row in range(rows):
+        for col in range(cols):
+            item = self.ui.gridLayout.itemAtPosition(row, col)
+            if item:
+                widget = item.widget()
+                if widget:
+                    print(f"Position ({row}, {col}): {widget.__class__.__name__} - {widget.objectName()}")
+                else:
+                    print(f"Position ({row}, {col}): Layout or Spacer")
+            else:
+                print(f"Position ({row}, {col}): Empty")
+    
+    print("-" * 30)
+
+
+
+
+def add_cordon(self):
+    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+    if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+        # Elimina el último item si es el vertical stretcher
+        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+        del item
+
+    # Determine the new column index using the number of existing cordones
+    index = len(self.dynamic_cordones_arm_act)
+    index += 1
 
     # Create a new grid layout for this column
     sub_grid_layout = QGridLayout()
@@ -610,12 +827,11 @@ def add_cordon(self):
 
     # Add the ComboBox at (1, 0)
     combo = QComboBox()
-    ''' Poblar comboBox generada dimamicamente con diametros disponibles en DB '''
+    diametros_en_db = db_recuperar_diametros_cordones()
     for diametro in diametros_en_db:
         combo.addItem(f"Ø {diametro} mm")
-    
-    combo.setMinimumSize(130, 0)  # Min width: 99, height: default (0)
-    combo.setMaximumSize(131, 16777215)  # Max width: 100, height: unlimited
+    combo.setMinimumSize(130, 0)
+    combo.setMaximumSize(131, 16777215)
     sub_grid_layout.addWidget(combo, 1, 0)
 
     # Add the "Area" label at (0, 1)
@@ -691,328 +907,75 @@ def add_cordon(self):
 
     # Update the dynamic data structures
     self.dynamic_diametros_arm_act.append(combo)
-    # self.dynamic_areas_arm_act.append(line_edit_area)
 
     # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
-    self.dynamic_cordones_arm_act[index_para_clave] = {
+    actual_index = index - 1
+    self.dynamic_cordones_arm_act[actual_index] = {
         'layout': layout,
         'layout_num_cordones': layout_num_cordones,
         'layout_tpi': layout_tpi,
-        'num_cordones': num_cordones,  # Store QLineEdits for num_cordones
-        'tpi': tpi,  # Store QLineEdits for tpi
-        'diametro': combo,  # Store ComboBox for diameter
-        'area': line_edit_area,  # Store QLineEdit for area
-        'label_tipo': label_tipo,  # Store QLabel for tipo
-        'label_area': label_area,  # Store QLabel for area
-        'label_num_cordones': label_num_cordones,  # Store QLabel for num_cordones
-        'label_tpi': label_tpi  # Store QLabel for tpi
+        'num_cordones': num_cordones,
+        'tpi': tpi,
+        'diametro': combo,
+        'area': line_edit_area,
+        'label_tipo': label_tipo,
+        'label_area': label_area,
+        'label_num_cordones': label_num_cordones,
+        'label_tpi': label_tpi
     }
 
-    ''' Agrega nuevamente Spacer al final de GridLayout. (No funciona bien) '''
-    # self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-    # self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)  # Add it to the rightmost side of the grid
+    # Add a horizontal spacer at the right end
+    self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+    self.ui.gridLayout.addItem(self.horizontalSpacer, 1, index + 1)
 
     # Adjust the stretch for all columns to maintain balance
-    for col in range(index + 2):  # Adjusts stretching for all columns, including the new one and the spacer
+    for col in range(index + 2):
         self.ui.gridLayout.setColumnStretch(col, 1)
-
-    print("add_cordon() --> Nueva cantidad de cordones es: ", len(self.dynamic_cordones_arm_act), "\n")
-
-    # print(" \n\n\n\n\n*** ESTADO DESPUES DE AGREGAR CORDON***\n\n")
-    # print_grid_layout_state(self)
-
     
-
-def armact_manage_del_cota(self):
-    # Llama a obtener_cotas_borrar, Con ese resultado se llama a funcion que borra cota especificada.
-    # Metodo originalmente era uno solo, Se divide en 2 partes para usar segunda parte en proceso de aplicar Tipo cableado Preset
-
-    cotas_seleccionadas = armact_get_cotas_borrar(self)
-
-    if cotas_seleccionadas:
-        for cota in cotas_seleccionadas:
-            del_cota(self, cota)
-    else:
-        print("No se seleccionan cotas.")
-
-def armact_get_cotas_borrar(self):
-    cotas_existentes = []
-    cotas_seleccionadas = []
-
-    # Obtener valores de cotas existentes en la GUI
-    for cota in self.dynamic_cotas:
-        cotas_existentes.append(cota.text())
-        # print(cota.text())
-
-    cotas_seleccionadas = open_del_cotas_dialog(self, cotas_existentes)
-    
-    return cotas_seleccionadas
-
-def del_cota(self, target):
-    
-    for i, cota in enumerate(self.dynamic_cotas):
-        print(f"Cota existente actual: {cota.text()}")
-        print(f"Comparando target: {target}")
-
-        if float(cota.text()) == float(target):
-
-            cota_to_remove = self.dynamic_cotas.pop(i)
-            cota_to_remove.deleteLater()
-
-            # Remove corresponding QLineEdits for num_cordones and tpi in each cordon
-            for cordon in self.dynamic_cordones_arm_act.values():
-                if i < len(cordon['num_cordones']):
-                    num_cordon_to_remove = cordon['num_cordones'].pop(i)
-                    num_cordon_to_remove.deleteLater()
-                
-                if i < len(cordon['tpi']):
-                    tpi_to_remove = cordon['tpi'].pop(i)
-                    tpi_to_remove.deleteLater()
-    
-
-
+    print_grid_layout_state(self)
 
 def del_cordon(self):
-    # print(" \n\n\n\n*** ESTADO ANTES DE BORRAR CORDON***\n\n")
-    # print_grid_layout_state(self)
     if self.dynamic_cordones_arm_act:
         last_index = max(self.dynamic_cordones_arm_act.keys())
         cordon = self.dynamic_cordones_arm_act.pop(last_index)
 
-        # Delete widgets (QLineEdit and QComboBox)
+        # Delete widgets
         for widget in cordon['num_cordones'] + cordon['tpi']:
-            widget.deleteLater()
+            if widget:
+                widget.setParent(None)
+                widget.deleteLater()
+        
+        cordon['diametro'].setParent(None)
         cordon['diametro'].deleteLater()
+        
+        cordon['area'].setParent(None)
         cordon['area'].deleteLater()
 
         # Delete labels
-        cordon['label_tipo'].deleteLater()
-        cordon['label_area'].deleteLater()
-        cordon['label_num_cordones'].deleteLater()
-        cordon['label_tpi'].deleteLater()
+        for label in [cordon['label_tipo'], cordon['label_area'], 
+                      cordon['label_num_cordones'], cordon['label_tpi']]:
+            if label:
+                label.setParent(None)
+                label.deleteLater()
 
         # Remove layout from grid
-        self.ui.gridLayout.removeItem(cordon['layout'])
-        cordon['layout'].deleteLater()
+        if cordon['layout']:
+            self.ui.gridLayout.removeItem(cordon['layout'])
+            cordon['layout'].deleteLater()
 
         # Remove from list of dynamically generated diameters
         self.dynamic_diametros_arm_act.pop()
 
-        ''' Agrega spacer al final de GridLayout (No funciona bien) '''
-        # last_column = self.ui.gridLayout.columnCount() - 1
-        # self.ui.gridLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum), 1, last_column)
-        
-        # print(" \n\n\n\n*** ESTADO DESPUES DE BORRAR CORDON***\n\n")
-        # print_grid_layout_state(self)
-        remove_empty_columns(self.ui.gridLayout)
+        # Remove the horizontal spacer if it exists
+        if self.horizontalSpacer:
+            self.ui.gridLayout.removeItem(self.horizontalSpacer)
+            self.horizontalSpacer = None
+
+        # Adjust the stretch for all columns to maintain balance
+        for col in range(self.ui.gridLayout.columnCount()):
+            self.ui.gridLayout.setColumnStretch(col, 1)
     else:
         print("del_cordon() --> No existen cordones que borrar \n")
 
+    print_grid_layout_state(self)
 
-
-def print_dynamic_cordones_values(self):
-    """Print the actual text content of QLineEdits in self.dynamic_cordones_arm_act."""
-    for index, cordon in self.dynamic_cordones_arm_act.items():
-        print(f"Cordon {index + 1}:")
-        for i, num_cordon in enumerate(cordon['num_cordones']):
-            print(f"  Num Cordones {i + 1}: {num_cordon.text()}")
-        for i, tpi in enumerate(cordon['tpi']):
-            print(f"  TPI {i + 1}: {tpi.text()}")
-
-
-''' ====================================================================================================================================== '''
-''' ========================================= TIPOS DE CABLEADOS (PRESETS T2, T4,...) ==================================================== '''
-# Numero despuse de T representa cantidad de cordones totales en preset 
-
-
-def armact_tipos_cableados(self):
-    ''' Maneja presets de cableados para cada pieza, 
-    Se guardan usando 2 tablas en DB armaduras.db (cableado_tipos, cableado_cables) 
-
-    Los presets se cargan dinamicamente a un ComboBox dependiendo de la pieza seleccionada.
-    '''
-    ''' WIDGETS
-        tab2_combo_preset (Seleccionar)
-        tab2_btn_aplicar_preset (Aplicar)
-    '''
-    tipo_cableado_seleccionado = self.ui.tab2_combo_preset.currentText()
-    # id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
-    id_tipo_cableado = db_id_tipo_cableado_pieza("VI", "4060", tipo_cableado_seleccionado)
-    id_tipo_cableado = id_tipo_cableado[0][0]
-    cotas_existentes = []
-
-    
-    # Obtiene todas las cotas existentes
-    for cota in self.dynamic_cotas:
-        cotas_existentes.append(cota.text())
-
-    # Borra todas las cotas existentes    
-    for cota in cotas_existentes:
-        del_cota(self, cota)
-    
-
-    # Obtener ID de tipo de cableado con contenido de ComboBox (Se usa id desde ese punto)
-    # Obtener cantidad de cotas en tipo cableado seleccionado en comboBox
-    # Invocar add_cota con metro como parametro
-    # Obtener cantidad de cordones y sus diametros, num_cord, tpi
-    # Llamar add_cord()
-    # Editar diametros, num_cord, y tpi de cada cordon agregado segun tipo cableado
-
-
-
-    db_tipos_cableado_pieza("VI", "4060") # Familia // Modelo
-    # print(f"Contenido tipo_cableado_seleccionado: {tipo_cableado_seleccionado}\n") # Contenido en comboBox
-    cotas_cableado = db_cantidad_cotas_tipo_cableado(id_tipo_cableado)
-    cotas_cableado.reverse()
-
-    ''' Agrega cotas '''
-    for cota in cotas_cableado:
-        cota = f"{float(cota[0]):.3f}"  # fuerza 3 decimales (usa str)
-        add_cota(self, cota)
-
-    
-    ''' Agrega cordones '''
-    configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado) # Usa contenido ComboB
-
-    ''' Muestra en terminal configuracion de preset en DB '''
-    # print(f"Contenido en configuracion_cordones:")
-    # for cota, diametro, num_cord, tpi in configuracion_cableado:
-    #     print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
-
-    cordones_por_diametro = {}
-
-    # Group data by `diametro`
-    for cota, diametro, num_cord, tpi in configuracion_cableado:
-        if diametro not in cordones_por_diametro:
-            cordones_por_diametro[diametro] = []  # Inicia lista para key de dicc (diametro)
-        
-        cordones_por_diametro[diametro].append((cota, num_cord, tpi))  # guarda parametros
-
-    # Print grouped data
-    for diametro, cordones in cordones_por_diametro.items():
-        print(f"\nDiametro: {diametro}")
-        for cota, num_cord, tpi in cordones:
-            print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
-
-    ''' AJUSTAR CORDONES A CANTIDAD NECESARIA '''
-    cantidad_cordones_necesarios = db_cantidad_cordones_tipo_cableado(id_tipo_cableado) 
-    cantidad_cordones_necesarios = cantidad_cordones_necesarios[0][0] # Cantidad necesaria
-
-    diferencia_cantidad_cordones = len(self.dynamic_cordones_arm_act) - cantidad_cordones_necesarios
-    print(f"OPERACION: Cordones existentes - Necesarios para preset: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
-
-    if diferencia_cantidad_cordones < 0:
-        for _ in range(diferencia_cantidad_cordones * -1):
-            add_cordon(self)
-    elif diferencia_cantidad_cordones > 0:
-        for i in range(diferencia_cantidad_cordones):
-            del_cordon(self)
-    elif diferencia_cantidad_cordones == 0:
-        print("")   
-
-
-
-    print("Claves disponibles en self.dynamic_cordones_arm_act:", self.dynamic_cordones_arm_act.keys())
-
-    for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
-        if index not in self.dynamic_cordones_arm_act:
-            print(f"Error: No existe índice '{index}' en dynamic_cordones_arm_act")
-            continue
-
-        cordon = self.dynamic_cordones_arm_act[index]
-        print(f"Editando cordón en índice {index} con diámetro {diametro}")
-
-        # Configurar el ComboBox con el diámetro correcto
-        combobox_diametro = cordon['diametro']
-        combo_index = self.dynamic_cordones_arm_act[index]['diametro'].findText(f"Ø {diametro} mm")
-
-        if combo_index != -1:
-            self.dynamic_cordones_arm_act[index]['diametro'].setCurrentIndex(combo_index)
-        else:
-            print(f"Advertencia: No se encontró el diámetro '{diametro}' en el ComboBox")
-
-        # Asignar num_cordones y tpi
-        for i, (cota, num_cords, tpi) in enumerate(reversed(valores)):  # Reverse the order
-            cordon["num_cordones"][i].setText(str(num_cords))
-            cordon["tpi"][i].setText(str(tpi))
-
-
-def armact_llena_tipos_cableado(self):
-
-    familia = self.familia_pieza_cargada
-    modelo = self.modelo_pieza_cargada
-    
-    ''' para desarrollo'''
-    # familia = 'VI'
-    # modelo = "4060"
-
-    # print (f" contenido familia {familia}, contenido modelo: {modelo}")
-    tipos = db_tipos_cableado_pieza(familia, modelo)
-    # print(f"contenido de tipos: {tipos}")
-
-
-
-    ''' Llena con T2, T4, T6, Tx..... Numero representa cantidad de cordones totales en preset '''
-    self.ui.tab2_combo_preset.clear()
-    for tipo in tipos:
-        self.ui.tab2_combo_preset.addItems({tipo[0]})
-
-
-
-
-
-''' ======== DEBUGGING DEL_CORD ========='''
-
-def print_grid_layout_state(self):
-    # rows = self.ui.gridLayout.rowCount()
-    # cols = self.ui.gridLayout.columnCount()
-    
-    # print("\nGrid Layout State:")
-    # print(f"Total Rows: {rows}, Total Columns: {cols}")
-
-    # for row in range(rows):
-    #     for col in range(cols):
-    #         item = self.ui.gridLayout.itemAtPosition(row, col)
-    #         if item:
-    #             widget = item.widget()
-    #             if widget:
-    #                 print(f"Position ({row}, {col}): {widget.__class__.__name__} - {widget.objectName()}")
-    #             else:
-    #                 print(f"Position ({row}, {col}): Layout or Spacer")
-    #         else:
-    #             print(f"Position ({row}, {col}): Empty")
-    
-    # print("-" * 30)
-    print("")
-
-def remove_empty_columns(grid_layout):
-    print("")
-    # """Removes any column that has at least one empty row."""
-    # column_count = grid_layout.columnCount()
-    # row_count = grid_layout.rowCount()
-
-    # print("\n\n\n\n\n\n\n\n\n\n contenido de grid_lauout", grid_layout)
-
-    # columns_to_remove = set()  # Use a set to avoid duplicates
-
-    # # Identify columns that have empty spaces
-    # for col in range(column_count):
-    #     for row in range(row_count):
-    #         item = grid_layout.itemAtPosition(row, col)
-    #         if not item:  # If there's an empty spot, mark the column for removal
-    #             columns_to_remove.add(col)
-    #             break  # No need to check the rest of this column
-    
-    # # Remove identified columns in reverse order to avoid shifting issues
-    # for col in sorted(columns_to_remove, reverse=True):
-    #     for row in range(row_count):
-    #         item = grid_layout.itemAtPosition(row, col)
-    #         if item:
-    #             widget = item.widget()
-    #             if widget:
-    #                 grid_layout.removeWidget(widget)
-    #                 widget.deleteLater()
-    #             else:
-    #                 grid_layout.removeItem(item)
-    
-    # grid_layout.update()
