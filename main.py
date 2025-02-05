@@ -19,6 +19,8 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Polygon
 from dibujo import plot_trapecios
 
+from armadura_pasiva import setup_armadura_pasiva
+
 
 from PySide6.QtWidgets import QDialog
 from PySide6.QtGui import QKeyEvent
@@ -138,6 +140,7 @@ class MyDialog(QDialog):
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
+        setup_armadura_pasiva(self) # Inicia TAB3 (Armadura Pasiva)
 
 
 
