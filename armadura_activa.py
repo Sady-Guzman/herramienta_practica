@@ -1108,3 +1108,131 @@ def remove_empty_columns(grid_layout):
                     grid_layout.removeItem(item)
     
     grid_layout.update()
+
+
+
+''' ================================================================================================================================== '''
+''' Ejemplo para borrar elementos de layout en caso trapecios '''
+
+''' REFERENCE FUNCTIONS '''
+
+
+''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
+def add_rows(self, index):
+    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+    if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+        # Elimina el último item si es el vertical stretcher
+        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+        del item
+
+    ''' Crea un nuevo HLayout para agregar elementos de nueva tupla '''
+    layout = QHBoxLayout()
+    # Asigna nombre al layout generado dinámicamente
+    layout_name = f"layout_t{index}"
+
+    ''' Crea los widgets para la fila '''
+    name_label = QLabel(f"T{index}\t    ")  # Usa tab + 4 espacios para coincidir
+    bi_line = QLineEdit()
+    bs_line = QLineEdit()
+    altura_line = QLineEdit()
+    area_line = QLineEdit()
+    cg_line = QLineEdit()
+    inercia_line = QLineEdit()
+    op_line = QLineEdit()
+
+    ''' Configura nombres de objetos para referencia futura '''
+    name_label.setObjectName(f"t{index}_name")
+    bi_line.setObjectName(f"t{index}_bi")
+    bs_line.setObjectName(f"t{index}_bs")
+    altura_line.setObjectName(f"t{index}_altura")
+    area_line.setObjectName(f"t{index}_area")
+    cg_line.setObjectName(f"t{index}_cg")
+    inercia_line.setObjectName(f"t{index}_inercia")
+    op_line.setObjectName(f"t{index}_op")
+
+    ''' Haz que ciertos QLineEdits sean de solo lectura '''
+    area_line.setReadOnly(True)
+    cg_line.setReadOnly(True)
+    inercia_line.setReadOnly(True)
+    op_line.setReadOnly(True)
+
+    ''' Agrega los widgets al layout '''
+    layout.addWidget(name_label)
+    layout.addWidget(bi_line)
+    layout.addWidget(bs_line)
+    layout.addWidget(altura_line)
+    layout.addWidget(area_line)
+    layout.addWidget(cg_line)
+    layout.addWidget(inercia_line)
+    layout.addWidget(op_line)
+
+    ''' Inserta el layout al principio del contenedor vertical '''
+    self.ui.layout_nuevas_row.insertLayout(0, layout)  # Change to insertLayout to add at the top
+
+    ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
+    self.ui.layout_nuevas_row.addStretch()
+
+    ''' Guarda la referencia al layout dinámico '''
+    self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
+        "bi_line": bi_line,
+        "bs_line": bs_line,
+        "altura_line": altura_line,
+        "area_line": area_line,
+        "cg_line": cg_line,
+        "inercia_line": inercia_line,
+        "op_line": op_line,
+    })
+
+    ''' Incrementa el contador de filas creadas dinámicamente '''
+    self.historial_agregados += 1
+
+
+
+
+''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
+def del_rows(self, index):
+    # print("DEBUG del_rows() > valor de Index: ", index)
+    
+    # Determina cuántos borrar, usando min() para asegurar que no intente borrar más de lo que existe
+    num_rows = min(index, self.historial_agregados)
+    if num_rows == 0:
+        return
+
+    # print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
+
+    ''' Elimina el vertical stretcher temporalmente '''
+    if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+        del item  # Remove the stretcher
+
+    ''' Itera para eliminar layouts de forma inversa '''
+    for _ in range(num_rows):
+        if self.ui.layout_nuevas_row.count() > 0:
+            # Toma el último elemento (último layout añadido)
+            last_item = self.ui.layout_nuevas_row.takeAt(0)  # Cambiar a `0` para eliminar el primer elemento (último visualmente debido a la inversión)
+
+            # Comprueba que el item sea un layout antes de eliminarlo
+            if last_item.layout():
+                delete_layout_widgets(self, last_item.layout())  # Elimina los widgets dentro del layout primero
+            del last_item  # Elimina el layout
+
+            # Elimina referencia al layout dinámico (último visualmente)
+            self.dynamic_layouts.pop(0)  # Elimina el primer elemento de la lista de layouts dinámicos
+
+    # Decrementa el contador de layouts dinámicos existentes
+    self.historial_agregados -= num_rows
+
+    # Vuelve a agregar el vertical stretcher al final para mantener la estructura
+    self.ui.layout_nuevas_row.addStretch()
+
+
+''' Elimina los widgets dentro de un layout '''
+def delete_layout_widgets(self, layout):
+    # Iterate through all the widgets in the layout and delete them
+    while layout.count():
+        item = layout.takeAt(0)  # Take the first item
+        if item.widget():  # If it's a widget, delete it
+            item.widget().deleteLater()
+        elif item.layout():  # If it's another layout, recursively delete its widgets
+            self.delete_layout_widgets(item.layout())  # Recursive call to delete nested layouts
+
