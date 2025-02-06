@@ -104,16 +104,11 @@ def apasiva_add_barra_corrugada(self):
     ''' Cada row (otras formas de referirse a row puede ser: fila, tuplas, posicion, barra) se compone de un HorizontalLayout con varios widgets predeterminados dentro'''
     ''' Se guarda referencia a estas barras generadas dinamicamente en una variable definida en main: self.dynamic_apasiva_barras'''
     
-    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
-    # if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
-    #     # Elimina el último item si es el vertical stretcher
-    #     item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-    #     del item
-    
-    if self.ui.layout_nuevas_row.count() > 0:  # Ensure there is at least one item
-        last_item = self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1)
+    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''    
+    if self.ui.tab3_Vlayout_barras.count() > 0:  # Ensure there is at least one item
+        last_item = self.ui.tab3_Vlayout_barras.itemAt(self.ui.tab3_Vlayout_barras.count() - 1)
         if last_item and last_item.spacerItem():  # Ensure it's a valid spacer
-            item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+            item = self.ui.tab3_Vlayout_barras.takeAt(self.ui.tab3_Vlayout_barras.count() - 1)
             del item
 
     ''' Crea un nuevo HLayout para agregar elementos de nueva tupla '''
@@ -167,126 +162,126 @@ def apasiva_add_barra_corrugada(self):
 ''' ================================================================================================================================================ '''
 ''' ================================================================================================================================================ '''
 ''' ================================================================================================================================================ '''
-''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
-def add_rows(self, index):
-    ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
-    if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
-        # Elimina el último item si es el vertical stretcher
-        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-        del item
+# ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
+# def add_rows(self, index):
+#     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
+#     if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+#         # Elimina el último item si es el vertical stretcher
+#         item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+#         del item
 
-    ''' Crea un nuevo HLayout para agregar elementos de nueva tupla '''
-    layout = QHBoxLayout()
+#     ''' Crea un nuevo HLayout para agregar elementos de nueva tupla '''
+#     layout = QHBoxLayout()
 
-    ''' Crea los widgets para la fila '''
-    name_label = QLabel(f"T{index}\t    ")  # Usa tab + 4 espacios para coincidir
-    bi_line = QLineEdit()
-    bs_line = QLineEdit()
-    altura_line = QLineEdit()
-    area_line = QLineEdit()
-    cg_line = QLineEdit()
-    inercia_line = QLineEdit()
-    op_line = QLineEdit()
+#     ''' Crea los widgets para la fila '''
+#     name_label = QLabel(f"T{index}\t    ")  # Usa tab + 4 espacios para coincidir
+#     bi_line = QLineEdit()
+#     bs_line = QLineEdit()
+#     altura_line = QLineEdit()
+#     area_line = QLineEdit()
+#     cg_line = QLineEdit()
+#     inercia_line = QLineEdit()
+#     op_line = QLineEdit()
 
-    ''' Configura nombres de objetos para referencia futura '''
-    name_label.setObjectName(f"t{index}_name")
-    bi_line.setObjectName(f"t{index}_bi")
-    bs_line.setObjectName(f"t{index}_bs")
-    altura_line.setObjectName(f"t{index}_altura")
-    area_line.setObjectName(f"t{index}_area")
-    cg_line.setObjectName(f"t{index}_cg")
-    inercia_line.setObjectName(f"t{index}_inercia")
-    op_line.setObjectName(f"t{index}_op")
+#     ''' Configura nombres de objetos para referencia futura '''
+#     name_label.setObjectName(f"t{index}_name")
+#     bi_line.setObjectName(f"t{index}_bi")
+#     bs_line.setObjectName(f"t{index}_bs")
+#     altura_line.setObjectName(f"t{index}_altura")
+#     area_line.setObjectName(f"t{index}_area")
+#     cg_line.setObjectName(f"t{index}_cg")
+#     inercia_line.setObjectName(f"t{index}_inercia")
+#     op_line.setObjectName(f"t{index}_op")
 
-    ''' Haz que ciertos QLineEdits sean de solo lectura '''
-    area_line.setReadOnly(True)
-    cg_line.setReadOnly(True)
-    inercia_line.setReadOnly(True)
-    op_line.setReadOnly(True)
+#     ''' Haz que ciertos QLineEdits sean de solo lectura '''
+#     area_line.setReadOnly(True)
+#     cg_line.setReadOnly(True)
+#     inercia_line.setReadOnly(True)
+#     op_line.setReadOnly(True)
 
-    ''' Agrega los widgets al layout '''
-    layout.addWidget(name_label)
-    layout.addWidget(bi_line)
-    layout.addWidget(bs_line)
-    layout.addWidget(altura_line)
-    layout.addWidget(area_line)
-    layout.addWidget(cg_line)
-    layout.addWidget(inercia_line)
-    layout.addWidget(op_line)
+#     ''' Agrega los widgets al layout '''
+#     layout.addWidget(name_label)
+#     layout.addWidget(bi_line)
+#     layout.addWidget(bs_line)
+#     layout.addWidget(altura_line)
+#     layout.addWidget(area_line)
+#     layout.addWidget(cg_line)
+#     layout.addWidget(inercia_line)
+#     layout.addWidget(op_line)
 
-    ''' Inserta el layout al principio del contenedor vertical '''
-    self.ui.layout_nuevas_row.insertLayout(0, layout)  # Change to insertLayout to add at the top
+#     ''' Inserta el layout al principio del contenedor vertical '''
+#     self.ui.layout_nuevas_row.insertLayout(0, layout)  # Change to insertLayout to add at the top
 
-    ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
-    self.ui.layout_nuevas_row.addStretch()
+#     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
+#     self.ui.layout_nuevas_row.addStretch()
 
-    ''' Guarda la referencia al layout dinámico '''
-    self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
-        "bi_line": bi_line,
-        "bs_line": bs_line,
-        "altura_line": altura_line,
-        "area_line": area_line,
-        "cg_line": cg_line,
-        "inercia_line": inercia_line,
-        "op_line": op_line,
-    })
+#     ''' Guarda la referencia al layout dinámico '''
+#     self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
+#         "bi_line": bi_line,
+#         "bs_line": bs_line,
+#         "altura_line": altura_line,
+#         "area_line": area_line,
+#         "cg_line": cg_line,
+#         "inercia_line": inercia_line,
+#         "op_line": op_line,
+#     })
 
-    ''' Incrementa el contador de filas creadas dinámicamente '''
-    self.historial_agregados += 1
-
-
+#     ''' Incrementa el contador de filas creadas dinámicamente '''
+#     self.historial_agregados += 1
 
 
 
-''' Elimina trapecio seleccionado en ListWidget '''
-def del_rows(self):
-    """ Deletes the corresponding row from VLayout based on the label text. """
+
+
+# ''' Elimina trapecio seleccionado en ListWidget '''
+# def del_rows(self):
+#     """ Deletes the corresponding row from VLayout based on the label text. """
     
-    try:
-        trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
-    except:
-        print("Error: No hay ningun trapecio seleccionado para eliminar.")
-        return
-    # Find the matching row dynamically
-    row_to_delete = None
-    for row in self.dynamic_layouts:
+#     try:
+#         trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
+#     except:
+#         print("Error: No hay ningun trapecio seleccionado para eliminar.")
+#         return
+#     # Find the matching row dynamically
+#     row_to_delete = None
+#     for row in self.dynamic_layouts:
 
-        if row["name_label"].text().strip() == trapecio_para_borrar:
-            row_to_delete = row
-            break
+#         if row["name_label"].text().strip() == trapecio_para_borrar:
+#             row_to_delete = row
+#             break
 
-    if not row_to_delete:
-        print(f"Error: Could not find row with label {trapecio_para_borrar}")
-        return
+#     if not row_to_delete:
+#         print(f"Error: Could not find row with label {trapecio_para_borrar}")
+#         return
 
-    # Remove the row's layout from the VLayout
-    for i in range(self.ui.layout_nuevas_row.count()):
-        item = self.ui.layout_nuevas_row.itemAt(i)
-        if isinstance(item, QHBoxLayout) and row_to_delete["name_label"] in [item.itemAt(j).widget() for j in range(item.count())]:
-            layout_to_remove = self.ui.layout_nuevas_row.takeAt(i)
-            # Delete all widgets inside the layout
-            while layout_to_remove.count():
-                item = layout_to_remove.takeAt(0)
-                widget = item.widget()
-                if widget:
-                    widget.deleteLater()  # Ensure Qt properly removes it
-            del layout_to_remove
-            break
+#     # Remove the row's layout from the VLayout
+#     for i in range(self.ui.layout_nuevas_row.count()):
+#         item = self.ui.layout_nuevas_row.itemAt(i)
+#         if isinstance(item, QHBoxLayout) and row_to_delete["name_label"] in [item.itemAt(j).widget() for j in range(item.count())]:
+#             layout_to_remove = self.ui.layout_nuevas_row.takeAt(i)
+#             # Delete all widgets inside the layout
+#             while layout_to_remove.count():
+#                 item = layout_to_remove.takeAt(0)
+#                 widget = item.widget()
+#                 if widget:
+#                     widget.deleteLater()  # Ensure Qt properly removes it
+#             del layout_to_remove
+#             break
 
-    # Remove from tracking list
-    self.dynamic_layouts.remove(row_to_delete)
-    self.historial_agregados -= 1
-    self.ui.tab1_list_trapecios_existentes.takeItem(int(trapecio_para_borrar[1])-1)
-
-
-    self.ui.tab1_list_trapecios_existentes.clear()
-    for index, row in enumerate(reversed(self.dynamic_layouts)):
-        # Ajusta name_label de todos los trapecios
-        row["name_label"].setText(f"T{index+1}\t    ")
-
-        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
-        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+#     # Remove from tracking list
+#     self.dynamic_layouts.remove(row_to_delete)
+#     self.historial_agregados -= 1
+#     self.ui.tab1_list_trapecios_existentes.takeItem(int(trapecio_para_borrar[1])-1)
 
 
+#     self.ui.tab1_list_trapecios_existentes.clear()
+#     for index, row in enumerate(reversed(self.dynamic_layouts)):
+#         # Ajusta name_label de todos los trapecios
+#         row["name_label"].setText(f"T{index+1}\t    ")
 
-    print(f"Se elimina trapecio correctamente")
+#         # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+#         self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+
+
+
+#     print(f"Se elimina trapecio correctamente")

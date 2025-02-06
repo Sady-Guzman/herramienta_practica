@@ -781,7 +781,14 @@ def add_cordon(self):
     #     # Elimina el último item si es el vertical stretcher
     #     item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
     #     del item
-    # este layout se usa en TAB1, No deberia modificarse, Se mantiene en caso de necesitarlo
+    # # este layout se usa en TAB1, No deberia modificarse, Se mantiene en caso de necesitarlo
+
+
+    # diametros_en_db = db_recuperar_diametros_cordones()
+    # ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
+    # if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
+    #     popup_msg("Solo hay 4 tipos de cordones en base de datos")
+    #     return 
 
     # Determine the new column index using the number of existing cordones
     index = len(self.dynamic_cordones_arm_act)
