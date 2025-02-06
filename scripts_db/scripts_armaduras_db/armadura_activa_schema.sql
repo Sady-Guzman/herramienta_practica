@@ -1,4 +1,4 @@
-    CREATE TABLE propiedades_armadura_activa (
+CREATE TABLE propiedades_armadura_activa (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_comun TEXT,
     acero_completo TEXT,
