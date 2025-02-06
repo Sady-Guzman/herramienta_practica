@@ -777,10 +777,11 @@ def armact_get_cotas_borrar(self):
 
 def add_cordon(self):
     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
-    if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
-        # Elimina el último item si es el vertical stretcher
-        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-        del item
+    # if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+    #     # Elimina el último item si es el vertical stretcher
+    #     item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+    #     del item
+    # este layout se usa en TAB1, No deberia modificarse, Se mantiene en caso de necesitarlo
 
     # Determine the new column index using the number of existing cordones
     index = len(self.dynamic_cordones_arm_act)

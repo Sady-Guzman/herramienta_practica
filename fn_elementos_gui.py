@@ -113,37 +113,8 @@ def confirmar_borrar(self):
         del_rows(self)
     
 
-''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
-# def del_rows(self):
 
-#     trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
-#     print(f"Trapecio para borrar: Label completo {trapecio_para_borrar} -- Numero Label: {trapecio_para_borrar[1]}, Pos en Vlayout(cant-label): {self.historial_agregados - int(trapecio_para_borrar[1])}")
-#     print(f"La cantidad de Hlayouts existentes en Vlayout Antes de hacer delete: {self.historial_agregados}")
-
-
-#     for row in self.dynamic_layouts:
-#         if row["name_label"].text().strip() == trapecio_para_borrar:
-#             print(f"bi_line value: {row['bi_line'].text()}")
-#             print(f"bs_line value: {row['bs_line'].text()}")
-#             print(f"h_line value: {row['altura_line'].text()}")
-
-#             # Posicion de Hlayout que se desea borrar dentro de Vlayout que contiene a Hlayouts que representan cada trapecio
-#             # self.historial_agregados --> Cantidad total de trapecios (rows o Layouts) que existen actualmente en Vlayout
-#             layout_para_borrar = self.ui.layout_nuevas_row.takeAt(self.historial_agregados - int(trapecio_para_borrar[1]))
-
-#             if layout_para_borrar.layout():
-#                 delete_layout_widgets(self, layout_para_borrar.layout())  # Elimina los widgets dentro del layout primero
-#                 self.dynamic_layouts.pop(int(trapecio_para_borrar[1])-1)  # Elimina el primer elemento de la lista de layouts dinámicos
-
-#                 self.ui.tab1_list_trapecios_existentes.takeItem(int(trapecio_para_borrar[1])-1)
-
-
-#             self.historial_agregados -= 1 # Resta 1 row de variable que cuenta la cantidad de layouts dynamicos existentes
-#             return
-
-#     print("Error: No se encuentra trapecio que se quiere borrar.")
-#     return # If not found
-
+''' Elimina trapecio seleccionado en ListWidget '''
 def del_rows(self):
     """ Deletes the corresponding row from VLayout based on the label text. """
     
@@ -179,18 +150,56 @@ def del_rows(self):
     self.historial_agregados -= 1
     self.ui.tab1_list_trapecios_existentes.takeItem(int(trapecio_para_borrar[1])-1)
 
-    for index, row in enumerate(reversed(self.dynamic_layouts)):
-        row["name_label"].setText(f"T{index+1}\t    ")
-
-    ''' Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo '''
-    # Limpia ListWidget. Luego itera sobre Labels Existentes en rows de Vlayout, Los asigna a ListWidget (str limpios)
-    # self.ui.tab1_list_trapecios_existentes.addItem(f"T{index}")
 
     self.ui.tab1_list_trapecios_existentes.clear()
-    # for item in self.ui.tab1_list_trapecios_existentes:
-        # self.ui.tab1_list_trapecios_existentes.takeItem(item)
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Ajusta name_label de todos los trapecios
+        row["name_label"].setText(f"T{index+1}\t    ")
+
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+
+
 
     print(f"Se elimina trapecio correctamente")
+
+
+
+''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
+def del_all_trapecios(self):
+    index = 99 # Se asegura de borrar todos los trapecios
+    
+    # Determina cuántos borrar, usando min() para asegurar que no intente borrar más de lo que existe
+    num_rows = min(index, self.historial_agregados)
+    if num_rows == 0:
+        return
+
+    # print("DEBUG - del_rows > Cantidad a eliminar value: ", num_rows)  # Debug
+
+    ''' Elimina el vertical stretcher temporalmente '''
+    if self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+        del item  # Remove the stretcher
+
+    ''' Itera para eliminar layouts de forma inversa '''
+    for _ in range(num_rows):
+        if self.ui.layout_nuevas_row.count() > 0:
+            # Toma el último elemento (último layout añadido)
+            last_item = self.ui.layout_nuevas_row.takeAt(0)  # Cambiar a `0` para eliminar el primer elemento (último visualmente debido a la inversión)
+
+            # Comprueba que el item sea un layout antes de eliminarlo
+            if last_item.layout():
+                delete_layout_widgets(self, last_item.layout())  # Elimina los widgets dentro del layout primero
+            del last_item  # Elimina el layout
+
+            # Elimina referencia al layout dinámico (último visualmente)
+            self.dynamic_layouts.pop(0)  # Elimina el primer elemento de la lista de layouts dinámicos
+
+    # Decrementa el contador de layouts dinámicos existentes
+    self.historial_agregados -= num_rows
+
+    # Vuelve a agregar el vertical stretcher al final para mantener la estructura
+    self.ui.layout_nuevas_row.addStretch()
 
 
 ''' Elimina los widgets dentro de un layout '''
@@ -209,7 +218,8 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
     # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
     # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
     print("ajustar_layouts_dinamicos() -> valor cantidad_trapecios: ", cantidad_trapecios)
-    del_rows(self, 99) # No pide confirmacion
+    # del_rows(self, 99) # No pide confirmacion
+    del_all_trapecios(self)
 
     ''' Loop to create the frames '''
     for i in range(cantidad_trapecios):
@@ -296,6 +306,12 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)
 
+    ''' Anade todos los trapecios a listWidget que se usa para borrar'''
+    self.ui.tab1_list_trapecios_existentes.clear()
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+
 
 
 
@@ -331,6 +347,11 @@ def aplicar_pieza_de_dynamic(self):
         calcular_nuevos_valores(self)
     except:
         print("No existe datos para self.dyn_layout_data[pieza_seccion]... Por lo tanto se asume pieza temporal")
+    
+    self.ui.tab1_list_trapecios_existentes.clear()
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
         
 
     

@@ -146,20 +146,6 @@ class MyDialog(QDialog):
 
 
 
-
-    ''' === === === '''
-    # self.ui.tab1_list_trapecios_existentes # Is the listWidget containing the name_labels of existing rows
-    def find_row_by_label(self, target_label):
-        print("SE INVOCA find_row_by_label()")
-        for row in self.dynamic_layouts:
-            if row["name_label"].text().strip() == target_label:
-                print(f"bi_line value: {row['bi_line'].text()}")
-                print(f"bs_line value: {row['bs_line'].text()}")
-                print(f"h_line value: {row['altura_line'].text()}")
-                # return row  # Return the matching row dictionary
-                # Should Delete the found row
-        return # If not found
-
     ''' ====================================================================================================================================================== '''
 
     # Boton aplicar seccion
