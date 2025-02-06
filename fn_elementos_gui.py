@@ -95,6 +95,9 @@ def add_rows(self, index):
     ''' Incrementa el contador de filas creadas dinámicamente '''
     self.historial_agregados += 1
 
+    ''' Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo '''
+    self.ui.tab1_list_trapecios_existentes.addItem(f"T{index}")
+
 
 ''' mensaje POP UP '''
 def confirmar_borrar(self, index):

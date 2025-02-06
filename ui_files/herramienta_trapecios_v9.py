@@ -17,9 +17,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QListView, QListWidget, QListWidgetItem, QPushButton,
-    QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
-    QVBoxLayout, QWidget)
+    QListWidget, QListWidgetItem, QPushButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
+    QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -271,9 +271,9 @@ class Ui_Dialog(object):
         self.btn_salto_linea = QPushButton(self.tab)
         self.btn_salto_linea.setObjectName(u"btn_salto_linea")
         self.btn_salto_linea.setGeometry(QRect(10, 540, 100, 32))
-        self.tab1_list_trapecios_existentes = QListView(self.tab)
+        self.tab1_list_trapecios_existentes = QListWidget(self.tab)
         self.tab1_list_trapecios_existentes.setObjectName(u"tab1_list_trapecios_existentes")
-        self.tab1_list_trapecios_existentes.setGeometry(QRect(650, 10, 221, 121))
+        self.tab1_list_trapecios_existentes.setGeometry(QRect(650, 10, 201, 121))
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")

@@ -429,12 +429,12 @@
       <string>PushButton</string>
      </property>
     </widget>
-    <widget class="QListView" name="tab1_list_trapecios_existentes">
+    <widget class="QListWidget" name="tab1_list_trapecios_existentes">
      <property name="geometry">
       <rect>
        <x>650</x>
        <y>10</y>
-       <width>221</width>
+       <width>201</width>
        <height>121</height>
       </rect>
      </property>
