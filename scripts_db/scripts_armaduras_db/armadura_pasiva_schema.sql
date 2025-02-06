@@ -7,26 +7,28 @@
 
 CREATE TABLE IF NOT EXISTS apasiva_tipos (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre_tipo TEXT,
+    nombre_tipo TEXT
+);
+
+
+CREATE TABLE  IF NOT EXISTS apasiva_usos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre_uso TEXT
 );
 
 CREATE TABLE  IF NOT EXISTS apasiva_materiales (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
-    nombre_material TEXT,
-};
-
-CREATE TABLE  IF NOT EXISTS apasiva_usos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT
-    nombre_uso TEXT,
-};
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nombre_material TEXT
+);
 
 -- Inserts de valores que existen en jacena para pantalla de Armaduras Pasivas
 
 INSERT INTO apasiva_tipos (nombre_tipo)
     VALUES ("Barra Corrugada"), ("Cerco"), ("Malla");
 
-INSERT INTO apasiva_tipos (nombre_material)
-    VALUES ("Barra Corrugada"), ("Cerco"), ("Malla");
 
-INSERT INTO apasiva_tipos (nombre_uso)
+INSERT INTO apasiva_usos (nombre_uso)
     VALUES ("Flexión"), ("Cortante"), ("Varios"), ("Flexión Aleta"), ("Cortante Aleta");
+
+INSERT INTO apasiva_materiales (nombre_material)
+    VALUES ("A63-42H"), ("AT56-50H"), ("ASTM-416"), ("ASTM-421");
