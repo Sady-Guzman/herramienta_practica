@@ -89,6 +89,7 @@ def add_rows(self, index):
         "cg_line": cg_line,
         "inercia_line": inercia_line,
         "op_line": op_line,
+        "name_label": name_label, # Para identificar trapecios
     })
 
     ''' Incrementa el contador de filas creadas dinámicamente '''

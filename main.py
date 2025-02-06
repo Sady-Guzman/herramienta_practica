@@ -103,7 +103,9 @@ class MyDialog(QDialog):
         ) # Elimina Dynamic Row
 
 
-        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
+        # self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
+        self.ui.btn_salto_linea.clicked.connect(lambda: self.find_row_by_label("T2")) # BTN Salto linea par adebug
+        
         
         
         
@@ -222,6 +224,20 @@ class MyDialog(QDialog):
             self.ui.tab2_btn_valores.setDefault(True)
             self.ui.tab2_btn_valores.setAutoDefault(True)
             print("index 1. btn2 default")
+    
+    ''' ==== '''
+    # tab1_list_trapecios_existentes
+
+    def find_row_by_label(self, target_label):
+        print("SE INVOCA find_row_by_label()")
+        for row in self.dynamic_layouts:
+            if row["name_label"].text().strip() == target_label:
+                # print(row)
+                print(f"bi_line value: {row['bi_line'].text()}")
+                print(f"bs_line value: {row['bs_line'].text()}")
+                print(f"h_line value: {row['altura_line'].text()}")
+                return row  # Return the matching row dictionary
+        return None  # If not found
 
         
 

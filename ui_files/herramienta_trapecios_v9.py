@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'herramienta_trapecios_v8.ui'
+## Form generated from reading UI file 'herramienta_trapecios_v9.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.1
 ##
@@ -17,9 +17,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
-    QListWidget, QListWidgetItem, QPushButton, QSizePolicy,
-    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
-    QWidget)
+    QListView, QListWidget, QListWidgetItem, QPushButton,
+    QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
+    QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -41,7 +41,7 @@ class Ui_Dialog(object):
         self.tab.setObjectName(u"tab")
         self.btn_save_pieza = QPushButton(self.tab)
         self.btn_save_pieza.setObjectName(u"btn_save_pieza")
-        self.btn_save_pieza.setGeometry(QRect(0, 591, 221, 31))
+        self.btn_save_pieza.setGeometry(QRect(10, 591, 221, 31))
         self.btn_save_pieza.setAutoDefault(False)
         self.verticalLayoutWidget_5 = QWidget(self.tab)
         self.verticalLayoutWidget_5.setObjectName(u"verticalLayoutWidget_5")
@@ -55,7 +55,7 @@ class Ui_Dialog(object):
 
         self.label_guardar_pieza = QLabel(self.tab)
         self.label_guardar_pieza.setObjectName(u"label_guardar_pieza")
-        self.label_guardar_pieza.setGeometry(QRect(0, 570, 221, 21))
+        self.label_guardar_pieza.setGeometry(QRect(10, 570, 221, 21))
         self.horizontalLayoutWidget = QWidget(self.tab)
         self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
         self.horizontalLayoutWidget.setGeometry(QRect(290, 210, 751, 31))
@@ -104,7 +104,7 @@ class Ui_Dialog(object):
 
         self.verticalLayoutWidget_4 = QWidget(self.tab)
         self.verticalLayoutWidget_4.setObjectName(u"verticalLayoutWidget_4")
-        self.verticalLayoutWidget_4.setGeometry(QRect(910, 10, 131, 116))
+        self.verticalLayoutWidget_4.setGeometry(QRect(950, 10, 131, 116))
         self.Vlayout_resultados = QVBoxLayout(self.verticalLayoutWidget_4)
         self.Vlayout_resultados.setObjectName(u"Vlayout_resultados")
         self.Vlayout_resultados.setContentsMargins(0, 0, 0, 0)
@@ -134,39 +134,39 @@ class Ui_Dialog(object):
 
         self.gridLayoutWidget = QWidget(self.tab)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(290, 10, 259, 91))
+        self.gridLayoutWidget.setGeometry(QRect(290, 10, 337, 91))
         self.Glayout_edita_tuplas = QGridLayout(self.gridLayoutWidget)
         self.Glayout_edita_tuplas.setObjectName(u"Glayout_edita_tuplas")
         self.Glayout_edita_tuplas.setContentsMargins(0, 0, 0, 0)
-        self.label_cant_eliminar = QLabel(self.gridLayoutWidget)
-        self.label_cant_eliminar.setObjectName(u"label_cant_eliminar")
-
-        self.Glayout_edita_tuplas.addWidget(self.label_cant_eliminar, 0, 1, 1, 1)
-
         self.spin_cant_agregar = QSpinBox(self.gridLayoutWidget)
         self.spin_cant_agregar.setObjectName(u"spin_cant_agregar")
 
         self.Glayout_edita_tuplas.addWidget(self.spin_cant_agregar, 1, 0, 1, 1)
 
-        self.btn_acpt_eliminar = QPushButton(self.gridLayoutWidget)
-        self.btn_acpt_eliminar.setObjectName(u"btn_acpt_eliminar")
+        self.label_cant_agregar = QLabel(self.gridLayoutWidget)
+        self.label_cant_agregar.setObjectName(u"label_cant_agregar")
 
-        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_eliminar, 2, 1, 1, 1)
-
-        self.btn_acpt_agregar = QPushButton(self.gridLayoutWidget)
-        self.btn_acpt_agregar.setObjectName(u"btn_acpt_agregar")
-
-        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_agregar, 2, 0, 1, 1)
+        self.Glayout_edita_tuplas.addWidget(self.label_cant_agregar, 0, 0, 1, 1)
 
         self.spin_cant_eliminar = QSpinBox(self.gridLayoutWidget)
         self.spin_cant_eliminar.setObjectName(u"spin_cant_eliminar")
 
         self.Glayout_edita_tuplas.addWidget(self.spin_cant_eliminar, 1, 1, 1, 1)
 
-        self.label_cant_agregar = QLabel(self.gridLayoutWidget)
-        self.label_cant_agregar.setObjectName(u"label_cant_agregar")
+        self.btn_acpt_eliminar = QPushButton(self.gridLayoutWidget)
+        self.btn_acpt_eliminar.setObjectName(u"btn_acpt_eliminar")
 
-        self.Glayout_edita_tuplas.addWidget(self.label_cant_agregar, 0, 0, 1, 1)
+        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_eliminar, 2, 1, 1, 1)
+
+        self.label_cant_eliminar = QLabel(self.gridLayoutWidget)
+        self.label_cant_eliminar.setObjectName(u"label_cant_eliminar")
+
+        self.Glayout_edita_tuplas.addWidget(self.label_cant_eliminar, 0, 1, 1, 1)
+
+        self.btn_acpt_agregar = QPushButton(self.gridLayoutWidget)
+        self.btn_acpt_agregar.setObjectName(u"btn_acpt_agregar")
+
+        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_agregar, 2, 0, 1, 1)
 
         self.btn_calcular_nuevos_valores = QPushButton(self.tab)
         self.btn_calcular_nuevos_valores.setObjectName(u"btn_calcular_nuevos_valores")
@@ -240,7 +240,7 @@ class Ui_Dialog(object):
 
         self.verticalLayoutWidget_3 = QWidget(self.tab)
         self.verticalLayoutWidget_3.setObjectName(u"verticalLayoutWidget_3")
-        self.verticalLayoutWidget_3.setGeometry(QRect(790, 10, 121, 121))
+        self.verticalLayoutWidget_3.setGeometry(QRect(880, 10, 71, 121))
         self.Vlayout_label_resultados = QVBoxLayout(self.verticalLayoutWidget_3)
         self.Vlayout_label_resultados.setObjectName(u"Vlayout_label_resultados")
         self.Vlayout_label_resultados.setContentsMargins(0, 0, 0, 0)
@@ -270,7 +270,10 @@ class Ui_Dialog(object):
 
         self.btn_salto_linea = QPushButton(self.tab)
         self.btn_salto_linea.setObjectName(u"btn_salto_linea")
-        self.btn_salto_linea.setGeometry(QRect(610, 20, 100, 32))
+        self.btn_salto_linea.setGeometry(QRect(10, 540, 100, 32))
+        self.tab1_list_trapecios_existentes = QListView(self.tab)
+        self.tab1_list_trapecios_existentes.setObjectName(u"tab1_list_trapecios_existentes")
+        self.tab1_list_trapecios_existentes.setGeometry(QRect(650, 10, 221, 121))
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
@@ -512,7 +515,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -531,10 +534,10 @@ class Ui_Dialog(object):
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Inf", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
-        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar trapecios", None))
-        self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar", None))
-        self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
         self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar trapecios", None))
+        self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar", None))
+        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar trapecios", None))
+        self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
         self.btn_calcular_nuevos_valores.setText(QCoreApplication.translate("Dialog", u"Calcular nuevos valores", None))
         self.btn_usar_pieza_catalogo.setText(QCoreApplication.translate("Dialog", u"Usar pieza catalogo", None))
         self.btn_usar_pieza_usuario.setText(QCoreApplication.translate("Dialog", u"Usar pieza usuario", None))
