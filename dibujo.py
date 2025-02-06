@@ -2,6 +2,9 @@ import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 import random
+import os
+
+DB_DIR = os.path.join(os.path.dirname(__file__), "databases")
 
 # Genera colores en gradientes de verde
 def color_personalizado():
@@ -20,11 +23,15 @@ def plot_trapecios(pieza_id, seccion, familia, modelo, es_creada):
 
     # conecta a DB dependiendo de flag
     if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
+        # conn = sqlite3.connect("catalogo.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
     else:
-        conn = sqlite3.connect("piezas_creadas.db")
+        # conn = sqlite3.connect("piezas_creadas.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
 
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
+    
     print(pieza_id, seccion)
     cursor.execute("SELECT base_inf, base_sup, altura FROM trapecios WHERE pieza_id = ? AND tipo_seccion = ? ORDER BY posicion", (pieza_id, seccion))
     trapecios = cursor.fetchall()
