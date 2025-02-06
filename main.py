@@ -57,6 +57,9 @@ class MyDialog(QDialog):
         self.historial_agregados = 0 # Se usa para llevar la cuenta de cuantos layouts dinamicos hay generados actualmente
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
 
+        ''' ---------------------- '''
+        self.dynamic_apasiva_barras = [] # Guarda referencias de layouts generados dinamicamente como barras_corrugadas de armadura pasiva
+
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
         # self.es_catalogo = 3 # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query

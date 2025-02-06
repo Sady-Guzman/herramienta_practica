@@ -58,7 +58,7 @@ def add_rows(self, index):
     inercia_line.setObjectName(f"t{index}_inercia")
     op_line.setObjectName(f"t{index}_op")
 
-    ''' Haz que ciertos QLineEdits sean de solo lectura '''
+    ''' ciertos QLineEdits son de solo lectura '''
     area_line.setReadOnly(True)
     cg_line.setReadOnly(True)
     inercia_line.setReadOnly(True)
