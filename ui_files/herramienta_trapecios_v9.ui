@@ -207,52 +207,6 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="gridLayoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>290</x>
-       <y>10</y>
-       <width>337</width>
-       <height>91</height>
-      </rect>
-     </property>
-     <layout class="QGridLayout" name="Glayout_edita_tuplas">
-      <item row="1" column="0">
-       <widget class="QSpinBox" name="spin_cant_agregar"/>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_cant_agregar">
-        <property name="text">
-         <string>Agregar trapecios</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="spin_cant_eliminar"/>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="btn_acpt_eliminar">
-        <property name="text">
-         <string>Eliminar</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_cant_eliminar">
-        <property name="text">
-         <string>Eliminar trapecios</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QPushButton" name="btn_acpt_agregar">
-        <property name="text">
-         <string>Agregar</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
     <widget class="QPushButton" name="btn_calcular_nuevos_valores">
      <property name="geometry">
       <rect>
@@ -432,11 +386,79 @@
     <widget class="QListWidget" name="tab1_list_trapecios_existentes">
      <property name="geometry">
       <rect>
-       <x>650</x>
-       <y>10</y>
-       <width>201</width>
-       <height>121</height>
+       <x>410</x>
+       <y>20</y>
+       <width>131</width>
+       <height>81</height>
       </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_acpt_eliminar">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>70</y>
+       <width>131</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Eliminar Selección</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_cant_eliminar">
+     <property name="geometry">
+      <rect>
+       <x>405</x>
+       <y>100</y>
+       <width>141</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>10</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>*Elegir trapecio a eliminar</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_acpt_agregar">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>40</y>
+       <width>131</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Agregar Trapecio</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_cant_agregar">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>10</y>
+       <width>119</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>TRAPECIOS</string>
      </property>
     </widget>
    </widget>

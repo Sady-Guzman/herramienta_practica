@@ -15,7 +15,7 @@ from fn_crear_pieza import open_crear_pieza_dialog
 ''' Genera de manera dinamica tuplas para trapecios '''
 def generate_layout(self):
     # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-    num_rows = self.ui.spin_cant_agregar.value()
+    num_rows = 1
     # num_rows = 1 # BTN actua como agregar trapecios de Jacena en vez de usar spinBox
     print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
     tuplas_existentes = self.historial_agregados
@@ -118,7 +118,11 @@ def confirmar_borrar(self):
 def del_rows(self):
     """ Deletes the corresponding row from VLayout based on the label text. """
     
-    trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
+    try:
+        trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
+    except:
+        print("Error: No hay ningun trapecio seleccionado para eliminar.")
+        return
     # Find the matching row dynamically
     row_to_delete = None
     for row in self.dynamic_layouts:

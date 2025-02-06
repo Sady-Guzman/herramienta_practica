@@ -18,8 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFrame,
     QGridLayout, QHBoxLayout, QLabel, QLineEdit,
     QListWidget, QListWidgetItem, QPushButton, QSizePolicy,
-    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
-    QWidget)
+    QSpacerItem, QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -132,42 +131,6 @@ class Ui_Dialog(object):
 
         self.Vlayout_resultados.addWidget(self.result_sum_op)
 
-        self.gridLayoutWidget = QWidget(self.tab)
-        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(290, 10, 337, 91))
-        self.Glayout_edita_tuplas = QGridLayout(self.gridLayoutWidget)
-        self.Glayout_edita_tuplas.setObjectName(u"Glayout_edita_tuplas")
-        self.Glayout_edita_tuplas.setContentsMargins(0, 0, 0, 0)
-        self.spin_cant_agregar = QSpinBox(self.gridLayoutWidget)
-        self.spin_cant_agregar.setObjectName(u"spin_cant_agregar")
-
-        self.Glayout_edita_tuplas.addWidget(self.spin_cant_agregar, 1, 0, 1, 1)
-
-        self.label_cant_agregar = QLabel(self.gridLayoutWidget)
-        self.label_cant_agregar.setObjectName(u"label_cant_agregar")
-
-        self.Glayout_edita_tuplas.addWidget(self.label_cant_agregar, 0, 0, 1, 1)
-
-        self.spin_cant_eliminar = QSpinBox(self.gridLayoutWidget)
-        self.spin_cant_eliminar.setObjectName(u"spin_cant_eliminar")
-
-        self.Glayout_edita_tuplas.addWidget(self.spin_cant_eliminar, 1, 1, 1, 1)
-
-        self.btn_acpt_eliminar = QPushButton(self.gridLayoutWidget)
-        self.btn_acpt_eliminar.setObjectName(u"btn_acpt_eliminar")
-
-        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_eliminar, 2, 1, 1, 1)
-
-        self.label_cant_eliminar = QLabel(self.gridLayoutWidget)
-        self.label_cant_eliminar.setObjectName(u"label_cant_eliminar")
-
-        self.Glayout_edita_tuplas.addWidget(self.label_cant_eliminar, 0, 1, 1, 1)
-
-        self.btn_acpt_agregar = QPushButton(self.gridLayoutWidget)
-        self.btn_acpt_agregar.setObjectName(u"btn_acpt_agregar")
-
-        self.Glayout_edita_tuplas.addWidget(self.btn_acpt_agregar, 2, 0, 1, 1)
-
         self.btn_calcular_nuevos_valores = QPushButton(self.tab)
         self.btn_calcular_nuevos_valores.setObjectName(u"btn_calcular_nuevos_valores")
         self.btn_calcular_nuevos_valores.setGeometry(QRect(290, 180, 171, 32))
@@ -273,7 +236,31 @@ class Ui_Dialog(object):
         self.btn_salto_linea.setGeometry(QRect(10, 540, 100, 32))
         self.tab1_list_trapecios_existentes = QListWidget(self.tab)
         self.tab1_list_trapecios_existentes.setObjectName(u"tab1_list_trapecios_existentes")
-        self.tab1_list_trapecios_existentes.setGeometry(QRect(650, 10, 201, 121))
+        self.tab1_list_trapecios_existentes.setGeometry(QRect(410, 20, 131, 81))
+        self.btn_acpt_eliminar = QPushButton(self.tab)
+        self.btn_acpt_eliminar.setObjectName(u"btn_acpt_eliminar")
+        self.btn_acpt_eliminar.setGeometry(QRect(270, 70, 131, 32))
+        self.label_cant_eliminar = QLabel(self.tab)
+        self.label_cant_eliminar.setObjectName(u"label_cant_eliminar")
+        self.label_cant_eliminar.setGeometry(QRect(405, 100, 141, 22))
+        font1 = QFont()
+        font1.setFamilies([u"Verdana"])
+        font1.setPointSize(10)
+        font1.setBold(False)
+        font1.setItalic(False)
+        self.label_cant_eliminar.setFont(font1)
+        self.btn_acpt_agregar = QPushButton(self.tab)
+        self.btn_acpt_agregar.setObjectName(u"btn_acpt_agregar")
+        self.btn_acpt_agregar.setGeometry(QRect(270, 40, 131, 32))
+        self.label_cant_agregar = QLabel(self.tab)
+        self.label_cant_agregar.setObjectName(u"label_cant_agregar")
+        self.label_cant_agregar.setGeometry(QRect(290, 10, 119, 31))
+        font2 = QFont()
+        font2.setFamilies([u"Verdana"])
+        font2.setPointSize(15)
+        font2.setBold(False)
+        font2.setItalic(False)
+        self.label_cant_agregar.setFont(font2)
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
@@ -534,10 +521,6 @@ class Ui_Dialog(object):
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Inf", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
         self.label_op.setText(QCoreApplication.translate("Dialog", u"I+A*r^2", None))
-        self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar trapecios", None))
-        self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar", None))
-        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar trapecios", None))
-        self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar", None))
         self.btn_calcular_nuevos_valores.setText(QCoreApplication.translate("Dialog", u"Calcular nuevos valores", None))
         self.btn_usar_pieza_catalogo.setText(QCoreApplication.translate("Dialog", u"Usar pieza catalogo", None))
         self.btn_usar_pieza_usuario.setText(QCoreApplication.translate("Dialog", u"Usar pieza usuario", None))
@@ -552,6 +535,10 @@ class Ui_Dialog(object):
         self.label_sum_ponderado.setText(QCoreApplication.translate("Dialog", u"Y Inf: ", None))
         self.label_sum_op.setText(QCoreApplication.translate("Dialog", u"Inercia: ", None))
         self.btn_salto_linea.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
+        self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar Selecci\u00f3n", None))
+        self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"*Elegir trapecio a eliminar", None))
+        self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar Trapecio", None))
+        self.label_cant_agregar.setText(QCoreApplication.translate("Dialog", u"TRAPECIOS", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Tab 1", None))
         self.tab2_label_cota.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
         self.tab2_relleno_layout_armaduras.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
