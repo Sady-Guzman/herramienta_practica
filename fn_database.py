@@ -608,3 +608,51 @@ def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
 
     print(f"db_cantidad_cordones_tipo_cableado() -> contenido de consulta: {cotas}")
     return cotas
+
+''' ======================================================================================================================== '''
+
+def db_tipos_arm_pasiva():
+    ''' retorna todaos los tipos de armaduras pasivas '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_tipo FROM apasiva_tipos;
+        """
+        cursor.execute(query)
+        armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    print(f"db_tipos_arm_pasiva() -> contenido de consulta: {armaduras_pasivas}")
+    return armaduras_pasivas
+
+def db_materiales_arm_pasiva():
+    ''' retorna todaos los tipos de armaduras pasivas '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_material FROM apasiva_materiales;
+        """
+        cursor.execute(query)
+        armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    print(f"db_materiales_arm_pasiva() -> contenido de consulta: {armaduras_pasivas}")
+    return armaduras_pasivas

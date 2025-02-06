@@ -65,12 +65,14 @@ self.tab3_Vlayout_barras.addLayout(self.tab3_horizontal_layout)
         AT56-50H
 '''
 
+from fn_database import db_tipos_arm_pasiva, db_materiales_arm_pasiva
+
 
 def setup_armadura_pasiva(self):
     ''' Se ejecuta desde main cuando inicia app '''
     armpas_llenar_combo_ubicacion(self)
     # TODO Funcionalidad para tab3_btn_aplicar_ubicacion # --> Por ahora no se implementa funcionalidad para seleccion de ubicacion
-    armpas_llenar_combo_tipo_barras(self)
+    armpas_llenar_combos_materiales(self)
 
 
 
@@ -83,9 +85,12 @@ def armpas_llenar_combo_ubicacion(self):
     self.ui.tab3_combo_ubicacion.addItem("Apoyo Total")
     self.ui.tab3_combo_ubicacion.addItem("Apoyo Media Madera")
 
-def armpas_llenar_combo_tipo_barras(self):
+def armpas_llenar_combos_materiales(self):
     ''' Contenido se obtiene de base de datos '''
     ''' Hay mas materiales en Jacena, Joaquin indida solo usar A63-42H, AT56-50H '''
+    materiales_arm_pasiva = db_materiales_arm_pasiva()
 
-    self.ui.tab3_combo_tipo_barras.addItem("asd")
-    self.ui.tab3_combo_tipo_barras.addItem("qwe")
+    for i, tipo in enumerate(materiales_arm_pasiva):
+        self.ui.tab3_combo_tipo_barras.addItem(f"{materiales_arm_pasiva[i][0]}")
+        self.ui.tab3_combo_tipo_cercos.addItem(f"{materiales_arm_pasiva[i][0]}")
+        self.ui.tab3_combo_tipo_mallas.addItem(f"{materiales_arm_pasiva[i][0]}")

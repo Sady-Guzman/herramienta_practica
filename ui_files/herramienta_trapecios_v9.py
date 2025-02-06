@@ -395,10 +395,10 @@ class Ui_Dialog(object):
         self.tab3_label_ubicacion.setGeometry(QRect(10, 10, 71, 16))
         self.tab3_combo_ubicacion = QComboBox(self.tab_3)
         self.tab3_combo_ubicacion.setObjectName(u"tab3_combo_ubicacion")
-        self.tab3_combo_ubicacion.setGeometry(QRect(5, 30, 141, 32))
+        self.tab3_combo_ubicacion.setGeometry(QRect(5, 30, 181, 32))
         self.tab3_btn_apply_ubicacion = QPushButton(self.tab_3)
         self.tab3_btn_apply_ubicacion.setObjectName(u"tab3_btn_apply_ubicacion")
-        self.tab3_btn_apply_ubicacion.setGeometry(QRect(145, 30, 100, 32))
+        self.tab3_btn_apply_ubicacion.setGeometry(QRect(190, 30, 100, 32))
         self.tab3_btn_apply_tipo_barras = QPushButton(self.tab_3)
         self.tab3_btn_apply_tipo_barras.setObjectName(u"tab3_btn_apply_tipo_barras")
         self.tab3_btn_apply_tipo_barras.setGeometry(QRect(125, 90, 100, 32))
@@ -410,10 +410,10 @@ class Ui_Dialog(object):
         self.tab3_label_tipo_barras.setGeometry(QRect(50, 70, 161, 16))
         self.tab3_label_refuerzo = QLabel(self.tab_3)
         self.tab3_label_refuerzo.setObjectName(u"tab3_label_refuerzo")
-        self.tab3_label_refuerzo.setGeometry(QRect(260, 10, 211, 16))
+        self.tab3_label_refuerzo.setGeometry(QRect(360, 10, 211, 16))
         self.tab3_line_refuerzo = QLineEdit(self.tab_3)
         self.tab3_line_refuerzo.setObjectName(u"tab3_line_refuerzo")
-        self.tab3_line_refuerzo.setGeometry(QRect(310, 33, 101, 25))
+        self.tab3_line_refuerzo.setGeometry(QRect(410, 33, 101, 25))
         self.tab3_btn_apply_tipo_cercos = QPushButton(self.tab_3)
         self.tab3_btn_apply_tipo_cercos.setObjectName(u"tab3_btn_apply_tipo_cercos")
         self.tab3_btn_apply_tipo_cercos.setGeometry(QRect(355, 90, 100, 32))
@@ -502,7 +502,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
