@@ -226,11 +226,11 @@ class MyDialog(QDialog):
         if index == 0:
             self.ui.btn_calcular_nuevos_valores.setDefault(True)
             self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
-            print("index 0. btn default")
         elif index == 1:
             self.ui.tab2_btn_valores.setDefault(True)
             self.ui.tab2_btn_valores.setAutoDefault(True)
-            print("index 1. btn2 default")
+        elif index == 3:
+            self.ui.tab2_btn_guardar_valores.setDefault(True)
     
 
         
