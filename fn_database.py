@@ -707,7 +707,7 @@ def db_tipos_hormigon():
     finally:
         conn.close()
 
-    print(f"db_tipos_hormigon() -> contenido de consulta: {tipos_hormigon}")
+    # print(f"db_tipos_hormigon() -> contenido de consulta: {tipos_hormigon}")
     return tipos_hormigon
 
 
@@ -731,7 +731,7 @@ def db_id_tipo_hormigon_nombre(nombre_hormigon):
     finally:
         conn.close()
 
-    print(f"db_id_tipo_hormigon_nombre() -> contenido de consulta: {id_hormigon}")
+    # print(f"db_id_tipo_hormigon_nombre() -> contenido de consulta: {id_hormigon}")
     return id_hormigon
 
 
@@ -756,7 +756,7 @@ def db_resistencias_tipo_hormigon(tipo_hormigon):
     finally:
         conn.close()
 
-    print(f"db_resistencias_tipo_hormigon() -> contenido de consulta: {resistencias_hormigon}")
+    # print(f"db_resistencias_tipo_hormigon() -> contenido de consulta: {resistencias_hormigon}")
     return resistencias_hormigon
 
 
@@ -780,7 +780,7 @@ def db_densidades_tipo_hormigon(tipo_hormigon):
     finally:
         conn.close()
 
-    print(f"db_densidades_tipo_hormigon() -> contenido de consulta: {densidades}")
+    # print(f"db_densidades_tipo_hormigon() -> contenido de consulta: {densidades}")
     return densidades
 
 ''' from fn_database import db_tipos_hormigon, db_id_tipo_hormigon_nombre, db_resistencias_tipo_hormigon, db_densidades_tipo_hormigon '''

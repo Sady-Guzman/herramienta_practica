@@ -33,7 +33,7 @@ CREATE TABLE densidades(
 
 -- Inserts para tipos de hormigon existentes
 INSERT INTO tipos_hormigon(nombre_tipo)
-VALUES ("f'c 450/10"), ("f'c 350/20");
+VALUES ("f'c 450/10"), ("f'c 350/20"), ("f'c 450/20 DALLA"), ("f'c 450/20 ALV"), ("f'c 500/20"), ("f'c 450/10 CAN"), ("f'c 400/20"), ("HA 25"), ("HP 50");
 
 -- Inserts para resistencias segun tipo hormigon
 INSERT INTO resistencias_hormigon(tipo_hormigon, fc_horm_ini_min, e_horm_ini_min, fc_horm_ini_max, e_horm_ini_max, fc_horm_final, e_horm_final, fc_horm_insitu, e_horm_insitu)
