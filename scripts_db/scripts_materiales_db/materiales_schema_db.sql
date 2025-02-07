@@ -1,13 +1,13 @@
 -- Creacion de tablas para base de datos materiales.db
 
 -- tipos de hormigon existentes disponibles
-CREATE TABLE tipo_hormigon(
+CREATE TABLE tipos_hormigon(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     nombre_tipo TEXT UNIQUE
 );
 
 -- Datos para correspondiente f'_c (Resistecia hormigon), Para campos de Fck(f'c)(N/mm2) y E(N/mm2)
-CREATE TABLE resistencia_hormigon(
+CREATE TABLE resistencias_hormigon(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     tipo_hormigon INTEGER NOT NULL,
     fc_horm_ini_min REAL,
@@ -32,11 +32,11 @@ CREATE TABLE densidades(
 
 
 -- Inserts para tipos de hormigon existentes
-INSERT INTO tipo_hormigon(nombre_tipo)
+INSERT INTO tipos_hormigon(nombre_tipo)
 VALUES ("f'c 450/10"), ("f'c 350/20");
 
 -- Inserts para resistencias segun tipo hormigon
-INSERT INTO resistencia_hormigon(tipo_hormigon, fc_horm_ini_min, e_horm_ini_min, fc_horm_ini_max, e_horm_ini_max, fc_horm_final, e_horm_final, fc_horm_insitu, e_horm_insitu)
+INSERT INTO resistencias_hormigon(tipo_hormigon, fc_horm_ini_min, e_horm_ini_min, fc_horm_ini_max, e_horm_ini_max, fc_horm_final, e_horm_final, fc_horm_insitu, e_horm_insitu)
 VALUES 
 (1, 25, 23500, 35, 23500, 45, 31528, 25, 23500),
 (2, 20, 21019, 25, 21019, 35, 27806, 25, 23500);
