@@ -1033,6 +1033,9 @@
       </rect>
      </property>
      <layout class="QVBoxLayout" name="tab3_Vlayout_barras">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <item>
        <spacer name="tab3_Vspacer">
         <property name="orientation">
@@ -1077,7 +1080,7 @@
     <widget class="QLabel" name="tab3_label_uso">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>170</x>
        <y>210</y>
        <width>31</width>
        <height>16</height>
@@ -1090,7 +1093,7 @@
     <widget class="QLabel" name="tab3_label_n_min">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>280</x>
        <y>210</y>
        <width>58</width>
        <height>16</height>
@@ -1103,7 +1106,7 @@
     <widget class="QLabel" name="tab3_label_n_max">
      <property name="geometry">
       <rect>
-       <x>370</x>
+       <x>380</x>
        <y>210</y>
        <width>58</width>
        <height>16</height>
@@ -1116,7 +1119,7 @@
     <widget class="QLabel" name="tab3_label_d_min">
      <property name="geometry">
       <rect>
-       <x>450</x>
+       <x>465</x>
        <y>210</y>
        <width>81</width>
        <height>16</height>
@@ -1129,7 +1132,7 @@
     <widget class="QLabel" name="tab3_label_d_max">
      <property name="geometry">
       <rect>
-       <x>560</x>
+       <x>565</x>
        <y>210</y>
        <width>91</width>
        <height>16</height>
