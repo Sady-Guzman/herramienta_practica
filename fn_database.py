@@ -681,3 +681,106 @@ def db_usos_arm_pasiva():
 
     # print(f"db_usos_arm_pasiva() -> contenido de consulta: {usos_armaduras_pasivas}")
     return usos_armaduras_pasivas
+
+
+''' ============================================================================================================== '''
+'''    QUERIES para DB materiales.db     '''
+
+
+def db_tipos_hormigon():
+    ''' Obtiene todos los tipos de hormigon que hay disponibles '''
+    ''' Tabla tipos_hormigon de materiales.db'''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM tipos_hormigon;
+        """
+        cursor.execute(query)
+        tipos_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        tipos_hormigon = 0
+    finally:
+        conn.close()
+
+    print(f"db_tipos_hormigon() -> contenido de consulta: {tipos_hormigon}")
+    return tipos_hormigon
+
+
+def db_id_tipo_hormigon_nombre(nombre_hormigon):
+    ''' Dado un nombre de un tipo de hormigon (str) se obtiene su id PK correspondiente '''
+    ''' Resultado se usa para queries donde ID es PK en otra tabla '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT id FROM tipos_hormigon WHERE nombre_tipo = ?;
+        """
+        cursor.execute(query, (nombre_hormigon,))
+        id_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        id_hormigon = 0
+    finally:
+        conn.close()
+
+    print(f"db_id_tipo_hormigon_nombre() -> contenido de consulta: {id_hormigon}")
+    return id_hormigon
+
+
+
+def db_resistencias_tipo_hormigon(tipo_hormigon):
+    ''' Obtiene parametros de resistencias para un tipo de hormigon dado '''
+    ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en resistencias_hormigon '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM resistencias_hormigon WHERE tipo_hormigon = ?;
+        """
+        cursor.execute(query, (tipo_hormigon,))
+        resistencias_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        resistencias_hormigon = 0
+    finally:
+        conn.close()
+
+    print(f"db_resistencias_tipo_hormigon() -> contenido de consulta: {resistencias_hormigon}")
+    return resistencias_hormigon
+
+
+def db_densidades_tipo_hormigon(tipo_hormigon):
+    ''' Obtiene parametros de desidades HORMIGON/ACERO para un tipo de hormigon dado '''
+    ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en densidades '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM densidades WHERE tipo_hormigon = ?;
+        """
+        cursor.execute(query, (tipo_hormigon,))
+        densidades = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        densidades = 0
+    finally:
+        conn.close()
+
+    print(f"db_densidades_tipo_hormigon() -> contenido de consulta: {densidades}")
+    return densidades
+
+''' from fn_database import db_tipos_hormigon, db_id_tipo_hormigon_nombre, db_resistencias_tipo_hormigon, db_densidades_tipo_hormigon '''
