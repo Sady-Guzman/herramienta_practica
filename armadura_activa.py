@@ -32,6 +32,12 @@ def setup_armadura_activa(self):
 
     arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
 
+    ''' Parche a descuadre en primer cordon agergado '''
+    add_cordon(self)
+    add_cordon(self)
+    del_cordon(self)
+    del_cordon(self)
+
 
     self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
     # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
