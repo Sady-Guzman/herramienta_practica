@@ -624,15 +624,15 @@ def db_tipos_arm_pasiva():
         SELECT nombre_tipo FROM apasiva_tipos;
         """
         cursor.execute(query)
-        armaduras_pasivas = cursor.fetchall()
+        tipos_armaduras_pasivas = cursor.fetchall()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
-        armaduras_pasivas = 0
+        tipos_armaduras_pasivas = 0
     finally:
         conn.close()
 
-    print(f"db_tipos_arm_pasiva() -> contenido de consulta: {armaduras_pasivas}")
-    return armaduras_pasivas
+    print(f"db_tipos_arm_pasiva() -> contenido de consulta: {tipos_armaduras_pasivas}")
+    return tipos_armaduras_pasivas
 
 def db_materiales_arm_pasiva():
     ''' retorna todaos los tipos de armaduras pasivas '''
@@ -647,12 +647,37 @@ def db_materiales_arm_pasiva():
         SELECT nombre_material FROM apasiva_materiales;
         """
         cursor.execute(query)
-        armaduras_pasivas = cursor.fetchall()
+        materiales_armaduras_pasivas = cursor.fetchall()
     except sqlite3.Error as e:
         print(f"Database error: {e}")
-        armaduras_pasivas = 0
+        materiales_armaduras_pasivas = 0
     finally:
         conn.close()
 
-    print(f"db_materiales_arm_pasiva() -> contenido de consulta: {armaduras_pasivas}")
-    return armaduras_pasivas
+    # print(f"db_materiales_arm_pasiva() -> contenido de consulta: {materiales_armaduras_pasivas}")
+    return materiales_armaduras_pasivas
+
+
+def db_usos_arm_pasiva():
+    ''' retorna todos los usos de armaduras pasivas '''
+    ''' Flexion, Cortante, Varios, Flexion Aleta, Cortante Aleta '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_uso FROM apasiva_usos;
+        """
+        cursor.execute(query)
+        usos_armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        usos_armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    # print(f"db_usos_arm_pasiva() -> contenido de consulta: {usos_armaduras_pasivas}")
+    return usos_armaduras_pasivas

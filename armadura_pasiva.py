@@ -3,7 +3,7 @@ from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlain
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel, QComboBox
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from PySide6.QtCore import Qt
-from fn_database import db_tipos_arm_pasiva, db_materiales_arm_pasiva
+from fn_database import db_tipos_arm_pasiva, db_materiales_arm_pasiva, db_usos_arm_pasiva
 
 
 def setup_armadura_pasiva(self):
@@ -34,6 +34,22 @@ def armpas_llenar_combos_materiales(self):
         self.ui.tab3_combo_tipo_barras.addItem(f"{materiales_arm_pasiva[i][0]}")
         self.ui.tab3_combo_tipo_cercos.addItem(f"{materiales_arm_pasiva[i][0]}")
         self.ui.tab3_combo_tipo_mallas.addItem(f"{materiales_arm_pasiva[i][0]}")
+
+def armpas_llenar_combo_usos(self):
+    ''' Contenido se obtiene de base de datos'''
+    ''' Flexion, Cortante, Varios, Flexion Aleta, Cortante Aleta '''
+
+    usos_arm_pasiva = db_usos_arm_pasiva()
+    # print(f"Usos recuperados: {usos_arm_pasiva}\n\n")
+
+    ''' Asigna tipos de usos a comboBox de uso en posicion 3 de Horizontal Layout (["uso"]) '''
+    for index, barra in enumerate(self.dynamic_apasiva_barras):
+        barra = self.dynamic_apasiva_barras[index]
+
+        for j in range(len(usos_arm_pasiva)):
+            barra["uso"].addItem(usos_arm_pasiva[j][0])
+
+
 
 
 
@@ -104,8 +120,27 @@ def apasiva_add_barra_corrugada(self):
     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
     self.ui.tab3_Vlayout_barras.addStretch()
 
+    armpas_llenar_combo_usos(self, combo_pos2)
+
+def armpas_llenar_combo_usos(self, comboBox):
+    ''' Contenido se obtiene de base de datos'''
+    ''' Flexion, Cortante, Varios, Flexion Aleta, Cortante Aleta '''
+
+    usos_arm_pasiva = db_usos_arm_pasiva()
+    # print(f"Usos recuperados: {usos_arm_pasiva}\n\n")
+
+    for j in range(len(usos_arm_pasiva)):
+            comboBox.addItem(usos_arm_pasiva[j][0])
+
+    # ''' Recorre todos las barras y asigna en comboBox tipos de uso '''
+    # ''' Asigna tipos de usos a comboBox de uso en posicion 3 de Horizontal Layout (["uso"]) '''
+    # for index, barra in enumerate(self.dynamic_apasiva_barras):
+    #     barra = self.dynamic_apasiva_barras[index]
+
+    #     for j in range(len(usos_arm_pasiva)):
+    #         barra["uso"].addItem(usos_arm_pasiva[j][0])
+
 def apasiva_del_barra_corrugada(self):
-    ''' asd '''
     
     ''' Elimina el vertical stretcher temporalmente '''
     if self.ui.tab3_Vlayout_barras.itemAt(self.ui.tab3_Vlayout_barras.count() - 1).spacerItem():
