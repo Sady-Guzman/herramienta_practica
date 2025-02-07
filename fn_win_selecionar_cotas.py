@@ -16,11 +16,12 @@ class CotasDialog(QDialog):
         y_position = 60  # Variable de Offset inicial para agregrar CheckBoxes bajo de Label/Btns y espacio entre ellas
         self.setup_cotas(cotas, y_position)
 
-        # Adjust window size
+
+        # Ajusta tamano ventana
         self.adjustSize()
         self.setMinimumSize(380, 340)
 
-        # Connect buttons
+        # Conecta btns
         self.ui_cotas.btn_aceptar.clicked.connect(self.aceptar)
         self.ui_cotas.btn_cancelar.clicked.connect(self.cancelar)
 
@@ -57,7 +58,7 @@ class AddCotasTesteroDialog(CotasDialog):
         for cota in cotas_testero:
             checkBox = QCheckBox(f"{cota[0]:.3f}", self)
 
-            # Disable checkbox if the cota already exists or exceeds the height limit
+            ''' sombrea checkbox si la cota ya existe en GUI o si es mas alta que la altura de la pieza '''
             if cota[0] > self.altura_pieza or cota[0] in self.cotas_existentes:
                 checkBox.setDisabled(True)
 

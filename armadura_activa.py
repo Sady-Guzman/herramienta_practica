@@ -32,6 +32,12 @@ def setup_armadura_activa(self):
 
     arm_act_poblar_combo_testeros(self) # Carga comboTesteros al inicio, Los testeros son universales para todas las piezas
 
+    ''' Parche a descuadre en primer cordon agergado '''
+    add_cordon(self)
+    add_cordon(self)
+    del_cordon(self)
+    del_cordon(self)
+
 
     self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
     # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
@@ -777,10 +783,17 @@ def armact_get_cotas_borrar(self):
 
 def add_cordon(self):
     ''' Maneja vertical stretcher para solo tener 1 y que siempre esté abajo '''
-    if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
-        # Elimina el último item si es el vertical stretcher
-        item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
-        del item
+    # if self.ui.layout_nuevas_row.count() > 0 and self.ui.layout_nuevas_row.itemAt(self.ui.layout_nuevas_row.count() - 1).spacerItem():
+    #     # Elimina el último item si es el vertical stretcher
+    #     item = self.ui.layout_nuevas_row.takeAt(self.ui.layout_nuevas_row.count() - 1)
+    #     del item
+    # este layout se usa en TAB1, No deberia modificarse, Se mantiene en caso de necesitarlo
+
+    diametros_en_db = db_recuperar_diametros_cordones()
+    ''' Se asegura de que no se generen mas cordones de la cantidad de tipos de cordones que existen en DB '''
+    if len(self.dynamic_cordones_arm_act) >= len(diametros_en_db):
+        popup_msg("Solo hay 4 tipos de cordones en base de datos")
+        return 
 
     # Determine the new column index using the number of existing cordones
     index = len(self.dynamic_cordones_arm_act)
@@ -870,9 +883,9 @@ def add_cordon(self):
     self.ui.gridLayout.setColumnStretch(index, 1)
 
     # Ensure that the layout grows with the new column
-    self.ui.gridLayoutWidget.adjustSize()
-    self.ui.gridLayoutWidget.resize(self.ui.gridLayoutWidget.sizeHint())
-    self.ui.gridLayoutWidget.setMinimumSize(self.ui.gridLayoutWidget.sizeHint())
+    # self.ui.gridLayoutWidget.adjustSize()
+    # self.ui.gridLayoutWidget.resize(self.ui.gridLayoutWidget.sizeHint())
+    # self.ui.gridLayoutWidget.setMinimumSize(self.ui.gridLayoutWidget.sizeHint())
 
     # Update the dynamic data structures
     self.dynamic_diametros_arm_act.append(combo)

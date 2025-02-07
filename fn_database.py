@@ -1,4 +1,8 @@
 import sqlite3
+import os
+
+# Define PATH a carpeta para bases de datos
+DB_DIR = os.path.join(os.path.dirname(__file__), "databases")
 
 def db_cargar_familias_modelos(self, tipo_db):
     """
@@ -10,9 +14,10 @@ def db_cargar_familias_modelos(self, tipo_db):
     """
 
     if tipo_db == True:
-        db_path = 'catalogo.db' 
+        db_path = os.path.join(DB_DIR, "catalogo.db")
     else:
-        db_path = 'piezas_creadas.db'
+        # db_path = 'piezas_creadas.db'
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
     
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -45,9 +50,11 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
     print("db_cargar_tipos_secciones() -> valor es_creada: ", es_creada, "\n")
 
     if es_creada == False:
-        db_path = 'catalogo.db' 
+        # db_path = 'catalogo.db' 
+        db_path = os.path.join(DB_DIR, "catalogo.db")
     else:
-        db_path = 'piezas_creadas.db'
+        # db_path = 'piezas_creadas.db'
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
     
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -91,9 +98,14 @@ def db_get_datos_trapecios(pieza_id, seccion, es_creada):
     '''
 
     if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
+        # conn = sqlite3.connect("catalogo.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
+        conn = sqlite3.connect(db_path)
     else:
-        conn = sqlite3.connect("piezas_creadas.db")
+        # conn = sqlite3.connect("piezas_creadas.db")
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     print("pieza_id = " ,pieza_id)
@@ -123,9 +135,13 @@ def db_get_cant_trapecios(pieza_id, seccion, es_creada):
     '''
 
     if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
+        # conn = sqlite3.connect("catalogo.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
     else:
-        conn = sqlite3.connect("piezas_creadas.db")
+        # conn = sqlite3.connect("piezas_creadas.db")
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     print("pieza_id = " ,pieza_id)
@@ -156,9 +172,13 @@ def db_get_id_pieza(familia, modelo, es_creada):
 
     # Connect to the database
     if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
+        # conn = sqlite3.connect("catalogo.db")
     else:
-        conn = sqlite3.connect("piezas_creadas.db")
+        # conn = sqlite3.connect("piezas_creadas.db")
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -213,7 +233,9 @@ def db_iniciar_database(db_path):
     Args:
         db_path (str): Path al archivo base de datos (ej., 'catalogo.db').
     """
-    connection = sqlite3.connect(db_path)
+
+    db_path_con_dir = os.path.join(DB_DIR, db_path)    
+    connection = sqlite3.connect(db_path_con_dir)
     cursor = connection.cursor()
 
     # Revisa si existe la relacion
@@ -285,7 +307,10 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
         Funcion usada por btn guardar pieza temporal a base de datos. En caso de ser una pieza nueva hace INSERT.
         en caso de ya existir y se este haciedo una modificacion, hace UPDATE
     '''
-    conn = sqlite3.connect('piezas_creadas.db')
+    
+    db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+    conn = sqlite3.connect(db_path)
+    # conn = sqlite3.connect('piezas_creadas.db')
     cursor = conn.cursor()
 
     familia, modelo = pieza_data
@@ -324,11 +349,13 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 '''
 def db_get_all_trapecios_data(pieza_id, es_creada):
     if es_creada == False:
-        conn = sqlite3.connect("catalogo.db")
+        db_path = os.path.join(DB_DIR, "catalogo.db")
+        # conn = sqlite3.connect("catalogo.db")
     else:
-        conn = sqlite3.connect("piezas_creadas.db")
-    cursor = conn.cursor()
+        # conn = sqlite3.connect("piezas_creadas.db")
+        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
 
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     print(f"en db_get_all_trapecio_data() ---> value pieza_id: {pieza_id} ,,, value es_creada: {es_creada}")
@@ -363,7 +390,10 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
 
 def db_recuperar_diametros_cordones():
     ''' Retorna la cantidad de tuplas que hay en tabla propiedades_armadura_activa en armaduras.db '''
-    conn = sqlite3.connect("armaduras.db")
+    
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
+    # conn = sqlite3.connect("armaduras.db")
     cursor = conn.cursor()
 
     try:
@@ -382,7 +412,10 @@ def db_recuperar_diametros_cordones():
 
 
 def db_area_cordon(diametro):
-    conn = sqlite3.connect("armaduras.db")
+
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -403,7 +436,9 @@ def db_area_cordon(diametro):
 
 ''' Consulta cotas existente en testero seleccionado en ComboBox '''
 def db_cotas_testero(testero):
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -422,7 +457,9 @@ def db_cotas_testero(testero):
 
 ''' fetch los testeros distintos en tabla testeros '''
 def db_testeros_existentes():
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -444,7 +481,9 @@ def db_testeros_existentes():
 def db_tipos_cableado_pieza(familia, modelo):
     ''' Obtiene los tipos de cableado que existen como Preset para una pieza '''
 
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     # print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}")
@@ -465,7 +504,9 @@ def db_tipos_cableado_pieza(familia, modelo):
 def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
     " Usando familia, modelo, y seleccion en comboBox obtiene ID correspondiente a ese tipo de cableado para esa pieza "
     
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}, seleccion es: {seleccion}\n\n\n\n")
@@ -489,7 +530,9 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
 def db_cables_tipo_cableado(tipo_cableado, familia, modelo):
     ''' usa ID de tipo cableado obtenido de cableado_tipos y compara en col tipo_cableado de cableado_cables '''
 
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -517,7 +560,9 @@ def db_cables_tipo_cableado(tipo_cableado, familia, modelo):
 def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
     ''' Usa como parametro ID de cableado_tipos '''
 
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -541,7 +586,9 @@ def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
 def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
     ''' Usa como parametro ID de cableado_tipos '''
 
-    conn = sqlite3.connect("armaduras.db")
+    # conn = sqlite3.connect("armaduras.db")
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     try:
@@ -561,3 +608,179 @@ def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
 
     print(f"db_cantidad_cordones_tipo_cableado() -> contenido de consulta: {cotas}")
     return cotas
+
+''' ======================================================================================================================== '''
+
+def db_tipos_arm_pasiva():
+    ''' retorna todaos los tipos de armaduras pasivas '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_tipo FROM apasiva_tipos;
+        """
+        cursor.execute(query)
+        tipos_armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        tipos_armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    print(f"db_tipos_arm_pasiva() -> contenido de consulta: {tipos_armaduras_pasivas}")
+    return tipos_armaduras_pasivas
+
+def db_materiales_arm_pasiva():
+    ''' retorna todaos los tipos de armaduras pasivas '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_material FROM apasiva_materiales;
+        """
+        cursor.execute(query)
+        materiales_armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        materiales_armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    # print(f"db_materiales_arm_pasiva() -> contenido de consulta: {materiales_armaduras_pasivas}")
+    return materiales_armaduras_pasivas
+
+
+def db_usos_arm_pasiva():
+    ''' retorna todos los usos de armaduras pasivas '''
+    ''' Flexion, Cortante, Varios, Flexion Aleta, Cortante Aleta '''
+
+    db_path = os.path.join(DB_DIR, "armaduras.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT nombre_uso FROM apasiva_usos;
+        """
+        cursor.execute(query)
+        usos_armaduras_pasivas = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        usos_armaduras_pasivas = 0
+    finally:
+        conn.close()
+
+    # print(f"db_usos_arm_pasiva() -> contenido de consulta: {usos_armaduras_pasivas}")
+    return usos_armaduras_pasivas
+
+
+''' ============================================================================================================== '''
+'''    QUERIES para DB materiales.db     '''
+
+
+def db_tipos_hormigon():
+    ''' Obtiene todos los tipos de hormigon que hay disponibles '''
+    ''' Tabla tipos_hormigon de materiales.db'''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM tipos_hormigon;
+        """
+        cursor.execute(query)
+        tipos_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        tipos_hormigon = 0
+    finally:
+        conn.close()
+
+    # print(f"db_tipos_hormigon() -> contenido de consulta: {tipos_hormigon}")
+    return tipos_hormigon
+
+
+def db_id_tipo_hormigon_nombre(nombre_hormigon):
+    ''' Dado un nombre de un tipo de hormigon (str) se obtiene su id PK correspondiente '''
+    ''' Resultado se usa para queries donde ID es PK en otra tabla '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT id FROM tipos_hormigon WHERE nombre_tipo = ?;
+        """
+        cursor.execute(query, (nombre_hormigon,))
+        id_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        id_hormigon = 0
+    finally:
+        conn.close()
+
+    # print(f"db_id_tipo_hormigon_nombre() -> contenido de consulta: {id_hormigon}")
+    return id_hormigon
+
+
+
+def db_resistencias_tipo_hormigon(tipo_hormigon):
+    ''' Obtiene parametros de resistencias para un tipo de hormigon dado '''
+    ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en resistencias_hormigon '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM resistencias_hormigon WHERE tipo_hormigon = ?;
+        """
+        cursor.execute(query, (tipo_hormigon,))
+        resistencias_hormigon = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        resistencias_hormigon = 0
+    finally:
+        conn.close()
+
+    # print(f"db_resistencias_tipo_hormigon() -> contenido de consulta: {resistencias_hormigon}")
+    return resistencias_hormigon
+
+
+def db_densidades_tipo_hormigon(tipo_hormigon):
+    ''' Obtiene parametros de desidades HORMIGON/ACERO para un tipo de hormigon dado '''
+    ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en densidades '''
+    db_path = os.path.join(DB_DIR, "materiales.db")
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        query = """
+        SELECT * FROM densidades WHERE tipo_hormigon = ?;
+        """
+        cursor.execute(query, (tipo_hormigon,))
+        densidades = cursor.fetchall()
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        densidades = 0
+    finally:
+        conn.close()
+
+    # print(f"db_densidades_tipo_hormigon() -> contenido de consulta: {densidades}")
+    return densidades
+
+''' from fn_database import db_tipos_hormigon, db_id_tipo_hormigon_nombre, db_resistencias_tipo_hormigon, db_densidades_tipo_hormigon '''

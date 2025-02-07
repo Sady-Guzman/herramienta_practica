@@ -1,11 +1,13 @@
--- dependencias instaladas
+!ESTE ARCHIVO NO ES UN 'requirements.txt'
+-- dependencias usadas
 
 pip install
 - Numpy
-- PySide6 UI
+- PySide6 (Para GUI)
+- matplotlib
 
 - Enpaquetado con Pyinstaller
 
-- UI construida con QTdesigner
+- GUI construida con QTdesigner
 - Desarrollado usando Python Virtual Enviroment
 - Despues de crear Venv -> source venv/bin/activate

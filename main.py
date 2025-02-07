@@ -1,28 +1,36 @@
+#  IMPORTS DE DEPENDENCIAS
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QHBoxLayout, QLineEdit, QSpacerItem, QSizePolicy, QMessageBox, QComboBox, QGridLayout
 from PySide6.QtCore import Qt
-from ui_files.herramienta_trapecios_v9 import Ui_Dialog  # Import from the ui_files directory
-from fn_database import *
-from fn_calculo_propiedades import *
-from fn_update_gui import *
-from fn_elementos_gui import *
-from fn_crear_pieza import open_crear_pieza_dialog
-from fn_pieza_temporal import *
-from utils import popup_msg
-from armadura_activa import setup_armadura_activa
-import sqlite3
-import random
+from PySide6.QtWidgets import QDialog
+from PySide6.QtGui import QKeyEvent
+from PySide6.QtCore import Qt
+
 import matplotlib.pyplot as plt  # Add this import statement
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.patches import Polygon
+
+import sqlite3
+import random
+
+#  IMPORTS DE OTROS ARCHIVOS
+from ui_files.herramienta_trapecios_v10 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
+
+from fn_database import *
+from fn_calculo_propiedades import *
+from fn_update_gui import *
+from fn_elementos_gui import *
+
+from fn_crear_pieza import open_crear_pieza_dialog
+from fn_pieza_temporal import *
+from utils import popup_msg
 from dibujo import plot_trapecios
+from armadura_activa import setup_armadura_activa # TAB 2
+from armadura_pasiva import setup_armadura_pasiva # TAB 3
+from tab_materiales import setup_tab_materiales # TAB 4
 
-
-from PySide6.QtWidgets import QDialog
-from PySide6.QtGui import QKeyEvent
-from PySide6.QtCore import Qt
 
 
 
@@ -54,6 +62,9 @@ class MyDialog(QDialog):
         self.dynamic_layouts_data = []
         self.historial_agregados = 0 # Se usa para llevar la cuenta de cuantos layouts dinamicos hay generados actualmente
         self.valores_creacion = [] # Almacena valores ingresados por usuario en ventana de creacion de pieza
+
+        ''' ---------------------- '''
+        self.dynamic_apasiva_barras = [] # Guarda referencias de layouts generados dinamicamente como barras_corrugadas de armadura pasiva
 
         self.es_creada = False # identifica que boton se usa para poblar ComboBoxes de familia/modelo, y luego a cual db hacer query
         self.es_temporal = False # Se usa para saber si la pieza actual esta en base de datos o no (Maneja accion btn_acpt_tipo_seccion)
@@ -96,12 +107,14 @@ class MyDialog(QDialog):
 
         # conecta btn Elimina layouts dinamicos
         self.ui.btn_acpt_eliminar.clicked.connect(
-            # print("USA btn eliminar trapecio")
-            lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
+            # lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
+            lambda: confirmar_borrar(self)
         ) # Elimina Dynamic Row
 
 
         self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
+        # self.ui.btn_salto_linea.clicked.connect(lambda: self.find_row_by_label("T2")) # BTN Salto linea par adebug
+        
         
         
         
@@ -138,9 +151,8 @@ class MyDialog(QDialog):
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
-
-
-
+        setup_armadura_pasiva(self) # Inicia TAB3 (Armadura Pasiva)
+        setup_tab_materiales(self) # inicia TAB4 (Materiales)
 
 
 
@@ -214,11 +226,12 @@ class MyDialog(QDialog):
         if index == 0:
             self.ui.btn_calcular_nuevos_valores.setDefault(True)
             self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
-            print("index 0. btn default")
         elif index == 1:
             self.ui.tab2_btn_valores.setDefault(True)
             self.ui.tab2_btn_valores.setAutoDefault(True)
-            print("index 1. btn2 default")
+        elif index == 3:
+            self.ui.tab2_btn_guardar_valores.setDefault(True)
+    
 
         
 

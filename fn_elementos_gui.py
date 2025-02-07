@@ -15,7 +15,7 @@ from fn_crear_pieza import open_crear_pieza_dialog
 ''' Genera de manera dinamica tuplas para trapecios '''
 def generate_layout(self):
     # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
-    num_rows = self.ui.spin_cant_agregar.value()
+    num_rows = 1
     # num_rows = 1 # BTN actua como agregar trapecios de Jacena en vez de usar spinBox
     print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
     tuplas_existentes = self.historial_agregados
@@ -58,7 +58,7 @@ def add_rows(self, index):
     inercia_line.setObjectName(f"t{index}_inercia")
     op_line.setObjectName(f"t{index}_op")
 
-    ''' Haz que ciertos QLineEdits sean de solo lectura '''
+    ''' ciertos QLineEdits son de solo lectura '''
     area_line.setReadOnly(True)
     cg_line.setReadOnly(True)
     inercia_line.setReadOnly(True)
@@ -89,14 +89,18 @@ def add_rows(self, index):
         "cg_line": cg_line,
         "inercia_line": inercia_line,
         "op_line": op_line,
+        "name_label": name_label, # Para identificar trapecios
     })
 
     ''' Incrementa el contador de filas creadas dinámicamente '''
     self.historial_agregados += 1
 
+    ''' Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo '''
+    self.ui.tab1_list_trapecios_existentes.addItem(f"T{index}")
+
 
 ''' mensaje POP UP '''
-def confirmar_borrar(self, index):
+def confirmar_borrar(self):
     # Pide confirmacion de usuario antes de borrar layouts
     reply = QMessageBox.question(self, 'Confirmar', 
                                 "Confirmar acción?", 
@@ -106,12 +110,68 @@ def confirmar_borrar(self, index):
     if reply == QMessageBox.No:
         return 0
     else:
-        del_rows(self, index)
+        del_rows(self)
     
 
+
+''' Elimina trapecio seleccionado en ListWidget '''
+def del_rows(self):
+    """ Deletes the corresponding row from VLayout based on the label text. """
+    
+    try:
+        trapecio_para_borrar = self.ui.tab1_list_trapecios_existentes.currentItem().text()
+    except:
+        print("Error: No hay ningun trapecio seleccionado para eliminar.")
+        return
+    # Find the matching row dynamically
+    row_to_delete = None
+    for row in self.dynamic_layouts:
+
+        if row["name_label"].text().strip() == trapecio_para_borrar:
+            row_to_delete = row
+            break
+
+    if not row_to_delete:
+        print(f"Error: Could not find row with label {trapecio_para_borrar}")
+        return
+
+    # Remove the row's layout from the VLayout
+    for i in range(self.ui.layout_nuevas_row.count()):
+        item = self.ui.layout_nuevas_row.itemAt(i)
+        if isinstance(item, QHBoxLayout) and row_to_delete["name_label"] in [item.itemAt(j).widget() for j in range(item.count())]:
+            layout_to_remove = self.ui.layout_nuevas_row.takeAt(i)
+            # Delete all widgets inside the layout
+            while layout_to_remove.count():
+                item = layout_to_remove.takeAt(0)
+                widget = item.widget()
+                if widget:
+                    widget.deleteLater()  # Ensure Qt properly removes it
+            del layout_to_remove
+            break
+
+    # Remove from tracking list
+    self.dynamic_layouts.remove(row_to_delete)
+    self.historial_agregados -= 1
+    self.ui.tab1_list_trapecios_existentes.takeItem(int(trapecio_para_borrar[1])-1)
+
+
+    self.ui.tab1_list_trapecios_existentes.clear()
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Ajusta name_label de todos los trapecios
+        row["name_label"].setText(f"T{index+1}\t    ")
+
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+
+
+
+    print(f"Se elimina trapecio correctamente")
+
+
+
 ''' Elimina tuplas que fueron creadas dinamicamente dentro del layout vertical '''
-def del_rows(self, index):
-    # print("DEBUG del_rows() > valor de Index: ", index)
+def del_all_trapecios(self):
+    index = 99 # Se asegura de borrar todos los trapecios
     
     # Determina cuántos borrar, usando min() para asegurar que no intente borrar más de lo que existe
     num_rows = min(index, self.historial_agregados)
@@ -162,7 +222,8 @@ def ajustar_layouts_dinamicos(self, cantidad_trapecios):
     # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
     # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
     print("ajustar_layouts_dinamicos() -> valor cantidad_trapecios: ", cantidad_trapecios)
-    del_rows(self, 99) # No pide confirmacion
+    # del_rows(self, 99) # No pide confirmacion
+    del_all_trapecios(self)
 
     ''' Loop to create the frames '''
     for i in range(cantidad_trapecios):
@@ -249,6 +310,12 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     calcular_nuevos_valores(self)
 
+    ''' Anade todos los trapecios a listWidget que se usa para borrar'''
+    self.ui.tab1_list_trapecios_existentes.clear()
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
+
 
 
 
@@ -284,6 +351,11 @@ def aplicar_pieza_de_dynamic(self):
         calcular_nuevos_valores(self)
     except:
         print("No existe datos para self.dyn_layout_data[pieza_seccion]... Por lo tanto se asume pieza temporal")
+    
+    self.ui.tab1_list_trapecios_existentes.clear()
+    for index, row in enumerate(reversed(self.dynamic_layouts)):
+        # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
+        self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
         
 
     

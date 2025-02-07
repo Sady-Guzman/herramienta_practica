@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'herramienta_trapecios_v9.ui'
+## Form generated from reading UI file 'herramienta_trapecios_v10.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.1
 ##
@@ -500,10 +500,186 @@ class Ui_Dialog(object):
         self.tab3_horizontal_line.setFrameShape(QFrame.Shape.HLine)
         self.tab3_horizontal_line.setFrameShadow(QFrame.Shadow.Sunken)
         self.tabWidget.addTab(self.tab_3, "")
+        self.tab_4 = QWidget()
+        self.tab_4.setObjectName(u"tab_4")
+        self.tab4_label_caracteristicas_horm = QLabel(self.tab_4)
+        self.tab4_label_caracteristicas_horm.setObjectName(u"tab4_label_caracteristicas_horm")
+        self.tab4_label_caracteristicas_horm.setGeometry(QRect(10, 10, 221, 31))
+        self.tab4_label_caracteristicas_horm.setFont(font2)
+        self.gridLayoutWidget = QWidget(self.tab_4)
+        self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
+        self.gridLayoutWidget.setGeometry(QRect(10, 70, 303, 151))
+        self.tab4_gridLayout_fc = QGridLayout(self.gridLayoutWidget)
+        self.tab4_gridLayout_fc.setObjectName(u"tab4_gridLayout_fc")
+        self.tab4_gridLayout_fc.setContentsMargins(0, 0, 0, 0)
+        self.tab4_grid_horm_relleno = QLabel(self.gridLayoutWidget)
+        self.tab4_grid_horm_relleno.setObjectName(u"tab4_grid_horm_relleno")
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_grid_horm_relleno, 0, 0, 1, 1)
+
+        self.tab4_label_horm_final = QLabel(self.gridLayoutWidget)
+        self.tab4_label_horm_final.setObjectName(u"tab4_label_horm_final")
+        self.tab4_label_horm_final.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_horm_final, 3, 0, 1, 1)
+
+        self.tab4_label_grid_e = QLabel(self.gridLayoutWidget)
+        self.tab4_label_grid_e.setObjectName(u"tab4_label_grid_e")
+        font3 = QFont()
+        font3.setFamilies([u"Verdana"])
+        font3.setPointSize(14)
+        font3.setBold(False)
+        font3.setItalic(False)
+        self.tab4_label_grid_e.setFont(font3)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_grid_e, 0, 2, 1, 1)
+
+        self.tab4_label_horm_min = QLabel(self.gridLayoutWidget)
+        self.tab4_label_horm_min.setObjectName(u"tab4_label_horm_min")
+        self.tab4_label_horm_min.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_horm_min, 1, 0, 1, 1)
+
+        self.tab4_label_horm_max = QLabel(self.gridLayoutWidget)
+        self.tab4_label_horm_max.setObjectName(u"tab4_label_horm_max")
+        self.tab4_label_horm_max.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_horm_max, 2, 0, 1, 1)
+
+        self.tab4_label_grid_fc = QLabel(self.gridLayoutWidget)
+        self.tab4_label_grid_fc.setObjectName(u"tab4_label_grid_fc")
+        self.tab4_label_grid_fc.setFont(font3)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_grid_fc, 0, 1, 1, 1)
+
+        self.tab4_label_horm_insitu = QLabel(self.gridLayoutWidget)
+        self.tab4_label_horm_insitu.setObjectName(u"tab4_label_horm_insitu")
+        self.tab4_label_horm_insitu.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_label_horm_insitu, 4, 0, 1, 1)
+
+        self.tab4_line_horm_min_fc = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_min_fc.setObjectName(u"tab4_line_horm_min_fc")
+        self.tab4_line_horm_min_fc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_min_fc, 1, 1, 1, 1)
+
+        self.tab4_line_horm_min_e = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_min_e.setObjectName(u"tab4_line_horm_min_e")
+        self.tab4_line_horm_min_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_min_e, 1, 2, 1, 1)
+
+        self.tab4_line_horm_max_fc = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_max_fc.setObjectName(u"tab4_line_horm_max_fc")
+        self.tab4_line_horm_max_fc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_max_fc, 2, 1, 1, 1)
+
+        self.tab4_line_horm_max_e = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_max_e.setObjectName(u"tab4_line_horm_max_e")
+        self.tab4_line_horm_max_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_max_e, 2, 2, 1, 1)
+
+        self.tab4_line_horm_final_fc = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_final_fc.setObjectName(u"tab4_line_horm_final_fc")
+        self.tab4_line_horm_final_fc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_final_fc, 3, 1, 1, 1)
+
+        self.tab4_line_horm_final_e = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_final_e.setObjectName(u"tab4_line_horm_final_e")
+        self.tab4_line_horm_final_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_final_e, 3, 2, 1, 1)
+
+        self.tab4_line_horm_insitu_fc = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_insitu_fc.setObjectName(u"tab4_line_horm_insitu_fc")
+        self.tab4_line_horm_insitu_fc.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_insitu_fc, 4, 1, 1, 1)
+
+        self.tab4_line_horm_insitu_e = QLineEdit(self.gridLayoutWidget)
+        self.tab4_line_horm_insitu_e.setObjectName(u"tab4_line_horm_insitu_e")
+        self.tab4_line_horm_insitu_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_insitu_e, 4, 2, 1, 1)
+
+        self.horizontalLayoutWidget_2 = QWidget(self.tab_4)
+        self.horizontalLayoutWidget_2.setObjectName(u"horizontalLayoutWidget_2")
+        self.horizontalLayoutWidget_2.setGeometry(QRect(10, 40, 311, 32))
+        self.tab4_horizontalLayout_tipo_hormigon = QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.tab4_horizontalLayout_tipo_hormigon.setObjectName(u"tab4_horizontalLayout_tipo_hormigon")
+        self.tab4_horizontalLayout_tipo_hormigon.setContentsMargins(0, 0, 0, 0)
+        self.tab4_label_tipo_horm = QLabel(self.horizontalLayoutWidget_2)
+        self.tab4_label_tipo_horm.setObjectName(u"tab4_label_tipo_horm")
+        self.tab4_label_tipo_horm.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab4_horizontalLayout_tipo_hormigon.addWidget(self.tab4_label_tipo_horm)
+
+        self.tab4_combo_tipo_horm = QComboBox(self.horizontalLayoutWidget_2)
+        self.tab4_combo_tipo_horm.setObjectName(u"tab4_combo_tipo_horm")
+        self.tab4_combo_tipo_horm.setMinimumSize(QSize(0, 0))
+
+        self.tab4_horizontalLayout_tipo_hormigon.addWidget(self.tab4_combo_tipo_horm)
+
+        self.tab4_horizontalLayout_tipo_hormigon.setStretch(0, 1)
+        self.tab4_horizontalLayout_tipo_hormigon.setStretch(1, 2)
+        self.gridLayoutWidget_4 = QWidget(self.tab_4)
+        self.gridLayoutWidget_4.setObjectName(u"gridLayoutWidget_4")
+        self.gridLayoutWidget_4.setGeometry(QRect(330, 40, 211, 84))
+        self.gridLayout_2 = QGridLayout(self.gridLayoutWidget_4)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.tab4_label_dens_acero = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_dens_acero.setObjectName(u"tab4_label_dens_acero")
+
+        self.gridLayout_2.addWidget(self.tab4_label_dens_acero, 2, 0, 1, 1)
+
+        self.tab4_label_wc = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_wc.setObjectName(u"tab4_label_wc")
+        font4 = QFont()
+        font4.setFamilies([u"Verdana"])
+        font4.setPointSize(16)
+        font4.setBold(False)
+        font4.setItalic(False)
+        self.tab4_label_wc.setFont(font4)
+
+        self.gridLayout_2.addWidget(self.tab4_label_wc, 0, 0, 1, 1)
+
+        self.tab4_label_dens_horm = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_dens_horm.setObjectName(u"tab4_label_dens_horm")
+
+        self.gridLayout_2.addWidget(self.tab4_label_dens_horm, 1, 0, 1, 1)
+
+        self.tab4_line_dens_horm = QLineEdit(self.gridLayoutWidget_4)
+        self.tab4_line_dens_horm.setObjectName(u"tab4_line_dens_horm")
+
+        self.gridLayout_2.addWidget(self.tab4_line_dens_horm, 1, 1, 1, 1)
+
+        self.tab4_line_dens_acero = QLineEdit(self.gridLayoutWidget_4)
+        self.tab4_line_dens_acero.setObjectName(u"tab4_line_dens_acero")
+
+        self.gridLayout_2.addWidget(self.tab4_line_dens_acero, 2, 1, 1, 1)
+
+        self.tab4_label_temporal2 = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_temporal2.setObjectName(u"tab4_label_temporal2")
+
+        self.gridLayout_2.addWidget(self.tab4_label_temporal2, 0, 1, 1, 1)
+
+        self.tab4_label_temporal = QLabel(self.tab_4)
+        self.tab4_label_temporal.setObjectName(u"tab4_label_temporal")
+        self.tab4_label_temporal.setGeometry(QRect(550, 10, 221, 51))
+        self.tab4_label_temporal.setFont(font4)
+        self.tab2_btn_guardar_valores = QPushButton(self.tab_4)
+        self.tab2_btn_guardar_valores.setObjectName(u"tab2_btn_guardar_valores")
+        self.tab2_btn_guardar_valores.setGeometry(QRect(330, 190, 211, 32))
+        self.tabWidget.addTab(self.tab_4, "")
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(3)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -587,5 +763,23 @@ class Ui_Dialog(object):
         self.tab3_label_cercos.setText(QCoreApplication.translate("Dialog", u"CERCOS", None))
         self.tab3_label_mallas.setText(QCoreApplication.translate("Dialog", u"MALLAS", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Dialog", u"Arm. Pasiva", None))
+        self.tab4_label_caracteristicas_horm.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas del Hormig\u00f3n", None))
+        self.tab4_grid_horm_relleno.setText("")
+        self.tab4_label_horm_final.setText(QCoreApplication.translate("Dialog", u"Hor.Pref. Final", None))
+        self.tab4_label_grid_e.setText(QCoreApplication.translate("Dialog", u"E(N/mm2)", None))
+        self.tab4_label_horm_min.setText(QCoreApplication.translate("Dialog", u"Hor.Pref.Inic.(min)", None))
+        self.tab4_label_horm_max.setText(QCoreApplication.translate("Dialog", u"Hor.Pref.inic.(max)", None))
+        self.tab4_label_grid_fc.setText(QCoreApplication.translate("Dialog", u"F'c(N/mm2)", None))
+        self.tab4_label_horm_insitu.setText(QCoreApplication.translate("Dialog", u"Hor.In-Situ", None))
+        self.tab4_line_horm_min_e.setText("")
+        self.tab4_label_tipo_horm.setText(QCoreApplication.translate("Dialog", u"Tipo Hormig\u00f3n", None))
+        self.tab4_label_dens_acero.setText(QCoreApplication.translate("Dialog", u"Dens.Acero(kN/m3)", None))
+        self.tab4_label_wc.setText(QCoreApplication.translate("Dialog", u"Wc ", None))
+        self.tab4_label_dens_horm.setText(QCoreApplication.translate("Dialog", u"Dens.Horm.(kN/m3)", None))
+        self.tab4_line_dens_horm.setText("")
+        self.tab4_label_temporal2.setText(QCoreApplication.translate("Dialog", u"(kN/m3)", None))
+        self.tab4_label_temporal.setText(QCoreApplication.translate("Dialog", u"(Confirmar labels Joaquin)", None))
+        self.tab2_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Guardar valores", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("Dialog", u"Materiales", None))
     # retranslateUi
 
