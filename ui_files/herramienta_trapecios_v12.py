@@ -499,6 +499,9 @@ class Ui_Dialog(object):
         self.tab3_horizontal_line.setGeometry(QRect(20, 490, 841, 16))
         self.tab3_horizontal_line.setFrameShape(QFrame.Shape.HLine)
         self.tab3_horizontal_line.setFrameShadow(QFrame.Shadow.Sunken)
+        self.tab3_btn_calcular = QPushButton(self.tab_3)
+        self.tab3_btn_calcular.setObjectName(u"tab3_btn_calcular")
+        self.tab3_btn_calcular.setGeometry(QRect(939, 10, 141, 32))
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
@@ -682,9 +685,9 @@ class Ui_Dialog(object):
 
         self.tab4_gridLayout_densidades.addWidget(self.tab4_line_dens_concreto, 3, 1, 1, 1)
 
-        self.tab2_btn_guardar_valores = QPushButton(self.tab_4)
-        self.tab2_btn_guardar_valores.setObjectName(u"tab2_btn_guardar_valores")
-        self.tab2_btn_guardar_valores.setGeometry(QRect(360, 190, 211, 32))
+        self.tab4_btn_guardar_valores = QPushButton(self.tab_4)
+        self.tab4_btn_guardar_valores.setObjectName(u"tab4_btn_guardar_valores")
+        self.tab4_btn_guardar_valores.setGeometry(QRect(360, 190, 211, 32))
         self.tab4_instrucciones1 = QLabel(self.tab_4)
         self.tab4_instrucciones1.setObjectName(u"tab4_instrucciones1")
         self.tab4_instrucciones1.setGeometry(QRect(770, 20, 311, 20))
@@ -1004,7 +1007,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(3)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1087,6 +1090,7 @@ class Ui_Dialog(object):
         self.tab3_label_longitud.setText(QCoreApplication.translate("Dialog", u"Longitud (m)", None))
         self.tab3_label_cercos.setText(QCoreApplication.translate("Dialog", u"CERCOS", None))
         self.tab3_label_mallas.setText(QCoreApplication.translate("Dialog", u"MALLAS", None))
+        self.tab3_btn_calcular.setText(QCoreApplication.translate("Dialog", u"Agregar a calculo", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Dialog", u"Arm. Pasiva", None))
         self.tab4_label_caracteristicas_horm.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas del Hormig\u00f3n", None))
         self.tab4_grid_horm_relleno.setText("")
@@ -1104,7 +1108,7 @@ class Ui_Dialog(object):
         self.tab4_label_wc.setText("")
         self.tab4_label_dens_acero.setText(QCoreApplication.translate("Dialog", u"Dens. Acero(kN/m3)", None))
         self.tab4_label_dens_concreto.setText(QCoreApplication.translate("Dialog", u"Dens. Concreto(kg/m3) [wc]", None))
-        self.tab2_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Calcular con Wc", None))
+        self.tab4_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Calcular con Wc", None))
         self.tab4_instrucciones1.setText(QCoreApplication.translate("Dialog", u"*Dens. Concreto [wc] por defecto = 2400 (kg/m3)", None))
         self.tab4_instrucciones2.setText(QCoreApplication.translate("Dialog", u"Al seleccionar tipo de hormi\u00f3n en lista superior se asignan automaticamete valores para f'c ; Ec ; densidades en los campos.", None))
         self.tab4_instrucciones3.setText(QCoreApplication.translate("Dialog", u"Estos valores usan formula JACENA de Ec = 4700 * raiz(f'c).", None))

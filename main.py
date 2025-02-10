@@ -230,8 +230,10 @@ class MyDialog(QDialog):
         elif index == 1:
             self.ui.tab2_btn_valores.setDefault(True)
             self.ui.tab2_btn_valores.setAutoDefault(True)
+        elif index == 2:
+            self.ui.tab3_btn_calcular.setDefault(True)
         elif index == 3:
-            self.ui.tab2_btn_guardar_valores.setDefault(True)
+            self.ui.tab4_btn_guardar_valores.setDefault(True)
         elif index == 4:
             self.ui.tab5_btn_calcular.setDefault(True)
     
