@@ -11,6 +11,9 @@
     para guardar los valores ingresados por el usuario en los campos de cada variable.
 '''
 
+"""
+    ATENCION: update_tpi_values(self) usa valores por defecto para tpi segun cordon seleccionado que estan hardcoded (FIJOS). Ya que en documentacion general no se especifican tpi. Estos valores son tomados de JACENA
+"""
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
@@ -120,7 +123,7 @@ def arm_act_add_cota_tesero(self):
 
 def update_area_values(self):
     """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
-    print("update_area_values() -> Entra func \n")
+
     for index, combo in enumerate(self.dynamic_diametros_arm_act):
         if index in self.dynamic_cordones_arm_act:  # Ensure there's a corresponding cordon entry
             line_edit_area = self.dynamic_cordones_arm_act[index].get('area')
@@ -129,6 +132,27 @@ def update_area_values(self):
                 diametro_value = combo.currentText()
                 area_value = ac_transformar_area_cordon(self, diametro_value)
                 line_edit_area.setText(area_value)
+
+def update_tpi_values(self):
+    ''' Itera por las comboBoxes chekeando cual es el diametro seleccionado, En base a esto se asigna un valor TPI por defecto para todas las cotas del cordon '''
+    
+    ''' SE USA VALORES HARDCODEADOS PORQUE NO SE ESPECIFICAN VALORES TPI EN DOCUMENTACION GENERAL. '''
+    for index, combo in enumerate(self.dynamic_diametros_arm_act):
+        if index in self.dynamic_cordones_arm_act:  # Ensure there's a corresponding cordon entry
+            # line_edit_area = self.dynamic_cordones_arm_act[index].get('area')
+            line_edit_tpi = self.dynamic_cordones_arm_act[index].get('tpi')
+
+            # print(f"valor recuperado para line_edits_tpi: {line_edit_tpi}\n\n")
+
+            if line_edit_tpi:
+                diametro_value = combo.currentText()
+                if diametro_value == "Ø 4.98 mm":
+                    for i, tpi in enumerate(line_edit_tpi):
+                        line_edit_tpi[i].setText("1230")
+                else:
+                    for i, tpi in enumerate(line_edit_tpi):
+                        line_edit_tpi[i].setText("1400")
+
 
 
 def ac_transformar_area_cordon(self, diametro_cordon):
@@ -231,6 +255,7 @@ def arm_act_btn_calcular(self):
     update_area_values(self) # asigna area segun diametro cordon
     arm_act_cdg(self) # Centro de gravedad
     armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
+    update_tpi_values(self)
 
 
 

@@ -30,7 +30,7 @@ from dibujo import plot_trapecios
 from armadura_activa import setup_armadura_activa # TAB 2
 from armadura_pasiva import setup_armadura_pasiva # TAB 3
 from tab_materiales import setup_tab_materiales # TAB 4
-
+from tab_calculo_parcial import setup_tab_calc_parcial # TAB 5
 
 
 
@@ -153,6 +153,7 @@ class MyDialog(QDialog):
 
         setup_armadura_pasiva(self) # Inicia TAB3 (Armadura Pasiva)
         setup_tab_materiales(self) # inicia TAB4 (Materiales)
+        setup_tab_calc_parcial(self) # Inicia/maneja tab de Calculo Parcial (Tab5)
 
 
 
@@ -215,14 +216,14 @@ class MyDialog(QDialog):
 
 
 
-
+    ''' Maneja Btn por defecto segun TAB seleccinada '''
     def set_default_button(self, index):
-        # Remove default from all buttons first
+        # Remueve defecto de otras tabs primero
         self.ui.btn_calcular_nuevos_valores.setDefault(False)
         self.ui.tab2_btn_valores.setDefault(False)
         self.ui.tabWidget.widget(index).setFocus()
 
-        # Set default only for the current tab
+        # Asigna btn por defecto segun pestana seleccionada
         if index == 0:
             self.ui.btn_calcular_nuevos_valores.setDefault(True)
             self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
@@ -231,6 +232,8 @@ class MyDialog(QDialog):
             self.ui.tab2_btn_valores.setAutoDefault(True)
         elif index == 3:
             self.ui.tab2_btn_guardar_valores.setDefault(True)
+        elif index == 4:
+            self.ui.tab5_btn_calcular.setDefault(True)
     
 
         
