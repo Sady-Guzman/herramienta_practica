@@ -5,6 +5,7 @@ from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from PySide6.QtCore import Qt
 from fn_database import db_tipos_hormigon, db_id_tipo_hormigon_nombre, db_resistencias_tipo_hormigon, db_densidades_tipo_hormigon
 
+import math
 
 def setup_tab_materiales(self):
     ''' Se ejecuta desde main cuando inicia app '''
@@ -15,8 +16,10 @@ def setup_tab_materiales(self):
 
     # Cuando usuario elige un tipo distinto de hormigon, se actualizan los parametros de las resistencias
     self.ui.tab4_combo_tipo_horm.currentIndexChanged.connect(
-    lambda: (mat_fill_densidades_tipo_horm(self), mat_fill_resistencias_tipo_horm(self))
-)
+        lambda: (mat_fill_densidades_tipo_horm(self), mat_fill_resistencias_tipo_horm(self))
+    )
+
+    self.ui.tab2_btn_guardar_valores.clicked.connect(lambda: mat_calc_save_ec(self))
 
 
 
@@ -59,15 +62,20 @@ def mat_fill_resistencias_tipo_horm(self):
         self.ui.tab4_line_horm_max_fc.setText(str(tupla_resistencias[4]))
         self.ui.tab4_line_horm_max_e.setText(str(tupla_resistencias[5]))
         self.ui.tab4_line_horm_final_fc.setText(str(tupla_resistencias[6]))
-        self.ui.tab4_line_horm_final_e.setText(str(tupla_resistencias[6]))
-        self.ui.tab4_line_horm_insitu_fc.setText(str(tupla_resistencias[7]))
-        self.ui.tab4_line_horm_insitu_e.setText(str(tupla_resistencias[7]))
+        self.ui.tab4_line_horm_final_e.setText(str(tupla_resistencias[7]))
+        self.ui.tab4_line_horm_insitu_fc.setText(str(tupla_resistencias[8]))
+        self.ui.tab4_line_horm_insitu_e.setText(str(tupla_resistencias[9]))
     else:
         print(f"No se encuentran resistencias para id_hormigon: {id_hormigon}")
 
 
 def mat_fill_densidades_tipo_horm(self):
     ''' Llena LineEdits de densidades HORMIGON y ACERO en TAB4 materiales segun la seleccion de tipo de hormigon en comboBox '''
+    '''
+        * Densidad de hormigon depende de seleccion en ComboBox tipo hormigon
+        * Densidad de acero depende de seleccion en ComboBox tipo hormigon
+        * Densidad de concreto es siempre por defecto 2400 (kg/m3)
+    '''
     
     # id = [0]
     # tipo_hormigon (FOREIGN KEY) = [1]
@@ -88,8 +96,67 @@ def mat_fill_densidades_tipo_horm(self):
         
     else:
         print(f"No se encuentran densidades para id_hormigon: {id_hormigon}")
+    
+    print("Pantalla materiales -> Densidad de concreto es 2400 (kg/m3) por defecto.\n")
+    self.ui.tab4_line_dens_concreto.setText(str(2400))
 
 
 
+def mat_calc_save_ec(self):
+    ''' calculo el valor de E_c usando valores de W_c y f'c. Despues guarda en variables los nuevos valores '''
+    ''' Post-it naranja: 1440 (kg/m3) <= W_c <= 2560 (kg/m3) ''' # ?????
+
+    ''' Formula E_c = W_c^(1.5) * 0.043 * sqrt(f'c)'''
+    
+    try:
+        fc_pref_ini_min = float(self.ui.tab4_line_horm_min_fc.text())
+        fc_pref_ini_max = float(self.ui.tab4_line_horm_max_fc.text())
+        fc_pref_final = float(self.ui.tab4_line_horm_final_fc.text())
+        fc_insitu = float(self.ui.tab4_line_horm_insitu_fc.text())
+    except:
+        print("Falta asignar valor algun para f'c\n")
+        return
+    try:
+        valor_wc = float(self.ui.tab4_line_dens_concreto.text())
+    except:
+        print("Falta asignar valor para Wc\n")
+        return
 
 
+    print(f"**********\nValores en GUI para W_c {valor_wc}\n\n")
+    
+    
+
+    print(f"Valores para campos F'c")
+    print(f"\tF'c horm. pref. ini. MIN = {fc_pref_ini_min}")
+    print(f"\tF'c horm. pref. ini. MAX = {fc_pref_ini_max}")
+    print(f"\tF'c horm. pref. FINAL = {fc_pref_final}")
+    print(f"\tF'c horm. INSITU = {fc_insitu}\n")
+
+
+    ''' Calcula distintos Ec'''
+    # Horm. Pref. Ini. MIN
+    ec_horm_ini_min = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_min))
+    ec_horm_ini_min = round(ec_horm_ini_min, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_min})] = {ec_horm_ini_min}\n")
+
+    # Horm. Pref. Ini. MAX
+    ec_horm_ini_max = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_max))
+    ec_horm_ini_max = round(ec_horm_ini_max, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_max})] = {ec_horm_ini_max}\n")
+
+    # Horm. Pref. FINAL
+    ec_horm_final = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_final))
+    ec_horm_final = round(ec_horm_final, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_final})] = {ec_horm_final}\n")
+
+    # Horm. Insitu
+    ec_horm_insitu = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_insitu))
+    ec_horm_insitu = round(ec_horm_insitu, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_insitu})] = {ec_horm_insitu}\n")
+    
+    ''' Asigna rsultados a LineEdits'''
+    self.ui.tab4_line_horm_min_e.setText(str(ec_horm_ini_min))
+    self.ui.tab4_line_horm_max_e.setText(str(ec_horm_ini_max))
+    self.ui.tab4_line_horm_final_e.setText(str(ec_horm_final))
+    self.ui.tab4_line_horm_insitu_e.setText(str(ec_horm_insitu))
