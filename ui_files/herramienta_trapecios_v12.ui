@@ -598,9 +598,9 @@
     <widget class="QWidget" name="gridLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>899</x>
+       <x>879</x>
        <y>10</y>
-       <width>171</width>
+       <width>191</width>
        <height>116</height>
       </rect>
      </property>
@@ -628,7 +628,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="tab2_label_area_total">
         <property name="text">
-         <string>Area total:</string>
+         <string>Area total [cm2]:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -1218,6 +1218,29 @@
      </property>
      <property name="text">
       <string>Agregar a calculo</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_yinf_barras">
+     <property name="geometry">
+      <rect>
+       <x>880</x>
+       <y>80</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Yinf Barras:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab3_line_yinf_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>80</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
      </property>
     </widget>
    </widget>

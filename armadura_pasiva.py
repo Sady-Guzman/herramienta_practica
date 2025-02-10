@@ -21,12 +21,13 @@ def apasiva_calcular(self):
     ''' Solo imprime valores ingresados a campos dinamicos. No es necesario usar btn para anadir valores a calculo '''
     ''' placebo para usr '''
 
-    print("----------------  Arm. Pasiva  ----------------")
+    print("----------------  Datos Arm. Pasiva  ----------------")
     for index, barra in enumerate(self.dynamic_apasiva_barras):
         # print(f"VALOR BARRA {barra}")
         print(f"posicion: {barra['posicion'].text()}; Num_Min: {barra['n_min'].text()}; Diametro_min: {barra['diametro_min'].text()}")
     
-    sum_area = 0
+    
+    print("----------------  Areas Arm. Pasiva  ----------------")
     area_acumulada = 0
     area = 0
 
@@ -34,7 +35,86 @@ def apasiva_calcular(self):
         area = float(barra['n_min'].text()) * pow((float(barra['diametro_min'].text())/2000), 2) * math.pi
         area_acumulada += area
         print(f"valor area en posicion: {barra['posicion'].text()} es = {area}")
-        print(f"Valor de area acumulada = {area_acumulada}")
+        print(f"Valor de area acumulada = {area_acumulada}\n")
+    
+
+    print("----------------  Y_inf Arm. Pasiva  ----------------")
+    ''' Se calculo igual que centro de gravedad inferior para armaduras activas peros in tpi porque esta armadura no se tensa.'''
+
+    cant_barras = len(self.dynamic_apasiva_barras)
+    print(f"cantidad de barras: {cant_barras}")
+
+    numerador_acum = 0
+    denominador_acum = 0
+    # for barra in range(cant_barras):
+    try:
+        for _, barra in enumerate(self.dynamic_apasiva_barras):
+            numerador_barra_actual = (float(barra['n_min'].text()) * (float(barra['diametro_min'].text()) * float(barra['cota'].text())))
+            numerador_acum += numerador_barra_actual
+
+            print(f"Valor de barra actual numerador: {numerador_barra_actual}")
+
+            denominador_barra_actual = (float(barra['n_min'].text()) * float(barra['diametro_min'].text()))
+            denominador_acum += denominador_barra_actual
+        
+            print(f"Valor de barra actual denominador: {numerador_barra_actual}\n\n")
+
+
+        cdg_barras = numerador_acum / denominador_acum
+        print(f"resultado de CDG barras = {cdg_barras}")
+
+        self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
+    except:
+        print(f"Faltan datos en armadura pasiva para hacer calculo")
+
+
+# ''' --------------------------------------------------------------- '''
+
+#     numerador = 0
+#     numerador_acum = 0
+
+#     denominador = 0
+#     denominador_acum = 0
+
+#     cdg = 0
+
+#     ''' -------------------------------------'''
+#     ''' calculo SIN  TPI '''
+#     for y in range(cant_cotas):
+#         # print("\n")
+#         for x in range(cant_tipos_cordones):
+#             # print(f"**************** \nen cota:{y} en cordon:{x}\n")
+
+#             cordon = self.dynamic_cordones_arm_act.get(x)
+#             cota = self.dynamic_cotas[y].text()
+            
+#             area = cordon['area'].text()
+#             n_cords = cordon['num_cordones'][y].text()
+#             try:
+#                 numerador = (float(cota) * (float(n_cords))*float(area))
+#                 # print(f"Valor numerador: {numerador}")
+#                 numerador_acum += numerador
+#                 # print(f"Valor numerador acumulado: {numerador_acum}\n")
+
+#                 denominador = (float(area) * float(n_cords))
+#                 # print(f"valor de denominador: {denominador}")
+#                 denominador_acum += denominador
+#                 # print(f"valor de denominador acumulado: {denominador_acum}\n")
+#             except Exception as error:
+#                 print("Se encuentra error en calculo: ", error, "\n")
+    
+#     try:
+#         cdg = (numerador_acum / denominador_acum)
+#     except Exception as error:
+#         cdg = 0
+#         print("Se encuentra error en calculo: ", error, "\n")
+
+#     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
+#     print("\t\t\t RESULTADO CDG sin TPI")
+#     print(f"CDG = {cdg}\n\n\n")
+#     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
+
+# # ''' --------------------------------------------------------------- '''
 
 
 
