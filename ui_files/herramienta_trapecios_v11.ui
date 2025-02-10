@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>4</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -1428,7 +1428,7 @@
        <height>113</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2">
+     <layout class="QGridLayout" name="tab4_gridLayout_densidades">
       <item row="0" column="1">
        <widget class="QLabel" name="tab4_label_temporal2">
         <property name="text">
@@ -1579,7 +1579,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Para usar resultados de formula Wc^1.5 * 0.043 * raiz(f'c). &gt;&gt;Usar boton &quot;Calcular con Wc&quot;</string>
+      <string>Para usar resultados de formula Ec = Wc^1.5 * 0.043 * raiz(f'c). &gt;&gt;Usar boton &quot;Calcular con Wc&quot;</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -1590,21 +1590,21 @@
     <attribute name="title">
      <string>Calc. Parcial</string>
     </attribute>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QLineEdit" name="tab5_line_temp1">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>70</y>
+       <x>940</x>
+       <y>540</y>
        <width>113</width>
        <height>21</height>
       </rect>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="tab5_label_temp1">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>30</y>
+       <x>880</x>
+       <y>510</y>
        <width>181</width>
        <height>16</height>
       </rect>
@@ -1613,11 +1613,11 @@
       <string>Ingresar datos esfuerzo</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="tab5_label_temp2">
      <property name="geometry">
       <rect>
-       <x>50</x>
-       <y>70</y>
+       <x>870</x>
+       <y>540</y>
        <width>71</width>
        <height>16</height>
       </rect>
@@ -1626,11 +1626,11 @@
       <string>Momento:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="tab5_label_temp3">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>110</y>
+       <x>880</x>
+       <y>580</y>
        <width>61</width>
        <height>16</height>
       </rect>
@@ -1639,27 +1639,218 @@
       <string>Modulo:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lineEdit_2">
+    <widget class="QLineEdit" name="tab5_line_temp2">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>110</y>
+       <x>940</x>
+       <y>580</y>
        <width>113</width>
        <height>21</height>
       </rect>
      </property>
     </widget>
-    <widget class="Line" name="line">
+    <widget class="Line" name="tab5_horizontal_line_temp">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>90</y>
+       <x>940</x>
+       <y>560</y>
        <width>111</width>
        <height>20</height>
       </rect>
      </property>
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab5_titulo_caracteristicas">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>20</y>
+       <width>321</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>17</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Características mecánicas sección</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>70</y>
+       <width>361</width>
+       <height>109</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab5_gridLayout_caracteristicas">
+      <property name="spacing">
+       <number>-1</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab5_label_relleno_grid">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="tab5_label_simple_t0">
+        <property name="text">
+         <string>Simple t=0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="tab5_label_cdg">
+        <property name="text">
+         <string>Yinf</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="tab5_label_area">
+        <property name="text">
+         <string>Area</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="tab5_label_inercia">
+        <property name="text">
+         <string>Inercia</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="tab5_label_bruta">
+        <property name="text">
+         <string>Bruta t=0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="tab5_label_simple_t00">
+        <property name="text">
+         <string>Simple t=00</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab5_line_area_bruta">
+        <property name="maximumSize">
+         <size>
+          <width>100</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLineEdit" name="tab5_line_area_t0">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLineEdit" name="tab5_line_area_t00">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="tab5_line_cdg_bruta">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="tab5_line_cdg_t0">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLineEdit" name="tab5_line_cdg_t00">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="tab5_line_inercia_bruta">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="tab5_line_inercia_t0">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLineEdit" name="tab5_line_inercia_t00">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="tab5_btn_calcular">
+     <property name="geometry">
+      <rect>
+       <x>889</x>
+       <y>20</y>
+       <width>171</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Calcular características</string>
      </property>
     </widget>
    </widget>
