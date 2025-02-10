@@ -57,14 +57,14 @@ def mat_fill_resistencias_tipo_horm(self):
 
 
     if tupla_resistencias:  
-        # self.ui.tab4_line_horm_min_fc.setText(str(tupla_resistencias[2]))
+        self.ui.tab4_line_horm_min_fc.setText(str(tupla_resistencias[2]))
         self.ui.tab4_line_horm_min_e.setText(str(tupla_resistencias[3]))
         self.ui.tab4_line_horm_max_fc.setText(str(tupla_resistencias[4]))
         self.ui.tab4_line_horm_max_e.setText(str(tupla_resistencias[5]))
         self.ui.tab4_line_horm_final_fc.setText(str(tupla_resistencias[6]))
-        self.ui.tab4_line_horm_final_e.setText(str(tupla_resistencias[6]))
-        self.ui.tab4_line_horm_insitu_fc.setText(str(tupla_resistencias[7]))
-        self.ui.tab4_line_horm_insitu_e.setText(str(tupla_resistencias[7]))
+        self.ui.tab4_line_horm_final_e.setText(str(tupla_resistencias[7]))
+        self.ui.tab4_line_horm_insitu_fc.setText(str(tupla_resistencias[8]))
+        self.ui.tab4_line_horm_insitu_e.setText(str(tupla_resistencias[9]))
     else:
         print(f"No se encuentran resistencias para id_hormigon: {id_hormigon}")
 
@@ -104,12 +104,17 @@ def mat_fill_densidades_tipo_horm(self):
 
 def mat_calc_save_ec(self):
     ''' calculo el valor de E_c usando valores de W_c y f'c. Despues guarda en variables los nuevos valores '''
+    ''' Post-it naranja: 1440 (kg/m3) <= W_c <= 2560 (kg/m3) ''' # ?????
 
-    ''' E_c = W_c^(1.5) * 0.043 * sqrt(f'c)'''
+    ''' Formula E_c = W_c^(1.5) * 0.043 * sqrt(f'c)'''
+    
     try:
-        valor_fc = float(self.ui.tab4_line_horm_min_fc.text())
+        fc_pref_ini_min = float(self.ui.tab4_line_horm_min_fc.text())
+        fc_pref_ini_max = float(self.ui.tab4_line_horm_max_fc.text())
+        fc_pref_final = float(self.ui.tab4_line_horm_final_fc.text())
+        fc_insitu = float(self.ui.tab4_line_horm_insitu_fc.text())
     except:
-        print("Falta asignar valor para f'c\n")
+        print("Falta asignar valor algun para f'c\n")
         return
     try:
         valor_wc = float(self.ui.tab4_line_dens_concreto.text())
@@ -118,8 +123,40 @@ def mat_calc_save_ec(self):
         return
 
 
-    print(f"Valores en GUI para f'c: {valor_fc}, para W_c {valor_wc}\n\n")
+    print(f"**********\nValores en GUI para W_c {valor_wc}\n\n")
+    
+    
 
-    ec_calculado = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(valor_fc))
+    print(f"Valores para campos F'c")
+    print(f"\tF'c horm. pref. ini. MIN = {fc_pref_ini_min}")
+    print(f"\tF'c horm. pref. ini. MAX = {fc_pref_ini_max}")
+    print(f"\tF'c horm. pref. FINAL = {fc_pref_final}")
+    print(f"\tF'c horm. INSITU = {fc_insitu}\n")
 
-    print(f"Valor calculado para E_c usando [W_c^(1.5) * 0.043 * sqrt(f'c)] = {ec_calculado}\n\n")
+
+    ''' Calcula distintos Ec'''
+    # Horm. Pref. Ini. MIN
+    ec_horm_ini_min = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_min))
+    ec_horm_ini_min = round(ec_horm_ini_min, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_min})] = {ec_horm_ini_min}\n")
+
+    # Horm. Pref. Ini. MAX
+    ec_horm_ini_max = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_max))
+    ec_horm_ini_max = round(ec_horm_ini_max, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_max})] = {ec_horm_ini_max}\n")
+
+    # Horm. Pref. FINAL
+    ec_horm_final = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_final))
+    ec_horm_final = round(ec_horm_final, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_final})] = {ec_horm_final}\n")
+
+    # Horm. Insitu
+    ec_horm_insitu = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_insitu))
+    ec_horm_insitu = round(ec_horm_insitu, 1)
+    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_insitu})] = {ec_horm_insitu}\n")
+    
+    ''' Asigna rsultados a LineEdits'''
+    self.ui.tab4_line_horm_min_e.setText(str(ec_horm_ini_min))
+    self.ui.tab4_line_horm_max_e.setText(str(ec_horm_ini_max))
+    self.ui.tab4_line_horm_final_e.setText(str(ec_horm_final))
+    self.ui.tab4_line_horm_insitu_e.setText(str(ec_horm_insitu))
