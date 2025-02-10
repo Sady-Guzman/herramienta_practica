@@ -628,14 +628,24 @@ class Ui_Dialog(object):
         self.tab4_horizontalLayout_tipo_hormigon.setStretch(1, 2)
         self.gridLayoutWidget_4 = QWidget(self.tab_4)
         self.gridLayoutWidget_4.setObjectName(u"gridLayoutWidget_4")
-        self.gridLayoutWidget_4.setGeometry(QRect(330, 40, 211, 84))
+        self.gridLayoutWidget_4.setGeometry(QRect(350, 40, 223, 113))
         self.gridLayout_2 = QGridLayout(self.gridLayoutWidget_4)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.tab4_label_dens_acero = QLabel(self.gridLayoutWidget_4)
-        self.tab4_label_dens_acero.setObjectName(u"tab4_label_dens_acero")
+        self.tab4_label_temporal2 = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_temporal2.setObjectName(u"tab4_label_temporal2")
 
-        self.gridLayout_2.addWidget(self.tab4_label_dens_acero, 2, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.tab4_label_temporal2, 0, 1, 1, 1)
+
+        self.tab4_label_dens_horm = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_dens_horm.setObjectName(u"tab4_label_dens_horm")
+
+        self.gridLayout_2.addWidget(self.tab4_label_dens_horm, 1, 0, 1, 1)
+
+        self.tab4_line_dens_horm = QLineEdit(self.gridLayoutWidget_4)
+        self.tab4_line_dens_horm.setObjectName(u"tab4_line_dens_horm")
+
+        self.gridLayout_2.addWidget(self.tab4_line_dens_horm, 1, 1, 1, 1)
 
         self.tab4_label_wc = QLabel(self.gridLayoutWidget_4)
         self.tab4_label_wc.setObjectName(u"tab4_label_wc")
@@ -648,33 +658,50 @@ class Ui_Dialog(object):
 
         self.gridLayout_2.addWidget(self.tab4_label_wc, 0, 0, 1, 1)
 
-        self.tab4_label_dens_horm = QLabel(self.gridLayoutWidget_4)
-        self.tab4_label_dens_horm.setObjectName(u"tab4_label_dens_horm")
+        self.tab4_label_dens_acero = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_dens_acero.setObjectName(u"tab4_label_dens_acero")
 
-        self.gridLayout_2.addWidget(self.tab4_label_dens_horm, 1, 0, 1, 1)
-
-        self.tab4_line_dens_horm = QLineEdit(self.gridLayoutWidget_4)
-        self.tab4_line_dens_horm.setObjectName(u"tab4_line_dens_horm")
-
-        self.gridLayout_2.addWidget(self.tab4_line_dens_horm, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.tab4_label_dens_acero, 2, 0, 1, 1)
 
         self.tab4_line_dens_acero = QLineEdit(self.gridLayoutWidget_4)
         self.tab4_line_dens_acero.setObjectName(u"tab4_line_dens_acero")
 
         self.gridLayout_2.addWidget(self.tab4_line_dens_acero, 2, 1, 1, 1)
 
-        self.tab4_label_temporal2 = QLabel(self.gridLayoutWidget_4)
-        self.tab4_label_temporal2.setObjectName(u"tab4_label_temporal2")
+        self.tab4_label_dens_concreto = QLabel(self.gridLayoutWidget_4)
+        self.tab4_label_dens_concreto.setObjectName(u"tab4_label_dens_concreto")
 
-        self.gridLayout_2.addWidget(self.tab4_label_temporal2, 0, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.tab4_label_dens_concreto, 3, 0, 1, 1)
+
+        self.tab4_line_dens_concreto = QLineEdit(self.gridLayoutWidget_4)
+        self.tab4_line_dens_concreto.setObjectName(u"tab4_line_dens_concreto")
+
+        self.gridLayout_2.addWidget(self.tab4_line_dens_concreto, 3, 1, 1, 1)
 
         self.tab4_label_temporal = QLabel(self.tab_4)
         self.tab4_label_temporal.setObjectName(u"tab4_label_temporal")
-        self.tab4_label_temporal.setGeometry(QRect(550, 10, 221, 51))
+        self.tab4_label_temporal.setGeometry(QRect(760, 220, 221, 51))
         self.tab4_label_temporal.setFont(font4)
         self.tab2_btn_guardar_valores = QPushButton(self.tab_4)
         self.tab2_btn_guardar_valores.setObjectName(u"tab2_btn_guardar_valores")
-        self.tab2_btn_guardar_valores.setGeometry(QRect(330, 190, 211, 32))
+        self.tab2_btn_guardar_valores.setGeometry(QRect(360, 190, 211, 32))
+        self.tab4_instrucciones1 = QLabel(self.tab_4)
+        self.tab4_instrucciones1.setObjectName(u"tab4_instrucciones1")
+        self.tab4_instrucciones1.setGeometry(QRect(830, 30, 131, 16))
+        font5 = QFont()
+        font5.setFamilies([u"Verdana"])
+        font5.setPointSize(12)
+        font5.setBold(False)
+        font5.setItalic(False)
+        self.tab4_instrucciones1.setFont(font5)
+        self.tab4_instrucciones2 = QLabel(self.tab_4)
+        self.tab4_instrucciones2.setObjectName(u"tab4_instrucciones2")
+        self.tab4_instrucciones2.setGeometry(QRect(880, 50, 141, 16))
+        self.tab4_instrucciones2.setFont(font5)
+        self.tab4_instrucciones3 = QLabel(self.tab_4)
+        self.tab4_instrucciones3.setObjectName(u"tab4_instrucciones3")
+        self.tab4_instrucciones3.setGeometry(QRect(880, 70, 181, 16))
+        self.tab4_instrucciones3.setFont(font5)
         self.tabWidget.addTab(self.tab_4, "")
 
         self.retranslateUi(Dialog)
@@ -773,13 +800,17 @@ class Ui_Dialog(object):
         self.tab4_label_horm_insitu.setText(QCoreApplication.translate("Dialog", u"Hor.In-Situ", None))
         self.tab4_line_horm_min_e.setText("")
         self.tab4_label_tipo_horm.setText(QCoreApplication.translate("Dialog", u"Tipo Hormig\u00f3n", None))
-        self.tab4_label_dens_acero.setText(QCoreApplication.translate("Dialog", u"Dens.Acero(kN/m3)", None))
-        self.tab4_label_wc.setText(QCoreApplication.translate("Dialog", u"Wc ", None))
-        self.tab4_label_dens_horm.setText(QCoreApplication.translate("Dialog", u"Dens.Horm.(kN/m3)", None))
-        self.tab4_line_dens_horm.setText("")
         self.tab4_label_temporal2.setText(QCoreApplication.translate("Dialog", u"(kN/m3)", None))
+        self.tab4_label_dens_horm.setText(QCoreApplication.translate("Dialog", u"Dens. Horm.(kN/m3)", None))
+        self.tab4_line_dens_horm.setText("")
+        self.tab4_label_wc.setText(QCoreApplication.translate("Dialog", u"Wc ", None))
+        self.tab4_label_dens_acero.setText(QCoreApplication.translate("Dialog", u"Dens. Acero(kN/m3)", None))
+        self.tab4_label_dens_concreto.setText(QCoreApplication.translate("Dialog", u"Dens. Concreto(kN/m3)", None))
         self.tab4_label_temporal.setText(QCoreApplication.translate("Dialog", u"(Confirmar labels Joaquin)", None))
-        self.tab2_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Guardar valores", None))
+        self.tab2_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Re-calcular valores", None))
+        self.tab4_instrucciones1.setText(QCoreApplication.translate("Dialog", u"Ingresar parametros:", None))
+        self.tab4_instrucciones2.setText(QCoreApplication.translate("Dialog", u"* Dens. Concreto (Wc)", None))
+        self.tab4_instrucciones3.setText(QCoreApplication.translate("Dialog", u"* Hormigon Pref. Inicial (f'c)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("Dialog", u"Materiales", None))
     # retranslateUi
 
