@@ -567,6 +567,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_min_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_min_e.setObjectName(u"tab4_line_horm_min_e")
         self.tab4_line_horm_min_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_min_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_min_e, 1, 2, 1, 1)
 
@@ -579,6 +580,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_max_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_max_e.setObjectName(u"tab4_line_horm_max_e")
         self.tab4_line_horm_max_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_max_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_max_e, 2, 2, 1, 1)
 
@@ -591,6 +593,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_final_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_final_e.setObjectName(u"tab4_line_horm_final_e")
         self.tab4_line_horm_final_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_final_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_final_e, 3, 2, 1, 1)
 
@@ -603,6 +606,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_insitu_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_insitu_e.setObjectName(u"tab4_line_horm_insitu_e")
         self.tab4_line_horm_insitu_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_insitu_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_insitu_e, 4, 2, 1, 1)
 

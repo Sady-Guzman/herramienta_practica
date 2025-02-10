@@ -1335,6 +1335,9 @@
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -1348,6 +1351,9 @@
        <widget class="QLineEdit" name="tab4_line_horm_max_e">
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -1363,6 +1369,9 @@
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="4" column="1">
@@ -1376,6 +1385,9 @@
        <widget class="QLineEdit" name="tab4_line_horm_insitu_e">
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

@@ -28,3 +28,8 @@ def calc_bruta(self):
     self.ui.tab5_line_cdg_bruta.setText(valor_bruta_cdg)
     self.ui.tab5_line_inercia_bruta.setText(valor_bruta_inercia)
 
+
+def calc_simple_t0(self):
+    ''' Usa formulas de hoja calculos JOAQUIN. '''
+
+    
