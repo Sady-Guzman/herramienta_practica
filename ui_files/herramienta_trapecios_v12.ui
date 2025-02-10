@@ -1224,7 +1224,7 @@
      <property name="geometry">
       <rect>
        <x>880</x>
-       <y>80</y>
+       <y>100</y>
        <width>81</width>
        <height>16</height>
       </rect>
@@ -1237,7 +1237,30 @@
      <property name="geometry">
       <rect>
        <x>970</x>
-       <y>80</y>
+       <y>100</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_area_barras">
+     <property name="geometry">
+      <rect>
+       <x>880</x>
+       <y>70</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Area Barras:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab3_line_area_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>70</y>
        <width>81</width>
        <height>21</height>
       </rect>

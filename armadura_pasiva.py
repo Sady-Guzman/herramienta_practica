@@ -27,16 +27,21 @@ def apasiva_calcular(self):
         print(f"posicion: {barra['posicion'].text()}; Num_Min: {barra['n_min'].text()}; Diametro_min: {barra['diametro_min'].text()}")
     
     
-    print("----------------  Areas Arm. Pasiva  ----------------")
-    area_acumulada = 0
-    area = 0
+    try:
+        print("----------------  Areas Arm. Pasiva  ----------------")
+        area_acumulada = 0
+        area = 0
 
-    for _, barra in enumerate(self.dynamic_apasiva_barras):
-        area = float(barra['n_min'].text()) * pow((float(barra['diametro_min'].text())/2000), 2) * math.pi
-        area_acumulada += area
-        print(f"valor area en posicion: {barra['posicion'].text()} es = {area}")
-        print(f"Valor de area acumulada = {area_acumulada}\n")
-    
+        for _, barra in enumerate(self.dynamic_apasiva_barras):
+            area = float(barra['n_min'].text()) * pow((float(barra['diametro_min'].text())/2000), 2) * math.pi
+            area_acumulada += area
+            print(f"valor area en posicion: {barra['posicion'].text()} es = {area}")
+            print(f"Valor de area acumulada = {area_acumulada}\n")
+        
+        area_acumulada = round(area_acumulada, 4)
+        self.ui.tab3_line_area_barras.setText(f"{area_acumulada}")
+    except:
+        print("Faltan datos para hacer calculo de area total de barras corrugadas.")
 
     print("----------------  Y_inf Arm. Pasiva  ----------------")
     ''' Se calculo igual que centro de gravedad inferior para armaduras activas peros in tpi porque esta armadura no se tensa.'''
@@ -63,6 +68,7 @@ def apasiva_calcular(self):
         cdg_barras = numerador_acum / denominador_acum
         print(f"resultado de CDG barras = {cdg_barras}")
 
+        cdg_barras = round(cdg_barras, 4)
         self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
     except:
         print(f"Faltan datos en armadura pasiva para hacer calculo")
