@@ -16,7 +16,7 @@ import sqlite3
 import random
 
 #  IMPORTS DE OTROS ARCHIVOS
-from ui_files.herramienta_trapecios_v11 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
+from ui_files.herramienta_trapecios_v12 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
 
 from fn_database import *
 from fn_calculo_propiedades import *
