@@ -255,7 +255,7 @@ def arm_act_btn_calcular(self):
     update_area_values(self) # asigna area segun diametro cordon
     arm_act_cdg(self) # Centro de gravedad
     armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
-    update_tpi_values(self)
+    # update_tpi_values(self)
 
 
 

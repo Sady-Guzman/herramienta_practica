@@ -19,7 +19,6 @@ def setup_armadura_pasiva(self):
 
 def apasiva_calcular(self):
     ''' Solo imprime valores ingresados a campos dinamicos. No es necesario usar btn para anadir valores a calculo '''
-    ''' placebo para usr '''
 
     print("----------------  Datos Arm. Pasiva  ----------------")
     for index, barra in enumerate(self.dynamic_apasiva_barras):
