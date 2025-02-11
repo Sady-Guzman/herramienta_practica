@@ -28,19 +28,20 @@ def calc_bruta(self):
     self.ui.tab5_line_cdg_bruta.setText(valor_bruta_cdg)
     self.ui.tab5_line_inercia_bruta.setText(valor_bruta_inercia)
 
-    calc_simple_t0(self)
+    inercia_seccion_neta_inicial = calc_seccion_neta_inicial(self)
 
 
 
 
-def calc_simple_t0(self):
-    ''' Usa formulas de hoja calculos JOAQUIN. '''
+def calc_seccion_neta_inicial(self):
+    ''' Usa formulas de hoja calculos JOAQUIN. Pen-ultima tabla'''
 
     print("\t\t\t\n\n\n>>Datos usados para simple t = 0<<\n")
 
     print(f"Areas:")
     viga_area = self.ui.result_sum_area.text()
     cordones_area =self.ui.tab2_line_total_area.text()
+    cordones_area = float(cordones_area) / 10000
     barras_area = self.ui.tab3_line_area_barras.text()
     print(f"\t VIGA: {viga_area} m2")
     print(f"\t Arm. Activa: {cordones_area} m2")
@@ -97,9 +98,12 @@ def calc_simple_t0(self):
     operacion_final = float(operacion_tipo_viga) - (float(operacion_tipo_barras) + float(operacion_tipo_cordones))
     print("Resultado de operacion_final (Inercia de todo?): ", operacion_final)
 
+    return operacion_final
 
 
 
+def seccion_homogeneizada_inicial(self):
+    ''' ultima tabla excel Joaquin '''
 
 
 

@@ -64,7 +64,7 @@ def arm_act_calcular_inercia(self):
             num_cords = int(cordon['num_cordones'][index_cota].text())  # Convert to int
             area_cordon = float(cordon['area'].text())  # Convert to float
 
-            total_area = num_cords * area_cordon  # Compute total area
+            total_area = num_cords * (area_cordon / 10000)  # Compute total area
 
             dict_areas_cota[cota_value] += total_area  # Add to total for this cota
 
@@ -96,7 +96,7 @@ def arm_act_calcular_inercia(self):
         inercia_acu += inercia_seccion
     
     # print("\n\n>>>Resultado de inercia acumulada: ", inercia_acu, "m^4")
-    inercia_acu = round(inercia_acu, 5)
+    inercia_acu = round(inercia_acu, 9)
     self.ui.tab2_line_total_inercia.setText(f"{inercia_acu}")
 
 
