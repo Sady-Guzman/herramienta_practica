@@ -65,14 +65,41 @@ def calc_simple_t0(self):
     print("\n\n\n\n")
 
     print("A*cg de cada tipo:")
-    viga_a_cg = viga_area * viga_a_cg
-    cordones_a_cg = cordones_area * cordones_cg
-    barras_a_cg = barras_area * barras_inercia
+    # TODO que nombre usar para esta variable ??
+    viga_a_cg = float(viga_area) * float(viga_cg)
+    cordones_a_cg = float(cordones_area) * float(cordones_cg)
+    barras_a_cg = float(barras_area) * float(barras_cg)
     print(f"\tA*Cg de viga: {viga_a_cg}")
     print(f"\tA*Cg de cordones: {cordones_a_cg}")
     print(f"\tA*Cg de barras: {barras_a_cg}")
 
-    
+    print("\n\n\n\n")
+
+    area_final = float(viga_area) - (float(barras_area) + float(cordones_area))
+    print(f"Area final con viga-barras-cordones: {area_final}")
+
+    total_area_cg = float(viga_a_cg) + float(barras_a_cg) + float(cordones_a_cg)
+    print(f"Sumatoria de Areas * Cg's: {total_area_cg}")
+
+    yinf_final = float(total_area_cg) / float(area_final)
+    print(f"Y_inf final: {yinf_final}")
+
+    # TODO nombre de variables
+    operacion_tipo_viga = float(viga_inercia) + float(viga_area) * pow((float(viga_cg) - float(yinf_final)), 2)
+    print("Operacion para viga: ", operacion_tipo_viga)
+
+    operacion_tipo_barras = float(barras_inercia) + float(barras_area) * pow((float(barras_cg) - float(yinf_final)), 2)
+    print("Operacion para barras: ", operacion_tipo_viga)
+
+    operacion_tipo_cordones = float(cordones_inercia) + float(cordones_area) * pow((float(cordones_cg) - float(yinf_final)), 2)
+    print("Operacion para cordones: ", operacion_tipo_viga)
+
+    operacion_final = float(operacion_tipo_viga) - (float(operacion_tipo_barras) + float(operacion_tipo_cordones))
+    print("Resultado de operacion_final (Inercia de todo?): ", operacion_final)
+
+
+
+
 
 
 
