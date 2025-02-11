@@ -1266,6 +1266,29 @@
       </rect>
      </property>
     </widget>
+    <widget class="QLineEdit" name="tab3_line_inercia_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>130</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_inercia_barras">
+     <property name="geometry">
+      <rect>
+       <x>860</x>
+       <y>130</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Inercia Barras:</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
     <attribute name="title">

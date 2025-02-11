@@ -43,16 +43,17 @@ def apasiva_calcular(self):
     except:
         print("Faltan datos para hacer calculo de area total de barras corrugadas.")
 
-    print("----------------  Y_inf Arm. Pasiva  ----------------")
-    ''' Se calculo igual que centro de gravedad inferior para armaduras activas peros in tpi porque esta armadura no se tensa.'''
-
-    cant_barras = len(self.dynamic_apasiva_barras)
-    print(f"cantidad de barras: {cant_barras}")
-
-    numerador_acum = 0
-    denominador_acum = 0
-    # for barra in range(cant_barras):
+    
     try:
+        print("----------------  Y_inf Arm. Pasiva  ----------------")
+        ''' Se calculo igual que centro de gravedad inferior para armaduras activas peros in tpi porque esta armadura no se tensa.'''
+
+        cant_barras = len(self.dynamic_apasiva_barras)
+        print(f"cantidad de barras: {cant_barras}")
+
+        numerador_acum = 0
+        denominador_acum = 0
+
         for _, barra in enumerate(self.dynamic_apasiva_barras):
             numerador_barra_actual = (float(barra['n_min'].text()) * (float(barra['diametro_min'].text()) * float(barra['cota'].text())))
             numerador_acum += numerador_barra_actual
@@ -71,56 +72,38 @@ def apasiva_calcular(self):
         cdg_barras = round(cdg_barras, 4)
         self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
     except:
-        print(f"Faltan datos en armadura pasiva para hacer calculo")
+        print(f"Faltan datos en barras corrugadas para hacer calculo de Y_inf")
 
-
-# ''' --------------------------------------------------------------- '''
-
-#     numerador = 0
-#     numerador_acum = 0
-
-#     denominador = 0
-#     denominador_acum = 0
-
-#     cdg = 0
-
-#     ''' -------------------------------------'''
-#     ''' calculo SIN  TPI '''
-#     for y in range(cant_cotas):
-#         # print("\n")
-#         for x in range(cant_tipos_cordones):
-#             # print(f"**************** \nen cota:{y} en cordon:{x}\n")
-
-#             cordon = self.dynamic_cordones_arm_act.get(x)
-#             cota = self.dynamic_cotas[y].text()
-            
-#             area = cordon['area'].text()
-#             n_cords = cordon['num_cordones'][y].text()
-#             try:
-#                 numerador = (float(cota) * (float(n_cords))*float(area))
-#                 # print(f"Valor numerador: {numerador}")
-#                 numerador_acum += numerador
-#                 # print(f"Valor numerador acumulado: {numerador_acum}\n")
-
-#                 denominador = (float(area) * float(n_cords))
-#                 # print(f"valor de denominador: {denominador}")
-#                 denominador_acum += denominador
-#                 # print(f"valor de denominador acumulado: {denominador_acum}\n")
-#             except Exception as error:
-#                 print("Se encuentra error en calculo: ", error, "\n")
     
-#     try:
-#         cdg = (numerador_acum / denominador_acum)
-#     except Exception as error:
-#         cdg = 0
-#         print("Se encuentra error en calculo: ", error, "\n")
+    try:
+        print("----------------  Inercia Arm. Pasiva  ----------------")
+        ''' primero se calcula la inercia de cada barra y luego se suman los resultados '''
 
-#     print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-#     print("\t\t\t RESULTADO CDG sin TPI")
-#     print(f"CDG = {cdg}\n\n\n")
-#     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
+        inercia_barra_especifica = 0
+        inercia_total_barras = 0
 
-# # ''' --------------------------------------------------------------- '''
+        # Inercia por barra
+        for _, barra in enumerate(self.dynamic_apasiva_barras):
+            inercia_barra_especifica = math.pi * (pow((float(barra['diametro_min'].text())) / 1000, 4)) / 64
+
+            print(f"Valor de inercia especifica barra actual: {inercia_barra_especifica}")
+
+            inercia_total_barras += inercia_barra_especifica
+
+            # print(f"Valor de inercia acumulada barras actual: {inercia_barra_especifica}\n\n")
+
+        print("valor inercia total", inercia_total_barras)
+        inercia_total_barras = round(inercia_total_barras, 6)
+        print("valor inercia total", inercia_total_barras)
+        self.ui.tab3_line_inercia_barras.setText(f"{inercia_total_barras}")
+    except:
+        print("Faltan datos para hacer calculo de inercia para barras corrugadas")
+
+
+
+
+
+
 
 
 
