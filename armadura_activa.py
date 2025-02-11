@@ -47,6 +47,59 @@ def setup_armadura_activa(self):
     # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
 
 
+def arm_act_calcular_inercia(self):
+    ''' Calcula area total en cada cota (considerando los distintos tipos de cordones) y luego hace operacion Inercia '''
+    
+    dict_areas_cota = {}
+
+    for index_cota, cota in enumerate(self.dynamic_cotas):
+        cota_value = float(self.dynamic_cotas[index_cota].text())  # Convert to float
+        dict_areas_cota[cota_value] = 0  # Initialize total area for this cota
+
+        # print(f"\n\nPara cota {cota_value}:")
+
+        for index_cord, cordon in enumerate(self.dynamic_cordones_arm_act):
+            cordon = self.dynamic_cordones_arm_act[index_cord]
+
+            num_cords = int(cordon['num_cordones'][index_cota].text())  # Convert to int
+            area_cordon = float(cordon['area'].text())  # Convert to float
+
+            total_area = num_cords * area_cordon  # Compute total area
+
+            dict_areas_cota[cota_value] += total_area  # Add to total for this cota
+
+            # print(f"  - Cordon {index_cord} --> Num_cords = {num_cords}, Área Cordon = {area_cordon}, Total_Area = {total_area}")
+
+    # Print summarized results
+    # print("\n\nResumen de áreas por cota:")
+    # for cota, area_total in dict_areas_cota.items():
+    #     print(f"Cota {cota}m → Área total = {area_total} cm²")
+
+    ''' Operacion Inercia por cada seccion (cota) y sumatoria de inercia (Inercia real)'''
+
+    inercia_seccion = 0
+    inercia_acu = 0
+
+    cdg_area = float(self.ui.tab2_line_total_cdg_area.text())
+
+    # print("\n\n\t\t\t\t Calculo de inercia por seccion y total de armadura activa.\n")
+    for index, cota in enumerate(self.dynamic_cotas):
+        print("\n-----\nValor de cota: ", cota.text())
+
+        area_seccion = dict_areas_cota[float(cota.text())]
+        # print("Area seccion: ", area_seccion)
+
+        inercia_seccion = area_seccion * (pow((float(cota.text()) - cdg_area), 2))
+
+        # print("Inercia seccion: ", inercia_seccion)
+
+        inercia_acu += inercia_seccion
+    
+    # print("\n\n>>>Resultado de inercia acumulada: ", inercia_acu, "m^4")
+    inercia_acu = round(inercia_acu, 5)
+    self.ui.tab2_line_total_inercia.setText(f"{inercia_acu}")
+
+
 def arm_act_poblar_combo_testeros(self):
     ''' usa valores db armaduras.db pra poblar comboBox '''
     
@@ -256,6 +309,7 @@ def arm_act_btn_calcular(self):
     arm_act_cdg(self) # Centro de gravedad
     armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
     # update_tpi_values(self)
+    arm_act_calcular_inercia(self)
 
 
 

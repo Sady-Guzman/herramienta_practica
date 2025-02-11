@@ -598,10 +598,10 @@
     <widget class="QWidget" name="gridLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>879</x>
+       <x>809</x>
        <y>10</y>
-       <width>191</width>
-       <height>116</height>
+       <width>261</width>
+       <height>147</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="tab2_gridLayout_totales">
@@ -615,10 +615,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="tab2_label_cdg_area">
+      <item row="3" column="0">
+       <widget class="QLabel" name="tab2_label_cdg_fuerza">
         <property name="text">
-         <string>c.d.g area:</string>
+         <string>c.d.g fuerza[m]:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -635,27 +635,40 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_cdg_area"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_area"/>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_cordones"/>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="tab2_label_cdg_fuerza">
+      <item row="2" column="0">
+       <widget class="QLabel" name="tab2_label_cdg_area">
         <property name="text">
-         <string>c.d.g fuerza:</string>
+         <string>c.d.g area[m]:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cordones"/>
+      </item>
       <item row="3" column="1">
        <widget class="QLineEdit" name="tab2_line_total_cdg_fuerza"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_area"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cdg_area"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="tab2_label_inercia">
+        <property name="text">
+         <string>Inercia (cdg Area) [m4]</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_inercia"/>
       </item>
      </layout>
     </widget>
@@ -714,7 +727,7 @@
     <widget class="QLabel" name="tab2_label_testero">
      <property name="geometry">
       <rect>
-       <x>610</x>
+       <x>460</x>
        <y>20</y>
        <width>113</width>
        <height>18</height>
@@ -727,7 +740,7 @@
     <widget class="QComboBox" name="tab2_combo_testero">
      <property name="geometry">
       <rect>
-       <x>610</x>
+       <x>460</x>
        <y>44</y>
        <width>141</width>
        <height>32</height>
@@ -737,7 +750,7 @@
     <widget class="QComboBox" name="tab2_combo_preset">
      <property name="geometry">
       <rect>
-       <x>747</x>
+       <x>597</x>
        <y>44</y>
        <width>121</width>
        <height>32</height>
@@ -747,7 +760,7 @@
     <widget class="QLabel" name="tab2_label_preset">
      <property name="geometry">
       <rect>
-       <x>750</x>
+       <x>600</x>
        <y>20</y>
        <width>112</width>
        <height>18</height>
@@ -760,7 +773,7 @@
     <widget class="QPushButton" name="tab2_btn_aplicar_preset">
      <property name="geometry">
       <rect>
-       <x>750</x>
+       <x>600</x>
        <y>70</y>
        <width>111</width>
        <height>32</height>

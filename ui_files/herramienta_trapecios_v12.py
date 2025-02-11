@@ -312,7 +312,7 @@ class Ui_Dialog(object):
         self.tab2_btn_del_cord.setGeometry(QRect(230, 70, 111, 32))
         self.gridLayoutWidget_3 = QWidget(self.tab_2)
         self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(879, 10, 191, 116))
+        self.gridLayoutWidget_3.setGeometry(QRect(809, 10, 261, 147))
         self.tab2_gridLayout_totales = QGridLayout(self.gridLayoutWidget_3)
         self.tab2_gridLayout_totales.setObjectName(u"tab2_gridLayout_totales")
         self.tab2_gridLayout_totales.setContentsMargins(0, 0, 0, 0)
@@ -322,11 +322,11 @@ class Ui_Dialog(object):
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_cant_cord, 0, 0, 1, 1)
 
-        self.tab2_label_cdg_area = QLabel(self.gridLayoutWidget_3)
-        self.tab2_label_cdg_area.setObjectName(u"tab2_label_cdg_area")
-        self.tab2_label_cdg_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.tab2_label_cdg_fuerza = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cdg_fuerza.setObjectName(u"tab2_label_cdg_fuerza")
+        self.tab2_label_cdg_fuerza.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_area, 2, 0, 1, 1)
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_fuerza, 3, 0, 1, 1)
 
         self.tab2_label_area_total = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
@@ -334,31 +334,42 @@ class Ui_Dialog(object):
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_area_total, 1, 0, 1, 1)
 
-        self.tab2_line_total_cdg_area = QLineEdit(self.gridLayoutWidget_3)
-        self.tab2_line_total_cdg_area.setObjectName(u"tab2_line_total_cdg_area")
+        self.tab2_label_cdg_area = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cdg_area.setObjectName(u"tab2_label_cdg_area")
+        self.tab2_label_cdg_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_area, 2, 1, 1, 1)
-
-        self.tab2_line_total_area = QLineEdit(self.gridLayoutWidget_3)
-        self.tab2_line_total_area.setObjectName(u"tab2_line_total_area")
-
-        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_area, 1, 1, 1, 1)
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_area, 2, 0, 1, 1)
 
         self.tab2_line_total_cordones = QLineEdit(self.gridLayoutWidget_3)
         self.tab2_line_total_cordones.setObjectName(u"tab2_line_total_cordones")
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cordones, 0, 1, 1, 1)
 
-        self.tab2_label_cdg_fuerza = QLabel(self.gridLayoutWidget_3)
-        self.tab2_label_cdg_fuerza.setObjectName(u"tab2_label_cdg_fuerza")
-        self.tab2_label_cdg_fuerza.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_fuerza, 3, 0, 1, 1)
-
         self.tab2_line_total_cdg_fuerza = QLineEdit(self.gridLayoutWidget_3)
         self.tab2_line_total_cdg_fuerza.setObjectName(u"tab2_line_total_cdg_fuerza")
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_fuerza, 3, 1, 1, 1)
+
+        self.tab2_line_total_area = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_area.setObjectName(u"tab2_line_total_area")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_area, 1, 1, 1, 1)
+
+        self.tab2_line_total_cdg_area = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_cdg_area.setObjectName(u"tab2_line_total_cdg_area")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_area, 2, 1, 1, 1)
+
+        self.tab2_label_inercia = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_inercia.setObjectName(u"tab2_label_inercia")
+        self.tab2_label_inercia.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_inercia, 4, 0, 1, 1)
+
+        self.tab2_line_total_inercia = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_inercia.setObjectName(u"tab2_line_total_inercia")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_inercia, 4, 1, 1, 1)
 
         self.tab2_btn_valores = QPushButton(self.tab_2)
         self.tab2_btn_valores.setObjectName(u"tab2_btn_valores")
@@ -374,19 +385,19 @@ class Ui_Dialog(object):
         self.tab2_label_cota_dinamica_2.setGeometry(QRect(230, 20, 101, 16))
         self.tab2_label_testero = QLabel(self.tab_2)
         self.tab2_label_testero.setObjectName(u"tab2_label_testero")
-        self.tab2_label_testero.setGeometry(QRect(610, 20, 113, 18))
+        self.tab2_label_testero.setGeometry(QRect(460, 20, 113, 18))
         self.tab2_combo_testero = QComboBox(self.tab_2)
         self.tab2_combo_testero.setObjectName(u"tab2_combo_testero")
-        self.tab2_combo_testero.setGeometry(QRect(610, 44, 141, 32))
+        self.tab2_combo_testero.setGeometry(QRect(460, 44, 141, 32))
         self.tab2_combo_preset = QComboBox(self.tab_2)
         self.tab2_combo_preset.setObjectName(u"tab2_combo_preset")
-        self.tab2_combo_preset.setGeometry(QRect(747, 44, 121, 32))
+        self.tab2_combo_preset.setGeometry(QRect(597, 44, 121, 32))
         self.tab2_label_preset = QLabel(self.tab_2)
         self.tab2_label_preset.setObjectName(u"tab2_label_preset")
-        self.tab2_label_preset.setGeometry(QRect(750, 20, 112, 18))
+        self.tab2_label_preset.setGeometry(QRect(600, 20, 112, 18))
         self.tab2_btn_aplicar_preset = QPushButton(self.tab_2)
         self.tab2_btn_aplicar_preset.setObjectName(u"tab2_btn_aplicar_preset")
-        self.tab2_btn_aplicar_preset.setGeometry(QRect(750, 70, 111, 32))
+        self.tab2_btn_aplicar_preset.setGeometry(QRect(600, 70, 111, 32))
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QWidget()
         self.tab_3.setObjectName(u"tab_3")
@@ -1070,9 +1081,10 @@ class Ui_Dialog(object):
         self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"Borrar Cota", None))
         self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"eliminar cordon", None))
         self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones:", None))
-        self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area:", None))
+        self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza[m]:", None))
         self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total [cm2]:", None))
-        self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza:", None))
+        self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area[m]:", None))
+        self.tab2_label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia (cdg Area) [m4]", None))
         self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"obtener valores", None))
         self.tab2_label_cota_dinamica.setText(QCoreApplication.translate("Dialog", u"Agregar Cotas", None))
         self.tab2_btn_add_cota_testero.setText(QCoreApplication.translate("Dialog", u"Cota Testero", None))
