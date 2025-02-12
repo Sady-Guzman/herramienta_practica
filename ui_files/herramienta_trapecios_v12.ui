@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -119,21 +119,21 @@
       <item>
        <widget class="QLabel" name="label_bi">
         <property name="text">
-         <string>Base_inf</string>
+         <string>Base_inf[m]</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_bs">
         <property name="text">
-         <string>Base_sup</string>
+         <string>Base_sup[m]</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_altura">
         <property name="text">
-         <string>Altura</string>
+         <string>Altura[m]</string>
         </property>
        </widget>
       </item>
@@ -1300,6 +1300,19 @@
      </property>
      <property name="text">
       <string>Inercia Barras [m4]:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_instrucciones">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>590</y>
+       <width>311</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Para calculo Simple t=0 solo usa N-min y Ømin</string>
      </property>
     </widget>
    </widget>
