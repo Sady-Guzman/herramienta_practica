@@ -10,7 +10,7 @@ def setup_tab_calc_parcial(self):
     self.ui.tab5_btn_calcular.clicked.connect(lambda: calc_bruta(self))
 
 
-
+''' Calculo Parcial Bruta t = 0 '''
 def calc_bruta(self):
     ''' Asigna valores a LineEdits Area, cdg, inercia para Bruta t=0. '''
     ''' Son los mismos valores calculados en Tab1. Solo recupera .text() de lineEdits tab1 (Geometria) '''
@@ -58,7 +58,7 @@ def calc_bruta(self):
 
 
 
-
+''' Calculo Parcial Primer paso para Simple t= 0 '''
 def calc_seccion_neta_inicial(self):
     ''' Usa formulas de hoja calculos JOAQUIN. Pen-ultima tabla'''
 
@@ -125,7 +125,7 @@ def calc_seccion_neta_inicial(self):
     print("Resultado de operacion_final (Inercia de todo?): ", self.operacion_final)
 
 
-
+''' Calculo Parcial simple t = 0 paso final'''
 def seccion_homogeneizada_inicial(self):
     ''' ultima tabla excel Joaquin '''
 
@@ -216,25 +216,3 @@ def seccion_homogeneizada_inicial(self):
     self.ui.tab5_line_cdg_t0.setText(f"{homo_total_yinf}")
     self.ui.tab5_line_inercia_t0.setText(f"{homo_operacion_final}")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
