@@ -113,13 +113,15 @@ def plot_trapecios(self):
         print("no existe seccion pieza cargada en variable")
         pass
     try:
-        print("\n\n\t\t Informacion de tuplas en dibujo.py para self.dynamic_layout_data [] ---> ", self.dynamic_layout_data[self.seccion_pieza_cargada])
         trapecios = self.dynamic_layout_data[self.seccion_pieza_cargada]
         trapecios = list(trapecios)
         # Strip the first item from each tuple
-        # trapecios = [(b, c, d) for _, b, c, d in trapecios]
         trapecios = [(float(b), float(c), float(d)) for _, b, c, d in trapecios]
-        print("\n\n\t\t Informacion de tuplas en dibujo.py para trapecios invertidos[] ---> ", trapecios)
+        if self.es_temporal == False and self.es_creada == False:
+            print("Se invierte lista porque es_temporal = FALSE, es_creada = FALSE")
+            trapecios = list(reversed(trapecios))
+        else:
+            print("No se invierte la lista porque no se cumple con: es_temporal = FALSE, es_creada = FALSE")
     except:
         print("En Dibujo ___ Execept: Return")
         return
