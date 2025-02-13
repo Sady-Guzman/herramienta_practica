@@ -128,6 +128,7 @@ class MyDialog(QDialog):
 
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada) # Calcular nuevos valores
 
         # Invoca ventana para CREAR NUEVA PIEZA
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
@@ -191,7 +192,7 @@ class MyDialog(QDialog):
             
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
-            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)
+            # plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada, self)# Invoca dibujo de pieza seleccionada
 
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
@@ -213,6 +214,8 @@ class MyDialog(QDialog):
         else:
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
             aplicar_pieza_de_dynamic(self)
+
+            # plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)# Invoca dibujo de pieza seleccionada
 
 
 
@@ -256,8 +259,10 @@ def popup_msg(message):
 if __name__ == "__main__":
     ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
     print("=========================================================================================")
-    db_iniciar_database("catalogo.db")
-    db_iniciar_database("piezas_creadas.db")
+    # db_iniciar_database("catalogo.db")
+    # db_iniciar_database("piezas_creadas.db")
+    # db_iniciar_database("armaduras.db")
+    copy_database_files()
     print("=========================================================================================\n\n\n")
     
 

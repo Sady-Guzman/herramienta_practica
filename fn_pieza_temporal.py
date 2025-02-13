@@ -61,7 +61,10 @@ def save_current_section_data(self):
         return
 
     pieza_seccion = pieza_seccion_item.text()
+    self.seccion_pieza_cargada = pieza_seccion
     current_section_data = []
+    
+    self.seccion_pieza_cargada = pieza_seccion
 
     # Collect data from the dynamic layouts
     for i, layout in enumerate(reversed(self.dynamic_layouts)):

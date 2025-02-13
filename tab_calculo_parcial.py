@@ -216,3 +216,6 @@ def seccion_homogeneizada_inicial(self):
     self.ui.tab5_line_cdg_t0.setText(f"{homo_total_yinf}")
     self.ui.tab5_line_inercia_t0.setText(f"{homo_operacion_final}")
 
+
+''' Falta calcular Simple t = 00 '''
+# Hace falta considerar variables que aun no son calculadas en programa.

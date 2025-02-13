@@ -22,6 +22,7 @@ from utils import popup_msg
 import re
 from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
 from PySide6 import QtCore
+import os
 
 
 def setup_armadura_activa(self):
@@ -170,11 +171,19 @@ def arm_act_poblar_combo_testeros(self):
     ''' usa valores db armaduras.db pra poblar comboBox '''
     
     # Distinct testeros in testeros
+    # try:
+    #     testeros = db_testeros_existentes()
+    # except:
+    #     return
+
+    # import os
+    # print(os.path.abspath("armaduras.db"))
+
+    db_testeros_existentes()
     testeros = db_testeros_existentes()
 
-    # print(testeros)
 
-    for testero in testeros:
+    for testero in testeros: # LINE 183
         self.ui.tab2_combo_testero.addItem(f"{testero[0]}")
     
     # Ajusta tamano de letrs en ComboB

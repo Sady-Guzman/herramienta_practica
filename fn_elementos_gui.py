@@ -304,11 +304,11 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
     ''' Store the values of all sections (secciones) '''
     self.dynamic_layout_data = db_get_all_trapecios_data(pieza_id, es_creada)
-    print("aplicar_pieza_de_db () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", self.dynamic_layout_data, "\n")
+    # print("aplicar_pieza_de_db () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data: ", self.dynamic_layout_data, "\n")
     print("\n\n")
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
-    calcular_nuevos_valores(self)
+    # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
 
     ''' Anade todos los trapecios a listWidget que se usa para borrar'''
     self.ui.tab1_list_trapecios_existentes.clear()
@@ -348,7 +348,7 @@ def aplicar_pieza_de_dynamic(self):
         pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
         print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
         aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
-        calcular_nuevos_valores(self)
+        # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
     except:
         print("No existe datos para self.dyn_layout_data[pieza_seccion]... Por lo tanto se asume pieza temporal")
     
