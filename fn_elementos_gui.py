@@ -311,6 +311,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
     print("aplicar_pieza_de_db () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data Despues de aplicar SORT en base a columna POSICION de tupla: ", self.dynamic_layout_data, "\n")
     print("\n\n")
+    
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
     # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
