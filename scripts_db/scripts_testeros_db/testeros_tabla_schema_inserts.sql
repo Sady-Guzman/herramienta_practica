@@ -1,5 +1,5 @@
 -- schema de tabla
-CREATE TABLE IF NOT EXISTS "testeros" (
+CREATE TABLE "testeros" (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     testero TEXT NOT NULL,
     posicion INTEGER NOT NULL, 

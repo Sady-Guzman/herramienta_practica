@@ -16,7 +16,7 @@ import sqlite3
 import random
 
 #  IMPORTS DE OTROS ARCHIVOS
-from ui_files.herramienta_trapecios_v11 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
+from ui_files.herramienta_trapecios_v12 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
 
 from fn_database import *
 from fn_calculo_propiedades import *
@@ -30,7 +30,7 @@ from dibujo import plot_trapecios
 from armadura_activa import setup_armadura_activa # TAB 2
 from armadura_pasiva import setup_armadura_pasiva # TAB 3
 from tab_materiales import setup_tab_materiales # TAB 4
-
+from tab_calculo_parcial import setup_tab_calc_parcial # TAB 5
 
 
 
@@ -128,6 +128,7 @@ class MyDialog(QDialog):
 
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada) # Calcular nuevos valores
 
         # Invoca ventana para CREAR NUEVA PIEZA
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
@@ -153,6 +154,7 @@ class MyDialog(QDialog):
 
         setup_armadura_pasiva(self) # Inicia TAB3 (Armadura Pasiva)
         setup_tab_materiales(self) # inicia TAB4 (Materiales)
+        setup_tab_calc_parcial(self) # Inicia/maneja tab de Calculo Parcial (Tab5)
 
 
 
@@ -190,7 +192,7 @@ class MyDialog(QDialog):
             
 
             pieza_id = db_get_id_pieza(familia_seleccionada, modelo_seleccionado, es_creada)
-            plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)
+            # plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada, self)# Invoca dibujo de pieza seleccionada
 
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
@@ -213,24 +215,30 @@ class MyDialog(QDialog):
             print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
             aplicar_pieza_de_dynamic(self)
 
+            # plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)# Invoca dibujo de pieza seleccionada
 
 
 
+    ''' Maneja Btn por defecto segun TAB seleccinada '''
     def set_default_button(self, index):
-        # Remove default from all buttons first
+        # Remueve defecto de otras tabs primero
         self.ui.btn_calcular_nuevos_valores.setDefault(False)
         self.ui.tab2_btn_valores.setDefault(False)
         self.ui.tabWidget.widget(index).setFocus()
 
-        # Set default only for the current tab
+        # Asigna btn por defecto segun pestana seleccionada
         if index == 0:
             self.ui.btn_calcular_nuevos_valores.setDefault(True)
             self.ui.btn_calcular_nuevos_valores.setAutoDefault(True)
         elif index == 1:
             self.ui.tab2_btn_valores.setDefault(True)
             self.ui.tab2_btn_valores.setAutoDefault(True)
+        elif index == 2:
+            self.ui.tab3_btn_calcular.setDefault(True)
         elif index == 3:
-            self.ui.tab2_btn_guardar_valores.setDefault(True)
+            self.ui.tab4_btn_guardar_valores.setDefault(True)
+        elif index == 4:
+            self.ui.tab5_btn_calcular.setDefault(True)
     
 
         
@@ -251,8 +259,10 @@ def popup_msg(message):
 if __name__ == "__main__":
     ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
     print("=========================================================================================")
-    db_iniciar_database("catalogo.db")
-    db_iniciar_database("piezas_creadas.db")
+    # db_iniciar_database("catalogo.db")
+    # db_iniciar_database("piezas_creadas.db")
+    # db_iniciar_database("armaduras.db")
+    copy_database_files()
     print("=========================================================================================\n\n\n")
     
 

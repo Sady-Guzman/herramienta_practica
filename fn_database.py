@@ -1,8 +1,155 @@
 import sqlite3
 import os
+import sys
+import shutil
 
 # Define PATH a carpeta para bases de datos
-DB_DIR = os.path.join(os.path.dirname(__file__), "databases")
+# DB_DIR = os.path.join(os.path.dirname(__file__), "databases") # Version que usa app interpretada. get_db_path se adapta a interpretado / empaquetado
+
+
+# def get_db_path(db_filename):
+#     """
+#     Devuelve la ruta correcta de la base de datos, asegurando compatibilidad con PyInstaller.
+#     """
+#     if getattr(sys, 'frozen', False):  # Si está empaquetado con PyInstaller
+#         base_path = sys._MEIPASS  # Carpeta temporal de PyInstaller
+#     else:
+#         base_path = os.path.dirname(os.path.abspath(__file__))  # Directorio en ejecución normal
+
+#     db_dir = os.path.join(base_path, "databases")
+
+#     # Asegurar que el directorio de la base de datos existe
+#     if not os.path.exists(db_dir):
+#         os.makedirs(db_dir, exist_ok=True)
+
+#     return os.path.join(db_dir, db_filename)
+
+def copy_database_files():
+    # If not packed, use the local _internal folder
+    if getattr(sys, 'frozen', False):
+        # source_dir = os.path.join(os.path.dirname(sys.executable), '_internal', 'databases')
+        source_dir = os.path.join(os.path.dirname(sys.executable), 'databases')
+    else:
+        # source_dir = os.path.join(os.path.dirname(__file__), '_internal', 'databases')
+        source_dir = os.path.join(os.path.dirname(__file__), 'databases')
+        # return
+
+    target_dir = os.path.expanduser('~/.myapp/databases')
+
+    # Create target directory if it doesn't exist
+    os.makedirs(target_dir, exist_ok=True)
+
+    # db_path = get_db_path('catalogo.db')
+    # abs_db_path = os.path.abspath(db_path)  # Get absolute path
+    # print(f"Using database at: {abs_db_path}")
+
+    # Ensure the source directory exists
+    if os.path.exists(source_dir):
+        # List the files in the source directory
+        for filename in os.listdir(source_dir):
+            source_file = os.path.join(source_dir, filename)
+            target_file = os.path.join(target_dir, filename)
+
+            # Only copy the file if it doesn't exist in the target or if it's different
+            if not os.path.exists(target_file) or os.path.getmtime(source_file) > os.path.getmtime(target_file):
+                shutil.copy2(source_file, target_file)
+                print(f"Copied {filename} to {target_dir}")
+    else:
+        print(f"Source directory {source_dir} does not exist.")
+
+
+def get_db_path(db_filename):
+    """
+    Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente.
+    """
+    if getattr(sys, 'frozen', False):  # Si está empaquetado con PyInstaller
+        base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en el home del usuario
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    db_dir = os.path.join(base_path, "databases")
+
+    # Asegurar que el directorio existe
+    if not os.path.exists(db_dir):
+        os.makedirs(db_dir, exist_ok=True)
+
+    return os.path.join(db_dir, db_filename)
+
+
+''' En caso de no existir archivos tipo db 'catalogo.db' ni 'piezas_credas.db' Se crean y asigna schema'''
+# def db_iniciar_database(db_path):
+#     """
+#     Inicializa la base de datos creando las tablas requeridas si no existen.
+
+#     Args:
+#         db_path (str): Nombre del archivo de base de datos (ej., 'catalogo.db').
+#     """
+
+#     db_path_con_dir = get_db_path(db_path)
+#     connection = sqlite3.connect(db_path_con_dir)
+#     cursor = connection.cursor()
+
+#     def table_exists(table_name):
+#         cursor.execute("""
+#             SELECT name FROM sqlite_master WHERE type='table' AND name=?
+#         """, (table_name,))
+#         return cursor.fetchone() is not None
+
+#     try:
+#         if not table_exists("piezas"):
+#             cursor.execute("""
+#                 CREATE TABLE piezas (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     familia TEXT NOT NULL,
+#                     modelo TEXT NOT NULL UNIQUE
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'piezas' creada.")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'piezas' ya existe. No se realizaron cambios.")
+
+#         if not table_exists("parametros"):
+#             cursor.execute("""
+#                 CREATE TABLE parametros (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     tipo_seccion INTEGER NOT NULL,
+#                     trapecios INTEGER NOT NULL,
+#                     pieza_id INTEGER NOT NULL, 
+#                     FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'parametros' creada")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'parametros' ya existe. No se realizaron cambios.")
+
+#         if not table_exists("trapecios"):
+#             cursor.execute("""
+#                 CREATE TABLE trapecios (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     tipo_seccion TEXT NOT NULL,
+#                     posicion INTEGER NOT NULL,
+#                     base_inf REAL NOT NULL,
+#                     base_sup REAL NOT NULL,
+#                     altura REAL NOT NULL,
+#                     pieza_id INTEGER NOT NULL,
+#                     FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'trapecios' creada.")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'trapecios' ya existe. No se realizaron cambios.")
+
+#     except sqlite3.Error as e:
+#         print(f"DEBUG error al inicializar DB '{db_path}': {e}")
+#     finally:
+#         connection.close()
+
+#     return
+
+''' ======================================================================================== '''
+''' ======================================================================================== '''
+''' ======================================================================================== '''
+
 
 def db_cargar_familias_modelos(self, tipo_db):
     """
@@ -14,10 +161,12 @@ def db_cargar_familias_modelos(self, tipo_db):
     """
 
     if tipo_db == True:
-        db_path = os.path.join(DB_DIR, "catalogo.db")
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
         # db_path = 'piezas_creadas.db'
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
     
     connection = sqlite3.connect(db_path)
     cursor = connection.cursor()
@@ -51,10 +200,12 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
 
     if es_creada == False:
         # db_path = 'catalogo.db' 
-        db_path = os.path.join(DB_DIR, "catalogo.db")
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
         # db_path = 'piezas_creadas.db'
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
     
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -99,11 +250,12 @@ def db_get_datos_trapecios(pieza_id, seccion, es_creada):
 
     if es_creada == False:
         # conn = sqlite3.connect("catalogo.db")
-        db_path = os.path.join(DB_DIR, "catalogo.db")
-        conn = sqlite3.connect(db_path)
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
         # conn = sqlite3.connect("piezas_creadas.db")
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -136,10 +288,12 @@ def db_get_cant_trapecios(pieza_id, seccion, es_creada):
 
     if es_creada == False:
         # conn = sqlite3.connect("catalogo.db")
-        db_path = os.path.join(DB_DIR, "catalogo.db")
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
         # conn = sqlite3.connect("piezas_creadas.db")
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -172,11 +326,12 @@ def db_get_id_pieza(familia, modelo, es_creada):
 
     # Connect to the database
     if es_creada == False:
-        db_path = os.path.join(DB_DIR, "catalogo.db")
-        # conn = sqlite3.connect("catalogo.db")
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
         # conn = sqlite3.connect("piezas_creadas.db")
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -222,83 +377,96 @@ def print_familias_modelos():
     print_families_and_models("Piezas CREADAS", dict_fam_mod_creadas)
 
 
-''' ==========================================================================================================================='''
-''' Funciones para iniciar estructura (esquema / schema) de bases de datos catalogo.db y piezas_creadas.db 
-    -- Solo ejecuta rutinas si las bases de datos no estan iniciadas, Por lo tanto solo se usa cuando se inicia el software por primera vez'''
-''' INIT para basde de datos de piezas migradas de JACENA (catalogo.db) y de piezas creadas por usuarios (piezas_creadas.db)'''
-def db_iniciar_database(db_path):
-    """
-    Inicializa la base de datos creando las tablas requeridas si no existen.
+# ''' ==========================================================================================================================='''
+# ''' Funciones para iniciar estructura (esquema / schema) de bases de datos catalogo.db y piezas_creadas.db 
+#     -- Solo ejecuta rutinas si las bases de datos no estan iniciadas, Por lo tanto solo se usa cuando se inicia el software por primera vez'''
+# ''' INIT para basde de datos de piezas migradas de JACENA (catalogo.db) y de piezas creadas por usuarios (piezas_creadas.db)'''
+# def db_iniciar_database(db_path):
+#     """
+#     Inicializa la base de datos creando las tablas requeridas si no existen.
 
-    Args:
-        db_path (str): Path al archivo base de datos (ej., 'catalogo.db').
-    """
+#     Args:
+#         db_path (str): Path al archivo base de datos (ej., 'catalogo.db').
+#     """
+    
+#     db_path_con_dir = os.path.join(DB_DIR, db_path)    
+#     connection = sqlite3.connect(db_path_con_dir)
+#     cursor = connection.cursor()
 
-    db_path_con_dir = os.path.join(DB_DIR, db_path)    
-    connection = sqlite3.connect(db_path_con_dir)
-    cursor = connection.cursor()
+#     # Revisa si existe la relacion
+#     def table_exists(table_name):
+#         cursor.execute("""
+#             SELECT name FROM sqlite_master WHERE type='table' AND name=?
+#         """, (table_name,))
+#         return cursor.fetchone() is not None
 
-    # Revisa si existe la relacion
-    def table_exists(table_name):
-        cursor.execute("""
-            SELECT name FROM sqlite_master WHERE type='table' AND name=?
-        """, (table_name,))
-        return cursor.fetchone() is not None
+#     try:
+#         # REVISAR RELACION PIEZAS
+#         if not table_exists("piezas"):
+#             cursor.execute("""
+#                 CREATE TABLE piezas (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     familia TEXT NOT NULL,
+#                     modelo TEXT NOT NULL UNIQUE
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'piezas' creada.")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'piezas' ya existe. No se realizaron cambios.")
 
-    try:
-        # REVISAR RELACION PIEZAS
-        if not table_exists("piezas"):
-            cursor.execute("""
-                CREATE TABLE piezas (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    familia TEXT NOT NULL,
-                    modelo TEXT NOT NULL UNIQUE
-                )
-            """)
-            print(f"init_db {db_path} > Tabla 'piezas' creada.")
-        else:
-            print(f"init_db {db_path} > La relacion 'piezas' ya existe. No se realizaron cambios.")
+#         # REVISAR RELACION PARAMETROS
+#         if not table_exists("parametros"):
+#             cursor.execute("""
+#                 CREATE TABLE parametros (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     tipo_seccion INTEGER NOT NULL,
+#                     trapecios INTEGER NOT NULL,
+#                     pieza_id INTEGER NOT NULL, 
+#                     FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'parametros' creada")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'parametros' ya existe. No se realizaron cambios.")
 
-        # REVISAR RELACION PARAMETROS
-        if not table_exists("parametros"):
-            cursor.execute("""
-                CREATE TABLE parametros (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tipo_seccion INTEGER NOT NULL,
-                    trapecios INTEGER NOT NULL,
-                    pieza_id INTEGER NOT NULL, 
-                    FOREIGN KEY (pieza_id) REFERENCES piezas (id)
-                )
-            """)
-            print(f"init_db {db_path} > Tabla 'parametros' creada")
-        else:
-            print(f"init_db {db_path} > La relacion 'parametros' ya existe. No se realizaron cambios.")
+#         # REVISAR RELACION TRAPECIOS
+#         if not table_exists("trapecios"):
+#             cursor.execute("""
+#                 CREATE TABLE trapecios (
+#                     id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                     tipo_seccion TEXT NOT NULL,
+#                     posicion INTEGER NOT NULL,
+#                     base_inf REAL NOT NULL,
+#                     base_sup REAL NOT NULL,
+#                     altura REAL NOT NULL,
+#                     pieza_id INTEGER NOT NULL,
+#                     FOREIGN KEY (pieza_id) REFERENCES piezas (id)
+#                 )
+#             """)
+#             print(f"init_db {db_path} > Tabla 'trapecios' creada.")
+#         else:
+#             print(f"init_db {db_path} > La relacion 'trapecios' ya existe. No se realizaron cambios.")
 
-        # REVISAR RELACION TRAPECIOS
-        if not table_exists("trapecios"):
-            cursor.execute("""
-                CREATE TABLE trapecios (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    tipo_seccion TEXT NOT NULL,
-                    posicion INTEGER NOT NULL,
-                    base_inf REAL NOT NULL,
-                    base_sup REAL NOT NULL,
-                    altura REAL NOT NULL,
-                    pieza_id INTEGER NOT NULL,
-                    FOREIGN KEY (pieza_id) REFERENCES piezas (id)
-                )
-            """)
-            print(f"init_db {db_path} > Tabla 'trapecios' creada.")
-        else:
-            print(f"init_db {db_path} > La relacion 'trapecios' ya existe. No se realizaron cambios.")
+#     except sqlite3.Error as e:
+#         print(f"DEBUG error al inicializar DB '{db_path}': {e}")
+#     finally:
+#         connection.close()
 
-    except sqlite3.Error as e:
-        print(f"DEBUG error al inicializar DB '{db_path}': {e}")
-    finally:
-        connection.close()
+#     return
 
-    return
 
+# ''' Para version distributable de programa creada con Pyinstaller '''
+# def get_db_path(db_filename):
+#     """
+#     Devuelve la ruta absoluta correcta para la base de datos,
+#     asegurando compatibilidad con PyInstaller (--onefile y --onedir).
+#     """
+#     if getattr(sys, 'frozen', False):  # Si está empaquetado con PyInstaller
+#         base_path = sys._MEIPASS  # Directorio temporal donde PyInstaller extrae archivos
+#     else:
+#         base_path = os.path.dirname(os.path.abspath(__file__))  # Ruta normal en desarrollo
+
+#     return os.path.join(base_path, db_filename)
 
 
  
@@ -308,7 +476,8 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
         en caso de ya existir y se este haciedo una modificacion, hace UPDATE
     '''
     
-    db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+    # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+    db_path = get_db_path("piezas_creadas.db")
     conn = sqlite3.connect(db_path)
     # conn = sqlite3.connect('piezas_creadas.db')
     cursor = conn.cursor()
@@ -349,11 +518,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 '''
 def db_get_all_trapecios_data(pieza_id, es_creada):
     if es_creada == False:
-        db_path = os.path.join(DB_DIR, "catalogo.db")
-        # conn = sqlite3.connect("catalogo.db")
+        # db_path = os.path.join(DB_DIR, "catalogo.db")
+        db_path = get_db_path("catalogo.db")
     else:
-        # conn = sqlite3.connect("piezas_creadas.db")
-        db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        # db_path = os.path.join(DB_DIR, "piezas_creadas.db")
+        db_path = get_db_path("piezas_creadas.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -391,7 +560,8 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
 def db_recuperar_diametros_cordones():
     ''' Retorna la cantidad de tuplas que hay en tabla propiedades_armadura_activa en armaduras.db '''
     
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     # conn = sqlite3.connect("armaduras.db")
     cursor = conn.cursor()
@@ -413,8 +583,8 @@ def db_recuperar_diametros_cordones():
 
 def db_area_cordon(diametro):
 
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -436,8 +606,8 @@ def db_area_cordon(diametro):
 
 ''' Consulta cotas existente en testero seleccionado en ComboBox '''
 def db_cotas_testero(testero):
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -457,8 +627,8 @@ def db_cotas_testero(testero):
 
 ''' fetch los testeros distintos en tabla testeros '''
 def db_testeros_existentes():
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -475,14 +645,48 @@ def db_testeros_existentes():
     # print(f"db_cotas_testero() -> contenido de consulta: {testeros} \n")
     return testeros
 
+import os
+import sqlite3
+
+''' DEBUG problema testeros en distributable '''
+def db_testeros_existentes():
+    db_path = get_db_path("armaduras.db")  # Ensure this resolves to the correct path
+    abs_db_path = os.path.abspath(db_path)  # Get absolute path
+    # print(f"🔍 Using database at: {abs_db_path}")
+
+    if not os.path.exists(db_path):
+        print("⚠️ ERROR: Database file does not exist at expected path!")
+        return 0  # Prevent further errors
+
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tables = cursor.fetchall()
+        # print(f"📋 Tables in database: {tables}")  # Check if 'testeros' is missing
+
+        query = "SELECT DISTINCT testero FROM testeros"
+        cursor.execute(query)
+        testeros = cursor.fetchall()
+        # print(f"✅ Query Result: {testeros}")  # Show fetched rows
+
+    except sqlite3.Error as e:
+        # print(f"❌ Database error: {e}")
+        testeros = 0
+    finally:
+        conn.close()
+
+    return testeros
+
 ''' ================================================================================================================================================================= '''
 ''' ============================   Funciones para feature de presets de armadura activa (Tipos Cableados, T2, T4, T6)  ============================================== '''
 
 def db_tipos_cableado_pieza(familia, modelo):
     ''' Obtiene los tipos de cableado que existen como Preset para una pieza '''
 
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -504,8 +708,8 @@ def db_tipos_cableado_pieza(familia, modelo):
 def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
     " Usando familia, modelo, y seleccion en comboBox obtiene ID correspondiente a ese tipo de cableado para esa pieza "
     
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -530,8 +734,8 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
 def db_cables_tipo_cableado(tipo_cableado, familia, modelo):
     ''' usa ID de tipo cableado obtenido de cableado_tipos y compara en col tipo_cableado de cableado_cables '''
 
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -560,8 +764,8 @@ def db_cables_tipo_cableado(tipo_cableado, familia, modelo):
 def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
     ''' Usa como parametro ID de cableado_tipos '''
 
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -586,8 +790,8 @@ def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
 def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
     ''' Usa como parametro ID de cableado_tipos '''
 
-    # conn = sqlite3.connect("armaduras.db")
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -614,7 +818,8 @@ def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
 def db_tipos_arm_pasiva():
     ''' retorna todaos los tipos de armaduras pasivas '''
 
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -637,7 +842,8 @@ def db_tipos_arm_pasiva():
 def db_materiales_arm_pasiva():
     ''' retorna todaos los tipos de armaduras pasivas '''
 
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -662,7 +868,8 @@ def db_usos_arm_pasiva():
     ''' retorna todos los usos de armaduras pasivas '''
     ''' Flexion, Cortante, Varios, Flexion Aleta, Cortante Aleta '''
 
-    db_path = os.path.join(DB_DIR, "armaduras.db")
+    # db_path = os.path.join(DB_DIR, "armaduras.db")
+    db_path = get_db_path("armaduras.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -690,7 +897,8 @@ def db_usos_arm_pasiva():
 def db_tipos_hormigon():
     ''' Obtiene todos los tipos de hormigon que hay disponibles '''
     ''' Tabla tipos_hormigon de materiales.db'''
-    db_path = os.path.join(DB_DIR, "materiales.db")
+    # db_path = os.path.join(DB_DIR, "materiales.db")
+    db_path = get_db_path("materiales.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -714,7 +922,8 @@ def db_tipos_hormigon():
 def db_id_tipo_hormigon_nombre(nombre_hormigon):
     ''' Dado un nombre de un tipo de hormigon (str) se obtiene su id PK correspondiente '''
     ''' Resultado se usa para queries donde ID es PK en otra tabla '''
-    db_path = os.path.join(DB_DIR, "materiales.db")
+    # db_path = os.path.join(DB_DIR, "materiales.db")
+    db_path = get_db_path("materiales.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -739,7 +948,8 @@ def db_id_tipo_hormigon_nombre(nombre_hormigon):
 def db_resistencias_tipo_hormigon(tipo_hormigon):
     ''' Obtiene parametros de resistencias para un tipo de hormigon dado '''
     ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en resistencias_hormigon '''
-    db_path = os.path.join(DB_DIR, "materiales.db")
+    # db_path = os.path.join(DB_DIR, "materiales.db")
+    db_path = get_db_path("materiales.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -763,7 +973,8 @@ def db_resistencias_tipo_hormigon(tipo_hormigon):
 def db_densidades_tipo_hormigon(tipo_hormigon):
     ''' Obtiene parametros de desidades HORMIGON/ACERO para un tipo de hormigon dado '''
     ''' tipo de hormigon es valor de id para un string de tipo de hormigon que se usa como PK en tipos_hormigon y FK en densidades '''
-    db_path = os.path.join(DB_DIR, "materiales.db")
+    # db_path = os.path.join(DB_DIR, "materiales.db")
+    db_path = get_db_path("materiales.db")
 
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()

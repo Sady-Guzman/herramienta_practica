@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'herramienta_trapecios_v11.ui'
+## Form generated from reading UI file 'herramienta_trapecios_v12.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.1
 ##
@@ -312,7 +312,7 @@ class Ui_Dialog(object):
         self.tab2_btn_del_cord.setGeometry(QRect(230, 70, 111, 32))
         self.gridLayoutWidget_3 = QWidget(self.tab_2)
         self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(899, 10, 171, 116))
+        self.gridLayoutWidget_3.setGeometry(QRect(809, 10, 261, 147))
         self.tab2_gridLayout_totales = QGridLayout(self.gridLayoutWidget_3)
         self.tab2_gridLayout_totales.setObjectName(u"tab2_gridLayout_totales")
         self.tab2_gridLayout_totales.setContentsMargins(0, 0, 0, 0)
@@ -322,11 +322,11 @@ class Ui_Dialog(object):
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_cant_cord, 0, 0, 1, 1)
 
-        self.tab2_label_cdg_area = QLabel(self.gridLayoutWidget_3)
-        self.tab2_label_cdg_area.setObjectName(u"tab2_label_cdg_area")
-        self.tab2_label_cdg_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.tab2_label_cdg_fuerza = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cdg_fuerza.setObjectName(u"tab2_label_cdg_fuerza")
+        self.tab2_label_cdg_fuerza.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_area, 2, 0, 1, 1)
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_fuerza, 3, 0, 1, 1)
 
         self.tab2_label_area_total = QLabel(self.gridLayoutWidget_3)
         self.tab2_label_area_total.setObjectName(u"tab2_label_area_total")
@@ -334,31 +334,42 @@ class Ui_Dialog(object):
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_label_area_total, 1, 0, 1, 1)
 
-        self.tab2_line_total_cdg_area = QLineEdit(self.gridLayoutWidget_3)
-        self.tab2_line_total_cdg_area.setObjectName(u"tab2_line_total_cdg_area")
+        self.tab2_label_cdg_area = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_cdg_area.setObjectName(u"tab2_label_cdg_area")
+        self.tab2_label_cdg_area.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_area, 2, 1, 1, 1)
-
-        self.tab2_line_total_area = QLineEdit(self.gridLayoutWidget_3)
-        self.tab2_line_total_area.setObjectName(u"tab2_line_total_area")
-
-        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_area, 1, 1, 1, 1)
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_area, 2, 0, 1, 1)
 
         self.tab2_line_total_cordones = QLineEdit(self.gridLayoutWidget_3)
         self.tab2_line_total_cordones.setObjectName(u"tab2_line_total_cordones")
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cordones, 0, 1, 1, 1)
 
-        self.tab2_label_cdg_fuerza = QLabel(self.gridLayoutWidget_3)
-        self.tab2_label_cdg_fuerza.setObjectName(u"tab2_label_cdg_fuerza")
-        self.tab2_label_cdg_fuerza.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-
-        self.tab2_gridLayout_totales.addWidget(self.tab2_label_cdg_fuerza, 3, 0, 1, 1)
-
         self.tab2_line_total_cdg_fuerza = QLineEdit(self.gridLayoutWidget_3)
         self.tab2_line_total_cdg_fuerza.setObjectName(u"tab2_line_total_cdg_fuerza")
 
         self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_fuerza, 3, 1, 1, 1)
+
+        self.tab2_line_total_area = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_area.setObjectName(u"tab2_line_total_area")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_area, 1, 1, 1, 1)
+
+        self.tab2_line_total_cdg_area = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_cdg_area.setObjectName(u"tab2_line_total_cdg_area")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_cdg_area, 2, 1, 1, 1)
+
+        self.tab2_label_inercia = QLabel(self.gridLayoutWidget_3)
+        self.tab2_label_inercia.setObjectName(u"tab2_label_inercia")
+        self.tab2_label_inercia.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_label_inercia, 4, 0, 1, 1)
+
+        self.tab2_line_total_inercia = QLineEdit(self.gridLayoutWidget_3)
+        self.tab2_line_total_inercia.setObjectName(u"tab2_line_total_inercia")
+
+        self.tab2_gridLayout_totales.addWidget(self.tab2_line_total_inercia, 4, 1, 1, 1)
 
         self.tab2_btn_valores = QPushButton(self.tab_2)
         self.tab2_btn_valores.setObjectName(u"tab2_btn_valores")
@@ -374,19 +385,19 @@ class Ui_Dialog(object):
         self.tab2_label_cota_dinamica_2.setGeometry(QRect(230, 20, 101, 16))
         self.tab2_label_testero = QLabel(self.tab_2)
         self.tab2_label_testero.setObjectName(u"tab2_label_testero")
-        self.tab2_label_testero.setGeometry(QRect(610, 20, 113, 18))
+        self.tab2_label_testero.setGeometry(QRect(460, 20, 113, 18))
         self.tab2_combo_testero = QComboBox(self.tab_2)
         self.tab2_combo_testero.setObjectName(u"tab2_combo_testero")
-        self.tab2_combo_testero.setGeometry(QRect(610, 44, 141, 32))
+        self.tab2_combo_testero.setGeometry(QRect(460, 44, 141, 32))
         self.tab2_combo_preset = QComboBox(self.tab_2)
         self.tab2_combo_preset.setObjectName(u"tab2_combo_preset")
-        self.tab2_combo_preset.setGeometry(QRect(747, 44, 121, 32))
+        self.tab2_combo_preset.setGeometry(QRect(597, 44, 121, 32))
         self.tab2_label_preset = QLabel(self.tab_2)
         self.tab2_label_preset.setObjectName(u"tab2_label_preset")
-        self.tab2_label_preset.setGeometry(QRect(750, 20, 112, 18))
+        self.tab2_label_preset.setGeometry(QRect(600, 20, 112, 18))
         self.tab2_btn_aplicar_preset = QPushButton(self.tab_2)
         self.tab2_btn_aplicar_preset.setObjectName(u"tab2_btn_aplicar_preset")
-        self.tab2_btn_aplicar_preset.setGeometry(QRect(750, 70, 111, 32))
+        self.tab2_btn_aplicar_preset.setGeometry(QRect(600, 70, 111, 32))
         self.tabWidget.addTab(self.tab_2, "")
         self.tab_3 = QWidget()
         self.tab_3.setObjectName(u"tab_3")
@@ -499,6 +510,30 @@ class Ui_Dialog(object):
         self.tab3_horizontal_line.setGeometry(QRect(20, 490, 841, 16))
         self.tab3_horizontal_line.setFrameShape(QFrame.Shape.HLine)
         self.tab3_horizontal_line.setFrameShadow(QFrame.Shadow.Sunken)
+        self.tab3_btn_calcular = QPushButton(self.tab_3)
+        self.tab3_btn_calcular.setObjectName(u"tab3_btn_calcular")
+        self.tab3_btn_calcular.setGeometry(QRect(939, 10, 141, 32))
+        self.tab3_label_yinf_barras = QLabel(self.tab_3)
+        self.tab3_label_yinf_barras.setObjectName(u"tab3_label_yinf_barras")
+        self.tab3_label_yinf_barras.setGeometry(QRect(860, 100, 101, 20))
+        self.tab3_line_yinf_barras = QLineEdit(self.tab_3)
+        self.tab3_line_yinf_barras.setObjectName(u"tab3_line_yinf_barras")
+        self.tab3_line_yinf_barras.setGeometry(QRect(970, 100, 81, 21))
+        self.tab3_label_area_barras = QLabel(self.tab_3)
+        self.tab3_label_area_barras.setObjectName(u"tab3_label_area_barras")
+        self.tab3_label_area_barras.setGeometry(QRect(830, 70, 131, 20))
+        self.tab3_line_area_barras = QLineEdit(self.tab_3)
+        self.tab3_line_area_barras.setObjectName(u"tab3_line_area_barras")
+        self.tab3_line_area_barras.setGeometry(QRect(970, 70, 81, 21))
+        self.tab3_line_inercia_barras = QLineEdit(self.tab_3)
+        self.tab3_line_inercia_barras.setObjectName(u"tab3_line_inercia_barras")
+        self.tab3_line_inercia_barras.setGeometry(QRect(970, 130, 81, 21))
+        self.tab3_label_inercia_barras = QLabel(self.tab_3)
+        self.tab3_label_inercia_barras.setObjectName(u"tab3_label_inercia_barras")
+        self.tab3_label_inercia_barras.setGeometry(QRect(830, 130, 141, 20))
+        self.tab3_instrucciones = QLabel(self.tab_3)
+        self.tab3_instrucciones.setObjectName(u"tab3_instrucciones")
+        self.tab3_instrucciones.setGeometry(QRect(760, 590, 311, 16))
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
@@ -567,6 +602,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_min_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_min_e.setObjectName(u"tab4_line_horm_min_e")
         self.tab4_line_horm_min_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_min_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_min_e, 1, 2, 1, 1)
 
@@ -579,6 +615,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_max_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_max_e.setObjectName(u"tab4_line_horm_max_e")
         self.tab4_line_horm_max_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_max_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_max_e, 2, 2, 1, 1)
 
@@ -591,6 +628,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_final_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_final_e.setObjectName(u"tab4_line_horm_final_e")
         self.tab4_line_horm_final_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_final_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_final_e, 3, 2, 1, 1)
 
@@ -603,6 +641,7 @@ class Ui_Dialog(object):
         self.tab4_line_horm_insitu_e = QLineEdit(self.gridLayoutWidget)
         self.tab4_line_horm_insitu_e.setObjectName(u"tab4_line_horm_insitu_e")
         self.tab4_line_horm_insitu_e.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab4_line_horm_insitu_e.setReadOnly(True)
 
         self.tab4_gridLayout_fc.addWidget(self.tab4_line_horm_insitu_e, 4, 2, 1, 1)
 
@@ -678,9 +717,9 @@ class Ui_Dialog(object):
 
         self.tab4_gridLayout_densidades.addWidget(self.tab4_line_dens_concreto, 3, 1, 1, 1)
 
-        self.tab2_btn_guardar_valores = QPushButton(self.tab_4)
-        self.tab2_btn_guardar_valores.setObjectName(u"tab2_btn_guardar_valores")
-        self.tab2_btn_guardar_valores.setGeometry(QRect(360, 190, 211, 32))
+        self.tab4_btn_guardar_valores = QPushButton(self.tab_4)
+        self.tab4_btn_guardar_valores.setObjectName(u"tab4_btn_guardar_valores")
+        self.tab4_btn_guardar_valores.setGeometry(QRect(360, 190, 211, 32))
         self.tab4_instrucciones1 = QLabel(self.tab_4)
         self.tab4_instrucciones1.setObjectName(u"tab4_instrucciones1")
         self.tab4_instrucciones1.setGeometry(QRect(770, 20, 311, 20))
@@ -704,6 +743,157 @@ class Ui_Dialog(object):
         self.tab4_instrucciones4.setObjectName(u"tab4_instrucciones4")
         self.tab4_instrucciones4.setGeometry(QRect(770, 170, 221, 71))
         self.tab4_instrucciones4.setWordWrap(True)
+        self.gridLayoutWidget_6 = QWidget(self.tab_4)
+        self.gridLayoutWidget_6.setObjectName(u"gridLayoutWidget_6")
+        self.gridLayoutWidget_6.setGeometry(QRect(20, 530, 551, 94))
+        self.tab4_gridLayout_info = QGridLayout(self.gridLayoutWidget_6)
+        self.tab4_gridLayout_info.setObjectName(u"tab4_gridLayout_info")
+        self.tab4_gridLayout_info.setContentsMargins(0, 0, 0, 0)
+        self.tab4_label_tipo_3 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tipo_3.setObjectName(u"tab4_label_tipo_3")
+        self.tab4_label_tipo_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tipo_3, 2, 0, 1, 1)
+
+        self.tab4_label_tpi_1 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tpi_1.setObjectName(u"tab4_label_tpi_1")
+        self.tab4_label_tpi_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tpi_1, 0, 4, 1, 1)
+
+        self.tab4_label_tipo_1 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tipo_1.setObjectName(u"tab4_label_tipo_1")
+        self.tab4_label_tipo_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tipo_1, 0, 0, 1, 1)
+
+        self.tab4_label_acero_1 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_acero_1.setObjectName(u"tab4_label_acero_1")
+        self.tab4_label_acero_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_acero_1, 0, 2, 1, 1)
+
+        self.tab4_label_tipo_2 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tipo_2.setObjectName(u"tab4_label_tipo_2")
+        self.tab4_label_tipo_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tipo_2, 1, 0, 1, 1)
+
+        self.tab4_label_pulgada_1 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_pulgada_1.setObjectName(u"tab4_label_pulgada_1")
+        self.tab4_label_pulgada_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_pulgada_1, 0, 1, 1, 1)
+
+        self.tab4_label_area_1 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_area_1.setObjectName(u"tab4_label_area_1")
+        self.tab4_label_area_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_area_1, 0, 3, 1, 1)
+
+        self.tab4_label_tipo_4 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tipo_4.setObjectName(u"tab4_label_tipo_4")
+        self.tab4_label_tipo_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tipo_4, 3, 0, 1, 1)
+
+        self.tab4_label_pulgada_2 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_pulgada_2.setObjectName(u"tab4_label_pulgada_2")
+        self.tab4_label_pulgada_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_pulgada_2, 1, 1, 1, 1)
+
+        self.tab4_label_pulgada_3 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_pulgada_3.setObjectName(u"tab4_label_pulgada_3")
+        self.tab4_label_pulgada_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_pulgada_3, 2, 1, 1, 1)
+
+        self.tab4_label_pulgada_4 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_pulgada_4.setObjectName(u"tab4_label_pulgada_4")
+        self.tab4_label_pulgada_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_pulgada_4, 3, 1, 1, 1)
+
+        self.tab4_label_acero_2 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_acero_2.setObjectName(u"tab4_label_acero_2")
+        self.tab4_label_acero_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_acero_2, 1, 2, 1, 1)
+
+        self.tab4_label_acero_3 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_acero_3.setObjectName(u"tab4_label_acero_3")
+        self.tab4_label_acero_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_acero_3, 2, 2, 1, 1)
+
+        self.tab4_label_acero_4 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_acero_4.setObjectName(u"tab4_label_acero_4")
+        self.tab4_label_acero_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_acero_4, 3, 2, 1, 1)
+
+        self.tab4_label_tpi_2 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tpi_2.setObjectName(u"tab4_label_tpi_2")
+        self.tab4_label_tpi_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tpi_2, 1, 4, 1, 1)
+
+        self.tab4_label_tpi_3 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tpi_3.setObjectName(u"tab4_label_tpi_3")
+        self.tab4_label_tpi_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tpi_3, 2, 4, 1, 1)
+
+        self.tab4_label_tpi_4 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_tpi_4.setObjectName(u"tab4_label_tpi_4")
+        self.tab4_label_tpi_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_tpi_4, 3, 4, 1, 1)
+
+        self.tab4_label_area_2 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_area_2.setObjectName(u"tab4_label_area_2")
+        self.tab4_label_area_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_area_2, 1, 3, 1, 1)
+
+        self.tab4_label_area_3 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_area_3.setObjectName(u"tab4_label_area_3")
+        self.tab4_label_area_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_area_3, 2, 3, 1, 1)
+
+        self.tab4_label_area_4 = QLabel(self.gridLayoutWidget_6)
+        self.tab4_label_area_4.setObjectName(u"tab4_label_area_4")
+        self.tab4_label_area_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab4_gridLayout_info.addWidget(self.tab4_label_area_4, 3, 3, 1, 1)
+
+        self.tab4_label_title_tipo = QLabel(self.tab_4)
+        self.tab4_label_title_tipo.setObjectName(u"tab4_label_title_tipo")
+        self.tab4_label_title_tipo.setGeometry(QRect(40, 510, 41, 16))
+        self.tab4_label_title_tipo.setFont(font2)
+        self.tab4_label_title_pulgada = QLabel(self.tab_4)
+        self.tab4_label_title_pulgada.setObjectName(u"tab4_label_title_pulgada")
+        self.tab4_label_title_pulgada.setGeometry(QRect(120, 510, 91, 16))
+        self.tab4_label_title_pulgada.setFont(font2)
+        self.tab4_label_title_acero = QLabel(self.tab_4)
+        self.tab4_label_title_acero.setObjectName(u"tab4_label_title_acero")
+        self.tab4_label_title_acero.setGeometry(QRect(240, 510, 91, 16))
+        self.tab4_label_title_acero.setFont(font2)
+        self.tab4_label_title_area = QLabel(self.tab_4)
+        self.tab4_label_title_area.setObjectName(u"tab4_label_title_area")
+        self.tab4_label_title_area.setGeometry(QRect(350, 510, 91, 16))
+        self.tab4_label_title_area.setFont(font2)
+        self.tab4_label_title_tpi = QLabel(self.tab_4)
+        self.tab4_label_title_tpi.setObjectName(u"tab4_label_title_tpi")
+        self.tab4_label_title_tpi.setGeometry(QRect(470, 510, 101, 16))
+        self.tab4_label_title_tpi.setFont(font2)
+        self.tab4_separador_tabla = QFrame(self.tab_4)
+        self.tab4_separador_tabla.setObjectName(u"tab4_separador_tabla")
+        self.tab4_separador_tabla.setGeometry(QRect(20, 520, 561, 16))
+        self.tab4_separador_tabla.setFrameShape(QFrame.Shape.HLine)
+        self.tab4_separador_tabla.setFrameShadow(QFrame.Shadow.Sunken)
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QWidget()
         self.tab_5.setObjectName(u"tab_5")
@@ -842,14 +1032,14 @@ class Ui_Dialog(object):
 
         self.tab5_gridLayout_caracteristicas.addWidget(self.tab5_line_inercia_t00, 3, 3, 1, 1)
 
-        self.pushButton = QPushButton(self.tab_5)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setGeometry(QRect(889, 20, 171, 32))
+        self.tab5_btn_calcular = QPushButton(self.tab_5)
+        self.tab5_btn_calcular.setObjectName(u"tab5_btn_calcular")
+        self.tab5_btn_calcular.setGeometry(QRect(889, 20, 171, 32))
         self.tabWidget.addTab(self.tab_5, "")
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -861,9 +1051,9 @@ class Ui_Dialog(object):
         self.btn_save_pieza.setText(QCoreApplication.translate("Dialog", u"Guardar como Pieza de Usuario", None))
         self.label_guardar_pieza.setText(QCoreApplication.translate("Dialog", u"Guardar en base de datos", None))
         self.label_name.setText(QCoreApplication.translate("Dialog", u"Num", None))
-        self.label_bi.setText(QCoreApplication.translate("Dialog", u"Base_inf", None))
-        self.label_bs.setText(QCoreApplication.translate("Dialog", u"Base_sup", None))
-        self.label_altura.setText(QCoreApplication.translate("Dialog", u"Altura", None))
+        self.label_bi.setText(QCoreApplication.translate("Dialog", u"Base_inf[m]", None))
+        self.label_bs.setText(QCoreApplication.translate("Dialog", u"Base_sup[m]", None))
+        self.label_altura.setText(QCoreApplication.translate("Dialog", u"Altura[m]", None))
         self.label_area.setText(QCoreApplication.translate("Dialog", u"Area", None))
         self.label_cg.setText(QCoreApplication.translate("Dialog", u"Cg_Inf", None))
         self.label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
@@ -894,9 +1084,10 @@ class Ui_Dialog(object):
         self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"Borrar Cota", None))
         self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"eliminar cordon", None))
         self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones:", None))
-        self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area:", None))
-        self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total:", None))
-        self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza:", None))
+        self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza[m]:", None))
+        self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total [cm2]:", None))
+        self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area[m]:", None))
+        self.tab2_label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia (cdg Area) [m4]", None))
         self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"obtener valores", None))
         self.tab2_label_cota_dinamica.setText(QCoreApplication.translate("Dialog", u"Agregar Cotas", None))
         self.tab2_btn_add_cota_testero.setText(QCoreApplication.translate("Dialog", u"Cota Testero", None))
@@ -932,6 +1123,11 @@ class Ui_Dialog(object):
         self.tab3_label_longitud.setText(QCoreApplication.translate("Dialog", u"Longitud (m)", None))
         self.tab3_label_cercos.setText(QCoreApplication.translate("Dialog", u"CERCOS", None))
         self.tab3_label_mallas.setText(QCoreApplication.translate("Dialog", u"MALLAS", None))
+        self.tab3_btn_calcular.setText(QCoreApplication.translate("Dialog", u"Agregar a calculo", None))
+        self.tab3_label_yinf_barras.setText(QCoreApplication.translate("Dialog", u"Yinf Barras[m]:", None))
+        self.tab3_label_area_barras.setText(QCoreApplication.translate("Dialog", u"Area Barras [mm2]:", None))
+        self.tab3_label_inercia_barras.setText(QCoreApplication.translate("Dialog", u"Inercia Barras [m4]:", None))
+        self.tab3_instrucciones.setText(QCoreApplication.translate("Dialog", u"Para calculo Simple t=0 solo usa N-min y \u00d8min", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Dialog", u"Arm. Pasiva", None))
         self.tab4_label_caracteristicas_horm.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas del Hormig\u00f3n", None))
         self.tab4_grid_horm_relleno.setText("")
@@ -949,11 +1145,36 @@ class Ui_Dialog(object):
         self.tab4_label_wc.setText("")
         self.tab4_label_dens_acero.setText(QCoreApplication.translate("Dialog", u"Dens. Acero(kN/m3)", None))
         self.tab4_label_dens_concreto.setText(QCoreApplication.translate("Dialog", u"Dens. Concreto(kg/m3) [wc]", None))
-        self.tab2_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Calcular con Wc", None))
+        self.tab4_btn_guardar_valores.setText(QCoreApplication.translate("Dialog", u"Calcular con Wc", None))
         self.tab4_instrucciones1.setText(QCoreApplication.translate("Dialog", u"*Dens. Concreto [wc] por defecto = 2400 (kg/m3)", None))
         self.tab4_instrucciones2.setText(QCoreApplication.translate("Dialog", u"Al seleccionar tipo de hormi\u00f3n en lista superior se asignan automaticamete valores para f'c ; Ec ; densidades en los campos.", None))
         self.tab4_instrucciones3.setText(QCoreApplication.translate("Dialog", u"Estos valores usan formula JACENA de Ec = 4700 * raiz(f'c).", None))
         self.tab4_instrucciones4.setText(QCoreApplication.translate("Dialog", u"Para usar resultados de formula Ec = Wc^1.5 * 0.043 * raiz(f'c). >>Usar boton \"Calcular con Wc\"", None))
+        self.tab4_label_tipo_3.setText(QCoreApplication.translate("Dialog", u"\u00d8 12.70 mm", None))
+        self.tab4_label_tpi_1.setText(QCoreApplication.translate("Dialog", u"1230", None))
+        self.tab4_label_tipo_1.setText(QCoreApplication.translate("Dialog", u"\u00d8 4.98 mm", None))
+        self.tab4_label_acero_1.setText(QCoreApplication.translate("Dialog", u"ASTM-421", None))
+        self.tab4_label_tipo_2.setText(QCoreApplication.translate("Dialog", u"\u00d8 9.3mm", None))
+        self.tab4_label_pulgada_1.setText(QCoreApplication.translate("Dialog", u"------", None))
+        self.tab4_label_area_1.setText(QCoreApplication.translate("Dialog", u"0.195", None))
+        self.tab4_label_tipo_4.setText(QCoreApplication.translate("Dialog", u"\u00d8 15.24mm", None))
+        self.tab4_label_pulgada_2.setText(QCoreApplication.translate("Dialog", u"3/8''", None))
+        self.tab4_label_pulgada_3.setText(QCoreApplication.translate("Dialog", u"1/2''", None))
+        self.tab4_label_pulgada_4.setText(QCoreApplication.translate("Dialog", u"0.6''", None))
+        self.tab4_label_acero_2.setText(QCoreApplication.translate("Dialog", u"ASTM-416", None))
+        self.tab4_label_acero_3.setText(QCoreApplication.translate("Dialog", u"ASTM-416", None))
+        self.tab4_label_acero_4.setText(QCoreApplication.translate("Dialog", u"ASTM-416", None))
+        self.tab4_label_tpi_2.setText(QCoreApplication.translate("Dialog", u"1400", None))
+        self.tab4_label_tpi_3.setText(QCoreApplication.translate("Dialog", u"1400", None))
+        self.tab4_label_tpi_4.setText(QCoreApplication.translate("Dialog", u"1400", None))
+        self.tab4_label_area_2.setText(QCoreApplication.translate("Dialog", u"0.432", None))
+        self.tab4_label_area_3.setText(QCoreApplication.translate("Dialog", u"0.775", None))
+        self.tab4_label_area_4.setText(QCoreApplication.translate("Dialog", u"1.102", None))
+        self.tab4_label_title_tipo.setText(QCoreApplication.translate("Dialog", u"Tipo", None))
+        self.tab4_label_title_pulgada.setText(QCoreApplication.translate("Dialog", u"Eq. Pulgada", None))
+        self.tab4_label_title_acero.setText(QCoreApplication.translate("Dialog", u"Tipo Acero", None))
+        self.tab4_label_title_area.setText(QCoreApplication.translate("Dialog", u"\u00c1rea (cm2)", None))
+        self.tab4_label_title_tpi.setText(QCoreApplication.translate("Dialog", u"Tpi (N/mm2)", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("Dialog", u"Materiales", None))
         self.tab5_label_temp1.setText(QCoreApplication.translate("Dialog", u"Ingresar datos esfuerzo", None))
         self.tab5_label_temp2.setText(QCoreApplication.translate("Dialog", u"Momento:", None))
@@ -967,7 +1188,7 @@ class Ui_Dialog(object):
         self.tab5_label_bruta.setText(QCoreApplication.translate("Dialog", u"Bruta t=0", None))
         self.tab5_label_simple_t00.setText(QCoreApplication.translate("Dialog", u"Simple t=00", None))
         self.tab5_line_area_bruta.setText("")
-        self.pushButton.setText(QCoreApplication.translate("Dialog", u"Calcular caracter\u00edsticas", None))
+        self.tab5_btn_calcular.setText(QCoreApplication.translate("Dialog", u"Calcular caracter\u00edsticas", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), QCoreApplication.translate("Dialog", u"Calc. Parcial", None))
     # retranslateUi
 

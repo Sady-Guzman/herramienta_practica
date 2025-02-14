@@ -11,6 +11,9 @@
     para guardar los valores ingresados por el usuario en los campos de cada variable.
 '''
 
+"""
+    ATENCION: update_tpi_values(self) usa valores por defecto para tpi segun cordon seleccionado que estan hardcoded (FIJOS). Ya que en documentacion general no se especifican tpi. Estos valores son tomados de JACENA
+"""
 from PySide6.QtWidgets import QVBoxLayout, QLabel, QLineEdit, QComboBox, QMessageBox, QSpacerItem, QHBoxLayout, QSizePolicy, QGridLayout
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont
@@ -19,6 +22,7 @@ from utils import popup_msg
 import re
 from fn_win_selecionar_cotas import open_add_cotas_dialog, open_del_cotas_dialog
 from PySide6 import QtCore
+import os
 
 
 def setup_armadura_activa(self):
@@ -40,19 +44,146 @@ def setup_armadura_activa(self):
 
 
     self.ui.btn_acpt_tipo_seccion.clicked.connect(lambda: armact_llena_tipos_cableado(self)) # Llena Combo TiposCableados al usar btn cargar pieza
-    # TODO descomentar linea superior para cargar comboBox tipo_cableado con tipos corresopndientes a pieza seleccionada
-    # armact_llena_tipos_cableado(self) # Carga SIEMPRE tipos para pieza 4060
+
+
+
+
+def arm_act_btn_calcular(self):
+
+    ''' Prints de componentes existentes en pestana '''
+    # if not self.dynamic_cotas:
+    #     print("ERROR: No se encontrarron cotas en GUI")
+    #     return
+    # # Print all ComboBox values
+    # print("ComboBox Values:")
+    # for i, combo in enumerate(self.dynamic_diametros_arm_act):
+    #     print(f"  ComboBox {i + 1}: {combo.currentText()}")
+
+    # # Print all values for num_cordones and tpi
+    # print("\nCordones and TPI Values:")
+    # for index, cordon in self.dynamic_cordones_arm_act.items():
+    #     print(f"  Cordon {index + 1}:")
+        
+    #     # Print num_cordones values
+    #     print("    Num Cordones:")
+    #     for j, num_cordon in enumerate(cordon['num_cordones']):
+    #         print(f"      {j + 1}: {num_cordon.text()}")
+
+    #     # Print tpi values
+    #     print("    TPI:")
+    #     for j, tpi in enumerate(cordon['tpi']):
+    #         print(f"      {j + 1}: {tpi.text()}")
+
+    # # Print all cota values
+    # print("\nCotas:")
+    # for i, cota in enumerate(self.dynamic_cotas):
+    #     print(f"  Cota {i + 1}: {cota.text()}")
+
+    # Calcula la suma total de num_cordones
+    total_num_cordones = calculate_total_num_cordones(self)
+    # print(f"\nTotal Num Cordones: {total_num_cordones}") # Print resultado
+
+    total_area = armact_calcular_total_area(self)
+
+    # Assign the total to the QLineEdit
+    self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
+    self.ui.tab2_line_total_area.setText(str(total_area))
+
+    ''' Asegura que si un lineEdit de Cotas aún no tiene ningún valor o un valor no-numerico no pase nada '''
+    for i in range(len(self.dynamic_cotas)):
+        cota_text = self.dynamic_cotas[i].text().strip()  # Get the text from the QLineEdit and strip spaces
+        try:
+            # Try converting the text to a float
+            float(cota_text)
+        except ValueError:
+            # If conversion fails, it's not a valid number, so return
+            print(f"Invalid value in Cota {i + 1}: '{cota_text}'. Skipping.")
+            return
+    
+    # print_cordon_values(self)
+    # arm_act_obtener_datos_formula(self)
+    update_area_values(self) # asigna area segun diametro cordon
+    arm_act_cdg(self) # Centro de gravedad
+    armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
+    arm_act_calcular_inercia(self)
+    # update_tpi_values(self) # TODO Arreglar funcion, No deberia cambiar valor de tpi cada vez que se usa btn calcular. Se pierde tpi en caso de usar uno ingresado por usr
+
+
+''' ===================================================================================================================== '''
+''' ===================================      Funciones para pestana    ================================================== '''
+
+
+
+def arm_act_calcular_inercia(self):
+    ''' Calcula area total en cada cota (considerando los distintos tipos de cordones) y luego hace operacion Inercia '''
+    
+    dict_areas_cota = {}
+
+    for index_cota, cota in enumerate(self.dynamic_cotas):
+        cota_value = float(self.dynamic_cotas[index_cota].text())  # Convert to float
+        dict_areas_cota[cota_value] = 0  # Initialize total area for this cota
+
+        # print(f"\n\nPara cota {cota_value}:")
+
+        for index_cord, cordon in enumerate(self.dynamic_cordones_arm_act):
+            cordon = self.dynamic_cordones_arm_act[index_cord]
+
+            num_cords = int(cordon['num_cordones'][index_cota].text())  # Convert to int
+            area_cordon = float(cordon['area'].text())  # Convert to float
+
+            total_area = num_cords * (area_cordon / 10000)  # Compute total area
+
+            dict_areas_cota[cota_value] += total_area  # Add to total for this cota
+
+            # print(f"  - Cordon {index_cord} --> Num_cords = {num_cords}, Área Cordon = {area_cordon}, Total_Area = {total_area}")
+
+    # Print summarized results
+    # print("\n\nResumen de áreas por cota:")
+    # for cota, area_total in dict_areas_cota.items():
+    #     print(f"Cota {cota}m → Área total = {area_total} cm²")
+
+    ''' Operacion Inercia por cada seccion (cota) y sumatoria de inercia (Inercia real)'''
+
+    inercia_seccion = 0
+    inercia_acu = 0
+
+    cdg_area = float(self.ui.tab2_line_total_cdg_area.text())
+
+    # print("\n\n\t\t\t\t Calculo de inercia por seccion y total de armadura activa.\n")
+    for index, cota in enumerate(self.dynamic_cotas):
+        print("\n-----\nValor de cota: ", cota.text())
+
+        area_seccion = dict_areas_cota[float(cota.text())]
+        # print("Area seccion: ", area_seccion)
+
+        inercia_seccion = area_seccion * (pow((float(cota.text()) - cdg_area), 2))
+
+        # print("Inercia seccion: ", inercia_seccion)
+
+        inercia_acu += inercia_seccion
+    
+    # print("\n\n>>>Resultado de inercia acumulada: ", inercia_acu, "m^4")
+    inercia_acu = round(inercia_acu, 9)
+    self.ui.tab2_line_total_inercia.setText(f"{inercia_acu}")
 
 
 def arm_act_poblar_combo_testeros(self):
     ''' usa valores db armaduras.db pra poblar comboBox '''
     
     # Distinct testeros in testeros
+    # try:
+    #     testeros = db_testeros_existentes()
+    # except:
+    #     return
+
+    # import os
+    # print(os.path.abspath("armaduras.db"))
+
+    db_testeros_existentes()
     testeros = db_testeros_existentes()
 
-    # print(testeros)
 
-    for testero in testeros:
+    for testero in testeros: # LINE 183
         self.ui.tab2_combo_testero.addItem(f"{testero[0]}")
     
     # Ajusta tamano de letrs en ComboB
@@ -120,7 +251,7 @@ def arm_act_add_cota_tesero(self):
 
 def update_area_values(self):
     """Iterate through all ComboBoxes and update their corresponding area QLineEdit values."""
-    print("update_area_values() -> Entra func \n")
+
     for index, combo in enumerate(self.dynamic_diametros_arm_act):
         if index in self.dynamic_cordones_arm_act:  # Ensure there's a corresponding cordon entry
             line_edit_area = self.dynamic_cordones_arm_act[index].get('area')
@@ -129,6 +260,27 @@ def update_area_values(self):
                 diametro_value = combo.currentText()
                 area_value = ac_transformar_area_cordon(self, diametro_value)
                 line_edit_area.setText(area_value)
+
+def update_tpi_values(self):
+    ''' Itera por las comboBoxes chekeando cual es el diametro seleccionado, En base a esto se asigna un valor TPI por defecto para todas las cotas del cordon '''
+    
+    ''' SE USA VALORES HARDCODEADOS PORQUE NO SE ESPECIFICAN VALORES TPI EN DOCUMENTACION GENERAL. '''
+    for index, combo in enumerate(self.dynamic_diametros_arm_act):
+        if index in self.dynamic_cordones_arm_act:  # Ensure there's a corresponding cordon entry
+            # line_edit_area = self.dynamic_cordones_arm_act[index].get('area')
+            line_edit_tpi = self.dynamic_cordones_arm_act[index].get('tpi')
+
+            # print(f"valor recuperado para line_edits_tpi: {line_edit_tpi}\n\n")
+
+            if line_edit_tpi:
+                diametro_value = combo.currentText()
+                if diametro_value == "Ø 4.98 mm":
+                    for i, tpi in enumerate(line_edit_tpi):
+                        line_edit_tpi[i].setText("1230")
+                else:
+                    for i, tpi in enumerate(line_edit_tpi):
+                        line_edit_tpi[i].setText("1400")
+
 
 
 def ac_transformar_area_cordon(self, diametro_cordon):
@@ -171,66 +323,6 @@ def calculate_total_num_cordones(self):
             except ValueError:
                 pass  # Ignore non-integer values
     return total
-
-
-def arm_act_btn_calcular(self):
-
-    if not self.dynamic_cotas:
-        print("ERROR: No se encontrarron cotas en GUI")
-        return
-    # Print all ComboBox values
-    print("ComboBox Values:")
-    for i, combo in enumerate(self.dynamic_diametros_arm_act):
-        print(f"  ComboBox {i + 1}: {combo.currentText()}")
-
-    # Print all values for num_cordones and tpi
-    print("\nCordones and TPI Values:")
-    for index, cordon in self.dynamic_cordones_arm_act.items():
-        print(f"  Cordon {index + 1}:")
-        
-        # Print num_cordones values
-        print("    Num Cordones:")
-        for j, num_cordon in enumerate(cordon['num_cordones']):
-            print(f"      {j + 1}: {num_cordon.text()}")
-
-        # Print tpi values
-        print("    TPI:")
-        for j, tpi in enumerate(cordon['tpi']):
-            print(f"      {j + 1}: {tpi.text()}")
-
-    # Print all cota values
-    print("\nCotas:")
-    for i, cota in enumerate(self.dynamic_cotas):
-        print(f"  Cota {i + 1}: {cota.text()}")
-
-    # Calculate and print the total sum of num_cordones
-    total_num_cordones = calculate_total_num_cordones(self)
-    print(f"\nTotal Num Cordones: {total_num_cordones}")
-
-    
-
-    total_area = armact_calcular_total_area(self)
-
-    # Assign the total to the QLineEdit
-    self.ui.tab2_line_total_cordones.setText(str(total_num_cordones))
-    self.ui.tab2_line_total_area.setText(str(total_area))
-
-    ''' Asegura que si un lineEdit de Cotas aún no tiene ningún valor o un valor no-numerico no pase nada '''
-    for i in range(len(self.dynamic_cotas)):
-        cota_text = self.dynamic_cotas[i].text().strip()  # Get the text from the QLineEdit and strip spaces
-        try:
-            # Try converting the text to a float
-            float(cota_text)
-        except ValueError:
-            # If conversion fails, it's not a valid number, so return
-            print(f"Invalid value in Cota {i + 1}: '{cota_text}'. Skipping.")
-            return
-    
-    # print_cordon_values(self)
-    # arm_act_obtener_datos_formula(self)
-    update_area_values(self) # asigna area segun diametro cordon
-    arm_act_cdg(self) # Centro de gravedad
-    armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
 
 
 
@@ -823,6 +915,7 @@ def add_cordon(self):
 
     # Add a QLineEdit at (1, 1)
     line_edit_area = QLineEdit()
+    line_edit_area.setReadOnly(True)
     line_edit_area.setMinimumSize(70, 0)
     line_edit_area.setMaximumSize(100, 16777215)
     sub_grid_layout.addWidget(line_edit_area, 1, 1)

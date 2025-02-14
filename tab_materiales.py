@@ -19,7 +19,7 @@ def setup_tab_materiales(self):
         lambda: (mat_fill_densidades_tipo_horm(self), mat_fill_resistencias_tipo_horm(self))
     )
 
-    self.ui.tab2_btn_guardar_valores.clicked.connect(lambda: mat_calc_save_ec(self))
+    self.ui.tab4_btn_guardar_valores.clicked.connect(lambda: mat_calc_save_ec(self))
 
 
 

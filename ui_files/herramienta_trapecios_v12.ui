@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -119,21 +119,21 @@
       <item>
        <widget class="QLabel" name="label_bi">
         <property name="text">
-         <string>Base_inf</string>
+         <string>Base_inf[m]</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_bs">
         <property name="text">
-         <string>Base_sup</string>
+         <string>Base_sup[m]</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label_altura">
         <property name="text">
-         <string>Altura</string>
+         <string>Altura[m]</string>
         </property>
        </widget>
       </item>
@@ -598,10 +598,10 @@
     <widget class="QWidget" name="gridLayoutWidget_3">
      <property name="geometry">
       <rect>
-       <x>899</x>
+       <x>809</x>
        <y>10</y>
-       <width>171</width>
-       <height>116</height>
+       <width>261</width>
+       <height>147</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="tab2_gridLayout_totales">
@@ -615,10 +615,10 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="tab2_label_cdg_area">
+      <item row="3" column="0">
+       <widget class="QLabel" name="tab2_label_cdg_fuerza">
         <property name="text">
-         <string>c.d.g area:</string>
+         <string>c.d.g fuerza[m]:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -628,34 +628,47 @@
       <item row="1" column="0">
        <widget class="QLabel" name="tab2_label_area_total">
         <property name="text">
-         <string>Area total:</string>
+         <string>Area total [cm2]:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_cdg_area"/>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_area"/>
+      <item row="2" column="0">
+       <widget class="QLabel" name="tab2_label_cdg_area">
+        <property name="text">
+         <string>c.d.g area[m]:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
       </item>
       <item row="0" column="1">
        <widget class="QLineEdit" name="tab2_line_total_cordones"/>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="tab2_label_cdg_fuerza">
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cdg_fuerza"/>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_area"/>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_cdg_area"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="tab2_label_inercia">
         <property name="text">
-         <string>c.d.g fuerza:</string>
+         <string>Inercia (cdg Area) [m4]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="tab2_line_total_cdg_fuerza"/>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="tab2_line_total_inercia"/>
       </item>
      </layout>
     </widget>
@@ -714,7 +727,7 @@
     <widget class="QLabel" name="tab2_label_testero">
      <property name="geometry">
       <rect>
-       <x>610</x>
+       <x>460</x>
        <y>20</y>
        <width>113</width>
        <height>18</height>
@@ -727,7 +740,7 @@
     <widget class="QComboBox" name="tab2_combo_testero">
      <property name="geometry">
       <rect>
-       <x>610</x>
+       <x>460</x>
        <y>44</y>
        <width>141</width>
        <height>32</height>
@@ -737,7 +750,7 @@
     <widget class="QComboBox" name="tab2_combo_preset">
      <property name="geometry">
       <rect>
-       <x>747</x>
+       <x>597</x>
        <y>44</y>
        <width>121</width>
        <height>32</height>
@@ -747,7 +760,7 @@
     <widget class="QLabel" name="tab2_label_preset">
      <property name="geometry">
       <rect>
-       <x>750</x>
+       <x>600</x>
        <y>20</y>
        <width>112</width>
        <height>18</height>
@@ -760,7 +773,7 @@
     <widget class="QPushButton" name="tab2_btn_aplicar_preset">
      <property name="geometry">
       <rect>
-       <x>750</x>
+       <x>600</x>
        <y>70</y>
        <width>111</width>
        <height>32</height>
@@ -1207,6 +1220,101 @@
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
+    <widget class="QPushButton" name="tab3_btn_calcular">
+     <property name="geometry">
+      <rect>
+       <x>939</x>
+       <y>10</y>
+       <width>141</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Agregar a calculo</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_yinf_barras">
+     <property name="geometry">
+      <rect>
+       <x>860</x>
+       <y>100</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Yinf Barras[m]:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab3_line_yinf_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>100</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_area_barras">
+     <property name="geometry">
+      <rect>
+       <x>830</x>
+       <y>70</y>
+       <width>131</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Area Barras [mm2]:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab3_line_area_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>70</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab3_line_inercia_barras">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>130</y>
+       <width>81</width>
+       <height>21</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_label_inercia_barras">
+     <property name="geometry">
+      <rect>
+       <x>830</x>
+       <y>130</y>
+       <width>141</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Inercia Barras [m4]:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab3_instrucciones">
+     <property name="geometry">
+      <rect>
+       <x>760</x>
+       <y>590</y>
+       <width>311</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Para calculo Simple t=0 solo usa N-min y Ømin</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="tab_4">
     <attribute name="title">
@@ -1335,6 +1443,9 @@
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -1348,6 +1459,9 @@
        <widget class="QLineEdit" name="tab4_line_horm_max_e">
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -1363,6 +1477,9 @@
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </item>
       <item row="4" column="1">
@@ -1376,6 +1493,9 @@
        <widget class="QLineEdit" name="tab4_line_horm_insitu_e">
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -1487,7 +1607,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="tab2_btn_guardar_valores">
+    <widget class="QPushButton" name="tab4_btn_guardar_valores">
      <property name="geometry">
       <rect>
        <x>360</x>
@@ -1583,6 +1703,336 @@
      </property>
      <property name="wordWrap">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>530</y>
+       <width>551</width>
+       <height>94</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab4_gridLayout_info">
+      <item row="2" column="0">
+       <widget class="QLabel" name="tab4_label_tipo_3">
+        <property name="text">
+         <string>Ø 12.70 mm</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="tab4_label_tpi_1">
+        <property name="text">
+         <string>1230</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab4_label_tipo_1">
+        <property name="text">
+         <string>Ø 4.98 mm</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="tab4_label_acero_1">
+        <property name="text">
+         <string>ASTM-421</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="tab4_label_tipo_2">
+        <property name="text">
+         <string>Ø 9.3mm</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="tab4_label_pulgada_1">
+        <property name="text">
+         <string>------</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="tab4_label_area_1">
+        <property name="text">
+         <string>0.195</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="tab4_label_tipo_4">
+        <property name="text">
+         <string>Ø 15.24mm</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="tab4_label_pulgada_2">
+        <property name="text">
+         <string>3/8''</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="tab4_label_pulgada_3">
+        <property name="text">
+         <string>1/2''</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="tab4_label_pulgada_4">
+        <property name="text">
+         <string>0.6''</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QLabel" name="tab4_label_acero_2">
+        <property name="text">
+         <string>ASTM-416</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLabel" name="tab4_label_acero_3">
+        <property name="text">
+         <string>ASTM-416</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="tab4_label_acero_4">
+        <property name="text">
+         <string>ASTM-416</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="tab4_label_tpi_2">
+        <property name="text">
+         <string>1400</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="tab4_label_tpi_3">
+        <property name="text">
+         <string>1400</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="4">
+       <widget class="QLabel" name="tab4_label_tpi_4">
+        <property name="text">
+         <string>1400</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="tab4_label_area_2">
+        <property name="text">
+         <string>0.432</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="tab4_label_area_3">
+        <property name="text">
+         <string>0.775</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3">
+       <widget class="QLabel" name="tab4_label_area_4">
+        <property name="text">
+         <string>1.102</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QLabel" name="tab4_label_title_tipo">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>510</y>
+       <width>41</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tipo</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab4_label_title_pulgada">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>510</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Eq. Pulgada</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab4_label_title_acero">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>510</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tipo Acero</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab4_label_title_area">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>510</y>
+       <width>91</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Área (cm2)</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab4_label_title_tpi">
+     <property name="geometry">
+      <rect>
+       <x>470</x>
+       <y>510</y>
+       <width>101</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Tpi (N/mm2)</string>
+     </property>
+    </widget>
+    <widget class="Line" name="tab4_separador_tabla">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>520</y>
+       <width>561</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </widget>
@@ -1840,7 +2290,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="tab5_btn_calcular">
      <property name="geometry">
       <rect>
        <x>889</x>
