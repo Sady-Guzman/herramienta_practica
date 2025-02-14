@@ -7,11 +7,11 @@ from PySide6.QtCore import Qt
 def setup_tab_calc_parcial(self):
     ''' Se ejecuta desde main cuando inicia app '''
 
-    self.ui.tab5_btn_calcular.clicked.connect(lambda: calc_bruta(self))
+    self.ui.tab5_btn_calcular.clicked.connect(lambda: calc_propiedades_tabla(self))
 
 
 ''' Calculo Parcial Bruta t = 0 '''
-def calc_bruta(self):
+def calc_propiedades_tabla(self):
     ''' Asigna valores a LineEdits Area, cdg, inercia para Bruta t=0. '''
     ''' Son los mismos valores calculados en Tab1. Solo recupera .text() de lineEdits tab1 (Geometria) '''
     '''
@@ -20,6 +20,7 @@ def calc_bruta(self):
         result_sum_op = inercia
     '''
 
+    ''' Asigna resultados para seccion Bruta t = 0'''
     valor_bruta_area = self.ui.result_sum_area.text()
     valor_bruta_cdg = self.ui.result_sum_ponderado.text()
     valor_bruta_inercia = self.ui.result_sum_op.text()
@@ -29,6 +30,7 @@ def calc_bruta(self):
     self.ui.tab5_line_inercia_bruta.setText(valor_bruta_inercia)
 
     ''' Variables corresponden a resultados celdas en Excel Joaquin'''
+    ''' Se usan para calcular Simple t = 0 '''
     # TODO nombre variables 
     self.viga_area = 0
     self.barras_area = 0
@@ -51,8 +53,9 @@ def calc_bruta(self):
     self.operacion_tipo_cordones = 0
     self.operacion_final = 0
 
-    calc_seccion_neta_inicial(self)
-    seccion_homogeneizada_inicial(self)
+    ''' Hace calculos para simple t = 0 '''
+    calc_seccion_neta_inicial(self) # Primer paso
+    calc_seccion_homogeneizada_inicial(self)  # segundo paso (final) para t = 0
 
 
 
@@ -64,41 +67,56 @@ def calc_seccion_neta_inicial(self):
 
     print("\t\t\t\n\n\n>>Datos usados para simple t = 0<<\n")
 
-    print(f"Areas:")
-    self.viga_area = self.ui.result_sum_area.text()
-    self.cordones_area =self.ui.tab2_line_total_area.text()
-    self.cordones_area = float(self.cordones_area) / 10000 # Pasa a metros
-    self.barras_area = self.ui.tab3_line_area_barras.text()
-    print(f"\t VIGA: {self.viga_area} m2")
-    print(f"\t Arm. Activa: {self.cordones_area} m2")
-    print(f"\t Arm. pasiva: {self.barras_area} mm2")
+    try: 
+        print(f"Areas:")
+        self.viga_area = self.ui.result_sum_area.text()
+        self.cordones_area =self.ui.tab2_line_total_area.text()
+        self.cordones_area = float(self.cordones_area) / 10000 # Pasa a metros
+        self.barras_area = self.ui.tab3_line_area_barras.text()
+        print(f"\t VIGA: {self.viga_area} m2")
+        print(f"\t Arm. Activa: {self.cordones_area} m2")
+        print(f"\t Arm. pasiva: {self.barras_area} mm2")
+    except:
+        print("Falta calcular valor de area en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        return
 
-    print(f"\nY_inf:")
-    self.viga_cg =self.ui.result_sum_ponderado.text()
-    self.cordones_cg = self.ui.tab2_line_total_cdg_area.text()
-    self.barras_cg = self.ui.tab3_line_yinf_barras.text()
-    print(f"\t VIGA: {self.viga_cg} m")
-    print(f"\t Arm. Activa (sin tpi): {self.cordones_cg} m")
-    print(f"\t Arm. pasiva: {self.barras_cg} mm")
+    try:
+        print(f"\nY_inf:")
+        self.viga_cg =self.ui.result_sum_ponderado.text()
+        self.cordones_cg = self.ui.tab2_line_total_cdg_area.text()
+        self.barras_cg = self.ui.tab3_line_yinf_barras.text()
+        print(f"\t VIGA: {self.viga_cg} m")
+        print(f"\t Arm. Activa (sin tpi): {self.cordones_cg} m")
+        print(f"\t Arm. pasiva: {self.barras_cg} mm")
+    except:
+        print("Falta calcular Y_inf en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        return
 
-    print(f"\nInercia:")
-    self.viga_inercia = self.ui.result_sum_op.text()
-    self.cordones_inercia = self.ui.tab2_line_total_inercia.text()
-    self.barras_inercia = self.ui.tab3_line_inercia_barras.text()
-    print(f"\t VIGA: {self.viga_inercia} [?]")
-    print(f"\t Arm. Activa (sin tpi): {self.cordones_inercia} m4")
-    print(f"\t Arm. pasiva: {self.barras_inercia} m4")
+    try:
+        print(f"\nInercia:")
+        self.viga_inercia = self.ui.result_sum_op.text()
+        self.cordones_inercia = self.ui.tab2_line_total_inercia.text()
+        self.barras_inercia = self.ui.tab3_line_inercia_barras.text()
+        print(f"\t VIGA: {self.viga_inercia} [?]")
+        print(f"\t Arm. Activa (sin tpi): {self.cordones_inercia} m4")
+        print(f"\t Arm. pasiva: {self.barras_inercia} m4")
+    except:
+        print("Falta calcular Inercia en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        return
+    
 
-    print("\n\n\n\n")
-
-    print("A*cg de cada tipo:")
-    # TODO que nombre usar para esta variable ??
-    self.viga_a_cg = float(self.viga_area) * float(self.viga_cg)
-    self.cordones_a_cg = float(self.cordones_area) * float(self.cordones_cg)
-    self.barras_a_cg = float(self.barras_area) * float(self.barras_cg)
-    print(f"\tA*Cg de viga: {self.viga_a_cg}")
-    print(f"\tA*Cg de cordones: {self.cordones_a_cg}")
-    print(f"\tA*Cg de barras: {self.barras_a_cg}")
+    try:
+        print("A*cg de cada tipo:")
+        # TODO que nombre usar para esta variable ??
+        self.viga_a_cg = float(self.viga_area) * float(self.viga_cg)
+        self.cordones_a_cg = float(self.cordones_area) * float(self.cordones_cg)
+        self.barras_a_cg = float(self.barras_area) * float(self.barras_cg)
+        print(f"\tA*Cg de viga: {self.viga_a_cg}")
+        print(f"\tA*Cg de cordones: {self.cordones_a_cg}")
+        print(f"\tA*Cg de barras: {self.barras_a_cg}")
+    except:
+        print("Falta calcular A*cg en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        return
 
     print("\n\n\n\n")
 
@@ -126,7 +144,7 @@ def calc_seccion_neta_inicial(self):
 
 
 ''' Calculo Parcial simple t = 0 paso final'''
-def seccion_homogeneizada_inicial(self):
+def calc_seccion_homogeneizada_inicial(self):
     ''' ultima tabla excel Joaquin '''
 
     # Ingresado por usr (o puede usar valor por defecto segun tipo de hormigon seleccionado en Cobmbo)
@@ -144,77 +162,101 @@ def seccion_homogeneizada_inicial(self):
     nps = cons_eps / ec_ini # Para preStressed Steel -> Cordones Activos
 
     ''' Col area m2'''
-    homo_area_viga_barra_cable = float(self.viga_area) - (float(self.barras_area) + float(self.cordones_area))
-    homo_area_barras = float(self.barras_area) * ns
-    homo_area_cordones = float(self.cordones_area) * nps
+    try:
+        homo_area_viga_barra_cable = float(self.viga_area) - (float(self.barras_area) + float(self.cordones_area))
+        homo_area_barras = float(self.barras_area) * ns
+        homo_area_cordones = float(self.cordones_area) * nps
 
-    homo_suma_areas = homo_area_viga_barra_cable + homo_area_cordones + homo_area_barras
+        homo_suma_areas = homo_area_viga_barra_cable + homo_area_cordones + homo_area_barras
 
-    print("Valores equivalente COL AREA:")
-    print("\t\t Area Viga-Barras-Cordones: ", homo_area_viga_barra_cable)
-    print("\t\t Area barras: ", homo_area_barras)
-    print("\t\t Area Cordones: ", homo_area_cordones)
-    print("\t\t Area sumatoria: ", homo_suma_areas)
+        print("Valores equivalente COL AREA:")
+        print("\t\t Area Viga-Barras-Cordones: ", homo_area_viga_barra_cable)
+        print("\t\t Area barras: ", homo_area_barras)
+        print("\t\t Area Cordones: ", homo_area_cordones)
+        print("\t\t Area sumatoria: ", homo_suma_areas)
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
+
 
     '''Col Y_inf'''
-    print("\n\nValores equivalente COL Y_inf")
-    homo_yinf_viga_barra_cable = self.total_area_cg / self.area_final
-    homo_yinf_barra = float(self.barras_cg)
-    homo_yinf_cordones = float(self.cordones_cg)
+    try:
+        print("\n\nValores equivalente COL Y_inf")
+        homo_yinf_viga_barra_cable = self.total_area_cg / self.area_final
+        homo_yinf_barra = float(self.barras_cg)
+        homo_yinf_cordones = float(self.cordones_cg)
 
-    print("\t\tY_inf viga-barras-cordones: ", homo_yinf_viga_barra_cable)
-    print("\t\tY_inf barras: ", homo_yinf_barra)
-    print("\t\tY_inf cordones: ", homo_yinf_cordones)
+        print("\t\tY_inf viga-barras-cordones: ", homo_yinf_viga_barra_cable)
+        print("\t\tY_inf barras: ", homo_yinf_barra)
+        print("\t\tY_inf cordones: ", homo_yinf_cordones)
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
 
     ''' COL Area * Cg de cada tipo '''
-    homo_viga_barra_cordon_a_cg = homo_area_viga_barra_cable * homo_yinf_viga_barra_cable
-    homo_barras_a_cg = homo_area_barras * homo_yinf_barra
-    homo_cordones_a_cg = homo_area_cordones * homo_yinf_cordones
+    try:
+        homo_viga_barra_cordon_a_cg = homo_area_viga_barra_cable * homo_yinf_viga_barra_cable
+        homo_barras_a_cg = homo_area_barras * homo_yinf_barra
+        homo_cordones_a_cg = homo_area_cordones * homo_yinf_cordones
 
-    homo_suma_a_cg = homo_viga_barra_cordon_a_cg + homo_barras_a_cg + homo_cordones_a_cg
+        homo_suma_a_cg = homo_viga_barra_cordon_a_cg + homo_barras_a_cg + homo_cordones_a_cg
 
-    print("\n\nValores equivalente COL Area * Cg")
-    print("\t\tA * Cg Vigas-Barras-Cables: ", homo_viga_barra_cordon_a_cg)
-    print("\t\tA * Cg Barras: ", homo_barras_a_cg)
-    print("\t\tA * Cg Cables: ", homo_cordones_a_cg)
-    print("\t\tA * Cg SUMATORIA: ", homo_suma_a_cg)
+        print("\n\nValores equivalente COL Area * Cg")
+        print("\t\tA * Cg Vigas-Barras-Cables: ", homo_viga_barra_cordon_a_cg)
+        print("\t\tA * Cg Barras: ", homo_barras_a_cg)
+        print("\t\tA * Cg Cables: ", homo_cordones_a_cg)
+        print("\t\tA * Cg SUMATORIA: ", homo_suma_a_cg)
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
 
 
     ''' Col Yinf. ultima fila '''
-    homo_total_yinf = homo_suma_a_cg / homo_suma_areas # No es realmente la sumatoria de col Y_inf TODO Que nombre asignarle ???
-    print("\n\n COL Y_inf Ultima celda")
-    print("\t\tUltima celda Y_inf: ", homo_total_yinf)
+    try:
+        homo_total_yinf = homo_suma_a_cg / homo_suma_areas # No es realmente la sumatoria de col Y_inf TODO Que nombre asignarle ???
+        print("\tCelda Y_inf: ", homo_total_yinf)
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
 
 
     ''' COL Inercia tipo '''
-    homo_inercia_viga_barra_cordon = float(self.operacion_final)
-    homo_inercia_barras = float(self.barras_inercia) * ns
-    homo_inercia_cordones = float(self.cordones_inercia) * nps
+    try:
+        homo_inercia_viga_barra_cordon = float(self.operacion_final)
+        homo_inercia_barras = float(self.barras_inercia) * ns
+        homo_inercia_cordones = float(self.cordones_inercia) * nps
 
-    print("\n\nValores equivalentes a COL Inercia")
-    print("\t\t Inercia Viga-Barras-Cables: ", homo_inercia_viga_barra_cordon)
-    print("\t\t Inercia Barras: ", homo_inercia_barras)
-    print("\t\t Inercia Cables: ", homo_inercia_cordones)
-
+        print("\n\nValores equivalentes a COL Inercia")
+        print("\t\t Inercia Viga-Barras-Cables: ", homo_inercia_viga_barra_cordon)
+        print("\t\t Inercia Barras: ", homo_inercia_barras)
+        print("\t\t Inercia Cables: ", homo_inercia_cordones)
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
+    
     ''' Col Operacion final '''
-    homo_operacion_viga_barra_cordon = homo_inercia_viga_barra_cordon + homo_area_viga_barra_cable * pow((homo_yinf_viga_barra_cable - homo_total_yinf), 2)
-    homo_operacion_barras = homo_inercia_barras + homo_area_barras * pow((homo_yinf_barra - homo_total_yinf), 2)
-    homo_operacion_cordones = homo_inercia_cordones + homo_area_cordones * pow((homo_yinf_cordones - homo_total_yinf), 2)
+    try:
+        homo_operacion_viga_barra_cordon = homo_inercia_viga_barra_cordon + homo_area_viga_barra_cable * pow((homo_yinf_viga_barra_cable - homo_total_yinf), 2)
+        homo_operacion_barras = homo_inercia_barras + homo_area_barras * pow((homo_yinf_barra - homo_total_yinf), 2)
+        homo_operacion_cordones = homo_inercia_cordones + homo_area_cordones * pow((homo_yinf_cordones - homo_total_yinf), 2)
 
-    # SUMATORIA DE TODAS OPERACIONES
-    homo_operacion_final = homo_operacion_viga_barra_cordon + homo_operacion_barras + homo_operacion_cordones
+        # SUMATORIA DE TODAS OPERACIONES
+        homo_operacion_final = homo_operacion_viga_barra_cordon + homo_operacion_barras + homo_operacion_cordones
 
-    print("\n\nValores equivalentes COL Operacion I + A*r^2")
-    print("\t\tOperacion vigas-barras-cables: ", homo_operacion_viga_barra_cordon)
-    print("\t\tOperacion barras: ", homo_operacion_barras)
-    print("\t\tOperacion cables: ", homo_operacion_cordones)
+        print("\n\nValores equivalentes COL Operacion I + A*r^2")
+        print("\t\tOperacion vigas-barras-cables: ", homo_operacion_viga_barra_cordon)
+        print("\t\tOperacion barras: ", homo_operacion_barras)
+        print("\t\tOperacion cables: ", homo_operacion_cordones)
 
-    print("\n\t\t\t >> Tabla seccion homogeneizada inicial<<\n")
-    print("resultado de operacion final en seccion homogenea: ", homo_operacion_final) # Inercia
+        print("\n\t\t\t >> Tabla seccion homogeneizada inicial<<\n")
+        print("resultado de operacion final en seccion homogenea: ", homo_operacion_final) # Inercia
+    except:
+        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        return
 
-    self.ui.tab5_line_area_t0.setText(f"{homo_suma_areas}")
-    self.ui.tab5_line_cdg_t0.setText(f"{homo_total_yinf}")
-    self.ui.tab5_line_inercia_t0.setText(f"{homo_operacion_final}")
+    self.ui.tab5_line_area_t0.setText(f"{round(homo_suma_areas, 7)}")
+    self.ui.tab5_line_cdg_t0.setText(f"{round(homo_total_yinf, 7)}")
+    self.ui.tab5_line_inercia_t0.setText(f"{round(homo_operacion_final, 7)}")
 
 
 ''' Falta calcular Simple t = 00 '''
