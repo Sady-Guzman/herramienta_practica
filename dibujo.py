@@ -119,9 +119,10 @@ def plot_trapecios(self):
         trapecios = [(float(b), float(c), float(d)) for _, b, c, d in trapecios]
         if self.es_temporal == False and self.es_creada == False:
             print("Se invierte lista porque es_temporal = FALSE, es_creada = FALSE")
-            trapecios = list(reversed(trapecios))
+            # trapecios = list(reversed(trapecios))
         else:
             print("No se invierte la lista porque no se cumple con: es_temporal = FALSE, es_creada = FALSE")
+            # trapecios = list(reversed(trapecios))
     except:
         print("En Dibujo ___ Execept: Return")
         return
@@ -151,12 +152,13 @@ def plot_trapecios(self):
         ]
 
         # Asegura que no se pase de 0.99 en alpha de color verde
-        if tono_color > 0.99:
-            tono_color = 0.7
+        # if tono_color > 0.99:
+            # tono_color = 0.7
 
         # Usa funcion de color todo de verde
-        color = color_personalizado(tono_color)
-        tono_color += 0.04
+        # color = color_personalizado(tono_color)
+        # tono_color += 0.04
+        color = (0.1, 0.9, 0.1)
 
 
         # Agrega el trapecio al plot
