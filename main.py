@@ -113,7 +113,6 @@ class MyDialog(QDialog):
 
 
         self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
-        # self.ui.btn_salto_linea.clicked.connect(lambda: self.find_row_by_label("T2")) # BTN Salto linea par adebug
         
         
         

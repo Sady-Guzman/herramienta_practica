@@ -109,7 +109,7 @@ def update_combo_modelo(self, es_creada):
 def aplicar_dimensiones_pieza(self, pieza_trapecios):
     # Check if the number of trapecios matches the layouts
     if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [A]")
         return
 
     # Print for debugging
@@ -144,7 +144,7 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
 def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
     # Check if the number of trapecios matches the layouts
     if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [B]")
         return
 
     # Print for debugging
@@ -177,7 +177,7 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
 
     # asegeura que numero de indices en parametros sea igual a cant de layouts dinamicos
     if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [C]")
         return
 
     # Itera sobre layouts y asigna valores a widgets LineEdits

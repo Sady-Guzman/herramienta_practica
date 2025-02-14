@@ -17,9 +17,9 @@ parametros_data = [
 ]
 
 trapecios_data = [
-    (1, 1, 0.100, 0.160, 0.015),
+    (1, 3, 0.400, 0.400, 0.103),  # (tipo_seccion, posicion, base_inf, base_sup, altura)
     (1, 2, 0.160, 0.200, 0.192),
-    (1, 3, 0.400, 0.400, 0.103)  # (tipo_seccion, posicion, base_inf, base_sup, altura)
+    (1, 1, 0.100, 0.160, 0.015)
 ]
 
 # Insert data into piezas and fetch the auto-generated pieza_id

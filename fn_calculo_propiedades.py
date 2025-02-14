@@ -197,21 +197,34 @@ def calcular_nuevos_valores(self):
 
     if not self.dynamic_layouts:
         return
-
+    
+    print("\n\n\n\nvalor de self.dynamic_layouts: ", self.dynamic_layouts)
+    print("valor de layout[0][bi line] y [comboBox]: ", self.dynamic_layouts[0]["bi_line"].text(), self.dynamic_layouts[0]["combo_insitu"].currentText(), "\n\n\n\n\n")
     for layout in self.dynamic_layouts:
-        bi = layout["bi_line"].text()
-        bs = layout["bs_line"].text()
-        altura = layout["altura_line"].text()
+        if layout["combo_insitu"].currentText() == "Normal":
+            bi = layout["bi_line"].text()
+            bs = layout["bs_line"].text()
+            altura = layout["altura_line"].text()
 
-        if not bi or not bs or not altura:
-            print("Error calcular_nuevos_valores(): Missing values in one or more of the LineEdits.")
-            return
-
+            if not bi or not bs or not altura:
+                print("Error calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria.")
+                return
+        
+        else:
+            print(">Salta trapecio insitu<")
+            bi = "x"
+            bs = "x"
+            altura = "x"
+        
         try:
             # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
             valores_dimensiones_dinamicas.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
         except Exception as e:
             print("Error calcular_nuevos_valores(): ", e)
+
+        
+    
+
 
     # print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
 
