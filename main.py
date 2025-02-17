@@ -271,7 +271,7 @@ if __name__ == "__main__":
     # db_iniciar_database("catalogo.db")
     # db_iniciar_database("piezas_creadas.db")
     # db_iniciar_database("armaduras.db")
-    copy_database_files()
+    # copy_database_files()
     print("=========================================================================================\n\n\n")
     
 
