@@ -113,10 +113,10 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
         return
 
     # Print for debugging
-    for trapecio in pieza_trapecios:
-        print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
-            f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
-            f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
+    # for trapecio in pieza_trapecios:
+    #     print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
+    #         f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
+    #         f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
 
     # Iterate over layouts in reverse order and update widgets
     for i, trapecio in enumerate(pieza_trapecios):
@@ -135,6 +135,11 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
         layout["cg_line"].setText("")  # Placeholder
         layout["inercia_line"].setText("")  # Placeholder
         layout["op_line"].setText("")  # Placeholder
+        if trapecio[7] == 0:
+            layout["combo_insitu"].setCurrentIndex(0)  # Default es NORMAL 
+        else:
+            layout["combo_insitu"].setCurrentIndex(1) # ES INSITU
+
 
     # Store the data in the correct format
     self.dynamic_layout_data = {

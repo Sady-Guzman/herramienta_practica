@@ -347,7 +347,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
-    # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
+    # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo # Automaticamente calcula valores de propiedades de trapecio
 
     ''' Anade todos los trapecios a listWidget que se usa para borrar'''
     self.ui.tab1_list_trapecios_existentes.clear()
