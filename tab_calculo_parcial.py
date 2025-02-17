@@ -151,10 +151,14 @@ def calc_seccion_homogeneizada_inicial(self):
 
     ''' F'c y Ec son obtenidos de PESTANA MATERIALES '''
     # Ingresado por usr (o puede usar valor por defecto segun tipo de hormigon seleccionado en Cobmbo)
-    fc_ini = float(self.ui.tab4_line_horm_min_fc.text())
-    
-    # Usa formula pedida por claudio
-    ec_ini = float(self.ui.tab4_line_horm_min_e.text())
+    try:
+        fc_ini = float(self.ui.tab4_line_horm_min_fc.text())
+        
+        # Usa formula pedida por claudio
+        ec_ini = float(self.ui.tab4_line_horm_min_e.text())
+    except:
+        print("Faltan datos f'c y/o Ec para poder hacer calculo.")
+        return
 
 
 

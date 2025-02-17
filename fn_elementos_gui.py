@@ -8,7 +8,7 @@ from fn_database import *
 from fn_crear_pieza import open_crear_pieza_dialog
 
 ''' 
-    Generacion y eliminacion de elementos dinamicos de ventana
+    Generacion y eliminacion de elementos dinamicos de pestana geometria
 '''
 
 
@@ -23,6 +23,10 @@ def generate_layout(self):
     ''' Loop to create the frames '''
     for i in range(num_rows):
         add_rows(self, self.historial_agregados + 1)
+
+''' Comprueba tipo de hormigon en tab GEOMETRIA '''
+def on_combo_changed(combo_box, index):
+    print(f"🔄 ComboBox in row {index} changed to: {combo_box.currentText()}")
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
@@ -86,6 +90,11 @@ def add_rows(self, index):
 
     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
     self.ui.layout_nuevas_row.addStretch()
+
+
+    ''' Connect comboBox signal dynamically '''
+    # combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: self.on_combo_changed(cb, i)) # Para saber si cambia tipo hormigon en Combo
+    combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: on_combo_changed(cb, i))
 
     ''' Guarda la referencia al layout dinámico '''
     self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list

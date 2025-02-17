@@ -163,7 +163,11 @@ class MyDialog(QDialog):
 
 
 
+
     ''' ====================================================================================================================================================== '''
+
+    
+
 
     # Boton aplicar seccion
     ''' Aplica pieza en espacio dinamico de trapecios. Maneja el caso de pieza de catalogo, creada por usuario, o temporal'''
