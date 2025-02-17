@@ -539,7 +539,7 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
         datos_por_seccion = {}
         for seccion in secciones:
             cursor.execute("""
-                SELECT posicion, base_inf, base_sup, altura 
+                SELECT posicion, base_inf, base_sup, altura, es_insitu
                 FROM trapecios 
                 WHERE pieza_id = ? AND tipo_seccion = ?
             """, (pieza_id[0], seccion))
