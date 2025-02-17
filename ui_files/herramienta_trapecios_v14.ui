@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>3</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -2071,6 +2071,71 @@
      <property name="orientation">
       <enum>Qt::Orientation::Horizontal</enum>
      </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_8">
+     <property name="geometry">
+      <rect>
+       <x>939</x>
+       <y>540</y>
+       <width>181</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab3_gridLayout_cons_elasticidad">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="tab3_line_cons_es">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab3_line_cons_eps">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab3_label_cons_es">
+        <property name="font">
+         <font>
+          <family>Verdana</family>
+          <pointsize>16</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Es [MPa]:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="tab3_label_cons_eps">
+        <property name="font">
+         <font>
+          <family>Verdana</family>
+          <pointsize>16</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Eps [MPa]:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_5">

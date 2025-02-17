@@ -869,6 +869,38 @@ class Ui_Dialog(object):
         self.tab4_separador_tabla.setGeometry(QRect(20, 520, 561, 16))
         self.tab4_separador_tabla.setFrameShape(QFrame.Shape.HLine)
         self.tab4_separador_tabla.setFrameShadow(QFrame.Shadow.Sunken)
+        self.gridLayoutWidget_8 = QWidget(self.tab_4)
+        self.gridLayoutWidget_8.setObjectName(u"gridLayoutWidget_8")
+        self.gridLayoutWidget_8.setGeometry(QRect(939, 540, 181, 80))
+        self.tab3_gridLayout_cons_elasticidad = QGridLayout(self.gridLayoutWidget_8)
+        self.tab3_gridLayout_cons_elasticidad.setObjectName(u"tab3_gridLayout_cons_elasticidad")
+        self.tab3_gridLayout_cons_elasticidad.setContentsMargins(0, 0, 0, 0)
+        self.tab3_line_cons_es = QLineEdit(self.gridLayoutWidget_8)
+        self.tab3_line_cons_es.setObjectName(u"tab3_line_cons_es")
+        self.tab3_line_cons_es.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab3_gridLayout_cons_elasticidad.addWidget(self.tab3_line_cons_es, 0, 1, 1, 1)
+
+        self.tab3_line_cons_eps = QLineEdit(self.gridLayoutWidget_8)
+        self.tab3_line_cons_eps.setObjectName(u"tab3_line_cons_eps")
+        self.tab3_line_cons_eps.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.tab3_gridLayout_cons_elasticidad.addWidget(self.tab3_line_cons_eps, 1, 1, 1, 1)
+
+        self.tab3_label_cons_es = QLabel(self.gridLayoutWidget_8)
+        self.tab3_label_cons_es.setObjectName(u"tab3_label_cons_es")
+        self.tab3_label_cons_es.setFont(font4)
+        self.tab3_label_cons_es.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab3_gridLayout_cons_elasticidad.addWidget(self.tab3_label_cons_es, 0, 0, 1, 1)
+
+        self.tab3_label_cons_eps = QLabel(self.gridLayoutWidget_8)
+        self.tab3_label_cons_eps.setObjectName(u"tab3_label_cons_eps")
+        self.tab3_label_cons_eps.setFont(font4)
+        self.tab3_label_cons_eps.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+
+        self.tab3_gridLayout_cons_elasticidad.addWidget(self.tab3_label_cons_eps, 1, 0, 1, 1)
+
         self.tabWidget.addTab(self.tab_4, "")
         self.tab_5 = QWidget()
         self.tab_5.setObjectName(u"tab_5")
@@ -1008,7 +1040,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(3)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1145,6 +1177,9 @@ class Ui_Dialog(object):
         self.tab4_label_title_acero.setText(QCoreApplication.translate("Dialog", u"Tipo Acero", None))
         self.tab4_label_title_area.setText(QCoreApplication.translate("Dialog", u"\u00c1rea (cm2)", None))
         self.tab4_label_title_tpi.setText(QCoreApplication.translate("Dialog", u"Tpi (N/mm2)", None))
+        self.tab3_line_cons_es.setText("")
+        self.tab3_label_cons_es.setText(QCoreApplication.translate("Dialog", u"Es [MPa]:", None))
+        self.tab3_label_cons_eps.setText(QCoreApplication.translate("Dialog", u"Eps [MPa]:", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("Dialog", u"Materiales", None))
         self.tab5_titulo_caracteristicas.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas mec\u00e1nicas secci\u00f3n", None))
         self.tab5_label_relleno_grid.setText("")

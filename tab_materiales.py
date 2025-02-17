@@ -14,6 +14,10 @@ def setup_tab_materiales(self):
     mat_fill_combo_tipo_horm(self)
     self.ui.tab4_combo_tipo_horm.setCurrentIndex(-1)
 
+    ''' Asigna valor por defecto para variables de elasticidad de acero y '''
+    self.ui.tab3_line_cons_es.setText("200000") # MPa
+    self.ui.tab3_line_cons_eps.setText("198569") # MPa
+
     # Cuando usuario elige un tipo distinto de hormigon, se actualizan los parametros de las resistencias
     self.ui.tab4_combo_tipo_horm.currentIndexChanged.connect(
         lambda: (mat_fill_densidades_tipo_horm(self), mat_fill_resistencias_tipo_horm(self))

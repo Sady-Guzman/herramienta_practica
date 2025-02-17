@@ -227,7 +227,7 @@ def calcular_nuevos_valores(self):
 
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
-                valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0))
+                valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
             except Exception as e:
                 print("Error calcular_nuevos_valores(): ", e)
         

@@ -8,6 +8,7 @@ def setup_tab_calc_parcial(self):
     ''' Se ejecuta desde main cuando inicia app '''
 
     self.ui.tab5_btn_calcular.clicked.connect(lambda: calc_propiedades_tabla(self))
+    
 
 
 ''' Calculo Parcial Bruta t = 0 '''
@@ -147,16 +148,21 @@ def calc_seccion_neta_inicial(self):
 def calc_seccion_homogeneizada_inicial(self):
     ''' ultima tabla excel Joaquin '''
 
+    ''' F'c y Ec son obtenidos de PESTANA MATERIALES '''
     # Ingresado por usr (o puede usar valor por defecto segun tipo de hormigon seleccionado en Cobmbo)
-    # fc_ini = float(self.ui.tab4_line_horm_min_fc.text())
-    fc_ini = 49.64448 # Valor en excel, Cambiar por LineEdit en Tab-Materiales # TODO usar fc variable
+    fc_ini = float(self.ui.tab4_line_horm_min_fc.text())
     
     # Usa formula pedida por claudio
-    # ec_ini = float(self.ui.tab4_line_horm_min_e.text())
-    ec_ini = 35622 # Valor en excel, Cambiar por LineEdit en Tab-Materiales # TODO usar ec variable
+    ec_ini = float(self.ui.tab4_line_horm_min_e.text())
 
-    cons_es = 200000 # unidad: MPa
-    cons_eps = 198569 # Unidad: N/mm2 ... = 28800 KSI
+
+    print(f"Calulo Parcial. calc_seccion_homogeneizada_inicial() --> Valores usados para f'c = {fc_ini}, y para ec = {ec_ini}")
+
+    ''' CONSTANTES '''
+    # cons_es = 200000 # unidad: MPa
+    # cons_eps = 198569 # Unidad: MPa ... = 28800 KSI
+    cons_es = float(self.ui.tab3_line_cons_es.text())
+    cons_eps = float(self.ui.tab3_line_cons_eps.text())
 
     ns =  cons_es / ec_ini # Para steel -> Barras Pasivas
     nps = cons_eps / ec_ini # Para preStressed Steel -> Cordones Activos
@@ -259,5 +265,10 @@ def calc_seccion_homogeneizada_inicial(self):
     self.ui.tab5_line_inercia_t0.setText(f"{round(homo_operacion_final, 7)}")
 
 
-''' Falta calcular Simple t = 00 '''
+
+''' ===================================================================================================================== '''
+''' TODO calcular Simple t = 00 '''
 # Hace falta considerar variables que aun no son calculadas en programa.
+# Y manejar material insitu correctamente en geometria.
+
+# Luz de Calculo se obtiene de input de usuario en ultima pestana (Solo hace falta ingresar valor, Boton es placebo para usuario)
