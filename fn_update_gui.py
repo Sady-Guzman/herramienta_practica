@@ -176,9 +176,9 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
 def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):
 
     # asegeura que numero de indices en parametros sea igual a cant de layouts dinamicos
-    if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [C]")
-        return
+    # if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
+    #     print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [C]")
+    #     return
 
     # Itera sobre layouts y asigna valores a widgets LineEdits
     for i, trapecio in enumerate(valores_areas):

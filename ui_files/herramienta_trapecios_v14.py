@@ -241,7 +241,7 @@ class Ui_Dialog(object):
         self.tab_2.setObjectName(u"tab_2")
         self.gridLayoutWidget_2 = QWidget(self.tab_2)
         self.gridLayoutWidget_2.setObjectName(u"gridLayoutWidget_2")
-        self.gridLayoutWidget_2.setGeometry(QRect(10, 190, 1061, 351))
+        self.gridLayoutWidget_2.setGeometry(QRect(10, 190, 1111, 351))
         self.gridLayout = QGridLayout(self.gridLayoutWidget_2)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setHorizontalSpacing(-1)
@@ -287,7 +287,7 @@ class Ui_Dialog(object):
         self.tab2_btn_del_cord.setGeometry(QRect(230, 70, 111, 32))
         self.gridLayoutWidget_3 = QWidget(self.tab_2)
         self.gridLayoutWidget_3.setObjectName(u"gridLayoutWidget_3")
-        self.gridLayoutWidget_3.setGeometry(QRect(809, 10, 261, 147))
+        self.gridLayoutWidget_3.setGeometry(QRect(840, 10, 261, 147))
         self.tab2_gridLayout_totales = QGridLayout(self.gridLayoutWidget_3)
         self.tab2_gridLayout_totales.setObjectName(u"tab2_gridLayout_totales")
         self.tab2_gridLayout_totales.setContentsMargins(0, 0, 0, 0)
@@ -1008,7 +1008,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(1)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 

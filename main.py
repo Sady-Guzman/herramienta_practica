@@ -92,6 +92,7 @@ class MyDialog(QDialog):
         ''' Default pushBtn en cada TAB '''
         self.ui.btn_calcular_nuevos_valores.setDefault(True)
         self.ui.tabWidget.currentChanged.connect(self.set_default_button)
+        
 
         
 
@@ -154,6 +155,11 @@ class MyDialog(QDialog):
         setup_armadura_pasiva(self) # Inicia TAB3 (Armadura Pasiva)
         setup_tab_materiales(self) # inicia TAB4 (Materiales)
         setup_tab_calc_parcial(self) # Inicia/maneja tab de Calculo Parcial (Tab5)
+
+        ''' ========================================================================================================================= '''
+
+        ''' Inicia App en tab 0 (GEOMETRIA) '''
+        self.ui.tabWidget.setCurrentIndex(0) 
 
 
 

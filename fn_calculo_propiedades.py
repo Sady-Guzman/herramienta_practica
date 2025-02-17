@@ -193,7 +193,8 @@ def calcular_altura_acumulada(trapecios):
 # Se usa en caso de que usuario agregue mas trapecios a una figura, para recalcular propiedades de pieza contemplando nuevos trapecios
 def calcular_nuevos_valores(self):
     ''' Obtiene valores de dimensiones '''
-    valores_dimensiones_dinamicas = []
+    valores_dimensiones_dinamicas_normal = [] # SIN INSITU
+    valores_dimensiones_dinamicas_completo = [] # INCLUYE TRAPECIOS DE HORMIGON INSITU
 
     if not self.dynamic_layouts:
         return
@@ -209,19 +210,26 @@ def calcular_nuevos_valores(self):
             if not bi or not bs or not altura:
                 print("Error calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria.")
                 return
+            
+            try:
+                # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
+                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+                valores_dimensiones_dinamicas_completo.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+                
+            except Exception as e:
+                print("Error calcular_nuevos_valores(): ", e)
         
         else:
             print(">Salta trapecio insitu<")
             bi = "x"
             bs = "x"
             altura = "x"
-        
-        try:
-            # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
-            valores_dimensiones_dinamicas.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
-        except Exception as e:
-            print("Error calcular_nuevos_valores(): ", e)
 
+            try:
+                # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
+                valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0))
+            except Exception as e:
+                print("Error calcular_nuevos_valores(): ", e)
         
     
 
@@ -229,11 +237,11 @@ def calcular_nuevos_valores(self):
     # print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
 
     ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
-    valores_areas = calcular_area(valores_dimensiones_dinamicas)
-    altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas)
-    valores_inercia = calcular_inercia(valores_dimensiones_dinamicas)
+    valores_areas = calcular_area(valores_dimensiones_dinamicas_normal)
+    altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas_normal)
+    valores_inercia = calcular_inercia(valores_dimensiones_dinamicas_normal)
     # valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y sup ?
-    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y inf ?
+    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas_normal) # Y inf ?
     suma_areas = calcular_suma_areas(valores_areas)
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
