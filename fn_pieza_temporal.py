@@ -59,7 +59,7 @@ def save_current_section_data(self):
     if not pieza_seccion_item:
         print("Debug: No section selected to save.")
         return
-
+    
     pieza_seccion = pieza_seccion_item.text()
     self.seccion_pieza_cargada = pieza_seccion
     current_section_data = []
@@ -68,11 +68,25 @@ def save_current_section_data(self):
 
     # Collect data from the dynamic layouts
     for i, layout in enumerate(reversed(self.dynamic_layouts)):
+
+
+        bi = layout["bi_line"].text()
+        bs = layout["bs_line"].text()
+        altura = layout["altura_line"].text()
+
+        print(f"save_current_section_data() -> bi: {bi}, bs: {bs}, altura: {altura} \n")
+
+        if layout["combo_insitu"].currentText() == "Insitu":
+            bs = bi
+            layout["bs_line"].setText(str(bs))
+
+
         data = (
             i + 1,  # Position index
-            layout["bi_line"].text(),
-            layout["bs_line"].text(),
-            layout["altura_line"].text()
+            bi,
+            bs,
+            altura ''' TODO guardar propiedad de insitu '''
+            
         )
         current_section_data.append(data)
 

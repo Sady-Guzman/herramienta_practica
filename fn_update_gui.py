@@ -179,31 +179,29 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
     
 ''' Asignar valores calculados en LineEdits dinamicos '''
 def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):
-    j = 0  # Separate index for result values
+    j = 0  # Indice separado para manejar resultados de calculos. (i es indice de trapecios existentes)
 
     for i, layout in enumerate(self.dynamic_layouts):
-        # Skip row if "insitu"
+        # Salta esta row (trapecio) en caso de ser hormigon tipo insitu
         print(f"aplicar_valores_calculados() --> Valor en combo_insitu actual: {layout['combo_insitu'].currentText()}")
         if layout["combo_insitu"].currentText() == "Insitu":
-            continue # Skip esta iteracion y pasa a la siguiente
+            continue # Skipea esta iteracion y pasa a la siguiente
 
-        # Ensure we don't go out of bounds in valores_* lists
+        # Asegura que no se pase de los limites de las listas de valores
         if j >= len(valores_areas):
             print(f"Warning: Not enough calculated values for layout {i}.")
             break  
 
-        # Assign values to widgets
+        # Asigna valores a widgets LineEdtis
         layout["area_line"].setText(f"{valores_areas[j]}")
         layout["cg_line"].setText(f"{valores_cg[j]:.7f}")
         layout["inercia_line"].setText(f"{valores_inercia[j]:.7f}")
         layout["op_line"].setText(f"{valores_op[j]:.7f}")
 
-        j += 1  # Only increment `j` when values are used
+        j += 1  # Solo incrementa valor de indice J en caso de ser usado. (Para manejar trapecios de tipo INSITU correctamente en GUI)
 
 
-
-
-    ''' valores en layout NO-dinamico de ventana '''
+    ''' valores en layout NO-dinamico de ventana (resultados totales en lineEdits esquina superior derecha) '''
     sumatoria_op = sum(valores_op)
 
     self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")

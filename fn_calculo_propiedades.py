@@ -228,6 +228,8 @@ def calcular_nuevos_valores(self):
         # print("Valor de i = ", i)
         i += 1
 
+
+
         bi = layout["bi_line"].text()
         bs = layout["bs_line"].text()
         altura = layout["altura_line"].text()
@@ -249,9 +251,12 @@ def calcular_nuevos_valores(self):
                 print("Error calcular_nuevos_valores(): ", e)
         
         else:
-            print(">Salta trapecio insitu<")
-
+            ''' ES TRAPECIO TIPO INSITU '''
             try:
+                ''' Iguala valor de Base superior a Base Inferior, Porque solo hay insitu rectangular. y usuario solo tiene disponible Input de Bi '''
+                bs = bi
+                layout["bs_line"].setText(bs)
+                
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
                 valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
                 valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 1)) # Ultimo es es_insitu
