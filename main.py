@@ -276,5 +276,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)   # Crear aplicacion
     dialog = MyDialog()            # Crear ventana Dialog
+    dialog.setWindowTitle("Herramienta de Calculo PREANSA") # TITULO VENTANA
     dialog.show()                  # Mostrar Dialog
     sys.exit(app.exec())           # Inicia loop de eventos app

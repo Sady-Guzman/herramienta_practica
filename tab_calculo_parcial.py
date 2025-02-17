@@ -156,7 +156,6 @@ def calc_seccion_homogeneizada_inicial(self):
     ec_ini = float(self.ui.tab4_line_horm_min_e.text())
 
 
-    print(f"Calulo Parcial. calc_seccion_homogeneizada_inicial() --> Valores usados para f'c = {fc_ini}, y para ec = {ec_ini}")
 
     ''' CONSTANTES '''
     # cons_es = 200000 # unidad: MPa
@@ -166,6 +165,8 @@ def calc_seccion_homogeneizada_inicial(self):
 
     ns =  cons_es / ec_ini # Para steel -> Barras Pasivas
     nps = cons_eps / ec_ini # Para preStressed Steel -> Cordones Activos
+
+    print(f"\nCalulo Parcial. calc_seccion_homogeneizada_inicial() --> Valores usados para f'c = {fc_ini}, ec = {ec_ini}, ns = {ns}, nps = {nps}\n")
 
     ''' Col area m2'''
     try:
