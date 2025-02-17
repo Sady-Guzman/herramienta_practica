@@ -25,8 +25,24 @@ def generate_layout(self):
         add_rows(self, self.historial_agregados + 1)
 
 ''' Comprueba tipo de hormigon en tab GEOMETRIA '''
-def on_combo_changed(combo_box, index):
+def on_combo_changed(self, combo_box, index):
     print(f"🔄 ComboBox in row {index} changed to: {combo_box.currentText()}")
+
+
+
+    # Find the row dictionary in dynamic_layouts
+    row_data = next((row for row in self.dynamic_layouts if row["name_label"].objectName() == f"t{index}_name"), None)
+    
+    if row_data:
+        is_insitu = combo_box.currentText() == "Insitu"
+
+        # Disable or enable the corresponding QLineEdit widgets
+        # row_data["bi_line"].setDisabled(is_insitu) # Se mantiene solo un campo de ancho porque bloques INSITU siempre tienen mismo ancho inf y sup
+        row_data["bs_line"].setDisabled(is_insitu)
+        # row_data["altura_line"].setDisabled(is_insitu) # Altura no se desactiva
+        row_data["area_line"].setDisabled(is_insitu)
+        row_data["cg_line"].setDisabled(is_insitu)
+        row_data["op_line"].setDisabled(is_insitu)
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
@@ -94,7 +110,7 @@ def add_rows(self, index):
 
     ''' Connect comboBox signal dynamically '''
     # combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: self.on_combo_changed(cb, i)) # Para saber si cambia tipo hormigon en Combo
-    combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: on_combo_changed(cb, i))
+    combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: on_combo_changed(self, cb, i))
 
     ''' Guarda la referencia al layout dinámico '''
     self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
