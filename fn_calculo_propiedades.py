@@ -27,18 +27,26 @@ def calcular_area(trapecios):
     ''' ( (base_inf + base_sup) * Altura ) / 2'''
     resultados = []
 
+    print("Debug calcular_area() -> Trapecios: ", trapecios)
+    print("Debug calcular_area() -> Cantidad de trapecios: ", len(trapecios))
+
     for i in range(len(trapecios)):
-        b_i = trapecios[i][3]
-        b_s = trapecios[i][4]
-        h = trapecios[i][5]
+        print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][6])
+        if trapecios[i][6] == 0: # No insitu
+            b_i = trapecios[i][3]
+            b_s = trapecios[i][4]
+            h = trapecios[i][5]
 
-        area = ((b_i + b_s) * h) / 2
-        
-        # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-        # print("AREA: ", area)
+            area = ((b_i + b_s) * h) / 2
+            
+            # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+            # print("AREA: ", area)
 
-        area = round(area, 9)
-        resultados.append(area)
+            area = round(area, 9)
+            print("calc_area() -> Area redondeada: ", area)
+            resultados.append(area)
+        else:
+            pass
 
     # print("Areas calculadas: ", resultados)
     return resultados
@@ -49,26 +57,29 @@ def calcular_inercia(trapecios):
     resultados = []
 
     for i in range(len(trapecios)):
-        b_i = trapecios[i][3]
-        b_s = trapecios[i][4]
-        h = trapecios[i][5]
+        if trapecios[i][6] == 0: # No insitu
+            b_i = trapecios[i][3]
+            b_s = trapecios[i][4]
+            h = trapecios[i][5]
 
-        h_cubed = h ** 3
-    
-        # pre-calcular max y min de bases de trapecio
-        max_base = max(b_i, b_s)
-        min_base = min(b_i, b_s)
-        sum_bases = b_i + b_s
+            h_cubed = h ** 3
         
-        # calculo final
-        result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
+            # pre-calcular max y min de bases de trapecio
+            max_base = max(b_i, b_s)
+            min_base = min(b_i, b_s)
+            sum_bases = b_i + b_s
+            
+            # calculo final
+            result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
 
 
-        # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-        # print("Inercia: ", result)
+            # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
+            # print("Inercia: ", result)
 
-        result = round(result, 9)
-        resultados.append(result)
+            result = round(result, 9)
+            resultados.append(result)
+        else:
+            pass
 
 
     # print("Valores lista Inercia: ", resultados)
@@ -97,23 +108,26 @@ def calcular_centro_gravedad(trapecios):
     resultados = []       # Guarda cada valor de Cg
 
     for i, trapecio in enumerate(trapecios):
-        b_i = trapecio[3]  # Base inferior
-        b_s = trapecio[4]  # Base superior
-        h = trapecio[5]    # Altura
+        if trapecios[i][6] == 0: # No insitu
+            b_i = trapecio[3]  # Base inferior
+            b_s = trapecio[4]  # Base superior
+            h = trapecio[5]    # Altura
 
-        if i > 0:
-            altura_acumulada += trapecios[i - 1][5]  # Suma altura de trapecios anteriores
+            if i > 0:
+                altura_acumulada += trapecios[i - 1][5]  # Suma altura de trapecios anteriores
 
-        # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
-        if b_s <= b_i:
-            centro = h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+            # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
+            if b_s <= b_i:
+                centro = h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+            else:
+                centro = h - h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+
+            # paso final: agregar valor de altura acumulada
+            resultado = centro + altura_acumulada
+            resultado = round(resultado, 9)
+            resultados.append(resultado)
         else:
-            centro = h - h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
-
-        # paso final: agregar valor de altura acumulada
-        resultado = centro + altura_acumulada
-        resultado = round(resultado, 9)
-        resultados.append(resultado)
+            pass
         # print("valor de var resultado: ", resultado)
         # print("Valor de var altura_acumulada: ", altura_acumulada)
 
@@ -127,9 +141,13 @@ def calcular_centro_gravedad(trapecios):
 def calcular_suma_areas(areas):
     suma_areas = 0
 
+    print("debug fn_calculos -> Areas a sumar: ", areas)
+    print("debug fn_calculos -> Cantidad de areas: ", len(areas))
+
     for i in range(len(areas)):
         suma_areas += areas[i]
-    # print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
+        print(f"debug fn_calculos -> Area {i + 1}: {areas[i]}")
+    print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
     
     return suma_areas
 
@@ -145,10 +163,12 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
 
     for i in range(len(areas)):
         resultado += areas[i] * centros_gravedad[i]
+
+    print(f"Valores de: Resultado = {resultado} y de suma_areas = {suma_areas}\n")
     
     resultado = resultado / suma_areas
 
-    # print("Resultado suma ponderada: ", resultado)
+    print("Resultado suma ponderada: ", resultado)
     return resultado
 
 
@@ -183,7 +203,10 @@ def calcular_altura_acumulada(trapecios):
     altura_acumulada = 0
 
     for i in range(len(trapecios)):
+        if trapecios[i][6] == 0: # No insitu
             altura_acumulada += trapecios[i][5]
+        else:
+            pass
     
     # print("Altura acumulada: ", altura_acumulada)
     return altura_acumulada
@@ -199,13 +222,18 @@ def calcular_nuevos_valores(self):
     if not self.dynamic_layouts:
         return
     
-    print("\n\n\n\nvalor de self.dynamic_layouts: ", self.dynamic_layouts)
-    print("valor de layout[0][bi line] y [comboBox]: ", self.dynamic_layouts[0]["bi_line"].text(), self.dynamic_layouts[0]["combo_insitu"].currentText(), "\n\n\n\n\n")
+    i = 1
+
     for layout in self.dynamic_layouts:
+        # print("Valor de i = ", i)
+        i += 1
+
+        bi = layout["bi_line"].text()
+        bs = layout["bs_line"].text()
+        altura = layout["altura_line"].text()
+
         if layout["combo_insitu"].currentText() == "Normal":
-            bi = layout["bi_line"].text()
-            bs = layout["bs_line"].text()
-            altura = layout["altura_line"].text()
+            
 
             if not bi or not bs or not altura:
                 print("Error calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria.")
@@ -213,21 +241,20 @@ def calcular_nuevos_valores(self):
             
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
-                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 0)) # Ultimo es es_insitu
                 valores_dimensiones_dinamicas_completo.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+                print(f"Valores guardados son: bi = {bi} -- bs = {bs} -- altura = {altura}")
                 
             except Exception as e:
                 print("Error calcular_nuevos_valores(): ", e)
         
         else:
             print(">Salta trapecio insitu<")
-            bi = "x"
-            bs = "x"
-            altura = "x"
 
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
                 valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
+                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 1)) # Ultimo es es_insitu
             except Exception as e:
                 print("Error calcular_nuevos_valores(): ", e)
         
@@ -240,11 +267,15 @@ def calcular_nuevos_valores(self):
     valores_areas = calcular_area(valores_dimensiones_dinamicas_normal)
     altura_acumulada = calcular_altura_acumulada(valores_dimensiones_dinamicas_normal)
     valores_inercia = calcular_inercia(valores_dimensiones_dinamicas_normal)
-    # valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y sup ?
-    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas_normal) # Y inf ?
+    # valores_cg = altura_acumulada - calcular_centro_gravedad(valores_dimensiones_dinamicas) # Y sup
+    valores_cg = calcular_centro_gravedad(valores_dimensiones_dinamicas_normal) # Y inf
     suma_areas = calcular_suma_areas(valores_areas)
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
+
+    
+    print(f"Caclular_nuevos_valores() -> valores de areas: {valores_areas}\n")
+    print(f"Caclular_nuevos_valores() -> Suma de areas: {suma_areas}\n")
 
     # Aplica resultados a layouts dinamicos + layouts fijos
     print(" ------ Calcular_nuevos_valores() ----> VALORES DE PROPIEDADES FUERON CALCULADOS Y ASIGNADOS ------\n\n")

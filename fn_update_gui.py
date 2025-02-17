@@ -179,34 +179,36 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
     
 ''' Asignar valores calculados en LineEdits dinamicos '''
 def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):
+    j = 0  # Separate index for result values
 
-    # asegeura que numero de indices en parametros sea igual a cant de layouts dinamicos
-    # if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
-    #     print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [C]")
-    #     return
+    for i, layout in enumerate(self.dynamic_layouts):
+        # Skip row if "insitu"
+        print(f"aplicar_valores_calculados() --> Valor en combo_insitu actual: {layout['combo_insitu'].currentText()}")
+        if layout["combo_insitu"].currentText() == "Insitu":
+            continue # Skip esta iteracion y pasa a la siguiente
 
-    # Itera sobre layouts y asigna valores a widgets LineEdits
-    for i, trapecio in enumerate(valores_areas):
-        layout = self.dynamic_layouts[i]
+        # Ensure we don't go out of bounds in valores_* lists
+        if j >= len(valores_areas):
+            print(f"Warning: Not enough calculated values for layout {i}.")
+            break  
 
-        # asegura que el widget existe
-        if not layout["area_line"] or not layout["cg_line"] or not layout["inercia_line"] or not layout["op_line"]:
-            print(f"Error: Widget for layout {i} is missing or deleted.")
-            continue
+        # Assign values to widgets
+        layout["area_line"].setText(f"{valores_areas[j]}")
+        layout["cg_line"].setText(f"{valores_cg[j]:.7f}")
+        layout["inercia_line"].setText(f"{valores_inercia[j]:.7f}")
+        layout["op_line"].setText(f"{valores_op[j]:.7f}")
 
-        layout["area_line"].setText(f"{valores_areas[i]}")
-        layout["cg_line"].setText(f"{valores_cg[i]:.7f}")
-        layout["inercia_line"].setText(f"{valores_inercia[i]:.7f}")
-        layout["op_line"].setText(f"{valores_op[i]:.7f}")
-    
+        j += 1  # Only increment `j` when values are used
+
+
+
+
     ''' valores en layout NO-dinamico de ventana '''
-
     sumatoria_op = sum(valores_op)
 
     self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")
     self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
-    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}") # Y _ inf ?
-    # self.ui.result_sum_ponderado.setText(f"{altura_acumulada-producto_ponderado:.7f}") # Y _ sup ?
+    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")  # Y _ inf
     self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
 
 

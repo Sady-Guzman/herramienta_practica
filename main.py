@@ -128,7 +128,7 @@ class MyDialog(QDialog):
 
         # conecta btn calcular propiedades de campos LineEdits
         self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada) # Calcular nuevos valores
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada
 
         # Invoca ventana para CREAR NUEVA PIEZA
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
@@ -271,7 +271,7 @@ if __name__ == "__main__":
     # db_iniciar_database("catalogo.db")
     # db_iniciar_database("piezas_creadas.db")
     # db_iniciar_database("armaduras.db")
-    # copy_database_files()
+    copy_database_files()
     print("=========================================================================================\n\n\n")
     
 
