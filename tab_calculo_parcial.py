@@ -57,6 +57,7 @@ def calc_propiedades_tabla(self):
     ''' Hace calculos para simple t = 0 '''
     calc_seccion_neta_inicial(self) # Primer paso
     calc_seccion_homogeneizada_inicial(self)  # segundo paso (final) para t = 0
+    test_t00(self)
 
 
 
@@ -273,3 +274,24 @@ def calc_seccion_homogeneizada_inicial(self):
 # Y manejar material insitu correctamente en geometria.
 
 # Luz de Calculo se obtiene de input de usuario en ultima pestana (Solo hace falta ingresar valor, Boton es placebo para usuario)
+
+def test_t00(self):
+    ''' Comprueba recuperacionde valores para concreto insitu y Lc, Sw '''
+
+    valor_luz_calculo = self.ui.tab6_line_luz_calculo.text()
+    valor_sw = self.ui.tab6_line_sw.text()
+
+    print(f"Lc (Luz calculo) = {valor_luz_calculo}, Sw (Dist. entre Almas) = {valor_sw}")
+
+
+    ''' Trapecios de hormigon insitu '''
+    for i, layout in enumerate(self.dynamic_layouts):
+        tipo_hormigon = layout['combo_insitu'].currentText()
+
+        if tipo_hormigon == "Insitu":
+            print(f"\n🔹 Para layout {i}")
+            print("\tTrapecio de hormigon Insitu:")
+            print(f"\tNombre: {layout['name_label'].text()}")
+            print(f"\tBi: {layout['bi_line'].text()}")
+            print(f"\tAltura: {layout['altura_line'].text()}")
+            print(f"\tÁrea: {layout['area_line'].text()}")

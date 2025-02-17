@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>5</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -2341,7 +2341,7 @@
     <widget class="QLabel" name="tab6_label_luz_calculo">
      <property name="geometry">
       <rect>
-       <x>490</x>
+       <x>320</x>
        <y>100</y>
        <width>151</width>
        <height>21</height>
@@ -2362,7 +2362,7 @@
     <widget class="QLineEdit" name="tab6_line_luz_calculo">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>340</x>
        <y>130</y>
        <width>113</width>
        <height>21</height>
@@ -2375,7 +2375,7 @@
     <widget class="QPushButton" name="tab6_btn_luz_calculo">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>340</x>
        <y>160</y>
        <width>111</width>
        <height>32</height>
@@ -2383,6 +2383,53 @@
      </property>
      <property name="text">
       <string>Guardar valor</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="tab6_line_sw">
+     <property name="geometry">
+      <rect>
+       <x>655</x>
+       <y>130</y>
+       <width>113</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="tab6_btn_sw">
+     <property name="geometry">
+      <rect>
+       <x>655</x>
+       <y>160</y>
+       <width>111</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Guardar valor</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="tab6_label_sw">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>100</y>
+       <width>241</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Verdana</family>
+       <pointsize>15</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Distancia entre almas - Sw (m)</string>
      </property>
     </widget>
    </widget>

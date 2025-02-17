@@ -8,6 +8,24 @@ def popup_msg(message):
     popup.setStandardButtons(QMessageBox.Ok)  # agrega btn OK
     popup.exec()  # muestra ventana PopUp
 
+def print_dynamic_trapecios(self):
+    for i, layout in enumerate(self.dynamic_layouts):
+        print(f"\n🔹 Para layout {i}")
+
+        # Print values from QLineEdit fields
+        print(f"  - Bi: {layout['bi_line'].text()}")
+        print(f"  - Bs: {layout['bs_line'].text()}")
+        print(f"  - Altura: {layout['altura_line'].text()}")
+        print(f"  - Área: {layout['area_line'].text()}")
+        print(f"  - Centro de gravedad (CG): {layout['cg_line'].text()}")
+        print(f"  - Inercia: {layout['inercia_line'].text()}")
+        print(f"  - Op: {layout['op_line'].text()}")
+
+        # Print the selected value from QComboBox
+        print(f"  - Insitu Type: {layout['combo_insitu'].currentText()}")
+
+        # Print the label name
+        print(f"  - Nombre: {layout['name_label'].text()}")
 
 
 def util_cotas_existentes_codones(self):
@@ -71,7 +89,7 @@ def util_calc_area_cota_por_cordon(self):
         for area_class, total_area in area_data.items():
             print(f"  - Área clase {area_class} cm² → Total: {total_area} cm²")
 
-def util_calc_area_cota():
+def util_calc_area_cota(self):
     ''' Calcula area total en cada cota de armadura activa, Considerando distintos tipos de cordones, Pero sin especificarlos ni guardarlos. SOLO IMPORTA TOTAL '''
     dict_areas_cota = {}
 
