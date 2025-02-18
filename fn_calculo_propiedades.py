@@ -249,11 +249,21 @@ def calcular_nuevos_valores(self):
 
         if layout["combo_insitu"].currentText() == "Normal":
             
-
+            ''' Tienen que estar todos los campos llenos '''
             if not bi or not bs or not altura:
-                print("Error calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria.")
+                print("\t\tError calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria. !!!")
                 return
             
+            ''' No puede haber 0s'''
+            if bi == "0" or bs == "0" or altura == "0":
+                print("\t\tError calcular_nuevos_valores(): Valores de dimensiones no pueden ser 0. !!!")
+                return
+            
+            ''' No pueden haber caracteres en ningun campo, Solo numeros '''
+            if not bi.isnumeric() or not bs.isnumeric() or not altura.isnumeric():
+                print("\t\tError calcular_nuevos_valores(): Valores de dimensiones deben ser numericos. !!!")
+                return
+
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
                 valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 0)) # Ultimo es es_insitu

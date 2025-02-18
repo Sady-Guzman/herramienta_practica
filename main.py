@@ -148,7 +148,7 @@ class MyDialog(QDialog):
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
-        ''' ===============================================  TAB2  Armaduras Activas  ================================================== '''
+        ''' ===============================================  SETUP para tabs  ================================================== '''
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
@@ -156,12 +156,8 @@ class MyDialog(QDialog):
         setup_tab_materiales(self) # inicia TAB4 (Materiales)
         setup_tab_calc_parcial(self) # Inicia/maneja tab de Calculo Parcial (Tab5)
 
-        ''' ========================================================================================================================= '''
-
         ''' Inicia App en tab 0 (GEOMETRIA) '''
         self.ui.tabWidget.setCurrentIndex(0) 
-
-
 
 
     ''' ====================================================================================================================================================== '''
