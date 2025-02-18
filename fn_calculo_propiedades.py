@@ -31,8 +31,8 @@ def calcular_area(trapecios):
     print("Debug calcular_area() -> Cantidad de trapecios: ", len(trapecios))
 
     for i in range(len(trapecios)):
-        print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][6])
-        if trapecios[i][6] == 0: # No insitu
+        print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][7])
+        if trapecios[i][7] == 0: # No insitu
             b_i = trapecios[i][3]
             b_s = trapecios[i][4]
             h = trapecios[i][5]
@@ -57,7 +57,7 @@ def calcular_inercia(trapecios):
     resultados = []
 
     for i in range(len(trapecios)):
-        if trapecios[i][6] == 0: # No insitu
+        if trapecios[i][7] == 0: # No insitu
             b_i = trapecios[i][3]
             b_s = trapecios[i][4]
             h = trapecios[i][5]
@@ -107,8 +107,16 @@ def calcular_centro_gravedad(trapecios):
     altura_acumulada = 0  # representa SUM($E$3:E3)
     resultados = []       # Guarda cada valor de Cg
 
-    for i, trapecio in enumerate(trapecios):
-        if trapecios[i][6] == 0: # No insitu
+    print(f"\n\n\ncalcular_centro_gravedad, trapecios data: {trapecios}")
+    # **Filter out trapecios where trapecio[7] == 1**
+    trapecios_filtrados = [t for t in trapecios if t[7] == 0]
+    print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODS data: {trapecios_filtrados}")
+
+
+    for i, trapecio in enumerate(trapecios_filtrados):
+        print(f"calc_Yinf() -> valor en trapeecio[i][7] = ", trapecios[i][7])
+        if trapecio[7] == 0: # No insitu
+            print(f"calc_Yinf() -> Entra a IF STATEMENT ")
             b_i = trapecio[3]  # Base inferior
             b_s = trapecio[4]  # Base superior
             h = trapecio[5]    # Altura
@@ -125,9 +133,14 @@ def calcular_centro_gravedad(trapecios):
             # paso final: agregar valor de altura acumulada
             resultado = centro + altura_acumulada
             resultado = round(resultado, 9)
+            print(f"Resultado = {resultado}")
             resultados.append(resultado)
         else:
-            pass
+            print(f"calc_Yinf() -> Entra a ELSE STATEMENT ")
+            continue
+
+
+
         # print("valor de var resultado: ", resultado)
         # print("Valor de var altura_acumulada: ", altura_acumulada)
 
@@ -141,13 +154,13 @@ def calcular_centro_gravedad(trapecios):
 def calcular_suma_areas(areas):
     suma_areas = 0
 
-    print("debug fn_calculos -> Areas a sumar: ", areas)
-    print("debug fn_calculos -> Cantidad de areas: ", len(areas))
+    # print("debug fn_calculos -> Areas a sumar: ", areas)
+    # print("debug fn_calculos -> Cantidad de areas: ", len(areas))
 
     for i in range(len(areas)):
         suma_areas += areas[i]
-        print(f"debug fn_calculos -> Area {i + 1}: {areas[i]}")
-    print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
+        # print(f"debug fn_calculos -> Area {i + 1}: {areas[i]}")
+    # print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
     
     return suma_areas
 
@@ -164,11 +177,11 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
     for i in range(len(areas)):
         resultado += areas[i] * centros_gravedad[i]
 
-    print(f"Valores de: Resultado = {resultado} y de suma_areas = {suma_areas}\n")
+    # print(f"Valores de: Resultado = {resultado} y de suma_areas = {suma_areas}\n")
     
     resultado = resultado / suma_areas
 
-    print("Resultado suma ponderada: ", resultado)
+    # print("Resultado suma ponderada: ", resultado)
     return resultado
 
 
@@ -244,7 +257,7 @@ def calcular_nuevos_valores(self):
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
                 valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 0)) # Ultimo es es_insitu
-                valores_dimensiones_dinamicas_completo.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
+                # valores_dimensiones_dinamicas_completo.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
                 print(f"Valores guardados son: bi = {bi} -- bs = {bs} -- altura = {altura}")
                 
             except Exception as e:
@@ -258,8 +271,9 @@ def calcular_nuevos_valores(self):
                 layout["bs_line"].setText(bs)
                 
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
-                valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
-                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 1)) # Ultimo es es_insitu
+                ''' Sigue estructura de tupla de DB (con primera col ID y [6] de FK )'''
+                valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 1)) # Ultimo es es_insitu
+                # valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
             except Exception as e:
                 print("Error calcular_nuevos_valores(): ", e)
         
