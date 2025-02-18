@@ -502,11 +502,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 
     # Insert or update trapecios
     for trapecio in trapecios_data:
-        seccion, posicion, base_inferior, base_superior, altura = trapecio
+        seccion, posicion, base_inferior, base_superior, altura, es_insitu = trapecio
         cursor.execute("""
-            INSERT OR REPLACE INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (seccion, posicion, base_inferior, base_superior, altura, pieza_id))
+            INSERT OR REPLACE INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id, es_insitu)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (seccion, posicion, base_inferior, base_superior, altura, pieza_id, es_insitu))
 
     conn.commit()
     conn.close()

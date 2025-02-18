@@ -16,7 +16,7 @@ def save_pieza_data(self):
 
     # Ensure there is a selection in the combo boxes
     if not familia or not modelo:
-        print("Debug: No family or model selected.")
+        print("Debug: No hay familia o modelo seleccionado.")
         return
 
     # Prepare the data for insertion
@@ -30,7 +30,8 @@ def save_pieza_data(self):
                 trapecio[0],  # Position index
                 float(trapecio[1]),  # Base Inferior
                 float(trapecio[2]),  # Base Superior
-                float(trapecio[3])   # Altura
+                float(trapecio[3]),  # Altura
+                float(trapecio[4])   # es_insitu (4ta posicion en self.dynamic_layout_data)
             ))
 
     # Call the database insertion function
