@@ -216,7 +216,7 @@ def calcular_altura_acumulada(trapecios):
     altura_acumulada = 0
 
     for i in range(len(trapecios)):
-        if trapecios[i][6] == 0: # No insitu
+        if trapecios[i][7] == 0: # No insitu
             altura_acumulada += trapecios[i][5]
         else:
             pass
