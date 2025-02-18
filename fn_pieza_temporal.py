@@ -73,20 +73,23 @@ def save_current_section_data(self):
         bi = layout["bi_line"].text()
         bs = layout["bs_line"].text()
         altura = layout["altura_line"].text()
+        # es_insitu = layout["combo_insitu"].currentText()
+        es_insitu = 0 # Por defecto no es Insitu, asigna 0
 
         print(f"save_current_section_data() -> bi: {bi}, bs: {bs}, altura: {altura} \n")
 
         if layout["combo_insitu"].currentText() == "Insitu":
             bs = bi
             layout["bs_line"].setText(str(bs))
+            es_insitu = 1 # En caso de ser insitu asigna 1
 
 
         data = (
             i + 1,  # Position index
             bi,
             bs,
-            altura ''' TODO guardar propiedad de insitu '''
-            
+            altura,
+            es_insitu
         )
         current_section_data.append(data)
 
