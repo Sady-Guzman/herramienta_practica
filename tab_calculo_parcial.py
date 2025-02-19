@@ -1,4 +1,6 @@
 import sys
+import math
+
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
 from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel, QComboBox
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
@@ -280,15 +282,24 @@ def calc_seccion_homogeneizada_inicial(self):
 # Luz de Calculo se obtiene de input de usuario en ultima pestana (Solo hace falta ingresar valor, Boton es placebo para usuario)
 
 def test_t00(self):
-    ''' Comprueba recuperacionde valores para concreto insitu y Lc, Sw '''
-
-    valor_luz_calculo = self.ui.tab6_line_luz_calculo.text()
-    valor_sw = self.ui.tab6_line_sw.text()
-
-    print(f"Lc (Luz calculo) = {valor_luz_calculo}, Sw (Dist. entre Almas) = {valor_sw}")
 
 
-    ''' Trapecios de hormigon insitu '''
+
+    ''' Valores para concreto insitu, VIGA,Lc, Sw, e, voladizo '''
+    valor_luz_calculo = float(self.ui.tab6_line_luz_calculo.text())
+    valor_sw = float(self.ui.tab6_line_sw.text())
+    valor_espesor_losa = float(self.ui.tab6_line_espesor.text())
+    valor_voladizo = float(self.ui.tab6_line_voladizo.text())
+
+    print(f"\n🔹 Valores de inputs en TAB6:")
+    print(f"\tLc (Luz calculo) = {valor_luz_calculo} m")
+    print(f"\tSw (Dist. entre Almas) = {valor_sw} m")
+    print(f"\te (Espesor de losa) = {valor_espesor_losa}m ")
+    print(f"\tD (largo de voladizo) = {valor_voladizo} m")
+
+
+
+    ''' Trapecios de hormigon insitu existentes '''
     for i, layout in enumerate(self.dynamic_layouts):
         tipo_hormigon = layout['combo_insitu'].currentText()
 
@@ -299,3 +310,93 @@ def test_t00(self):
             print(f"\tBi: {layout['bi_line'].text()}")
             print(f"\tAltura: {layout['altura_line'].text()}")
             print(f"\tÁrea: {layout['area_line'].text()}")
+
+
+    ''' Encuentra ancho de alma (Trapecio mas angosto en self.dynamic_layouts, que tenga Bi y Bs iguales, y que no esta ni en el primer ni ultimo lugar del diciconario) '''
+    print("\n\n🔹 Ancho de alma:")
+    menor_ancho = 99999
+    for i, layout in enumerate(self.dynamic_layouts):
+        if i == 0 or i == len(self.dynamic_layouts) - 1:
+            continue
+
+        if layout['bi_line'].text() == layout['bs_line'].text():
+            ancho = float(layout['bi_line'].text())
+            if ancho < menor_ancho:
+                menor_ancho = ancho
+                nombre = layout['name_label'].text()
+    
+    ''' Si se entra a este IF, significa que hay un problema al encontrar el trapecio que corresponde al ALMA. (Problema de geometria) '''
+    if menor_ancho == 99999:
+        print(f"No se encontró ancho de alma.")
+        # return
+    else:
+        print(f"\tAncho de alma mas angosto: {menor_ancho} m, en layout {nombre}")
+
+
+    ''' Recupera valores de F'c para viga y para insitu '''
+    fc_viga = float(self.ui.tab4_line_horm_final_fc.text())
+    fc_losa = float(self.ui.tab4_line_horm_insitu_fc.text())
+    n_elasticidad = math.sqrt(fc_viga/fc_losa)
+
+    print(f"\n🔹 Valores de f'c en TAB MATERIALES:")
+    print(f"\tf'c final (viga) = {fc_viga} N/mm2")
+    print(f"\tf'c insitu (losa) = {fc_losa} N/mm2")
+    print(f"\tResultado de SQRT (f'c(Viga) / F'c(Losa)) = {n_elasticidad} [? unidad]")
+
+
+
+
+    ''' Propiedades de viga bruta. '''
+    viga_area = float(self.ui.result_sum_area.text())
+    viga_yinf = float(self.ui.result_sum_ponderado.text())
+    viga_inercia = float(self.ui.result_sum_op.text())
+
+    print(f"\n🔹 Propiedades de VIGA BRUTA:")
+    print(f"\t Area = {viga_area} m2")
+    print(f"\t Y_inf = {viga_yinf} m")
+    print(f"\t Inercia = {viga_inercia} m4")
+
+
+    ''' Valores para tabla ACI 6.3.2.1 '''
+    ''' B_eff de losa '''
+
+    print(f"\n🔹 Comparaciones TABLA ACI 6.3.2.1 de valor minimo:")
+    ''' Ambos lados'''
+    print(f"\tAMBOS LADOS -> ")
+    print(f"\t\t 8*h (espesor losa)->({valor_espesor_losa} * 8) =\t{round(valor_espesor_losa * 8, 3)} m")
+    print(f"\t\t Sw/2 (separacion almas->({valor_sw} / 2) =\t{round(valor_sw / 2, 3)} m")
+    print(f"\t\t Lc/8 (luz calculo)->({valor_luz_calculo} / 8) =\t{round(valor_luz_calculo / 8, 3)} m")
+
+    print(f"\tSOLO UN LADO -> ")
+    print(f"\t\t 6*h (espesor losa)->({valor_espesor_losa} * 6) =\t{round(valor_espesor_losa * 6, 3)} m")
+    print(f"\t\t Sw/2 (separacion almas)->({valor_sw} / 2) =\t{round(valor_sw / 2, 3)} m")
+    print(f"\t\t Lc/12 (luz calculo)->({valor_luz_calculo} / 12) =\t{round(valor_luz_calculo / 12, 3)} m")
+
+    ancho_efectivo_losa_ambos = float(min(valor_espesor_losa * 8, valor_sw / 2, valor_luz_calculo / 8))
+    ancho_efectivo_losa_uno = float(min(valor_espesor_losa * 6, valor_sw / 2, valor_luz_calculo / 12))
+
+    print(f"\n🔹 Por lo tanto ANCHO EFECTIVO:")
+    print(f"\t\t B_eff (Valor minimo para ambos lados) = {ancho_efectivo_losa_ambos} m")
+    print(f"\t\t B_eff (Valor minimo para un lado) = {ancho_efectivo_losa_uno} m")
+
+
+    ''' Area losa '''
+    ''' Area de trapecio insitu '''
+    ''' Solo sirve si se usa un solo trapecio insitu (Osea una sola losa) No se esta controlando que usuario no agregue mas de un trapecio insitu '''
+
+    ''' altura de trapecio tipo insitu y valor ingresado en tab6 'espesor' Son lo mismo ??? '''
+
+    for i, layout in enumerate(self.dynamic_layouts):
+        tipo_hormigon = layout['combo_insitu'].currentText()
+
+        if tipo_hormigon == "Insitu":
+            # print(f"\n🔹 Para layout {i}")
+            # print("\tTrapecio de hormigon Insitu:")
+            # print(f"\tNombre: {layout['name_label'].text()}")
+            # print(f"\tBi: {layout['bi_line'].text()}")
+            # print(f"\tAltura: {layout['altura_line'].text()}")
+            # print(f"\tÁrea: {layout['area_line'].text()}")
+            ancho_real_losa = float(layout['bi_line'].text())
+
+    area_losa = ancho_real_losa * valor_espesor_losa
+    print(f"\n🔹 Area de losa (Ancho real losa * Espesor losa) ({ancho_real_losa} * {valor_espesor_losa}) = {area_losa} m2")
