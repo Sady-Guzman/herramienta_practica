@@ -260,9 +260,11 @@ def calcular_nuevos_valores(self):
                 return
             
             ''' No pueden haber caracteres en ningun campo, Solo numeros '''
-            if not bi.isnumeric() or not bs.isnumeric() or not altura.isnumeric():
-                print("\t\tError calcular_nuevos_valores(): Valores de dimensiones deben ser numericos. !!!")
-                return
+            ''' NO SE USA PORQUE AL ASIGNAR VALORES A LINEEDITS DE DIMENSIOENS EN GEOMETRIA, SE CARGA INFORMACION EN TYPO STRING. HACE QUE NO SE CALCULEN VALORES '''
+            ''' SE PUEDE ARREGLAR HACIENDO QUE LOS VALORES AL SER ASIGNADOS A LOS LINE EDITS SE CONVIERTAN EN NUMERO CON float() '''
+            # if not bi.isnumeric() or not bs.isnumeric() or not altura.isnumeric():
+            #     print("\t\tError calcular_nuevos_valores(): Valores de dimensiones deben ser numericos. !!!")
+            #     return
 
             try:
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
