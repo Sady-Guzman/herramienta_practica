@@ -16,7 +16,7 @@ import sqlite3
 import random
 
 #  IMPORTS DE OTROS ARCHIVOS
-from ui_files.herramienta_trapecios_v14 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
+from ui_files.herramienta_trapecios_v15 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
 
 from fn_database import *
 from fn_calculo_propiedades import *
@@ -158,6 +158,7 @@ class MyDialog(QDialog):
 
         ''' Inicia App en tab 0 (GEOMETRIA) '''
         self.ui.tabWidget.setCurrentIndex(0) 
+
 
 
     ''' ====================================================================================================================================================== '''
