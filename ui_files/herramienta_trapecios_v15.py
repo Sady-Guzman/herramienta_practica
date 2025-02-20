@@ -906,7 +906,7 @@ class Ui_Dialog(object):
         self.tab_5.setObjectName(u"tab_5")
         self.tab5_titulo_caracteristicas = QLabel(self.tab_5)
         self.tab5_titulo_caracteristicas.setObjectName(u"tab5_titulo_caracteristicas")
-        self.tab5_titulo_caracteristicas.setGeometry(QRect(420, 60, 321, 41))
+        self.tab5_titulo_caracteristicas.setGeometry(QRect(410, 60, 321, 41))
         font6 = QFont()
         font6.setFamilies([u"Verdana"])
         font6.setPointSize(17)
@@ -915,7 +915,7 @@ class Ui_Dialog(object):
         self.tab5_titulo_caracteristicas.setFont(font6)
         self.gridLayoutWidget_5 = QWidget(self.tab_5)
         self.gridLayoutWidget_5.setObjectName(u"gridLayoutWidget_5")
-        self.gridLayoutWidget_5.setGeometry(QRect(380, 110, 361, 109))
+        self.gridLayoutWidget_5.setGeometry(QRect(240, 110, 651, 109))
         self.tab5_gridLayout_caracteristicas = QGridLayout(self.gridLayoutWidget_5)
 #ifndef Q_OS_MAC
         self.tab5_gridLayout_caracteristicas.setSpacing(-1)
@@ -966,7 +966,7 @@ class Ui_Dialog(object):
 
         self.tab5_line_area_bruta = QLineEdit(self.gridLayoutWidget_5)
         self.tab5_line_area_bruta.setObjectName(u"tab5_line_area_bruta")
-        self.tab5_line_area_bruta.setMaximumSize(QSize(100, 16777215))
+        self.tab5_line_area_bruta.setMaximumSize(QSize(9999, 16777215))
         self.tab5_line_area_bruta.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.tab5_gridLayout_caracteristicas.addWidget(self.tab5_line_area_bruta, 1, 1, 1, 1)
@@ -1074,7 +1074,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(4)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1218,9 +1218,9 @@ class Ui_Dialog(object):
         self.tab5_titulo_caracteristicas.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas mec\u00e1nicas secci\u00f3n", None))
         self.tab5_label_relleno_grid.setText("")
         self.tab5_label_simple_t0.setText(QCoreApplication.translate("Dialog", u"Simple t=0", None))
-        self.tab5_label_cdg.setText(QCoreApplication.translate("Dialog", u"Yinf", None))
-        self.tab5_label_area.setText(QCoreApplication.translate("Dialog", u"Area", None))
-        self.tab5_label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia", None))
+        self.tab5_label_cdg.setText(QCoreApplication.translate("Dialog", u"Yinf [m]", None))
+        self.tab5_label_area.setText(QCoreApplication.translate("Dialog", u"Area [m2]", None))
+        self.tab5_label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia [m4]", None))
         self.tab5_label_bruta.setText(QCoreApplication.translate("Dialog", u"Bruta t=0", None))
         self.tab5_label_simple_t00.setText(QCoreApplication.translate("Dialog", u"Simple t=00", None))
         self.tab5_line_area_bruta.setText("")

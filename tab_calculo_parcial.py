@@ -34,7 +34,8 @@ def calc_propiedades_tabla(self):
 
     ''' Variables corresponden a resultados celdas en Excel Joaquin'''
     ''' Se usan para calcular Simple t = 0 '''
-    # TODO nombre variables 
+    # TODO Preguntar por nombres mas descriptivos a Joaquin cuando tenga tiempo
+    #  
     self.viga_area = 0
     self.barras_area = 0
     self.cordones_area = 0
@@ -47,9 +48,9 @@ def calc_propiedades_tabla(self):
     self.barras_a_cg = 0
     self.cordones_a_cg = 0
 
-    self.area_final = 0
-    self.yinf_final = 0
-    self.total_area_cg = 0
+    self.area_final = 0 # Para t= 0 (Hormigon presentaso + Armadura activa + Armadura Pasiva)
+    self.yinf_final = 0 # Para t= 0 (Hormigon presentaso + Armadura activa + Armadura Pasiva)
+    self.total_area_cg = 0 # Para t= 0 (Hormigon presentaso + Armadura activa + Armadura Pasiva)
 
     self.operacion_tipo_viga = 0
     self.operacion_tipo_barras = 0
@@ -59,7 +60,8 @@ def calc_propiedades_tabla(self):
     ''' Hace calculos para simple t = 0 '''
     calc_seccion_neta_inicial(self) # Primer paso
     calc_seccion_homogeneizada_inicial(self)  # segundo paso (final) para t = 0
-    test_t00(self)
+
+    calc_t00(self) # Paso 1 y Paso 2 para calcular T=00. Basado en tablas 5 y 6 de EXCEL CLAUDIO
 
 
 
@@ -281,9 +283,7 @@ def calc_seccion_homogeneizada_inicial(self):
 
 # Luz de Calculo se obtiene de input de usuario en ultima pestana (Solo hace falta ingresar valor, Boton es placebo para usuario)
 
-def test_t00(self):
-
-
+def calc_t00(self):
 
     ''' Valores para concreto insitu, VIGA,Lc, Sw, e, voladizo '''
     valor_luz_calculo = float(self.ui.tab6_line_luz_calculo.text())
@@ -464,3 +464,61 @@ def test_t00(self):
     inercia_compuesta = viga_inercia + losa_inercia + Inercia_viga_prima + Inercia_losa_prima
     print(f"\tInercia_compuesta (Final) = (I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima) -> {viga_inercia} + {losa_inercia} + {Inercia_viga_prima} + {Inercia_losa_prima}.")
     print(f"\tInercia compuesta = {inercia_compuesta} m4")
+
+
+
+
+    ''' ================================================================================================================================================================== '''
+    ''' ============================     PASO 2 PARA T=00, Tabla   6) Propiedades Sección Viga homogenizada compuesta Final EXCEL CLAUDIO     ============================ '''
+    ''' ================================================================================================================================================================== '''
+
+    ''' Los nombres de las variables estan basados en los nombres que estan asignadps a tabla 6 en Plantilla claudio '''
+
+    modulo_elasticidad = float(self.ui.tab3_line_cons_es.text()) / float(self.ui.tab4_line_horm_final_e.text()) # TODO Preguntar IGNACIO si esta bie usar Ec como horm_final_e
+
+    ''' COL area'''
+    ani_viga_comp = area_equivalente_viga_losa # Area equivalente total de todo el hormigon
+
+    # Area total de cables * modulo (Es / Ec) (Es, Ec son ingresados por usuario en TAB materiales, Pero toman valores por defecto al iniciar programa.)
+    area_total_cables = float(self.ui.tab2_line_total_area.text()) / 100 # Variable original esta en CM, Por eso se pasa a METROS
+    ani_cables = float(area_total_cables) * float(modulo_elasticidad)
+
+    area_neta_ini = ani_viga_comp + ani_cables
+
+    ''' COL Y cdg '''
+    ycdg_viga_comp = centro_gravedad_compuesto
+    ycdg_cables = float(self.ui.tab2_line_total_cdg_fuerza.text()) # USA centro de gravedad calculado por fuerza (CON TPI), Se puede cambiar a usar por AREA
+    
+    ''' COL li INERCIA '''
+    inercia_viga_comp = inercia_compuesta
+    inercia_cables = float(self.ui.tab2_line_total_inercia.text()) * modulo_elasticidad
+
+    ''' COL Ani * Ycg i'''
+    ani_Y_viga_comp = ani_viga_comp * ycdg_viga_comp
+    ani_Y_cables = ani_cables * ycdg_cables
+
+    # 3ra fila en columna, suma de ambos resultados
+    ani_Y_total = ani_Y_viga_comp + ani_Y_cables
+
+    ''' Yc.g neta ini (En Primera Columna) '''
+    Ycg_neta_ini = ani_Y_total / area_neta_ini
+
+    ''' COL Ani * li (O Ani * D^2 segun IGNACIO) '''
+    ani_d2_viga_comp = ani_viga_comp * pow((ycdg_viga_comp - Ycg_neta_ini), 2)
+    ani_d2_cables = ani_cables * pow((ycdg_cables - Ycg_neta_ini), 2)
+
+    ''' COL IT (ultima col) '''
+    it_viga_comp = inercia_viga_comp + ani_d2_viga_comp
+    it_cables = inercia_cables + ani_d2_cables
+
+    it_total = it_viga_comp + it_cables
+    inercia_neta_ini = it_total # Son la misma variable, Pero se hace asi para mantener consistencia con excel claudio
+
+    ''' ASIGNA RESULTADOS DE PROPIEDADES A LINEEDITS DE T = 00 en TAB CALC. PARCIAL '''
+    area_neta_ini = round(area_neta_ini, 7)
+    Ycg_neta_ini = round(Ycg_neta_ini, 7)
+    inercia_neta_ini = round(inercia_neta_ini, 7)
+
+    self.ui.tab5_line_area_t00.setText(f"{area_neta_ini}")
+    self.ui.tab5_line_cdg_t00.setText(f"{Ycg_neta_ini}")
+    self.ui.tab5_line_inercia_t00.setText(f"{inercia_neta_ini}")

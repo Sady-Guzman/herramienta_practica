@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>4</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -2145,7 +2145,7 @@
     <widget class="QLabel" name="tab5_titulo_caracteristicas">
      <property name="geometry">
       <rect>
-       <x>420</x>
+       <x>410</x>
        <y>60</y>
        <width>321</width>
        <height>41</height>
@@ -2166,9 +2166,9 @@
     <widget class="QWidget" name="gridLayoutWidget_5">
      <property name="geometry">
       <rect>
-       <x>380</x>
+       <x>240</x>
        <y>110</y>
-       <width>361</width>
+       <width>651</width>
        <height>109</height>
       </rect>
      </property>
@@ -2199,7 +2199,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="tab5_label_cdg">
         <property name="text">
-         <string>Yinf</string>
+         <string>Yinf [m]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -2209,7 +2209,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="tab5_label_area">
         <property name="text">
-         <string>Area</string>
+         <string>Area [m2]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -2219,7 +2219,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="tab5_label_inercia">
         <property name="text">
-         <string>Inercia</string>
+         <string>Inercia [m4]</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -2250,7 +2250,7 @@
        <widget class="QLineEdit" name="tab5_line_area_bruta">
         <property name="maximumSize">
          <size>
-          <width>100</width>
+          <width>9999</width>
           <height>16777215</height>
          </size>
         </property>
