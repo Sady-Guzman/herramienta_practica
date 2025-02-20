@@ -312,6 +312,7 @@ def test_t00(self):
             print(f"\tÁrea: {layout['area_line'].text()}")
 
 
+
     ''' Encuentra ancho de alma (Trapecio mas angosto en self.dynamic_layouts, que tenga Bi y Bs iguales, y que no esta ni en el primer ni ultimo lugar del diciconario) '''
     print("\n\n🔹 Ancho de alma:")
     menor_ancho = 99999
@@ -333,28 +334,32 @@ def test_t00(self):
         print(f"\tAncho de alma mas angosto: {menor_ancho} m, en layout {nombre}")
 
 
+
     ''' Recupera valores de F'c para viga y para insitu '''
     fc_viga = float(self.ui.tab4_line_horm_final_fc.text())
     fc_losa = float(self.ui.tab4_line_horm_insitu_fc.text())
-    n_elasticidad = math.sqrt(fc_viga/fc_losa)
+    n_compresion = math.sqrt(fc_viga/fc_losa)
 
     print(f"\n🔹 Valores de f'c en TAB MATERIALES:")
     print(f"\tf'c final (viga) = {fc_viga} N/mm2")
     print(f"\tf'c insitu (losa) = {fc_losa} N/mm2")
-    print(f"\tResultado de SQRT (f'c(Viga) / F'c(Losa)) = {n_elasticidad} [? unidad]")
+    print(f"\tResultado de SQRT (f'c(Viga) / F'c(Losa)) = {n_compresion} [? unidad]")
 
 
 
 
     ''' Propiedades de viga bruta. '''
+    viga_altura = float(self.ui.result_sum_altura.text())
     viga_area = float(self.ui.result_sum_area.text())
     viga_yinf = float(self.ui.result_sum_ponderado.text())
     viga_inercia = float(self.ui.result_sum_op.text())
 
     print(f"\n🔹 Propiedades de VIGA BRUTA:")
+    print(f"\t Altura = {viga_altura} m")
     print(f"\t Area = {viga_area} m2")
     print(f"\t Y_inf = {viga_yinf} m")
     print(f"\t Inercia = {viga_inercia} m4")
+
 
 
     ''' Valores para tabla ACI 6.3.2.1 '''
@@ -380,6 +385,7 @@ def test_t00(self):
     print(f"\t\t B_eff (Valor minimo para un lado) = {ancho_efectivo_losa_uno} m")
 
 
+
     ''' Area losa '''
     ''' Area de trapecio insitu '''
     ''' Solo sirve si se usa un solo trapecio insitu (Osea una sola losa) No se esta controlando que usuario no agregue mas de un trapecio insitu '''
@@ -399,4 +405,62 @@ def test_t00(self):
             ancho_real_losa = float(layout['bi_line'].text())
 
     area_losa = ancho_real_losa * valor_espesor_losa
-    print(f"\n🔹 Area de losa (Ancho real losa * Espesor losa) ({ancho_real_losa} * {valor_espesor_losa}) = {area_losa} m2")
+    print(f"\n🔹 Area de losa (Ancho real losa * Espesor losa) -> ({ancho_real_losa} * {valor_espesor_losa}) = {area_losa} m2")
+    
+    area_equivalente_losa = (ancho_efectivo_losa_ambos * valor_espesor_losa) / n_compresion
+    print(f"\n🔹 Area equivalente solo losa (B_eff (Ambos Lados * espesor) / n) ({ancho_efectivo_losa_ambos} * {valor_espesor_losa}) / {n_compresion} = {area_equivalente_losa} m2")
+
+
+    ''' A_eq viga/losa '''
+    ''' A_eq = A_viga + ((B_eff * espesor_losa) / n_compresion)'''
+
+    print(f"\n🔹 Area equivalente viga/losa:")
+    print(f"\tA_eq = A_viga + ((B_eff->(ambos lados) * espesor_losa) / n_compresion")
+    area_equivalente_viga_losa = viga_area + ((ancho_efectivo_losa_ambos * valor_espesor_losa) / n_compresion)
+    print(f"\tA_eq = {area_equivalente_viga_losa} m2")
+
+
+
+    ''' Inercia de losa '''
+    ''' I_losa = ((B_eff/n_compresion) * h ^3) / 12 '''
+
+    print(f"\n🔹 Inercia de losa:")
+    print(f"\tI_losa = ((B_eff->(Ambos Lados) / n_compresion) * h^3->(Espesor Losa)) / 12 ")
+    print(f"\tI_losa = (({ancho_efectivo_losa_ambos} / {n_compresion}) * {valor_espesor_losa}^3) / 12")
+    losa_inercia = ((ancho_efectivo_losa_ambos / n_compresion) * pow(valor_espesor_losa, 3)) / 12
+    print(f"\tInercia de losa = {losa_inercia} [? Unidad]")
+
+
+    ''' Centro de gravedad de losa Y_cl '''
+    ''' Y_inf de losa desde base de losa + Altura total de viga '''
+
+    print(f"\n🔹 Centro de gravedad de losa:")
+    print(f"\tY_inf de losa desde base de losa + Altura total de viga")
+    losa_yinf = viga_altura + (valor_espesor_losa / 2)
+    print(f"\tY_inf losa = {viga_altura} + ({valor_espesor_losa} / 2)")
+    print(f"\tCentro de gravedad losa (+ altura vida) = {losa_yinf}")
+
+    ''' Centro de gravedad compuesto '''
+    ''' Y_c = (Area_viga * Centroide_viga + Area_eq_losa * Centroide_losa) / Area_eq_viga_losa'''
+
+    print(f"\n🔹 Centro de gravedad compuesto:")
+    centro_gravedad_compuesto = (viga_area * viga_yinf + area_equivalente_losa * losa_yinf) / (area_equivalente_viga_losa)
+    print("\tY_c = (Area_viga * Centroide_viga + Area_eq_losa * Centroide_losa) / Area_eq_viga_losa")
+    print(f"\tY_c = ({viga_area} * {viga_yinf} + {area_equivalente_losa} * {losa_yinf}) / {area_equivalente_viga_losa}")
+    print(f"\tCentro de gravedad compuesto = {centro_gravedad_compuesto}")
+
+    ''' Inercia compuesta '''
+    ''' I_c = I_viga + I_losa + (Area_viga * (Y_c - Y_viga) ^2) + (Area_eq_losa * (Y_c - Y_losa) ^2) '''
+    ''' I_c = I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima '''
+
+
+    print(f"\n🔹 Inercia compuesta:")
+    Inercia_viga_prima = viga_area * pow((viga_yinf - centro_gravedad_compuesto), 2)
+    Inercia_losa_prima = area_equivalente_losa * pow((losa_yinf - centro_gravedad_compuesto), 2)
+
+    print(f"\tInercia_viga_prima (Area_viga * (Y_c - Y_viga) ^2) -> {viga_area} * ({viga_yinf} - {centro_gravedad_compuesto})^2 = {Inercia_viga_prima}")
+    print(f"\tInercia_viga_prima (Area_viga * (Y_c - Y_viga) ^2) -> {area_equivalente_losa} * ({losa_yinf} - {centro_gravedad_compuesto})^2 = {Inercia_losa_prima}")
+
+    inercia_compuesta = viga_inercia + losa_inercia + Inercia_viga_prima + Inercia_losa_prima
+    print(f"\tInercia_compuesta (Final) = (I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima) -> {viga_inercia} + {losa_inercia} + {Inercia_viga_prima} + {Inercia_losa_prima}.")
+    print(f"\tInercia compuesta = {inercia_compuesta} m4")
