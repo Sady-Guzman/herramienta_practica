@@ -79,6 +79,7 @@ def calcular_inercia(trapecios):
             result = round(result, 9)
             resultados.append(result)
         else:
+            print(f"Salta trapecio insitu en calculo de inercia")
             pass
 
 
@@ -136,6 +137,7 @@ def calcular_centro_gravedad(trapecios):
             print(f"Resultado = {resultado}")
             resultados.append(resultado)
         else:
+            print(f"Salta trapecio insitu en calculo de inercia")
             print(f"calc_Yinf() -> Entra a ELSE STATEMENT ")
             continue
 
