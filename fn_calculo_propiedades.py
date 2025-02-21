@@ -129,7 +129,7 @@ def calcular_centro_gravedad(trapecios):
             print(f"\tAltura = {h}")
 
             if i > 0:
-                altura_acumulada += trapecios[i - 1][5]  # Suma altura de trapecios anteriores
+                altura_acumulada += trapecio[5]  # Suma altura de trapecios anteriores
 
             # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
             if b_s <= b_i:
