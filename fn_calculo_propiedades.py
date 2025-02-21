@@ -108,19 +108,25 @@ def calcular_centro_gravedad(trapecios):
     altura_acumulada = 0  # representa SUM($E$3:E3)
     resultados = []       # Guarda cada valor de Cg
 
-    print(f"\n\n\ncalcular_centro_gravedad, trapecios data: {trapecios}")
-    # **Filter out trapecios where trapecio[7] == 1**
+    print("\n\n\n---------------------- CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------")
+    print(f"calcular_centro_gravedad, trapecios data: {trapecios}")
     trapecios_filtrados = [t for t in trapecios if t[7] == 0]
     print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODS data: {trapecios_filtrados}")
 
 
     for i, trapecio in enumerate(trapecios_filtrados):
-        print(f"calc_Yinf() -> valor en trapeecio[i][7] = ", trapecios[i][7])
+        print(f"\n-----> LOOP \nValor de i = {i}")
+        print(f"Valor de trapecio en [{i}] = {trapecio}")
+        print(f"calc_Yinf() -> valor en trapeecio[{i}][7] (Es_insitu)= ", trapecio[7])
         if trapecio[7] == 0: # No insitu
-            print(f"calc_Yinf() -> Entra a IF STATEMENT ")
+            print(f"calc_Yinf() -> Entra a IF STATEMENT porque NO ES INSITU\n\n")
             b_i = trapecio[3]  # Base inferior
             b_s = trapecio[4]  # Base superior
             h = trapecio[5]    # Altura
+
+            print(f"\tBase_i = {b_i}")
+            print(f"\tBase_s = {b_s}")
+            print(f"\tAltura = {h}")
 
             if i > 0:
                 altura_acumulada += trapecios[i - 1][5]  # Suma altura de trapecios anteriores
@@ -132,24 +138,22 @@ def calcular_centro_gravedad(trapecios):
                 centro = h - h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
 
             # paso final: agregar valor de altura acumulada
+            print(f"Valor de centro -> {centro}")
+            print(f"Valor de altura_acumulada -> {altura_acumulada}")
             resultado = centro + altura_acumulada
             resultado = round(resultado, 9)
-            print(f"Resultado = {resultado}")
+            print(f"Resultado de Centro + H_acu = {resultado}")
             resultados.append(resultado)
+            print(f"Contenido de resultados[] -> {resultados}")
         else:
             print(f"Salta trapecio insitu en calculo de inercia")
             print(f"calc_Yinf() -> Entra a ELSE STATEMENT ")
             continue
 
 
-
-        # print("valor de var resultado: ", resultado)
-        # print("Valor de var altura_acumulada: ", altura_acumulada)
-
-    # print(f"Debug calc_Cg -> Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-    # print(f"Debug calc_Cg -> Trapezoid {trapecio[0]} - Resultado: {resultado:.7f}") # 7 decimales
     
-    # print("Resultados CG's: ", resultados)
+    print("Contenido final de Resultados CG's: ", resultados)
+    print("\n\n---------------------- TERMINA CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------\n\n")
     return resultados
 
 
@@ -173,17 +177,28 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
 
         Columnas -> F: Area, G: Centro Gravedad, (F9: Suma de todas las areas)
     '''
+    # print("\n\n\n ------------------------")
+    # print(f"EN calcular_prod_pond() -> \n\tAreas -> {areas} \n\tCentros_Gravedad -> {centros_gravedad} \n\t suma_areas -> {suma_areas}")
 
     resultado = 0
 
-    for i in range(len(areas)):
-        resultado += areas[i] * centros_gravedad[i]
+    # print(f"\tValor resultado = {resultado}")
+    # print(f"\tValor len(areas) = {len(areas)}\n")
 
-    # print(f"Valores de: Resultado = {resultado} y de suma_areas = {suma_areas}\n")
+    for i in range(len(areas)):
+        # print(f"\n--->Valor de i = {i}")
+        # print(f"Valor de areas[{i}] = {areas[i]}")
+        # print(f"Valor de centros_gravedad[{i}] = {centros_gravedad[i]}")
+        resultado += areas[i] * centros_gravedad[i]
+        # print(f"valor resultado = {resultado}")
+
     
+    print(f"Valor suma_areas = {suma_areas}")
     resultado = resultado / suma_areas
+    # print(f"valor resultado por division = {resultado}")
 
     # print("Resultado suma ponderada: ", resultado)
+    # print(f"\t RESULTADO DE PROD_POND (Yc) = {resultado}\n\n\n ------------------------")
     return resultado
 
 
@@ -307,9 +322,15 @@ def calcular_nuevos_valores(self):
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
     
-    print(f"Caclular_nuevos_valores() -> valores de areas: {valores_areas}\n")
-    print(f"Caclular_nuevos_valores() -> Suma de areas: {suma_areas}\n")
+    # print(f"Caclular_nuevos_valores() -> valores de areas: {valores_areas}\n")
+    # print(f"Caclular_nuevos_valores() -> Suma de areas: {suma_areas}\n")
 
+
+    # valores_cg = int(69)
+    # print(f"\tContenido de valores_cg -> {valores_cg}\n")
+    # print(f"\tContenido de producto_ponderado -> {producto_ponderado}\n")
+
+    # TODO Pedir significado de nombres de columnas excel a Joaquin cuando tenga tiempo.
     # Aplica resultados a layouts dinamicos + layouts fijos
     print(" ------ Calcular_nuevos_valores() ----> VALORES DE PROPIEDADES FUERON CALCULADOS Y ASIGNADOS ------\n\n")
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
