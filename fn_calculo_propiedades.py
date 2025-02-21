@@ -111,7 +111,9 @@ def calcular_centro_gravedad(trapecios):
     print("\n\n\n---------------------- CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------")
     print(f"calcular_centro_gravedad, trapecios data: {trapecios}")
     trapecios_filtrados = [t for t in trapecios if t[7] == 0]
-    print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODS data: {trapecios_filtrados}")
+    print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODSdata: {trapecios_filtrados}")
+    trapecios_filtrados.reverse()
+    print(f"\n\n\ncalcular_centro_gravedad, trapecios : {trapecios_filtrados}")
 
 
     for i, trapecio in enumerate(trapecios_filtrados):
@@ -128,22 +130,33 @@ def calcular_centro_gravedad(trapecios):
             print(f"\tBase_s = {b_s}")
             print(f"\tAltura = {h}")
 
-            if i > 0:
-                altura_acumulada += trapecio[5]  # Suma altura de trapecios anteriores
+            # if i > 0:
+                # altura_acumulada += h  # Suma altura de trapecios anteriores
 
             # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
-            if b_s <= b_i:
-                centro = h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+            if b_s == b_i:
+                centro = h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
+            if b_s < b_i:
+                centro = h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
             else:
                 centro = h - h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+
 
             # paso final: agregar valor de altura acumulada
             print(f"Valor de centro -> {centro}")
             print(f"Valor de altura_acumulada -> {altura_acumulada}")
+
+
             resultado = centro + altura_acumulada
             resultado = round(resultado, 9)
+
+
             print(f"Resultado de Centro + H_acu = {resultado}")
             resultados.append(resultado)
+
+            altura_acumulada += h
+
+
             print(f"Contenido de resultados[] -> {resultados}")
         else:
             print(f"Salta trapecio insitu en calculo de inercia")
@@ -152,6 +165,7 @@ def calcular_centro_gravedad(trapecios):
 
 
     
+    resultados.reverse()
     print("Contenido final de Resultados CG's: ", resultados)
     print("\n\n---------------------- TERMINA CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------\n\n")
     return resultados
