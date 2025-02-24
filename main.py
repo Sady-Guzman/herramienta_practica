@@ -92,10 +92,6 @@ class MyDialog(QDialog):
         ''' Default pushBtn en cada TAB '''
         self.ui.btn_calcular_nuevos_valores.setDefault(True)
         self.ui.tabWidget.currentChanged.connect(self.set_default_button)
-        
-
-        
-
 
 
         # Carga datos de familias/modelos de DB
@@ -110,13 +106,7 @@ class MyDialog(QDialog):
         self.ui.btn_acpt_eliminar.clicked.connect(
             # lambda: confirmar_borrar(self, self.ui.spin_cant_eliminar.value())
             lambda: confirmar_borrar(self)
-        ) # Elimina Dynamic Row
-
-
-        self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
-        
-        
-        
+        ) # Elimina Dynamic Row        
         
 
         

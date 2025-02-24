@@ -125,9 +125,6 @@ class Ui_Dialog(object):
 
         self.Vlayout_catalogo.addWidget(self.btn_save_seccion)
 
-        self.btn_salto_linea = QPushButton(self.tab)
-        self.btn_salto_linea.setObjectName(u"btn_salto_linea")
-        self.btn_salto_linea.setGeometry(QRect(10, 540, 100, 32))
         self.tab1_list_trapecios_existentes = QListWidget(self.tab)
         self.tab1_list_trapecios_existentes.setObjectName(u"tab1_list_trapecios_existentes")
         self.tab1_list_trapecios_existentes.setGeometry(QRect(410, 20, 131, 81))
@@ -1070,11 +1067,16 @@ class Ui_Dialog(object):
         self.tab6_diagrama.setGeometry(QRect(670, 410, 461, 211))
         self.tab6_diagrama.setPixmap(QPixmap(u"diagrama_beff.png"))
         self.tab6_diagrama.setScaledContents(True)
+        self.label = QLabel(self.tab_6)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(510, 590, 151, 31))
+        self.label.setFont(font1)
+        self.label.setWordWrap(True)
         self.tabWidget.addTab(self.tab_6, "")
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(5)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1094,7 +1096,6 @@ class Ui_Dialog(object):
         self.label_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Tipo secci\u00f3n", None))
         self.btn_acpt_tipo_seccion.setText(QCoreApplication.translate("Dialog", u"Aplicar secci\u00f3n", None))
         self.btn_save_seccion.setText(QCoreApplication.translate("Dialog", u"Guardar datos secci\u00f3n", None))
-        self.btn_salto_linea.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
         self.btn_acpt_eliminar.setText(QCoreApplication.translate("Dialog", u"Eliminar Selecci\u00f3n", None))
         self.label_cant_eliminar.setText(QCoreApplication.translate("Dialog", u"*Elegir trapecio a eliminar", None))
         self.btn_acpt_agregar.setText(QCoreApplication.translate("Dialog", u"Agregar Trapecio", None))
@@ -1232,6 +1233,7 @@ class Ui_Dialog(object):
         self.tab6_label_espesor.setText(QCoreApplication.translate("Dialog", u"Espesor de losa - e (m)", None))
         self.tab6_label_voladizo.setText(QCoreApplication.translate("Dialog", u"Longitud voladiza - D (m)", None))
         self.tab6_diagrama.setText("")
+        self.label.setText(QCoreApplication.translate("Dialog", u"Voladizo no se considera en ningun calculo actualmente.", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_6), QCoreApplication.translate("Dialog", u"Luz Calculo", None))
     # retranslateUi
 
