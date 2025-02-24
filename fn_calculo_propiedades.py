@@ -135,11 +135,11 @@ def calcular_centro_gravedad(trapecios):
 
             # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
             if b_s == b_i:
-                centro = h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
+                centro = h - h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
             if b_s < b_i:
-                centro = h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
+                centro = h - h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
             else:
-                centro = h - h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+                centro = h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
 
 
             # paso final: agregar valor de altura acumulada
