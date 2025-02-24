@@ -286,16 +286,20 @@ def calc_seccion_homogeneizada_inicial(self):
 def calc_t00(self):
 
     ''' Valores para concreto insitu, VIGA,Lc, Sw, e, voladizo '''
-    valor_luz_calculo = float(self.ui.tab6_line_luz_calculo.text())
-    valor_sw = float(self.ui.tab6_line_sw.text())
-    valor_espesor_losa = float(self.ui.tab6_line_espesor.text())
-    valor_voladizo = float(self.ui.tab6_line_voladizo.text())
+    try:
+        valor_luz_calculo = float(self.ui.tab6_line_luz_calculo.text())
+        valor_sw = float(self.ui.tab6_line_sw.text())
+        valor_espesor_losa = float(self.ui.tab6_line_espesor.text())
+        # valor_voladizo = float(self.ui.tab6_line_voladizo.text())
+    except:
+        print("Falta uno o mas de los siguientes valores: Luz de Calculo, Sw, Espesor losa insitu. Por lo que no se puede calcular t=00.\n")
+        return
 
     print(f"\n🔹 Valores de inputs en TAB6:")
     print(f"\tLc (Luz calculo) = {valor_luz_calculo} m")
     print(f"\tSw (Dist. entre Almas) = {valor_sw} m")
     print(f"\te (Espesor de losa) = {valor_espesor_losa}m ")
-    print(f"\tD (largo de voladizo) = {valor_voladizo} m")
+    # print(f"\tD (largo de voladizo) = {valor_voladizo} m")
 
 
 
@@ -390,7 +394,8 @@ def calc_t00(self):
     ''' Area de trapecio insitu '''
     ''' Solo sirve si se usa un solo trapecio insitu (Osea una sola losa) No se esta controlando que usuario no agregue mas de un trapecio insitu '''
 
-    ''' altura de trapecio tipo insitu y valor ingresado en tab6 'espesor' Son lo mismo ??? '''
+    ''' TODO altura de trapecio tipo insitu y valor ingresado en tab6 'espesor' Son lo mismo ??? '''
+    existe_insitu = False
 
     for i, layout in enumerate(self.dynamic_layouts):
         tipo_hormigon = layout['combo_insitu'].currentText()
@@ -403,6 +408,11 @@ def calc_t00(self):
             # print(f"\tAltura: {layout['altura_line'].text()}")
             # print(f"\tÁrea: {layout['area_line'].text()}")
             ancho_real_losa = float(layout['bi_line'].text())
+            existe_insitu = True
+    
+    if existe_insitu == False:
+        print("No se encuentra ningun bloque de hormigon insitu en la geometria, No se continua con calculo t = 00.\n")
+        return
 
     area_losa = ancho_real_losa * valor_espesor_losa
     print(f"\n🔹 Area de losa (Ancho real losa * Espesor losa) -> ({ancho_real_losa} * {valor_espesor_losa}) = {area_losa} m2")
