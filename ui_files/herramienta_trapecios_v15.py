@@ -508,7 +508,7 @@ class Ui_Dialog(object):
         self.tab3_label_inercia_barras.setGeometry(QRect(890, 130, 141, 20))
         self.tab3_instrucciones = QLabel(self.tab_3)
         self.tab3_instrucciones.setObjectName(u"tab3_instrucciones")
-        self.tab3_instrucciones.setGeometry(QRect(810, 600, 311, 16))
+        self.tab3_instrucciones.setGeometry(QRect(840, 600, 281, 20))
         self.tabWidget.addTab(self.tab_3, "")
         self.tab_4 = QWidget()
         self.tab_4.setObjectName(u"tab_4")
@@ -1074,7 +1074,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1163,7 +1163,7 @@ class Ui_Dialog(object):
         self.tab3_label_yinf_barras.setText(QCoreApplication.translate("Dialog", u"Yinf Barras[m]:", None))
         self.tab3_label_area_barras.setText(QCoreApplication.translate("Dialog", u"Area Barras [mm2]:", None))
         self.tab3_label_inercia_barras.setText(QCoreApplication.translate("Dialog", u"Inercia Barras [m4]:", None))
-        self.tab3_instrucciones.setText(QCoreApplication.translate("Dialog", u"Para calculo Simple t=0 solo usa N-min y \u00d8min", None))
+        self.tab3_instrucciones.setText(QCoreApplication.translate("Dialog", u"Para calculo solo usa N-min, \u00d8min, y Cota", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Dialog", u"Arm. Pasiva", None))
         self.tab4_label_caracteristicas_horm.setText(QCoreApplication.translate("Dialog", u"Caracter\u00edsticas del Hormig\u00f3n", None))
         self.tab4_grid_horm_relleno.setText("")

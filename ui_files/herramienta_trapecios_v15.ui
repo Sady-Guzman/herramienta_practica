@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -1342,14 +1342,14 @@
     <widget class="QLabel" name="tab3_instrucciones">
      <property name="geometry">
       <rect>
-       <x>810</x>
+       <x>840</x>
        <y>600</y>
-       <width>311</width>
-       <height>16</height>
+       <width>281</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="text">
-      <string>Para calculo Simple t=0 solo usa N-min y Ømin</string>
+      <string>Para calculo solo usa N-min, Ømin, y Cota</string>
      </property>
     </widget>
    </widget>
