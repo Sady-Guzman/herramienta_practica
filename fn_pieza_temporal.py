@@ -16,7 +16,7 @@ def save_pieza_data(self):
 
     # Ensure there is a selection in the combo boxes
     if not familia or not modelo:
-        print("Debug: No family or model selected.")
+        print("Debug: No hay familia o modelo seleccionado.")
         return
 
     # Prepare the data for insertion
@@ -30,7 +30,8 @@ def save_pieza_data(self):
                 trapecio[0],  # Position index
                 float(trapecio[1]),  # Base Inferior
                 float(trapecio[2]),  # Base Superior
-                float(trapecio[3])   # Altura
+                float(trapecio[3]),  # Altura
+                float(trapecio[4])   # es_insitu (4ta posicion en self.dynamic_layout_data)
             ))
 
     # Call the database insertion function
@@ -59,7 +60,7 @@ def save_current_section_data(self):
     if not pieza_seccion_item:
         print("Debug: No section selected to save.")
         return
-
+    
     pieza_seccion = pieza_seccion_item.text()
     self.seccion_pieza_cargada = pieza_seccion
     current_section_data = []
@@ -68,11 +69,28 @@ def save_current_section_data(self):
 
     # Collect data from the dynamic layouts
     for i, layout in enumerate(reversed(self.dynamic_layouts)):
+
+
+        bi = layout["bi_line"].text()
+        bs = layout["bs_line"].text()
+        altura = layout["altura_line"].text()
+        # es_insitu = layout["combo_insitu"].currentText()
+        es_insitu = 0 # Por defecto no es Insitu, asigna 0
+
+        print(f"save_current_section_data() -> bi: {bi}, bs: {bs}, altura: {altura} \n")
+
+        if layout["combo_insitu"].currentText() == "Insitu":
+            bs = bi
+            layout["bs_line"].setText(str(bs))
+            es_insitu = 1 # En caso de ser insitu asigna 1
+
+
         data = (
             i + 1,  # Position index
-            layout["bi_line"].text(),
-            layout["bs_line"].text(),
-            layout["altura_line"].text()
+            bi,
+            bs,
+            altura,
+            es_insitu
         )
         current_section_data.append(data)
 

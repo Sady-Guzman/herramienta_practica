@@ -502,11 +502,11 @@ def db_insert_or_update_pieza(pieza_data, parametros_data, trapecios_data):
 
     # Insert or update trapecios
     for trapecio in trapecios_data:
-        seccion, posicion, base_inferior, base_superior, altura = trapecio
+        seccion, posicion, base_inferior, base_superior, altura, es_insitu = trapecio
         cursor.execute("""
-            INSERT OR REPLACE INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id)
-            VALUES (?, ?, ?, ?, ?, ?)
-        """, (seccion, posicion, base_inferior, base_superior, altura, pieza_id))
+            INSERT OR REPLACE INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id, es_insitu)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (seccion, posicion, base_inferior, base_superior, altura, pieza_id, es_insitu))
 
     conn.commit()
     conn.close()
@@ -539,7 +539,7 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
         datos_por_seccion = {}
         for seccion in secciones:
             cursor.execute("""
-                SELECT posicion, base_inf, base_sup, altura 
+                SELECT posicion, base_inf, base_sup, altura, es_insitu
                 FROM trapecios 
                 WHERE pieza_id = ? AND tipo_seccion = ?
             """, (pieza_id[0], seccion))

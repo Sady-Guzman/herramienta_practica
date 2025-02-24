@@ -17,15 +17,15 @@ parametros_data = [
 ]
 
 trapecios_data = [
-    (1, 9, 1.170, 1.170, 0.200), # En jacena el 9no trapecio es in situ --->  Crear Campo para especificar material/inSitu o Tabla separada para trapecios que no son de Prefabricado
-    (1, 8, 1.170, 1.170, 0.072), # (tipo_seccion, posicion, base_inf, base_sup, altura)
-    (1, 7, 0.530, 1.170, 0.038),
-    (1, 6, 0.150, 0.530, 0.100),
-    (1, 5, 0.150, 0.150, 0.290),
-    (1, 4, 0.320, 0.150, 0.100),
-    (1, 3, 0.620, 0.320, 0.050),
-    (1, 2, 0.620, 0.620, 0.125),
-    (1, 1, 0.570, 0.620, 0.025)
+    (1, 1, 0.570, 0.620, 0.025, 0)
+    (1, 2, 0.620, 0.620, 0.125, 0),
+    (1, 3, 0.620, 0.320, 0.050, 0),
+    (1, 4, 0.320, 0.150, 0.100, 0),
+    (1, 5, 0.150, 0.150, 0.290, 0),
+    (1, 6, 0.150, 0.530, 0.100, 0),
+    (1, 7, 0.530, 1.170, 0.038, 0),
+    (1, 8, 1.170, 1.170, 0.072, 0), # (tipo_seccion, posicion, base_inf, base_sup, altura)
+    (1, 9, 1.170, 1.170, 0.200, 1), # En jacena el 9no trapecio es in situ --->  Crear Campo para especificar material/inSitu o Tabla separada para trapecios que no son de Prefabricado
 ]
 
 # Insert data into piezas and fetch the auto-generated pieza_id
@@ -43,7 +43,7 @@ for familia, modelo in piezas_data:
     # Insert data into trapecios using the fetched pieza_id
     trapecios_data_with_id = [(ts, pos, bi, bs, h, pieza_id) for ts, pos, bi, bs, h in trapecios_data]
     cursor.executemany(
-        "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id) VALUES (?, ?, ?, ?, ?, ?);",
+        "INSERT INTO trapecios (tipo_seccion, posicion, base_inf, base_sup, altura, pieza_id, es_insitu) VALUES (?, ?, ?, ?, ?, ?, ?);",
         trapecios_data_with_id,
     )
 
@@ -53,4 +53,4 @@ conn.commit()
 # Close the connection
 conn.close()
 
-print("Se insertaron los datos de: CH - 51")
+print("Se insertaron los datos de: BN 080CH")

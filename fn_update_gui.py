@@ -109,14 +109,14 @@ def update_combo_modelo(self, es_creada):
 def aplicar_dimensiones_pieza(self, pieza_trapecios):
     # Check if the number of trapecios matches the layouts
     if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [A]")
         return
 
     # Print for debugging
-    for trapecio in pieza_trapecios:
-        print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
-            f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
-            f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
+    # for trapecio in pieza_trapecios:
+    #     print(f"ID: {trapecio[0]}, Tipo Sección: {trapecio[1]}, Posición: {trapecio[2]}, "
+    #         f"Base Inferior: {trapecio[3]:.2f}, Base Superior: {trapecio[4]:.2f}, "
+    #         f"Altura: {trapecio[5]:.2f}, Pieza ID: {trapecio[6]}")
 
     # Iterate over layouts in reverse order and update widgets
     for i, trapecio in enumerate(pieza_trapecios):
@@ -135,6 +135,11 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
         layout["cg_line"].setText("")  # Placeholder
         layout["inercia_line"].setText("")  # Placeholder
         layout["op_line"].setText("")  # Placeholder
+        if trapecio[7] == 0:
+            layout["combo_insitu"].setCurrentIndex(0)  # Default es NORMAL 
+        else:
+            layout["combo_insitu"].setCurrentIndex(1) # ES INSITU
+
 
     # Store the data in the correct format
     self.dynamic_layout_data = {
@@ -144,7 +149,7 @@ def aplicar_dimensiones_pieza(self, pieza_trapecios):
 def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
     # Check if the number of trapecios matches the layouts
     if not pieza_trapecios or len(pieza_trapecios) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
+        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes. [B]")
         return
 
     # Print for debugging
@@ -174,34 +179,34 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
     
 ''' Asignar valores calculados en LineEdits dinamicos '''
 def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado):
+    j = 0  # Indice separado para manejar resultados de calculos. (i es indice de trapecios existentes)
 
-    # asegeura que numero de indices en parametros sea igual a cant de layouts dinamicos
-    if not valores_areas or len(valores_areas) != len(self.dynamic_layouts):
-        print("Error: No coinciden datos de los trapecios y los layouts dinámicos existentes.")
-        return
+    for i, layout in enumerate(self.dynamic_layouts):
+        # Salta esta row (trapecio) en caso de ser hormigon tipo insitu
+        print(f"aplicar_valores_calculados() --> Valor en combo_insitu actual: {layout['combo_insitu'].currentText()}")
+        if layout["combo_insitu"].currentText() == "Insitu":
+            continue # Skipea esta iteracion y pasa a la siguiente
 
-    # Itera sobre layouts y asigna valores a widgets LineEdits
-    for i, trapecio in enumerate(valores_areas):
-        layout = self.dynamic_layouts[i]
+        # Asegura que no se pase de los limites de las listas de valores
+        if j >= len(valores_areas):
+            print(f"Warning: Not enough calculated values for layout {i}.")
+            break  
 
-        # asegura que el widget existe
-        if not layout["area_line"] or not layout["cg_line"] or not layout["inercia_line"] or not layout["op_line"]:
-            print(f"Error: Widget for layout {i} is missing or deleted.")
-            continue
+        # Asigna valores a widgets LineEdtis
+        layout["area_line"].setText(f"{valores_areas[j]}")
+        layout["cg_line"].setText(f"{valores_cg[j]:.7f}")
+        layout["inercia_line"].setText(f"{valores_inercia[j]:.7f}")
+        layout["op_line"].setText(f"{valores_op[j]:.7f}")
 
-        layout["area_line"].setText(f"{valores_areas[i]}")
-        layout["cg_line"].setText(f"{valores_cg[i]:.7f}")
-        layout["inercia_line"].setText(f"{valores_inercia[i]:.7f}")
-        layout["op_line"].setText(f"{valores_op[i]:.7f}")
-    
-    ''' valores en layout NO-dinamico de ventana '''
+        j += 1  # Solo incrementa valor de indice J en caso de ser usado. (Para manejar trapecios de tipo INSITU correctamente en GUI)
 
+
+    ''' valores en layout NO-dinamico de ventana (resultados totales en lineEdits esquina superior derecha) '''
     sumatoria_op = sum(valores_op)
 
     self.ui.result_sum_altura.setText(f"{altura_acumulada:.7f}")
     self.ui.result_sum_area.setText(f"{suma_areas:.7f}")
-    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}") # Y _ inf ?
-    # self.ui.result_sum_ponderado.setText(f"{altura_acumulada-producto_ponderado:.7f}") # Y _ sup ?
+    self.ui.result_sum_ponderado.setText(f"{producto_ponderado:.7f}")  # Y _ inf
     self.ui.result_sum_op.setText(f"{sumatoria_op:.7f}")
 
 

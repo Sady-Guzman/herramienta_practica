@@ -1,6 +1,6 @@
 import sys
 from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout, QLabel, QPlainTextEdit, QPushButton
-from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel
+from PySide6.QtWidgets import QApplication, QDialog, QHBoxLayout, QLineEdit, QLabel, QComboBox
 from PySide6.QtWidgets import QMessageBox, QApplication, QDialog
 from fn_calculo_propiedades import *
 from fn_update_gui import *
@@ -8,7 +8,7 @@ from fn_database import *
 from fn_crear_pieza import open_crear_pieza_dialog
 
 ''' 
-    Generacion y eliminacion de elementos dinamicos de ventana
+    Generacion y eliminacion de elementos dinamicos de pestana geometria
 '''
 
 
@@ -17,12 +17,32 @@ def generate_layout(self):
     # obtiene el numero de tuplas a generar de la spinbox 'spin_cant_agregar'
     num_rows = 1
     # num_rows = 1 # BTN actua como agregar trapecios de Jacena en vez de usar spinBox
-    print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
-    tuplas_existentes = self.historial_agregados
+    # print("debug_print> SpinBox Cantidad a generar value: ", num_rows) # Debug
+    # tuplas_existentes = self.historial_agregados
 
     ''' Loop to create the frames '''
     for i in range(num_rows):
         add_rows(self, self.historial_agregados + 1)
+
+''' Comprueba tipo de hormigon en tab GEOMETRIA '''
+def on_combo_changed(self, combo_box, index):
+    print(f"🔄 ComboBox in row {index} changed to: {combo_box.currentText()}")
+
+
+
+    # Find the row dictionary in dynamic_layouts
+    row_data = next((row for row in self.dynamic_layouts if row["name_label"].objectName() == f"t{index}_name"), None)
+    
+    if row_data:
+        is_insitu = combo_box.currentText() == "Insitu"
+
+        # Disable or enable the corresponding QLineEdit widgets
+        # row_data["bi_line"].setDisabled(is_insitu) # Se mantiene solo un campo de ancho porque bloques INSITU siempre tienen mismo ancho inf y sup
+        row_data["bs_line"].setDisabled(is_insitu)
+        # row_data["altura_line"].setDisabled(is_insitu) # Altura no se desactiva
+        row_data["area_line"].setDisabled(is_insitu)
+        row_data["cg_line"].setDisabled(is_insitu)
+        row_data["op_line"].setDisabled(is_insitu)
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
@@ -39,7 +59,7 @@ def add_rows(self, index):
     layout_name = f"layout_t{index}"
 
     ''' Crea los widgets para la fila '''
-    name_label = QLabel(f"T{index}\t    ")  # Usa tab + 4 espacios para coincidir
+    name_label = QLabel(f"T{index}    ")  # Usa  + 4 espacios para coincidir --> OJO en del_rows. Tambien se cambia label de row
     bi_line = QLineEdit()
     bs_line = QLineEdit()
     altura_line = QLineEdit()
@@ -47,6 +67,7 @@ def add_rows(self, index):
     cg_line = QLineEdit()
     inercia_line = QLineEdit()
     op_line = QLineEdit()
+    combo_insitu = QComboBox()
 
     ''' Configura nombres de objetos para referencia futura '''
     name_label.setObjectName(f"t{index}_name")
@@ -57,12 +78,17 @@ def add_rows(self, index):
     cg_line.setObjectName(f"t{index}_cg")
     inercia_line.setObjectName(f"t{index}_inercia")
     op_line.setObjectName(f"t{index}_op")
+    combo_insitu.setObjectName(f"t{index}_insitu")
 
     ''' ciertos QLineEdits son de solo lectura '''
     area_line.setReadOnly(True)
     cg_line.setReadOnly(True)
     inercia_line.setReadOnly(True)
     op_line.setReadOnly(True)
+
+    ''' Agrega opciones a comboBox insitu '''
+    combo_insitu.addItem("Normal")
+    combo_insitu.addItem("Insitu")
 
     ''' Agrega los widgets al layout '''
     layout.addWidget(name_label)
@@ -73,12 +99,18 @@ def add_rows(self, index):
     layout.addWidget(cg_line)
     layout.addWidget(inercia_line)
     layout.addWidget(op_line)
+    layout.addWidget(combo_insitu)
 
     ''' Inserta el layout al principio del contenedor vertical '''
     self.ui.layout_nuevas_row.insertLayout(0, layout)  # Change to insertLayout to add at the top
 
     ''' Vuelve a insertar el vertical stretcher en la posición inferior del layout vertical '''
     self.ui.layout_nuevas_row.addStretch()
+
+
+    ''' Connect comboBox signal dynamically '''
+    # combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: self.on_combo_changed(cb, i)) # Para saber si cambia tipo hormigon en Combo
+    combo_insitu.currentIndexChanged.connect(lambda _, cb=combo_insitu, i=index: on_combo_changed(self, cb, i))
 
     ''' Guarda la referencia al layout dinámico '''
     self.dynamic_layouts.insert(0, {  # Use insert(0, ...) to maintain inverted order in the list
@@ -90,6 +122,7 @@ def add_rows(self, index):
         "inercia_line": inercia_line,
         "op_line": op_line,
         "name_label": name_label, # Para identificar trapecios
+        "combo_insitu": combo_insitu, # Para identificar tipo de hormigon usado.
     })
 
     ''' Incrementa el contador de filas creadas dinámicamente '''
@@ -158,7 +191,7 @@ def del_rows(self):
     self.ui.tab1_list_trapecios_existentes.clear()
     for index, row in enumerate(reversed(self.dynamic_layouts)):
         # Ajusta name_label de todos los trapecios
-        row["name_label"].setText(f"T{index+1}\t    ")
+        row["name_label"].setText(f"T{index+1}    ")
 
         # Agrega name_label de trapecio a LIST para luego poder seleccionalo y borrarlo
         self.ui.tab1_list_trapecios_existentes.addItem(f"T{index+1}")
@@ -311,10 +344,10 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
     print("aplicar_pieza_de_db () CCCCCCCCCCCCCCCCCCCCCCCCCCC --> values secciones_data Despues de aplicar SORT en base a columna POSICION de tupla: ", self.dynamic_layout_data, "\n")
     print("\n\n")
-    
+
 
     ''' Usa valores dinamicamente agregados a LineEdits para hacer calculos y asignarlos '''
-    # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
+    # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo # Automaticamente calcula valores de propiedades de trapecio
 
     ''' Anade todos los trapecios a listWidget que se usa para borrar'''
     self.ui.tab1_list_trapecios_existentes.clear()

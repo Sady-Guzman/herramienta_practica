@@ -16,7 +16,7 @@ import sqlite3
 import random
 
 #  IMPORTS DE OTROS ARCHIVOS
-from ui_files.herramienta_trapecios_v12 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
+from ui_files.herramienta_trapecios_v15 import Ui_Dialog  # Import codigo GUI (Construido usando QTDesigner)
 
 from fn_database import *
 from fn_calculo_propiedades import *
@@ -92,6 +92,7 @@ class MyDialog(QDialog):
         ''' Default pushBtn en cada TAB '''
         self.ui.btn_calcular_nuevos_valores.setDefault(True)
         self.ui.tabWidget.currentChanged.connect(self.set_default_button)
+        
 
         
 
@@ -113,7 +114,6 @@ class MyDialog(QDialog):
 
 
         self.ui.btn_salto_linea.clicked.connect(lambda: print("\n\n")) # BTN Salto linea par adebug
-        # self.ui.btn_salto_linea.clicked.connect(lambda: self.find_row_by_label("T2")) # BTN Salto linea par adebug
         
         
         
@@ -127,8 +127,8 @@ class MyDialog(QDialog):
         self.ui.btn_usar_pieza_usuario.clicked.connect(lambda: poblar_combo_familia(self, False)) # Combo familia w/ PIEZAS_CREADAS
 
         # conecta btn calcular propiedades de campos LineEdits
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) # Calcular nuevos valores
-        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada) # Calcular nuevos valores
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: calcular_nuevos_valores(self)) #  nuevos valores CALCULAR
+        self.ui.btn_calcular_nuevos_valores.clicked.connect(lambda: plot_trapecios(self))# Invoca dibujo de pieza seleccionada DIBUJO
 
         # Invoca ventana para CREAR NUEVA PIEZA
         self.ui.btn_crear_pieza_temp.clicked.connect(lambda: handle_crear_pieza(self)) # CREAR pieza
@@ -148,7 +148,7 @@ class MyDialog(QDialog):
         # Conectar btn GUARDAR PIEZA A DB (piezas_creadas)
         self.ui.btn_save_pieza.clicked.connect(lambda: save_pieza_data(self)) # Guardar Pieza TEMP en DB
 
-        ''' ===============================================  TAB2  Armaduras Activas  ================================================== '''
+        ''' ===============================================  SETUP para tabs  ================================================== '''
         setup_armadura_activa(self) # Inicia las variabes que se usan en pestana 2 (Armadura Activa)
         self.ui.tab2_relleno_layout_armaduras.setVisible(False) # ESCONDE BOTON DE RELLENO PARA CUADRAR GRIDLAYOUT
 
@@ -156,9 +156,15 @@ class MyDialog(QDialog):
         setup_tab_materiales(self) # inicia TAB4 (Materiales)
         setup_tab_calc_parcial(self) # Inicia/maneja tab de Calculo Parcial (Tab5)
 
+        ''' Inicia App en tab 0 (GEOMETRIA) '''
+        self.ui.tabWidget.setCurrentIndex(0) 
+
 
 
     ''' ====================================================================================================================================================== '''
+
+    
+
 
     # Boton aplicar seccion
     ''' Aplica pieza en espacio dinamico de trapecios. Maneja el caso de pieza de catalogo, creada por usuario, o temporal'''
@@ -271,5 +277,6 @@ if __name__ == "__main__":
 
     app = QApplication(sys.argv)   # Crear aplicacion
     dialog = MyDialog()            # Crear ventana Dialog
+    dialog.setWindowTitle("Herramienta de Calculo PREANSA") # TITULO VENTANA
     dialog.show()                  # Mostrar Dialog
     sys.exit(app.exec())           # Inicia loop de eventos app
