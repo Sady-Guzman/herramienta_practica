@@ -1076,7 +1076,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(5)
+        self.tabWidget.setCurrentIndex(1)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1116,16 +1116,16 @@ class Ui_Dialog(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Dialog", u"Geometr\u00eda", None))
         self.tab2_label_cota.setText(QCoreApplication.translate("Dialog", u"Cota (m)", None))
         self.tab2_relleno_layout_armaduras.setText(QCoreApplication.translate("Dialog", u"PushButton", None))
-        self.tab2_btn_add_cota_custom.setText(QCoreApplication.translate("Dialog", u"Cota Custom", None))
-        self.tab2_btn_add_cord.setText(QCoreApplication.translate("Dialog", u"agrega cordon", None))
+        self.tab2_btn_add_cota_custom.setText(QCoreApplication.translate("Dialog", u"Nueva Cota", None))
+        self.tab2_btn_add_cord.setText(QCoreApplication.translate("Dialog", u"Agrega cordon", None))
         self.tab2_btn_del_cota.setText(QCoreApplication.translate("Dialog", u"Borrar Cota", None))
-        self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"eliminar cordon", None))
+        self.tab2_btn_del_cord.setText(QCoreApplication.translate("Dialog", u"Eliminar cordon", None))
         self.tab2_label_cant_cord.setText(QCoreApplication.translate("Dialog", u"N cordones:", None))
         self.tab2_label_cdg_fuerza.setText(QCoreApplication.translate("Dialog", u"c.d.g fuerza[m]:", None))
         self.tab2_label_area_total.setText(QCoreApplication.translate("Dialog", u"Area total [cm2]:", None))
         self.tab2_label_cdg_area.setText(QCoreApplication.translate("Dialog", u"c.d.g area[m]:", None))
         self.tab2_label_inercia.setText(QCoreApplication.translate("Dialog", u"Inercia (cdg Area) [m4]", None))
-        self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"obtener valores", None))
+        self.tab2_btn_valores.setText(QCoreApplication.translate("Dialog", u"Calcular Propiedades", None))
         self.tab2_label_cota_dinamica.setText(QCoreApplication.translate("Dialog", u"Agregar Cotas", None))
         self.tab2_btn_add_cota_testero.setText(QCoreApplication.translate("Dialog", u"Cota Testero", None))
         self.tab2_label_cota_dinamica_2.setText(QCoreApplication.translate("Dialog", u"Tipo de Cordon", None))

@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>1</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -577,7 +577,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Cota Custom</string>
+      <string>Nueva Cota</string>
      </property>
     </widget>
     <widget class="QPushButton" name="tab2_btn_add_cord">
@@ -590,7 +590,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>agrega cordon</string>
+      <string>Agrega cordon</string>
      </property>
     </widget>
     <widget class="QPushButton" name="tab2_btn_del_cota">
@@ -616,7 +616,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>eliminar cordon</string>
+      <string>Eliminar cordon</string>
      </property>
     </widget>
     <widget class="QWidget" name="gridLayoutWidget_3">
@@ -706,7 +706,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>obtener valores</string>
+      <string>Calcular Propiedades</string>
      </property>
     </widget>
     <widget class="QLabel" name="tab2_label_cota_dinamica">
