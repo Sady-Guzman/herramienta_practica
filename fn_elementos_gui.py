@@ -26,8 +26,9 @@ def generate_layout(self):
 
 ''' Comprueba tipo de hormigon en tab GEOMETRIA '''
 def on_combo_changed(self, combo_box, index):
-    print(f"🔄 ComboBox in row {index} changed to: {combo_box.currentText()}")
-
+    ''' Funcion para manejar respuesta de ComboBoxes dinamicamente generadas en TAB GEOMETRIA. NORMAL / INSITU '''
+    # Mensaje para comprobar en terminal cambio
+    # print(f"🔄 ComboBox in row {index} changed to: {combo_box.currentText()}")
 
 
     # Find the row dictionary in dynamic_layouts
@@ -36,13 +37,19 @@ def on_combo_changed(self, combo_box, index):
     if row_data:
         is_insitu = combo_box.currentText() == "Insitu"
 
-        # Disable or enable the corresponding QLineEdit widgets
+        # Para secciones insitu se tiene siempre mismo ancho en base sup y base inf. No se le calcula propiedades.
+
         # row_data["bi_line"].setDisabled(is_insitu) # Se mantiene solo un campo de ancho porque bloques INSITU siempre tienen mismo ancho inf y sup
         row_data["bs_line"].setDisabled(is_insitu)
         # row_data["altura_line"].setDisabled(is_insitu) # Altura no se desactiva
         row_data["area_line"].setDisabled(is_insitu)
         row_data["cg_line"].setDisabled(is_insitu)
         row_data["op_line"].setDisabled(is_insitu)
+
+        row_data["bs_line"].setText("")
+        row_data["area_line"].setText("")
+        row_data["cg_line"].setText("")
+        row_data["op_line"].setText("")
 
 
 ''' genera nuevo Hlayout (dinamico) y sus elementos, Los nombra correctamente y agrega a Vlayout contenedor (layout fijo)'''
