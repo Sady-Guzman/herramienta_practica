@@ -25,18 +25,51 @@ import shutil
 #     return os.path.join(db_dir, db_filename)
 
 ''' VERSION WINDOWS '''
-def copy_database_files():
-    # Determine source directory
-    if getattr(sys, 'frozen', False):  # If running as a packaged app
-        source_dir = os.path.join(os.path.dirname(sys.executable), 'databases')
-    else:  # Running as a script
-        source_dir = os.path.join(os.path.dirname(__file__), 'databases')
+# def copy_database_files():
+#     # Determine source directory
+#     if getattr(sys, 'frozen', False):  # If running as a packaged app
+#         source_dir = os.path.join(os.path.dirname(sys.executable), 'databases')
+#     else:  # Running as a script
+#         source_dir = os.path.join(os.path.dirname(__file__), 'databases')
 
-    # Determine target directory (cross-platform)
-    if os.name == 'nt':  # Windows
-        target_dir = os.path.join(os.getenv('APPDATA'), 'myapp', 'databases')
-    else:  # macOS/Linux
-        target_dir = os.path.expanduser('~/.myapp/databases')
+#     # Determine target directory (cross-platform)
+#     if os.name == 'nt':  # Windows
+#         target_dir = os.path.join(os.getenv('APPDATA'), 'myapp', 'databases')
+#     else:  # macOS/Linux
+#         target_dir = os.path.expanduser('~/.myapp/databases')
+
+#     # Create target directory if it doesn't exist
+#     os.makedirs(target_dir, exist_ok=True)
+
+#     # Ensure the source directory exists
+#     if os.path.exists(source_dir):
+#         # List files and copy them
+#         for filename in os.listdir(source_dir):
+#             source_file = os.path.join(source_dir, filename)
+#             target_file = os.path.join(target_dir, filename)
+
+#             # Only copy if the target doesn't exist or is outdated
+#             if not os.path.exists(target_file) or os.path.getmtime(source_file) > os.path.getmtime(target_file):
+#                 try:
+#                     shutil.copy2(source_file, target_file)
+#                     print(f"Copied {filename} to {target_dir}")
+#                 except PermissionError:
+#                     print(f"Permission denied: Could not copy {filename}")
+#                 except Exception as e:
+#                     print(f"Error copying {filename}: {e}")
+#     else:
+#         print(f"Source directory {source_dir} does not exist.")
+
+''' Windows . Copia a mismo dir '''
+def copy_database_files():
+    # Determine the current directory
+    current_dir = os.path.dirname(__file__)
+
+    # Define the source directory (current working directory)
+    source_dir = os.path.join(current_dir, 'databases')
+
+    # Define the target directory (current working directory)
+    target_dir = source_dir  # Same directory as the source
 
     # Create target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
@@ -93,19 +126,35 @@ def copy_database_files():
 
 
 ''' WINDOWS '''
+# def get_db_path(db_filename):
+#     """
+#     Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente (AppData en Windows).
+#     """
+
+#     if sys.platform == "win32":
+#         base_path = os.path.join(os.getenv("APPDATA"), "MyApp")  # Carpeta persistente en Windows
+#     else:
+#         base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en Linux/macOS
+
+#     db_dir = os.path.join(base_path, "databases")
+
+#     # Asegurar que el directorio existe
+#     os.makedirs(db_dir, exist_ok=True)
+
+#     return os.path.join(db_dir, db_filename)
+
+''' Windows . Usa mismo dir '''
 def get_db_path(db_filename):
     """
-    Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente (AppData en Windows).
+    Returns the correct database path and stores it in a persistent directory under the current directory.
     """
 
-    if sys.platform == "win32":
-        base_path = os.path.join(os.getenv("APPDATA"), "MyApp")  # Carpeta persistente en Windows
-    else:
-        base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en Linux/macOS
+    # Use the current directory for both source and destination
+    current_dir = os.path.dirname(__file__)
 
-    db_dir = os.path.join(base_path, "databases")
+    db_dir = os.path.join(current_dir, 'databases')
 
-    # Asegurar que el directorio existe
+    # Ensure the directory exists
     os.makedirs(db_dir, exist_ok=True)
 
     return os.path.join(db_dir, db_filename)
