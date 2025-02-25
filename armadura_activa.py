@@ -188,7 +188,7 @@ def arm_act_poblar_combo_testeros(self):
     
     # Ajusta tamano de letrs en ComboB
     font = QFont()
-    font.setPointSize(12)
+    # font.setPointSize(12)
     self.ui.tab2_combo_testero.setFont(font)
 
 
