@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>5</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -238,7 +238,7 @@
       <rect>
        <x>405</x>
        <y>100</y>
-       <width>141</width>
+       <width>191</width>
        <height>22</height>
       </rect>
      </property>
@@ -272,7 +272,7 @@
       <rect>
        <x>280</x>
        <y>10</y>
-       <width>101</width>
+       <width>111</width>
        <height>31</height>
       </rect>
      </property>
@@ -797,7 +797,7 @@
     <widget class="QPushButton" name="tab2_btn_aplicar_preset">
      <property name="geometry">
       <rect>
-       <x>620</x>
+       <x>605</x>
        <y>80</y>
        <width>111</width>
        <height>32</height>
@@ -1637,7 +1637,7 @@
     <widget class="QPushButton" name="tab4_btn_guardar_valores">
      <property name="geometry">
       <rect>
-       <x>390</x>
+       <x>410</x>
        <y>190</y>
        <width>211</width>
        <height>32</height>
@@ -1650,16 +1650,16 @@
     <widget class="QLabel" name="tab4_instrucciones1">
      <property name="geometry">
       <rect>
-       <x>720</x>
+       <x>710</x>
        <y>20</y>
-       <width>401</width>
+       <width>361</width>
        <height>20</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -2065,9 +2065,9 @@
     <widget class="QWidget" name="gridLayoutWidget_8">
      <property name="geometry">
       <rect>
-       <x>939</x>
+       <x>929</x>
        <y>540</y>
-       <width>181</width>
+       <width>191</width>
        <height>80</height>
       </rect>
      </property>
@@ -2333,14 +2333,14 @@
       <rect>
        <x>60</x>
        <y>30</y>
-       <width>181</width>
+       <width>231</width>
        <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>16</pointsize>
+       <pointsize>14</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -2391,16 +2391,16 @@
     <widget class="QLabel" name="tab6_label_sw">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>30</x>
        <y>240</y>
-       <width>301</width>
+       <width>351</width>
        <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>15</pointsize>
+       <pointsize>14</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -2412,7 +2412,7 @@
     <widget class="QLineEdit" name="tab6_line_espesor">
      <property name="geometry">
       <rect>
-       <x>420</x>
+       <x>470</x>
        <y>270</y>
        <width>113</width>
        <height>21</height>
@@ -2425,16 +2425,16 @@
     <widget class="QLabel" name="tab6_label_espesor">
      <property name="geometry">
       <rect>
-       <x>380</x>
+       <x>430</x>
        <y>240</y>
-       <width>201</width>
+       <width>241</width>
        <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>15</pointsize>
+       <pointsize>14</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -2459,7 +2459,7 @@
     <widget class="QLineEdit" name="tab6_line_voladizo">
      <property name="geometry">
       <rect>
-       <x>700</x>
+       <x>780</x>
        <y>270</y>
        <width>113</width>
        <height>21</height>
@@ -2472,16 +2472,16 @@
     <widget class="QLabel" name="tab6_label_voladizo">
      <property name="geometry">
       <rect>
-       <x>650</x>
+       <x>730</x>
        <y>240</y>
-       <width>221</width>
+       <width>271</width>
        <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>15</pointsize>
+       <pointsize>14</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
