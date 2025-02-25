@@ -92,22 +92,41 @@ def copy_database_files():
 #         print(f"Source directory {source_dir} does not exist.")
 
 
+''' WINDOWS '''
 def get_db_path(db_filename):
     """
-    Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente.
+    Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente (AppData en Windows).
     """
-    if getattr(sys, 'frozen', False):  # Si está empaquetado con PyInstaller
-        base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en el home del usuario
+
+    if sys.platform == "win32":
+        base_path = os.path.join(os.getenv("APPDATA"), "MyApp")  # Carpeta persistente en Windows
     else:
-        base_path = os.path.dirname(os.path.abspath(__file__))
+        base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en Linux/macOS
 
     db_dir = os.path.join(base_path, "databases")
 
     # Asegurar que el directorio existe
-    if not os.path.exists(db_dir):
-        os.makedirs(db_dir, exist_ok=True)
+    os.makedirs(db_dir, exist_ok=True)
 
     return os.path.join(db_dir, db_filename)
+
+''' LINUX '''
+# def get_db_path(db_filename):
+#     """
+#     Devuelve la ruta correcta de la base de datos y la almacena en un directorio persistente.
+#     """
+#     if getattr(sys, 'frozen', False):  # Si está empaquetado con PyInstaller
+#         base_path = os.path.expanduser("~/.myapp")  # Carpeta persistente en el home del usuario
+#     else:
+#         base_path = os.path.dirname(os.path.abspath(__file__))
+
+#     db_dir = os.path.join(base_path, "databases")
+
+#     # Asegurar que el directorio existe
+#     if not os.path.exists(db_dir):
+#         os.makedirs(db_dir, exist_ok=True)
+
+#     return os.path.join(db_dir, db_filename)
 
 
 ''' En caso de no existir archivos tipo db 'catalogo.db' ni 'piezas_credas.db' Se crean y asigna schema'''
