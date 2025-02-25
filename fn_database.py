@@ -24,38 +24,72 @@ import shutil
 
 #     return os.path.join(db_dir, db_filename)
 
+''' VERSION WINDOWS '''
 def copy_database_files():
-    # If not packed, use the local _internal folder
-    if getattr(sys, 'frozen', False):
-        # source_dir = os.path.join(os.path.dirname(sys.executable), '_internal', 'databases')
+    # Determine source directory
+    if getattr(sys, 'frozen', False):  # If running as a packaged app
         source_dir = os.path.join(os.path.dirname(sys.executable), 'databases')
-    else:
-        # source_dir = os.path.join(os.path.dirname(__file__), '_internal', 'databases')
+    else:  # Running as a script
         source_dir = os.path.join(os.path.dirname(__file__), 'databases')
-        # return
 
-    target_dir = os.path.expanduser('~/.myapp/databases')
+    # Determine target directory (cross-platform)
+    if os.name == 'nt':  # Windows
+        target_dir = os.path.join(os.getenv('APPDATA'), 'myapp', 'databases')
+    else:  # macOS/Linux
+        target_dir = os.path.expanduser('~/.myapp/databases')
 
     # Create target directory if it doesn't exist
     os.makedirs(target_dir, exist_ok=True)
 
-    # db_path = get_db_path('catalogo.db')
-    # abs_db_path = os.path.abspath(db_path)  # Get absolute path
-    # print(f"Using database at: {abs_db_path}")
-
     # Ensure the source directory exists
     if os.path.exists(source_dir):
-        # List the files in the source directory
+        # List files and copy them
         for filename in os.listdir(source_dir):
             source_file = os.path.join(source_dir, filename)
             target_file = os.path.join(target_dir, filename)
 
-            # Only copy the file if it doesn't exist in the target or if it's different
+            # Only copy if the target doesn't exist or is outdated
             if not os.path.exists(target_file) or os.path.getmtime(source_file) > os.path.getmtime(target_file):
-                shutil.copy2(source_file, target_file)
-                print(f"Copied {filename} to {target_dir}")
+                try:
+                    shutil.copy2(source_file, target_file)
+                    print(f"Copied {filename} to {target_dir}")
+                except PermissionError:
+                    print(f"Permission denied: Could not copy {filename}")
+                except Exception as e:
+                    print(f"Error copying {filename}: {e}")
     else:
         print(f"Source directory {source_dir} does not exist.")
+
+
+''' VERSION MAC '''
+# def copy_database_files():
+#     # If not packed, use the local _internal folder
+#     if getattr(sys, 'frozen', False):
+#         # source_dir = os.path.join(os.path.dirname(sys.executable), '_internal', 'databases')
+#         source_dir = os.path.join(os.path.dirname(sys.executable), 'databases')
+#     else:
+#         # source_dir = os.path.join(os.path.dirname(__file__), '_internal', 'databases')
+#         source_dir = os.path.join(os.path.dirname(__file__), 'databases')
+#         # return
+
+#     target_dir = os.path.expanduser('~/.myapp/databases')
+
+#     # Create target directory if it doesn't exist
+#     os.makedirs(target_dir, exist_ok=True)
+
+#     # Ensure the source directory exists
+#     if os.path.exists(source_dir):
+#         # List the files in the source directory
+#         for filename in os.listdir(source_dir):
+#             source_file = os.path.join(source_dir, filename)
+#             target_file = os.path.join(target_dir, filename)
+
+#             # Only copy the file if it doesn't exist in the target or if it's different
+#             if not os.path.exists(target_file) or os.path.getmtime(source_file) > os.path.getmtime(target_file):
+#                 shutil.copy2(source_file, target_file)
+#                 print(f"Copied {filename} to {target_dir}")
+#     else:
+#         print(f"Source directory {source_dir} does not exist.")
 
 
 def get_db_path(db_filename):
