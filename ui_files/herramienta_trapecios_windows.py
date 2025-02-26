@@ -1025,6 +1025,40 @@ class Ui_Dialog(object):
         self.tab5_btn_calcular = QPushButton(self.tab_5)
         self.tab5_btn_calcular.setObjectName(u"tab5_btn_calcular")
         self.tab5_btn_calcular.setGeometry(QRect(480, 230, 171, 32))
+        self.gridLayoutWidget_9 = QWidget(self.tab_5)
+        self.gridLayoutWidget_9.setObjectName(u"gridLayoutWidget_9")
+        self.gridLayoutWidget_9.setGeometry(QRect(810, 540, 311, 80))
+        self.tab5_gridLayout_beff = QGridLayout(self.gridLayoutWidget_9)
+        self.tab5_gridLayout_beff.setObjectName(u"tab5_gridLayout_beff")
+        self.tab5_gridLayout_beff.setContentsMargins(0, 0, 0, 0)
+        self.tab5_label_beff_uno = QLabel(self.gridLayoutWidget_9)
+        self.tab5_label_beff_uno.setObjectName(u"tab5_label_beff_uno")
+
+        self.tab5_gridLayout_beff.addWidget(self.tab5_label_beff_uno, 1, 0, 1, 1)
+
+        self.tab5_label_beff_ambos = QLabel(self.gridLayoutWidget_9)
+        self.tab5_label_beff_ambos.setObjectName(u"tab5_label_beff_ambos")
+
+        self.tab5_gridLayout_beff.addWidget(self.tab5_label_beff_ambos, 0, 0, 1, 1)
+
+        self.tab5_line_beff_ambos = QLineEdit(self.gridLayoutWidget_9)
+        self.tab5_line_beff_ambos.setObjectName(u"tab5_line_beff_ambos")
+        self.tab5_line_beff_ambos.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab5_line_beff_ambos.setReadOnly(True)
+
+        self.tab5_gridLayout_beff.addWidget(self.tab5_line_beff_ambos, 0, 1, 1, 1)
+
+        self.tab5_line_beff_uno = QLineEdit(self.gridLayoutWidget_9)
+        self.tab5_line_beff_uno.setObjectName(u"tab5_line_beff_uno")
+        self.tab5_line_beff_uno.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.tab5_line_beff_uno.setReadOnly(True)
+
+        self.tab5_gridLayout_beff.addWidget(self.tab5_line_beff_uno, 1, 1, 1, 1)
+
+        self.label_2 = QLabel(self.tab_5)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(20, 560, 191, 61))
+        self.label_2.setWordWrap(True)
         self.tabWidget.addTab(self.tab_5, "")
         self.tab_6 = QWidget()
         self.tab_6.setObjectName(u"tab_6")
@@ -1082,7 +1116,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(4)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1232,6 +1266,9 @@ class Ui_Dialog(object):
         self.tab5_label_simple_t00.setText(QCoreApplication.translate("Dialog", u"Simple t=00", None))
         self.tab5_line_area_bruta.setText("")
         self.tab5_btn_calcular.setText(QCoreApplication.translate("Dialog", u"Calcular caracter\u00edsticas", None))
+        self.tab5_label_beff_uno.setText(QCoreApplication.translate("Dialog", u"Beff (Un lado) [m]", None))
+        self.tab5_label_beff_ambos.setText(QCoreApplication.translate("Dialog", u"Beff (Ambos lados) [m]", None))
+        self.label_2.setText(QCoreApplication.translate("Dialog", u"No se considera armadura pasiva en calculo t=00.", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), QCoreApplication.translate("Dialog", u"Calc. Parcial", None))
         self.tab6_label_luz_calculo.setText(QCoreApplication.translate("Dialog", u"Luz de calculo (m)", None))
         self.tab6_btn_luz_calculo.setText(QCoreApplication.translate("Dialog", u"Guardar valores", None))

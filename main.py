@@ -43,11 +43,11 @@ from tab_calculo_parcial import setup_tab_calc_parcial # TAB 5
 class MyDialog(QDialog):
 
     ''' Previene cierre de aplicacion al presionar tecla escape '''
-    # def keyPressEvent(self, event: QKeyEvent):
-    #     if event.key() == Qt.Key_Escape:
-    #         print("Escape key.")
-    #     else:
-    #         super().keyPressEvent(event)
+    def keyPressEvent(self, event: QKeyEvent):
+        if event.key() == Qt.Key_Escape:
+            print("Escape key.")
+        else:
+            super().keyPressEvent(event)
 
     def __init__(self):
         super().__init__()
@@ -161,7 +161,7 @@ class MyDialog(QDialog):
     # Diferencia entre creada por usuario y temporal es que las piezas en base de datos 'piezas_creadas.db' fueron temporales en algun momento y fueron guardadas a la base de datos con btn de guardado
     def aplicar_pieza(self, es_temporal, es_creada):
         if self.es_temporal == False:
-            print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
+            # print("MAIN.aplicar_pieza() entra en IF porque self.es_temporal = ", self.es_temporal, "\n")
 
             ''' Juntar variables eventualmente. Por ahora se sigue con desarrollo por tiempo '''
             try:
@@ -192,23 +192,23 @@ class MyDialog(QDialog):
 
 
             if familia_seleccionada != self.ultima_pieza[0] or modelo_seleccionado != self.ultima_pieza[1]:
-                print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
-                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
+                # print("\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual =!!= LAST<<<<\n")
+                # print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
 
                 ''' # Recuerda la pieza que fue seleccionada por ultima vez '''
                 self.ultima_pieza[0] = familia_seleccionada
                 self.ultima_pieza[1] = modelo_seleccionado
-                print(f"MAIN.aplicar_pieza() --> Valor de self.ultima_pieza[0]y[1]: {self.ultima_pieza} \n")
+                # print(f"MAIN.aplicar_pieza() --> Valor de self.ultima_pieza[0]y[1]: {self.ultima_pieza} \n")
 
                 aplicar_pieza_de_db(self, es_creada, self.dynamic_layout_data)
 
-                print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
+                # print("MAIN.aplicar_pieza() despues de terminar aplicar pieza ---> valor de dynamic_layout_data: ", self.dynamic_layout_data)
             else:
-                print("\n\n\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual === LAST<<<< \n")
-                print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
+                # print("\n\n\n\n\n\n \t\t\t >>>>>>>>>>MAIN.aplicar_pieza() -> fig actual === LAST<<<< \n")
+                # print(f"familia seleccionada: {familia_seleccionada} -- modelo seleccionado: {modelo_seleccionado} -- ultima_pieza[0]: {self.ultima_pieza[0]} -- ultima_pieza[1]: {self.ultima_pieza[1]}\n")
                 aplicar_pieza_de_dynamic(self)
         else:
-            print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
+            # print("MAIN.aplicar_pieza() entra en ELSE porque es una pieza_temporal, es_temporal: ", self.es_temporal, "\n")
             aplicar_pieza_de_dynamic(self)
 
             # plot_trapecios(pieza_id[0], seccion_seleccionada, familia_seleccionada, modelo_seleccionado, self.es_creada)# Invoca dibujo de pieza seleccionada
@@ -253,16 +253,8 @@ def popup_msg(message):
 
 
 if __name__ == "__main__":
-    ''' Inicia estructura bases de datos catalogo/piezas_creadas solo en caso de que no exista '''
     print("=========================================================================================")
-    # db_iniciar_database("catalogo.db")
-    # db_iniciar_database("piezas_creadas.db")
-    # db_iniciar_database("armaduras.db")
-    # copy_database_files()
     print("=========================================================================================\n\n\n")
-    
-
-    # print_familias_modelos() # Debug muestra todo el catalogo y piezas_creadas
 
 
     app = QApplication(sys.argv)   # Crear aplicacion

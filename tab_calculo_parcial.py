@@ -277,11 +277,6 @@ def calc_seccion_homogeneizada_inicial(self):
 
 
 ''' ===================================================================================================================== '''
-''' TODO calcular Simple t = 00 '''
-# Hace falta considerar variables que aun no son calculadas en programa.
-# Y manejar material insitu correctamente en geometria.
-
-# Luz de Calculo se obtiene de input de usuario en ultima pestana (Solo hace falta ingresar valor, Boton es placebo para usuario)
 
 def calc_t00(self):
 
@@ -295,7 +290,7 @@ def calc_t00(self):
         print("Falta uno o mas de los siguientes valores: Luz de Calculo, Sw, Espesor losa insitu. Por lo que no se puede calcular t=00.\n")
         return
 
-    print(f"\n🔹 Valores de inputs en TAB6:")
+    print(f"\n🔹 Valores de inputs en pestana LUZ DE CALCULO:")
     print(f"\tLc (Luz calculo) = {valor_luz_calculo} m")
     print(f"\tSw (Dist. entre Almas) = {valor_sw} m")
     print(f"\te (Espesor de losa) = {valor_espesor_losa}m ")
@@ -308,8 +303,8 @@ def calc_t00(self):
         tipo_hormigon = layout['combo_insitu'].currentText()
 
         if tipo_hormigon == "Insitu":
-            print(f"\n🔹 Para layout {i}")
-            print("\tTrapecio de hormigon Insitu:")
+            # print(f"\n🔹 Para layout {i}")
+            print("\tTrapecio de hormigon INSITU en GEOMETRIA:")
             print(f"\tNombre: {layout['name_label'].text()}")
             print(f"\tBi: {layout['bi_line'].text()}")
             print(f"\tAltura: {layout['altura_line'].text()}")
@@ -383,6 +378,9 @@ def calc_t00(self):
 
     ancho_efectivo_losa_ambos = float(min(valor_espesor_losa * 8, valor_sw / 2, valor_luz_calculo / 8))
     ancho_efectivo_losa_uno = float(min(valor_espesor_losa * 6, valor_sw / 2, valor_luz_calculo / 12))
+
+    self.ui.tab5_line_beff_ambos.setText(f"{ancho_efectivo_losa_ambos}")
+    self.ui.tab5_line_beff_uno.setText(f"{ancho_efectivo_losa_uno}")
 
     print(f"\n🔹 Por lo tanto ANCHO EFECTIVO:")
     print(f"\t\t B_eff (Valor minimo para ambos lados) = {ancho_efectivo_losa_ambos} m")

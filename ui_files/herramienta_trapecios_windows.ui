@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>4</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -2321,6 +2321,68 @@
      </property>
      <property name="text">
       <string>Calcular características</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="gridLayoutWidget_9">
+     <property name="geometry">
+      <rect>
+       <x>810</x>
+       <y>540</y>
+       <width>311</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="tab5_gridLayout_beff">
+      <item row="1" column="0">
+       <widget class="QLabel" name="tab5_label_beff_uno">
+        <property name="text">
+         <string>Beff (Un lado) [m]</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="tab5_label_beff_ambos">
+        <property name="text">
+         <string>Beff (Ambos lados) [m]</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="tab5_line_beff_ambos">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="tab5_line_beff_uno">
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>560</y>
+       <width>191</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>No se considera armadura pasiva en calculo t=00.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
