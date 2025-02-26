@@ -71,7 +71,9 @@ def apasiva_calcular(self):
         cdg_barras = round(cdg_barras, 4)
         self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
     except:
-        print(f"Faltan datos en barras corrugadas para hacer calculo de Y_inf")
+        cdg_barras = 0
+        self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
+        print(f"Faltan datos en barras corrugadas para hacer calculo de Y_inf. Se asigna por defecto Yinf = 0 para barras corrugadas !\n")
 
     
     try:
