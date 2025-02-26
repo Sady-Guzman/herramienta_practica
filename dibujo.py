@@ -21,12 +21,12 @@ def color_personalizado(tono_verde):
 def plot_trapecios(self):
 
     try:
-        print("Valor de seccion seleccionada:", self.seccion_pieza_cargada)
+        # print("Valor de seccion seleccionada:", self.seccion_pieza_cargada)
 
         trapecios = self.dynamic_layout_data[self.seccion_pieza_cargada]
         trapecios = list(trapecios)
 
-        print("Trapecios raw data:", trapecios)  # Debugging
+        # print("Trapecios data:", trapecios)  # Debugging
 
         # Process correctly based on tuple size
         trapecios = [
@@ -35,10 +35,10 @@ def plot_trapecios(self):
             for t in trapecios
         ]
 
-        print("Processed trapecios:", trapecios)
+        # print("trapecios procesados:", trapecios)
 
     except Exception as e:
-        print("Error en Dibujo ___ Except:", e)
+        print(">Error en Dibujo ___ Except:", e)
         return
 
 
@@ -72,7 +72,9 @@ def plot_trapecios(self):
         # Usa funcion de color todo de verde
         # color = color_personalizado(tono_color)
         # tono_color += 0.04
-        print("\n---->Es insitu:", es_insitu)
+        # print("\n---->Es insitu:", es_insitu)
+
+        # INSITU USA COLOR GRIS
         if es_insitu == 1:
             color = (0.62, 0.62, 0.62)
         else:

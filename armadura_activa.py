@@ -151,7 +151,7 @@ def arm_act_calcular_inercia(self):
 
     # print("\n\n\t\t\t\t Calculo de inercia por seccion y total de armadura activa.\n")
     for index, cota in enumerate(self.dynamic_cotas):
-        print("\n-----\nValor de cota: ", cota.text())
+        # print("\n-----\nValor de cota: ", cota.text())
 
         area_seccion = dict_areas_cota[float(cota.text())]
         # print("Area seccion: ", area_seccion)
@@ -220,7 +220,7 @@ def arm_act_add_cota_tesero(self):
     # Obtener valores de cotas existentes en la GUI
     for cota in self.dynamic_cotas:
         cotas_existentes.append(cota.text())
-        print(cota.text())
+        # print(cota.text())
 
     testero_seleccionado = self.ui.tab2_combo_testero.currentIndex()
     cotas_testero = db_cotas_testero(self.ui.tab2_combo_testero.currentText())
@@ -229,22 +229,21 @@ def arm_act_add_cota_tesero(self):
     try:
         altura_pieza = float(self.ui.result_sum_altura.text())
     except Exception as e:
-        print("No se encuentra altura de pieza asignada, se usa valor 99 por defecto. error: ", e)
+        print("No se encuentra altura de pieza asignada, No se limita seleccion de cotas de testero a ninguna altura.")
         altura_pieza = 99
 
     cotas_testero.reverse()
-    print(cotas_testero)
 
     cotas_seleccionadas = open_add_cotas_dialog(self, cotas_testero, altura_pieza, cotas_existentes)
 
     if cotas_seleccionadas:
-        print("Selected cotas:", cotas_seleccionadas)
+        # print("Selected cotas:", cotas_seleccionadas)
         for cota in cotas_seleccionadas:
             add_cota(self, float(cota))
 
             
     else:
-        print("No cotas selected.")
+        print("No hay cotas seleccionadas.")
 
     armact_ordena_cotas(self) # Ordena cotas despues de insertar nuevas cotas de testero
 
@@ -342,8 +341,8 @@ def arm_act_cdg(self):
         Formula para calcular sin tpi es igual, solo hay que sacar tpi de parentesis
     '''
 
-    print("\n************************************************************\n")
-    print("************************************************************\n")
+    # print("\n************************************************************\n")
+    # print("************************************************************\n")
     cant_cotas = len(self.dynamic_cotas)
     # print(f"Cantidad Cotas: {cant_cotas}\n")
 
@@ -391,9 +390,9 @@ def arm_act_cdg(self):
     except Exception as error:
         cdg = 0
         print("Se encuentra error en calculo: ", error, "\n")
-    print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-    print("\t\t\t RESULTADO CDG con TPI")
-    print(f"CDG = {cdg}\n\n\n")
+    # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
+    # print("\t\t\t RESULTADO CDG con TPI")
+    # print(f"CDG = {cdg}\n\n\n")
     
     self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 4)))
     
@@ -436,9 +435,9 @@ def arm_act_cdg(self):
         cdg = 0
         print("Se encuentra error en calculo: ", error, "\n")
 
-    print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-    print("\t\t\t RESULTADO CDG sin TPI")
-    print(f"CDG = {cdg}\n\n\n")
+    # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
+    # print("\t\t\t RESULTADO CDG sin TPI")
+    # print(f"CDG = {cdg}\n\n\n")
     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
 
 
@@ -459,14 +458,14 @@ def armact_ordena_cotas(self):
     cant_tipos_cordones = len(self.dynamic_cordones_arm_act)
 
 
-    print(f"Cantidad Cotas: {cant_cotas} \n")
-    print(f"Cantidad tipo cordones: {cant_tipos_cordones} \n")
+    # print(f"Cantidad Cotas: {cant_cotas} \n")
+    # print(f"Cantidad tipo cordones: {cant_tipos_cordones} \n")
 
 
     # Extraer valores de las cotas
     for i in range(cant_cotas):
         cota_text = self.dynamic_cotas[i].text().strip()  # Ensure we remove any surrounding spaces
-        print(f"Text from QLineEdit {i}: '{cota_text}'")
+        # print(f"Text from QLineEdit {i}: '{cota_text}'")
         try:
             lista_cotas.append(float(cota_text))  # Convert to float safely
         except ValueError:
@@ -483,7 +482,7 @@ def armact_ordena_cotas(self):
     # Convertir valores de vuelta a string después de ordenar
     lista_cotas = [str(cota) for cota in lista_cotas]
 
-    print(f"Contenido de lista_cotas ordenado de mayor a menor: {lista_cotas} \n")
+    # print(f"Contenido de lista_cotas ordenado de mayor a menor: {lista_cotas} \n")
 
     # Crear diccionario de cordones ordenados por cota, usando el índice como clave
     for x in range(cant_tipos_cordones):
@@ -524,7 +523,7 @@ def armact_ordena_cotas(self):
 
     # Reasignar los valores de num_cordones y tpi a las posiciones correctas según el nuevo orden de las cotas
     for tipo_cordon, valores in dict_cordones.items():
-        print(f"Procesando índice {tipo_cordon}")
+        # print(f"Procesando índice {tipo_cordon}")
         
         # Obtener el cordón correcto para este índice
         cordon = self.dynamic_cordones_arm_act.get(tipo_cordon)
@@ -534,14 +533,14 @@ def armact_ordena_cotas(self):
         
         # Acceder a los QLineEdits de num_cordones y tpi para este cordón
         for i, (cota, num_cords, tpi) in enumerate(valores):
-            print(f"Iteración {i}: Cota {cota}, Num_Cordones {num_cords}, TPI {tpi}")
+            # print(f"Iteración {i}: Cota {cota}, Num_Cordones {num_cords}, TPI {tpi}")
 
             # Acceder a los QLineEdits de num_cordones y tpi para este cordón
             num_cord = cordon['num_cordones'][i]  # i para acceder al elemento correcto
             tpi_cord = cordon['tpi'][i]  # i para acceder al elemento correcto
             
             # Actualizar los valores de num_cordones y tpi en la GUI
-            print(f"Actualizando QLineEdit: num_cord {num_cords} y tpi {tpi}")
+            # print(f"Actualizando QLineEdit: num_cord {num_cords} y tpi {tpi}")
             num_cord.setText(num_cords)  # Actualiza el valor de num_cordones
             tpi_cord.setText(tpi)  # Actualiza el valor de tpi
 
@@ -599,7 +598,7 @@ def armact_tipos_cableados(self):
 
     ''' Asegura que exista una pieza seleccionada antes de seguir con funcion '''
     if self.familia_pieza_cargada == 0 or self.modelo_pieza_cargada == 0 or tipo_cableado_seleccionado == 0:
-        print("No hay pieza seleccionada para aplicar Tipo de Cableado")
+        print("> No hay pieza seleccionada para aplicar Tipo de Cableado.")
         return
     else:
         id_tipo_cableado = db_id_tipo_cableado_pieza(self.familia_pieza_cargada, self.modelo_pieza_cargada, tipo_cableado_seleccionado)
@@ -627,13 +626,13 @@ def armact_tipos_cableados(self):
 
     
     ''' Agrega cordones '''
-    print(f"\n\n\nDEBUG DEBUG, valor de tipo_cableado_seleccionado: {tipo_cableado_seleccionado}")
+    # print(f"\n\n\nDEBUG DEBUG, valor de tipo_cableado_seleccionado: {tipo_cableado_seleccionado}")
     configuracion_cableado = db_cables_tipo_cableado(tipo_cableado_seleccionado, self.familia_pieza_cargada, self.modelo_pieza_cargada) # Usa contenido ComboB
 
     ''' Muestra en terminal configuracion de preset en DB '''
-    print(f"Contenido en configuracion_cordones:")
-    for cota, diametro, num_cord, tpi in configuracion_cableado:
-        print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
+    # print(f"Contenido en configuracion_cordones:")
+    # for cota, diametro, num_cord, tpi in configuracion_cableado:
+        # print(f"Cableado: cota={cota}, diametro={diametro}, num_cord={num_cord}, tpi={tpi}")
 
     cordones_por_diametro = {}
 
@@ -645,17 +644,17 @@ def armact_tipos_cableados(self):
         cordones_por_diametro[diametro].append((cota, num_cord, tpi))  # guarda parametros
 
     # Print grouped data
-    for diametro, cordones in cordones_por_diametro.items():
-        print(f"\nDiametro: {diametro}")
-        for cota, num_cord, tpi in cordones:
-            print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
+    # for diametro, cordones in cordones_por_diametro.items():
+        # print(f"\nDiametro: {diametro}")
+        # for cota, num_cord, tpi in cordones:
+            # print(f"  Cota: {cota}, Num Cord: {num_cord}, TPI: {tpi}")
 
     ''' AJUSTAR CORDONES A CANTIDAD NECESARIA '''
     cantidad_cordones_necesarios = db_cantidad_cordones_tipo_cableado(id_tipo_cableado) 
     cantidad_cordones_necesarios = cantidad_cordones_necesarios[0][0] # Cantidad necesaria
 
     diferencia_cantidad_cordones = len(self.dynamic_cordones_arm_act) - cantidad_cordones_necesarios
-    print(f"OPERACION: Cordones existentes - Necesarios para preset: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
+    # print(f"OPERACION: Cordones existentes - Necesarios para preset: {len(self.dynamic_cordones_arm_act)} - {cantidad_cordones_necesarios} = {diferencia_cantidad_cordones}\n\n")
 
     if diferencia_cantidad_cordones < 0:
         for _ in range(diferencia_cantidad_cordones * -1):
@@ -675,7 +674,7 @@ def armact_tipos_cableados(self):
             continue
 
         cordon = self.dynamic_cordones_arm_act[actual_index]
-        print(f"Editando cordón en índice {actual_index} con diámetro {diametro}")
+        # print(f"Editando cordón en índice {actual_index} con diámetro {diametro}")
 
         # Configurar el ComboBox con el diámetro correcto
         combobox_diametro = cordon['diametro']
@@ -837,8 +836,8 @@ def armact_manage_del_cota(self):
 def del_cota(self, target):
     
     for i, cota in enumerate(self.dynamic_cotas):
-        print(f"Cota existente actual: {cota.text()}")
-        print(f"Comparando target: {target}")
+        # print(f"Cota existente actual: {cota.text()}")
+        # print(f"Comparando target: {target}")
 
         if float(cota.text()) == float(target):
 

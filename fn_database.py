@@ -575,7 +575,7 @@ def db_testeros_existentes():
     # print(f"🔍 Using database at: {abs_db_path}")
 
     if not os.path.exists(db_path):
-        print("⚠️ ERROR: Database file does not exist at expected path!")
+        print("ERROR: Database file does not exist at expected path!")
         return 0  # Prevent further errors
 
     conn = sqlite3.connect(db_path)
@@ -591,7 +591,7 @@ def db_testeros_existentes():
 
 
     except sqlite3.Error as e:
-        print(f"❌ Database error testeros: {e}")
+        print(f" Database error testeros: {e}")
         testeros = 0
     finally:
         conn.close()

@@ -81,7 +81,7 @@ class DelCotasTesteroDialog(CotasDialog):
 
     def setup_cotas(self, cotas_existentes, y_position):
         ''' Genera checkboxes '''
-        print("Contenido de cotas_existentes:", cotas_existentes)
+        # print("Contenido de cotas_existentes:", cotas_existentes)
 
         for cota in cotas_existentes:
             checkBox = QCheckBox(f"{cota:.3f}", self)

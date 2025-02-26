@@ -27,11 +27,11 @@ def calcular_area(trapecios):
     ''' ( (base_inf + base_sup) * Altura ) / 2'''
     resultados = []
 
-    print("Debug calcular_area() -> Trapecios: ", trapecios)
-    print("Debug calcular_area() -> Cantidad de trapecios: ", len(trapecios))
+    # print("Debug calcular_area() -> Trapecios: ", trapecios)
+    # print("Debug calcular_area() -> Cantidad de trapecios: ", len(trapecios))
 
     for i in range(len(trapecios)):
-        print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][7])
+        # print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][7])
         if trapecios[i][7] == 0: # No insitu
             b_i = trapecios[i][3]
             b_s = trapecios[i][4]
@@ -43,9 +43,10 @@ def calcular_area(trapecios):
             # print("AREA: ", area)
 
             area = round(area, 9)
-            print("calc_area() -> Area redondeada: ", area)
+            # print("calc_area() -> Area redondeada: ", area)
             resultados.append(area)
         else:
+            print(f"Salta trapecio insitu en calculo de area.")
             pass
 
     # print("Areas calculadas: ", resultados)
@@ -79,7 +80,7 @@ def calcular_inercia(trapecios):
             result = round(result, 9)
             resultados.append(result)
         else:
-            print(f"Salta trapecio insitu en calculo de inercia")
+            print(f"Salta trapecio insitu en calculo de inercia.")
             pass
 
 
@@ -108,27 +109,27 @@ def calcular_centro_gravedad(trapecios):
     altura_acumulada = 0  # representa SUM($E$3:E3)
     resultados = []       # Guarda cada valor de Cg
 
-    print("\n\n\n---------------------- CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------")
-    print(f"calcular_centro_gravedad, trapecios data: {trapecios}")
+    # print("\n\n\n---------------------- CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------")
+    # print(f"calcular_centro_gravedad, trapecios data: {trapecios}")
     trapecios_filtrados = [t for t in trapecios if t[7] == 0]
-    print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODSdata: {trapecios_filtrados}")
+    # print(f"\n\n\ncalcular_centro_gravedad, trapecios FILTRADODSdata: {trapecios_filtrados}")
     trapecios_filtrados.reverse()
-    print(f"\n\n\ncalcular_centro_gravedad, trapecios : {trapecios_filtrados}")
+    # print(f"\n\n\ncalcular_centro_gravedad, trapecios : {trapecios_filtrados}")
 
 
     for i, trapecio in enumerate(trapecios_filtrados):
-        print(f"\n-----> LOOP \nValor de i = {i}")
-        print(f"Valor de trapecio en [{i}] = {trapecio}")
-        print(f"calc_Yinf() -> valor en trapeecio[{i}][7] (Es_insitu)= ", trapecio[7])
+        # print(f"\n-----> LOOP \nValor de i = {i}")
+        # print(f"Valor de trapecio en [{i}] = {trapecio}")
+        # print(f"calc_Yinf() -> valor en trapeecio[{i}][7] (Es_insitu)= ", trapecio[7])
         if trapecio[7] == 0: # No insitu
-            print(f"calc_Yinf() -> Entra a IF STATEMENT porque NO ES INSITU\n\n")
+            # print(f"calc_Yinf() -> Entra a IF STATEMENT porque NO ES INSITU\n\n")
             b_i = trapecio[3]  # Base inferior
             b_s = trapecio[4]  # Base superior
             h = trapecio[5]    # Altura
 
-            print(f"\tBase_i = {b_i}")
-            print(f"\tBase_s = {b_s}")
-            print(f"\tAltura = {h}")
+            # print(f"\tBase_i = {b_i}")
+            # print(f"\tBase_s = {b_s}")
+            # print(f"\tAltura = {h}")
 
             # if i > 0:
                 # altura_acumulada += h  # Suma altura de trapecios anteriores
@@ -143,31 +144,30 @@ def calcular_centro_gravedad(trapecios):
 
 
             # paso final: agregar valor de altura acumulada
-            print(f"Valor de centro -> {centro}")
-            print(f"Valor de altura_acumulada -> {altura_acumulada}")
+            # print(f"Valor de centro -> {centro}")
+            # print(f"Valor de altura_acumulada -> {altura_acumulada}")
 
 
             resultado = centro + altura_acumulada
             resultado = round(resultado, 9)
 
 
-            print(f"Resultado de Centro + H_acu = {resultado}")
+            # print(f"Resultado de Centro + H_acu = {resultado}")
             resultados.append(resultado)
 
             altura_acumulada += h
 
 
-            print(f"Contenido de resultados[] -> {resultados}")
+            # print(f"Contenido de resultados[] -> {resultados}")
         else:
-            print(f"Salta trapecio insitu en calculo de inercia")
-            print(f"calc_Yinf() -> Entra a ELSE STATEMENT ")
+            print(f"Salta trapecio insitu en calculo de inercia.")
             continue
 
 
     
     resultados.reverse()
-    print("Contenido final de Resultados CG's: ", resultados)
-    print("\n\n---------------------- TERMINA CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------\n\n")
+    # print("Contenido final de Resultados CG's: ", resultados)
+    # print("\n\n---------------------- TERMINA CENTROS DE GRAVEDAD PARA CADA PIEZA -------------------\n\n")
     return resultados
 
 
@@ -207,7 +207,7 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
         # print(f"valor resultado = {resultado}")
 
     
-    print(f"Valor suma_areas = {suma_areas}")
+    # print(f"Valor suma_areas = {suma_areas}")
     resultado = resultado / suma_areas
     # print(f"valor resultado por division = {resultado}")
 
@@ -282,12 +282,12 @@ def calcular_nuevos_valores(self):
             
             ''' Tienen que estar todos los campos llenos '''
             if not bi or not bs or not altura:
-                print("\t\tError calcular_nuevos_valores(): Faltan valores en uno o mas campos de geometria. !!!")
+                print(">Error calcular_nuevos_valores(): Faltan valores en uno o mas datos en campos de pestana GEOMETRIA.")
                 return
             
             ''' No puede haber 0s'''
             if bi == "0" or bs == "0" or altura == "0":
-                print("\t\tError calcular_nuevos_valores(): Valores de dimensiones no pueden ser 0. !!!")
+                print(">Error calcular_nuevos_valores(): Valores de dimensiones no pueden ser 0.")
                 return
             
             ''' No pueden haber caracteres en ningun campo, Solo numeros '''
@@ -301,10 +301,10 @@ def calcular_nuevos_valores(self):
                 # Se agregan 0 antes y despues de valores de dimensiones para mantener consistencia en calculos
                 valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 0)) # Ultimo es es_insitu
                 # valores_dimensiones_dinamicas_completo.append((0, 0, 0, float(bi), float(bs), float(altura), 0))
-                print(f"Valores guardados son: bi = {bi} -- bs = {bs} -- altura = {altura}")
+                # print(f"Valores guardados son: bi = {bi} -- bs = {bs} -- altura = {altura}")
                 
             except Exception as e:
-                print("Error calcular_nuevos_valores(): ", e)
+                print(">Error calcular_nuevos_valores(): ", e)
         
         else:
             ''' ES TRAPECIO TIPO INSITU '''
@@ -318,7 +318,7 @@ def calcular_nuevos_valores(self):
                 valores_dimensiones_dinamicas_normal.append((0, 0, 0, float(bi), float(bs), float(altura), 0, 1)) # Ultimo es es_insitu
                 # valores_dimensiones_dinamicas_completo.append((0, 0, 0, bi, bs, altura, 0)) # No se esta usando esta lista.
             except Exception as e:
-                print("Error calcular_nuevos_valores(): ", e)
+                print(">Error calcular_nuevos_valores(): ", e)
         
     
 
