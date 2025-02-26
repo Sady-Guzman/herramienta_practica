@@ -1116,7 +1116,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
 
-        self.tabWidget.setCurrentIndex(4)
+        self.tabWidget.setCurrentIndex(2)
         self.btn_calcular_nuevos_valores.setDefault(False)
 
 
@@ -1202,7 +1202,7 @@ class Ui_Dialog(object):
         self.tab3_label_mallas.setText(QCoreApplication.translate("Dialog", u"MALLAS", None))
         self.tab3_btn_calcular.setText(QCoreApplication.translate("Dialog", u"Agregar a calculo", None))
         self.tab3_label_yinf_barras.setText(QCoreApplication.translate("Dialog", u"Yinf Barras[m]:", None))
-        self.tab3_label_area_barras.setText(QCoreApplication.translate("Dialog", u"Area Barras [mm2]:", None))
+        self.tab3_label_area_barras.setText(QCoreApplication.translate("Dialog", u"Area Barras [m2]:", None))
         self.tab3_label_inercia_barras.setText(QCoreApplication.translate("Dialog", u"Inercia Barras [m4]:", None))
         self.tab3_instrucciones.setText(QCoreApplication.translate("Dialog", u"Para calculo solo usa N-min, \u00d8min, y Cota. Solo aplica a calculo t = 0", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Dialog", u"Arm. Pasiva", None))

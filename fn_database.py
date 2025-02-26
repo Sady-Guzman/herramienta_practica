@@ -116,7 +116,7 @@ def db_cargar_familias_modelos(self, tipo_db):
 def db_cargar_tipos_secciones(familia, modelo, es_creada):
     """ obtiene tipos de secciones existentes para una pieza seleccionada """
 
-    print("db_cargar_tipos_secciones() -> valor es_creada: ", es_creada, "\n")
+    # print("db_cargar_tipos_secciones() -> valor es_creada: ", es_creada, "\n")
 
     if es_creada == False:
         # db_path = 'catalogo.db' 
@@ -156,7 +156,7 @@ def db_cargar_tipos_secciones(familia, modelo, es_creada):
         # Close the database connection
         conn.close()
 
-    print("db_cargar_tipos_secciones() --> Contenido de tipos_secciones: ", tipos_secciones ,"\n")
+    # print("db_cargar_tipos_secciones() --> Contenido de tipos_secciones: ", tipos_secciones ,"\n")
 
     return tipos_secciones
 
@@ -180,9 +180,9 @@ def db_get_datos_trapecios(pieza_id, seccion, es_creada):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    print("pieza_id = " ,pieza_id)
+    # print("pieza_id = " ,pieza_id)
     pieza_id_str = pieza_id[0]
-    print("pieza_id_Str = ", pieza_id_str)
+    # print("pieza_id_Str = ", pieza_id_str)
 
     
     # Query to get the trapecios from the trapecios table based on pieza_id and tipo_seccion
@@ -218,9 +218,9 @@ def db_get_cant_trapecios(pieza_id, seccion, es_creada):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    print("pieza_id = " ,pieza_id)
+    # print("pieza_id = " ,pieza_id)
     pieza_id_str = pieza_id[0]
-    print("pieza_id_Str = ", pieza_id_str)
+    # print("pieza_id_Str = ", pieza_id_str)
 
     
     # Query to get the trapecios from the trapecios table based on pieza_id and tipo_seccion
@@ -235,7 +235,7 @@ def db_get_cant_trapecios(pieza_id, seccion, es_creada):
     # Close the database connection
     conn.close()
 
-    print("DEBUG get_cant_trapecios > Cantidad de trapecios en seccion: ", cant_trapecios)
+    # print("DEBUG get_cant_trapecios > Cantidad de trapecios en seccion: ", cant_trapecios)
     return cant_trapecios
 
 def db_get_id_pieza(familia, modelo, es_creada):
@@ -447,8 +447,8 @@ def db_get_all_trapecios_data(pieza_id, es_creada):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    print(f"en db_get_all_trapecio_data() ---> value pieza_id: {pieza_id} ,,, value es_creada: {es_creada}")
-    print("\n")
+    # print(f"en db_get_all_trapecio_data() ---> value pieza_id: {pieza_id} ,,, value es_creada: {es_creada}")
+    # print("\n")
 
     try:
         # Obtener todas las secciones de la pieza
@@ -584,15 +584,14 @@ def db_testeros_existentes():
     try:
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tables = cursor.fetchall()
-        # print(f"📋 Tables in database: {tables}")  # Check if 'testeros' is missing
 
         query = "SELECT DISTINCT testero FROM testeros"
         cursor.execute(query)
         testeros = cursor.fetchall()
-        # print(f"✅ Query Result: {testeros}")  # Show fetched rows
+
 
     except sqlite3.Error as e:
-        # print(f"❌ Database error: {e}")
+        print(f"❌ Database error testeros: {e}")
         testeros = 0
     finally:
         conn.close()
@@ -622,7 +621,7 @@ def db_tipos_cableado_pieza(familia, modelo):
     finally:
         conn.close()
 
-    print(f"db_tipos_cableados_pieza() -> contenido de consulta: {tipos} \n")
+    # print(f"db_tipos_cableados_pieza() -> contenido de consulta: {tipos} \n")
     return tipos
 
 def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
@@ -633,7 +632,7 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
-    print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}, seleccion es: {seleccion}\n\n\n\n")
+    # print(f"en db_tipos: Contenido de familia: {familia}, contenido de modelo: {modelo}, seleccion es: {seleccion}\n\n\n\n")
 
     try:
         query = "SELECT id FROM cableado_tipos WHERE familia = ? AND modelo = ? AND tipo_cableado = ?"
@@ -645,7 +644,7 @@ def db_id_tipo_cableado_pieza(familia, modelo, seleccion):
     finally:
         conn.close()
 
-    print(f"db_id_tipo_cableado_pieza() -> ID de tipo cableado seleccionado : {id_tipo} \n")
+    # print(f"db_id_tipo_cableado_pieza() -> ID de tipo cableado seleccionado : {id_tipo} \n")
     return id_tipo
 
 
@@ -704,7 +703,7 @@ def db_cantidad_cotas_tipo_cableado(id_tipo_cableado):
     finally:
         conn.close()
 
-    print(f"db_cantidad_cotas_tipo_cableado() -> contenido de consulta: {cotas}")
+    # print(f"db_cantidad_cotas_tipo_cableado() -> contenido de consulta: {cotas}")
     return cotas
 
 def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
@@ -730,7 +729,7 @@ def db_cantidad_cordones_tipo_cableado(id_tipo_cableado):
     finally:
         conn.close()
 
-    print(f"db_cantidad_cordones_tipo_cableado() -> contenido de consulta: {cotas}")
+    # print(f"db_cantidad_cordones_tipo_cableado() -> contenido de consulta: {cotas}")
     return cotas
 
 ''' ======================================================================================================================== '''
@@ -756,7 +755,7 @@ def db_tipos_arm_pasiva():
     finally:
         conn.close()
 
-    print(f"db_tipos_arm_pasiva() -> contenido de consulta: {tipos_armaduras_pasivas}")
+    # print(f"db_tipos_arm_pasiva() -> contenido de consulta: {tipos_armaduras_pasivas}")
     return tipos_armaduras_pasivas
 
 def db_materiales_arm_pasiva():

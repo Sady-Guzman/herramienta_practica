@@ -261,7 +261,7 @@ def delete_layout_widgets(self, layout):
 def ajustar_layouts_dinamicos(self, cantidad_trapecios):
     # Tipo boton: 0: Cambia seccion, 1: Cambia pieza
     # Usa 99 para eliminar layouts para eliminar todos los layouts existentes (No hay caso de uso en el que se necesitan mas de 99 secciones para una pieza)
-    print("ajustar_layouts_dinamicos() -> valor cantidad_trapecios: ", cantidad_trapecios)
+    # print("ajustar_layouts_dinamicos() -> valor cantidad_trapecios: ", cantidad_trapecios)
     # del_rows(self, 99) # No pide confirmacion
     del_all_trapecios(self)
 
@@ -309,7 +309,7 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
     # Ensure there is a selection in the list widget
     if pieza_seccion_item is None:
-        print("error debug aplicar_pieza_seleccion(): No section selected in the ListWidget.")
+        print("error debug aplicar_pieza_seleccion(): No hay sección de pieza seleccinada.")
         return
 
     pieza_seccion = pieza_seccion_item.text()
@@ -367,32 +367,32 @@ def aplicar_pieza_de_db(self, es_creada, dynamic_layout_data):
 
 def aplicar_pieza_de_dynamic(self):
     ''' Igual a aplicar_pieza_de_db(), Pero en vez de sacar los datos de la base de datos, los obtiene de self.dynamic_layout_data '''
-    print("entra a aplicar_pieza_de_dynamic\n")
-    print(f"aplicar_pieza_de_dynamic() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
+
+    # print(f"aplicar_pieza_de_dynamic() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
 
     # Corresponde a la seccion seleccionada
     pieza_seccion_item = self.ui.list_tipo_seccion.currentItem()
     
     # Ensure there is a selection in the list widget
     if pieza_seccion_item is None:
-        print("error debug aplicar_pieza_de_dynamic(): No section selected in the ListWidget.")
+        print("error debug aplicar_pieza_de_dynamic(): No hay seccón de pieza seleccionada.")
         return
     pieza_seccion = pieza_seccion_item.text()
 
     # Obtiene y ajusta la cantidad de trapecios para la seccion seleccionada
     try:
         trapecios_necesarios = len(self.dynamic_layout_data[pieza_seccion])
-        print(f"aplicar_pieza_de_dynamic() --> len de dict: {trapecios_necesarios}")
+        # print(f"aplicar_pieza_de_dynamic() --> len de dict: {trapecios_necesarios}")
         ajustar_layouts_dinamicos(self, trapecios_necesarios)
     except:
-        print(f"aplicar_pieza_de_dynamic() --> len de dict: error. Se asume que es una pieza temporal")
+        # print(f"aplicar_pieza_de_dynamic() --> len de dict: error. Se asume que es una pieza temporal")
         ajustar_layouts_dinamicos(self, 0)
 
     # pieza_trapecios = db_get_datos_trapecios(pieza_id, pieza_seccion, es_creada)
 
     try:
         pieza_trapecios = self.dynamic_layout_data[pieza_seccion]
-        print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
+        # print(f"aplicar_pieza_de_dynamic() --> trapecios para seccion en dict: {pieza_trapecios}")
         aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios)
         # calcular_nuevos_valores(self) # Se comenta para manejo de dibujo
     except:
@@ -420,7 +420,7 @@ def handle_crear_pieza(self):
         self.dynamic_layout_data = {}
 
         # The dialog was accepted, and result_data is returned
-        print("handle_crear_pieza() --> Data from CrearPiezaDialog:", result_data, "\n")
+        # print("handle_crear_pieza() --> Data from CrearPiezaDialog:", result_data, "\n")
 
 
         # Example: Process the result_data

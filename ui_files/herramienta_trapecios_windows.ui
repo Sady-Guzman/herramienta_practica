@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>4</number>
+    <number>2</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -1290,7 +1290,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Area Barras [mm2]:</string>
+      <string>Area Barras [m2]:</string>
      </property>
     </widget>
     <widget class="QLineEdit" name="tab3_line_area_barras">

@@ -45,7 +45,7 @@ def update_combo_secciones(self):
     modelo_seleccionado = self.ui.combo_modelo.currentText()
 
     tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado)
-    print(tipos_secciones)
+    # print(tipos_secciones)
 
     # Extract values from the tuples and convert them to strings
     tipos_secciones_str = [str(item[0]) for item in tipos_secciones]
@@ -53,7 +53,7 @@ def update_combo_secciones(self):
     self.ui.combo_tipo_seccion.clear()
 
     if tipos_secciones:
-        print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
+        # print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
         self.ui.combo_tipo_seccion.addItems(tipos_secciones_str)
     else:
         self.ui.combo_tipo_seccion.addItems(["Sin secciones disponibles"])
@@ -68,7 +68,7 @@ def update_list_secciones(self, es_creada):
         tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, False)
     else:
         tipos_secciones = db_cargar_tipos_secciones(familia_seleccionada, modelo_seleccionado, True)
-    print(tipos_secciones)
+    # print(tipos_secciones)
 
     # Extract values from the tuples and convert them to strings
     tipos_secciones_str = [str(item[0]) for item in tipos_secciones]
@@ -78,7 +78,7 @@ def update_list_secciones(self, es_creada):
 
     # Add the retrieved section types to the list widget
     if tipos_secciones:
-        print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
+        # print("El contenido de la lista tipos_Secciones es: ", tipos_secciones_str)
         self.ui.list_tipo_seccion.addItems(tipos_secciones_str)
     else:
         self.ui.list_tipo_seccion.addItem("Sin secciones disponibles")
@@ -164,7 +164,7 @@ def aplicar_dimensiones_pieza_dynamic(self, pieza_trapecios):
 
         # Check if the widget is valid (exists)
         if not layout["bi_line"]:  # You can add similar checks for other widgets if necessary
-            print(f"Error: Widget for layout {i} is missing or deleted.")
+            print(f"Error: Falta widget para layout {i}.")
             continue
 
         # Assign values to QLineEdit widgets
@@ -183,13 +183,13 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
 
     for i, layout in enumerate(self.dynamic_layouts):
         # Salta esta row (trapecio) en caso de ser hormigon tipo insitu
-        print(f"aplicar_valores_calculados() --> Valor en combo_insitu actual: {layout['combo_insitu'].currentText()}")
+        # print(f"aplicar_valores_calculados() --> Valor en combo_insitu actual: {layout['combo_insitu'].currentText()}")
         if layout["combo_insitu"].currentText() == "Insitu":
             continue # Skipea esta iteracion y pasa a la siguiente
 
         # Asegura que no se pase de los limites de las listas de valores
         if j >= len(valores_areas):
-            print(f"Warning: Not enough calculated values for layout {i}.")
+            print(f"Warning: No hay suficientes valores calculados para layout {i}.")
             break  
 
         # Asigna valores a widgets LineEdtis
@@ -216,10 +216,10 @@ def aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia,
 ''' Una pieza temporal es una pieza que existe despues de crearla con ventana de creacion pero aun no es guardada en base de datos '''
 def poblar_datos_pieza_temporal(self, familia, modelo, secciones):
     
-    print(f"poblar_datos_pieza_temporal() -> Familia: {familia}, Modelo: {modelo}")
-    print("Secciones:")
-    for index, seccion in enumerate(secciones, start=1):
-        print(f"  Sección {index}: {seccion}")
+    # print(f"poblar_datos_pieza_temporal() -> Familia: {familia}, Modelo: {modelo}")
+    # print("Secciones:")
+    # for index, seccion in enumerate(secciones, start=1):
+        # print(f"  Sección {index}: {seccion}")
 
 
     ''' limpia y asigna nuevo valor a ComboBox de Familia '''
@@ -233,7 +233,7 @@ def poblar_datos_pieza_temporal(self, familia, modelo, secciones):
     ''' limpiar y asignar secciones a lista secciones '''
     self.ui.list_tipo_seccion.clear()
     if secciones:
-        print("El contenido de la lista tipos_Secciones es: ", secciones)
+        # print("El contenido de la lista tipos_Secciones es: ", secciones)
         self.ui.list_tipo_seccion.addItems(secciones)
     else:
         self.ui.list_tipo_seccion.addItem("Sin secciones disponibles")
