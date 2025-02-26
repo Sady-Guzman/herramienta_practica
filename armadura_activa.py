@@ -70,36 +70,9 @@ def on_cordon_combo_changed(self, index):
 
 def arm_act_btn_calcular(self):
 
-    print("\n\n\t\t\t ------------------------- CALCULOS ARMADURA ACTIVA ------------------------- \n\n")
-
-    ''' Prints de componentes existentes en pestana '''
-    # if not self.dynamic_cotas:
-    #     print("ERROR: No se encontrarron cotas en GUI")
-    #     return
-    # # Print all ComboBox values
-    # print("ComboBox Values:")
-    # for i, combo in enumerate(self.dynamic_diametros_arm_act):
-    #     print(f"  ComboBox {i + 1}: {combo.currentText()}")
-
-    # # Print all values for num_cordones and tpi
-    # print("\nCordones and TPI Values:")
-    # for index, cordon in self.dynamic_cordones_arm_act.items():
-    #     print(f"  Cordon {index + 1}:")
-        
-    #     # Print num_cordones values
-    #     print("    Num Cordones:")
-    #     for j, num_cordon in enumerate(cordon['num_cordones']):
-    #         print(f"      {j + 1}: {num_cordon.text()}")
-
-    #     # Print tpi values
-    #     print("    TPI:")
-    #     for j, tpi in enumerate(cordon['tpi']):
-    #         print(f"      {j + 1}: {tpi.text()}")
-
-    # # Print all cota values
-    # print("\nCotas:")
-    # for i, cota in enumerate(self.dynamic_cotas):
-    #     print(f"  Cota {i + 1}: {cota.text()}")
+    print("\n\n\t\t ----------------------------------------------------------------------------------------------------")
+    print("\t\t ------------------------------------- CALCULOS ARMADURA ACTIVA -------------------------------------")
+    print("\t\t ----------------------------------------------------------------------------------------------------")
 
     ''' Cantidad total de cordones '''
     total_num_cordones = calculate_total_num_cordones(self)
@@ -126,11 +99,9 @@ def arm_act_btn_calcular(self):
     # print_cordon_values(self)
     # arm_act_obtener_datos_formula(self)
 
-    # update_tpi_values(self) # TODO Arreglar funcion, No deberia cambiar valor de tpi cada vez que se usa btn calcular. Se pierde tpi en caso de usar uno ingresado por usr
-    # update_area_values(self) # asigna area segun diametro cordon
-
+    ''' CENTRO GRAVEDAD e INERCIA'''
     arm_act_cdg(self) # Centro de gravedad
-    armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
+    armact_ordena_cotas(self) # ordena tuplas de cordones segun cota (en caso de que usuario insere nuevas cotas)
     arm_act_calcular_inercia(self)
     
 
@@ -142,12 +113,16 @@ def arm_act_btn_calcular(self):
 
 def arm_act_calcular_inercia(self):
     ''' Calcula area total en cada cota (considerando los distintos tipos de cordones) y luego hace operacion Inercia '''
+
+    print("\n\n\n------------------------------------------------------------")
+    print("----------------  INERCIA ARMADURA ACTIVA  -----------------\n")
     
     dict_areas_cota = {}
 
+    ''' Arma diccionario con areas para calculo de inercia '''
     for index_cota, cota in enumerate(self.dynamic_cotas):
-        cota_value = float(self.dynamic_cotas[index_cota].text())  # Convert to float
-        dict_areas_cota[cota_value] = 0  # Initialize total area for this cota
+        cota_value = float(self.dynamic_cotas[index_cota].text()) 
+        dict_areas_cota[cota_value] = 0  # inicializa area total para esta cota
 
         # print(f"\n\nPara cota {cota_value}:")
 
@@ -161,9 +136,9 @@ def arm_act_calcular_inercia(self):
                 print("\t>Error: Hace falta elegir un diametro para uno o mas cordones en pestana de armadura activa.\n")
                 return
 
-            total_area = num_cords * (area_cordon / 10000)  # Compute total area
+            total_area = num_cords * (area_cordon / 10000)  # Calcula area total
 
-            dict_areas_cota[cota_value] += total_area  # Add to total for this cota
+            dict_areas_cota[cota_value] += total_area  # Anade total a diccinario
 
             # print(f"  - Cordon {index_cord} --> Num_cords = {num_cords}, Área Cordon = {area_cordon}, Total_Area = {total_area}")
 
@@ -178,23 +153,30 @@ def arm_act_calcular_inercia(self):
     inercia_acu = 0
 
     cdg_area = float(self.ui.tab2_line_total_cdg_area.text())
+    print(f"\tConsidera {cdg_area}m como CDG de armadura activa para calculos.")
 
     # print("\n\n\t\t\t\t Calculo de inercia por seccion y total de armadura activa.\n")
     for index, cota in enumerate(self.dynamic_cotas):
-        # print("\n-----\nValor de cota: ", cota.text())
+        print(f"\tIteracion calculando para cota: {cota.text()}")
 
         area_seccion = dict_areas_cota[float(cota.text())]
-        # print("Area seccion: ", area_seccion)
+        print(f"\tArea en cota: {area_seccion}")
 
         inercia_seccion = area_seccion * (pow((float(cota.text()) - cdg_area), 2))
-
-        # print("Inercia seccion: ", inercia_seccion)
+        print(f"\tInercia en esta iteracion: area_cota cm2 * ((cota m - CDG_total m) ^ 2) --> {area_seccion} * (({float(cota.text())} - {cdg_area}) ^ 2) = {inercia_seccion} ")
+        
 
         inercia_acu += inercia_seccion
+        print(f"\tInercia acumulada en esta iteracion = {inercia_acu} m4\n")
     
-    # print("\n\n>>>Resultado de inercia acumulada: ", inercia_acu, "m^4")
     inercia_acu = round(inercia_acu, 9)
+    print(f"\n\n\t Inercia final de armadura activa: {inercia_acu} m4")
     self.ui.tab2_line_total_inercia.setText(f"{inercia_acu}")
+
+
+
+
+
 
 
 def arm_act_poblar_combo_testeros(self):
@@ -237,10 +219,6 @@ def arm_act_add_cota_tesero(self):
     # Asignar valores True en indices correspondientes para variable Seleccionados.
     # Comparar indices de Cotas  y Seleccionas. Dejar solo cotas correspondientes a seleccionadas
     # llamar add_cota(VALOR DE COTA A AGREGAR) dentro de loop
-
-    # ---
-    # TODO verificar cuales cotas ya estan agregadas para no mostrarlas como opcion en ventana de seleccion de cotas testero
-    # TODO Ordenar por cota despues de agregar cota testero
 
     ''' Variabes para guardar cotas y selecciones '''
     cotas_testero = []
@@ -358,8 +336,8 @@ def calculate_total_num_cordones(self):
 
 def arm_act_cdg(self):
 
-    print("\n\n\n--------------------------------------------------------\n")
-    print("\n\n\n----------------  AREA ARMADURA ACTIVA  ----------------\n")
+    print("\n\n\n--------------------------------------------------------")
+    print("----------------  CDG ARMADURA ACTIVA  -----------------\n")
 
     ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) 
         Calcula cdg con y sin TPI considerado en formula
@@ -426,8 +404,8 @@ def arm_act_cdg(self):
         cdg = 0
         print("\t Se encuentra error en calculo  cdg: ", error, "\n")
 
-    print(f"\n\n\t ** RESULTADO CDG calculado por TPI (Fuerza): numerador_acum\ndenominador_acum --> {numerador_acum} / {denominador_acum}")
-    print(f"\t\t   --> CDG = {cdg} <--\n\n\n")
+    print(f"\n\n\t ** RESULTADO CDG calculado por TPI (Fuerza): numerador_acum\n\t CDG = numerador_acum / denominador_acum --> {numerador_acum} / {denominador_acum}")
+    print(f"\t\t   --> CDG = {cdg} m <--\n\n\n")
     
     self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 6)))
     
@@ -475,8 +453,8 @@ def arm_act_cdg(self):
         print("\tSe encuentra error en calculo: ", error, "\n")
 
 
-    print(f"\n\n\t ** RESULTADO CDG calculado por AREA: numerador_acum\ndenominador_acum --> {numerador_acum} / {denominador_acum}")
-    print(f"\t     --> CDG por AREA = {cdg} <--\n\n\n")
+    print(f"\n\n\t ** RESULTADO CDG calculado por AREA: numerador_acum\n\t CDG = numerador_acum / denominador_acum --> {numerador_acum} / {denominador_acum}")
+    print(f"\t     --> CDG por AREA = {cdg} m <--\n\n\n")
     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 6)))
 
 
@@ -596,7 +574,8 @@ def armact_ordena_cotas(self):
 def armact_calcular_total_area(self):
     total_area = 0.0
 
-    print("----------------  Area Arm. ACTIVA  ----------------")
+    print("\n\n\n--------------------------------------------------------")
+    print("----------------  AREA ARMADURA ACTIVA  ----------------\n")
 
 
     for index, cordon in self.dynamic_cordones_arm_act.items():
