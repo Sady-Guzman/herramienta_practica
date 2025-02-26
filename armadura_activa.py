@@ -358,6 +358,8 @@ def calculate_total_num_cordones(self):
 
 def arm_act_cdg(self):
 
+    print("\n\n----------------  Area Arm. ACTIVA  ----------------\n")
+
     ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) 
         Calcula cdg con y sin TPI considerado en formula
     '''
@@ -404,7 +406,8 @@ def arm_act_cdg(self):
             try:
                 # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
                 numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
-                # print(f"Valor numerador: {numerador}")
+                print(f"\t Numerador iteracion actual: Cota * cantidad_cordones  ")
+                print(f"Valor numerador: {numerador}")
                 numerador_acum += numerador
                 # print(f"Valor numerador acumulado: {numerador_acum}\n")
 
@@ -421,8 +424,8 @@ def arm_act_cdg(self):
         cdg = 0
         print("\t Se encuentra error en calculo: ", error, "\n")
     # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-    # print("\t\t\t RESULTADO CDG con TPI")
-    # print(f"CDG = {cdg}\n\n\n")
+    print(f"\t RESULTADO CDG calculado TPI (Fuerza)")
+    print(f"\t  CDG = {cdg}\n\n\n")
     
     self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 4)))
     
@@ -465,9 +468,9 @@ def arm_act_cdg(self):
         cdg = 0
         print("\tSe encuentra error en calculo: ", error, "\n")
 
-    # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-    # print("\t\t\t RESULTADO CDG sin TPI")
-    # print(f"CDG = {cdg}\n\n\n")
+
+    print(f"\t RESULTADO CDG calculado por AREA")
+    print(f"\t   CDG = {cdg}\n\n\n")
     self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
 
 

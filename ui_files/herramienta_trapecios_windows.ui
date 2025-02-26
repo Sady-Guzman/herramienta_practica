@@ -30,7 +30,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <property name="documentMode">
     <bool>false</bool>
@@ -1683,7 +1683,7 @@
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
@@ -1700,20 +1700,20 @@
       <rect>
        <x>710</x>
        <y>160</y>
-       <width>291</width>
+       <width>261</width>
        <height>51</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Verdana</family>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
        <italic>false</italic>
        <bold>false</bold>
       </font>
      </property>
      <property name="text">
-      <string>Estos valores usan formula JACENA de Ec = 4700 * raiz(f'c).</string>
+      <string>Estos valores usan formula JACENA de Ec = 4700 * raiz(f'c) por defecto.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -1724,7 +1724,7 @@
       <rect>
        <x>710</x>
        <y>220</y>
-       <width>281</width>
+       <width>221</width>
        <height>71</height>
       </rect>
      </property>
