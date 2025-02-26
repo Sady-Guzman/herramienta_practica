@@ -379,8 +379,8 @@ def calc_t00(self):
     ancho_efectivo_losa_ambos = float(min(valor_espesor_losa * 8, valor_sw / 2, valor_luz_calculo / 8))
     ancho_efectivo_losa_uno = float(min(valor_espesor_losa * 6, valor_sw / 2, valor_luz_calculo / 12))
 
-    self.ui.tab5_line_beff_ambos.setText(f"{ancho_efectivo_losa_ambos}")
-    self.ui.tab5_line_beff_uno.setText(f"{ancho_efectivo_losa_uno}")
+    self.ui.tab5_line_beff_ambos.setText(f"{round(ancho_efectivo_losa_ambos, 4)}")
+    self.ui.tab5_line_beff_uno.setText(f"{round(ancho_efectivo_losa_uno, 4)}")
 
     print(f"\n🔹 Por lo tanto ANCHO EFECTIVO:")
     print(f"\t\t B_eff (Valor minimo para ambos lados) = {ancho_efectivo_losa_ambos} m")
