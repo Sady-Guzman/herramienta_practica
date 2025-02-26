@@ -47,8 +47,30 @@ def setup_armadura_activa(self):
 
 
 
+def on_cordon_combo_changed(self, index):
+    
+    # print(f"COMBO CHANGED in cordon {index}")
+    ''' Ya no se usa esta  funcion porque actualiza areas para todos los cordones, no solo donde cambia tipo cordon'''
+    # update_area_values(self) # asigna area segun diametro cordon
+
+    try:
+        if index in self.dynamic_cordones_arm_act:
+            combo = self.dynamic_cordones_arm_act[index]['diametro']  # Obtiene el comboBox cambiado
+            line_edit_area = self.dynamic_cordones_arm_act[index]['area']  # obtiene el LineEdit correpondiente
+
+            if line_edit_area:
+                diametro_value = combo.currentText()  # Obtiene el texto seleccionado en el ComboBox
+                area_value = ac_transformar_area_cordon(self, diametro_value)  # llama funcion para calcular nuevo area (Correpondiente segun diametro de cordon por tabla de documentacion general)
+                line_edit_area.setText(area_value)  # Actualiza LineEdit de area solo de cordon cambiado.
+    except:
+        print("\t>Error: Hace falta elegir un diametro para uno o mas cordones en pestana de armadura activa.\n")
+        return
+
+
 
 def arm_act_btn_calcular(self):
+
+    print("\n\n\t\t\t ------------------------- CALCULOS ARMADURA ACTIVA ------------------------- \n\n")
 
     ''' Prints de componentes existentes en pestana '''
     # if not self.dynamic_cotas:
@@ -79,10 +101,11 @@ def arm_act_btn_calcular(self):
     # for i, cota in enumerate(self.dynamic_cotas):
     #     print(f"  Cota {i + 1}: {cota.text()}")
 
-    # Calcula la suma total de num_cordones
+    ''' Cantidad total de cordones '''
     total_num_cordones = calculate_total_num_cordones(self)
     # print(f"\nTotal Num Cordones: {total_num_cordones}") # Print resultado
 
+    ''' CALCULA TOTAL DE AREA'''
     total_area = armact_calcular_total_area(self)
 
     # Assign the total to the QLineEdit
@@ -97,16 +120,19 @@ def arm_act_btn_calcular(self):
             float(cota_text)
         except ValueError:
             # If conversion fails, it's not a valid number, so return
-            print(f"Invalid value in Cota {i + 1}: '{cota_text}'. Skipping.")
+            print(f"\tValor invalido en cota {i + 1}: '{cota_text}'. Saltando.")
             return
     
     # print_cordon_values(self)
     # arm_act_obtener_datos_formula(self)
-    update_area_values(self) # asigna area segun diametro cordon
+
+    # update_tpi_values(self) # TODO Arreglar funcion, No deberia cambiar valor de tpi cada vez que se usa btn calcular. Se pierde tpi en caso de usar uno ingresado por usr
+    # update_area_values(self) # asigna area segun diametro cordon
+
     arm_act_cdg(self) # Centro de gravedad
     armact_ordena_cotas(self) # ordena tuplas de cordones segun cota
     arm_act_calcular_inercia(self)
-    # update_tpi_values(self) # TODO Arreglar funcion, No deberia cambiar valor de tpi cada vez que se usa btn calcular. Se pierde tpi en caso de usar uno ingresado por usr
+    
 
 
 ''' ===================================================================================================================== '''
@@ -128,8 +154,12 @@ def arm_act_calcular_inercia(self):
         for index_cord, cordon in enumerate(self.dynamic_cordones_arm_act):
             cordon = self.dynamic_cordones_arm_act[index_cord]
 
-            num_cords = int(cordon['num_cordones'][index_cota].text())  # Convert to int
-            area_cordon = float(cordon['area'].text())  # Convert to float
+            num_cords = float(cordon['num_cordones'][index_cota].text())  # permite float en caso de que se quiera despreciar armadura activa. Al usar un valor como 0.0000001
+            try:
+                area_cordon = float(cordon['area'].text())
+            except:
+                print("\t>Error: Hace falta elegir un diametro para uno o mas cordones en pestana de armadura activa.\n")
+                return
 
             total_area = num_cords * (area_cordon / 10000)  # Compute total area
 
@@ -292,7 +322,7 @@ def ac_transformar_area_cordon(self, diametro_cordon):
     if diametro_numerico:
         diametro_numerico = diametro_numerico.group()  # extrae numero
     else:
-        return "error" 
+        return "\terror" 
     
     area = db_area_cordon(diametro_numerico)
 
@@ -383,13 +413,13 @@ def arm_act_cdg(self):
                 denominador_acum += denominador
                 # print(f"valor de denominador acumulado: {denominador_acum}\n")
             except Exception as error:
-                print("Se encuentra error en calculo: ", error, "\n")
+                print("\tSe encuentra error en calculo: ", error, "\n")
 
     try:
         cdg = (numerador_acum / denominador_acum)
     except Exception as error:
         cdg = 0
-        print("Se encuentra error en calculo: ", error, "\n")
+        print("\t Se encuentra error en calculo: ", error, "\n")
     # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     # print("\t\t\t RESULTADO CDG con TPI")
     # print(f"CDG = {cdg}\n\n\n")
@@ -427,13 +457,13 @@ def arm_act_cdg(self):
                 denominador_acum += denominador
                 # print(f"valor de denominador acumulado: {denominador_acum}\n")
             except Exception as error:
-                print("Se encuentra error en calculo: ", error, "\n")
+                print("\tSe encuentra error en calculo: ", error, "\n")
     
     try:
         cdg = (numerador_acum / denominador_acum)
     except Exception as error:
         cdg = 0
-        print("Se encuentra error en calculo: ", error, "\n")
+        print("\tSe encuentra error en calculo: ", error, "\n")
 
     # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
     # print("\t\t\t RESULTADO CDG sin TPI")
@@ -469,7 +499,7 @@ def armact_ordena_cotas(self):
         try:
             lista_cotas.append(float(cota_text))  # Convert to float safely
         except ValueError:
-            print(f"Input invalido para cota {cota_text}. Ignorando.")
+            print(f"\tInput invalido para cota {cota_text}. Ignorando.")
 
     # print(f"Contenido de lista_cotas antes de ordenar: {lista_cotas} \n")
 
@@ -557,22 +587,35 @@ def armact_ordena_cotas(self):
 def armact_calcular_total_area(self):
     total_area = 0.0
 
+    print("----------------  Area Arm. ACTIVA  ----------------")
+
+
     for index, cordon in self.dynamic_cordones_arm_act.items():
         # Get the ComboBox value (diameter)
-        diametro_value = cordon['diametro'].currentText()
+        # diametro_value = cordon['diametro'].currentText()
         # Get the area per cordon based on diameter
-        area_per_cordon = float(ac_transformar_area_cordon(self, diametro_value))
+        # area_per_cordon = float(ac_transformar_area_cordon(self, diametro_value))
+        area_per_cordon = cordon['area'].text()
+
+        try:
+            area_per_cordon = float(area_per_cordon)
+        except:
+            print("\t>ERROR: Falta elegir diametro para uno o mas de los tipos de cordones en pestaNa de armadura activa.\n")
+            return
 
         # Sum the number of cordones
         total_num_cordones = sum(
             int(num_cordon.text()) if num_cordon.text().isdigit() else 0
             for num_cordon in cordon['num_cordones']
         )
+        
+        print(f"\t Area de tipo de cordon cm2 * Cantidad de cordones en tipo de cordon ---> {total_num_cordones} * {area_per_cordon}cm2 = {total_num_cordones * area_per_cordon} cm2")
 
         # Multiply num_cordones by area per cordon
         total_area += total_num_cordones * area_per_cordon
 
-    return round(total_area, 3)  # Round for better readability
+    print(f"\n\tValor de todas las areas sumadas = {round(total_area, 6)} cm2")
+    return round(total_area, 6)  # Round for better readability
 
 
 
@@ -670,7 +713,7 @@ def armact_tipos_cableados(self):
     for index, (diametro, valores) in enumerate(cordones_por_diametro.items()):
         actual_index = index  # Adjust index to match the keys in dynamic_cordones_arm_act
         if actual_index not in self.dynamic_cordones_arm_act:
-            print(f"Error: No existe índice '{actual_index}' en dynamic_cordones_arm_act")
+            print(f"\tError: No existe índice '{actual_index}' en dynamic_cordones_arm_act")
             continue
 
         cordon = self.dynamic_cordones_arm_act[actual_index]
@@ -905,6 +948,7 @@ def add_cordon(self):
         combo.addItem(f"Ø {diametro} mm")
     combo.setMinimumSize(130, 0)
     combo.setMaximumSize(131, 16777215)
+    combo.setCurrentIndex(-1) # Asegura que usuario cambie index de comboBox y de esa manera on_combobox_cordon_changed() sea llamado.
     sub_grid_layout.addWidget(combo, 1, 0)
 
     # Add the "Area" label at (0, 1)
@@ -914,7 +958,7 @@ def add_cordon(self):
 
     # Add a QLineEdit at (1, 1)
     line_edit_area = QLineEdit()
-    line_edit_area.setReadOnly(True)
+    # line_edit_area.setReadOnly(True)
     line_edit_area.setMinimumSize(70, 0)
     line_edit_area.setMaximumSize(100, 16777215)
     sub_grid_layout.addWidget(line_edit_area, 1, 1)
@@ -981,6 +1025,9 @@ def add_cordon(self):
 
     # Update the dynamic data structures
     self.dynamic_diametros_arm_act.append(combo)
+
+    ''' Conecta accion en ComboBox de diametro dinamicamente '''
+    combo.currentIndexChanged.connect(lambda _, i=index-1: on_cordon_combo_changed(self, i))
 
     # Store ComboBox, QLineEdit, and other related widgets in dynamic_cordones_arm_act dictionary
     actual_index = index - 1
