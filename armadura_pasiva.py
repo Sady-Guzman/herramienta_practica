@@ -20,7 +20,7 @@ def setup_armadura_pasiva(self):
 def apasiva_calcular(self):
     ''' Solo imprime valores ingresados a campos dinamicos. No es necesario usar btn para anadir valores a calculo '''
 
-    print("\n\n\n-----------------------  Datosde CALCULOS para Arm. Pasiva  -------------------------")
+    print("\n\n\n\t\t\t\t-----------------------  Datosde CALCULOS para Arm. Pasiva  -------------------------\n\n")
     # for index, barra in enumerate(self.dynamic_apasiva_barras):
         # print(f"VALOR BARRA {barra}")
         # print(f"posicion: {barra['posicion'].text()}; Num_Min: {barra['n_min'].text()}; Diametro_min: {barra['diametro_min'].text()}")
