@@ -358,7 +358,8 @@ def calculate_total_num_cordones(self):
 
 def arm_act_cdg(self):
 
-    print("\n\n----------------  Area Arm. ACTIVA  ----------------\n")
+    print("\n\n\n--------------------------------------------------------\n")
+    print("\n\n\n----------------  AREA ARMADURA ACTIVA  ----------------\n")
 
     ''' Calcula el centro de gravedad de los cordones de armadura activa (ignora concreto en calculo) 
         Calcula cdg con y sin TPI considerado en formula
@@ -373,8 +374,7 @@ def arm_act_cdg(self):
         Formula para calcular sin tpi es igual, solo hay que sacar tpi de parentesis
     '''
 
-    # print("\n************************************************************\n")
-    # print("************************************************************\n")
+    
     cant_cotas = len(self.dynamic_cotas)
     # print(f"Cantidad Cotas: {cant_cotas}\n")
 
@@ -391,6 +391,8 @@ def arm_act_cdg(self):
 
     ''' -------------------------------------'''
     ''' calculo considerando TPI '''
+
+    print("\t>>>> CDG POR TPI (FUERZA)\n")
     for y in range(cant_cotas):
         # print("\n")
         for x in range(cant_tipos_cordones):
@@ -404,30 +406,30 @@ def arm_act_cdg(self):
             tpi = cordon['tpi'][y].text()
 
             try:
-                # print(f"cota:{cota}, area:{area}, num_cords:{n_cords}, tpi:{tpi} ", end=" | ")
                 numerador = (float(cota) * (float(n_cords))*(float(tpi))*float(area))
-                print(f"\t Numerador iteracion actual: Cota * cantidad_cordones  ")
-                print(f"Valor numerador: {numerador}")
+                print(f"\n\t Numerador iteracion actual: cota * cantidad_cordones  * TPI * area --> {float(cota)} * {float(n_cords)} * {float(tpi)} * {float(area)} = {numerador}")
+
                 numerador_acum += numerador
-                # print(f"Valor numerador acumulado: {numerador_acum}\n")
 
                 denominador = (float(area) * float(n_cords) * float(tpi))
-                # print(f"valor de denominador: {denominador}")
+                print(f"\t Denominador iteracion actual: area * cantidad_cordones * tpi --> {float(area)} * {float(n_cords)} * {float(tpi)} = {denominador}")
+
                 denominador_acum += denominador
-                # print(f"valor de denominador acumulado: {denominador_acum}\n")
+
+                print(f"\t Numerador_acumulado en iteracion actual = {numerador_acum} m --- Denominador_acumulado en iteracion actual = {denominador_acum} m")
             except Exception as error:
-                print("\tSe encuentra error en calculo: ", error, "\n")
+                print("\tSe encuentra error en calculo para CDG: ", error, "\n")
 
     try:
         cdg = (numerador_acum / denominador_acum)
     except Exception as error:
         cdg = 0
-        print("\t Se encuentra error en calculo: ", error, "\n")
-    # print("\n><<><><><><><><><><><><><><><><><><><><><><><><><><><\n")
-    print(f"\t RESULTADO CDG calculado TPI (Fuerza)")
-    print(f"\t  CDG = {cdg}\n\n\n")
+        print("\t Se encuentra error en calculo  cdg: ", error, "\n")
+
+    print(f"\n\n\t ** RESULTADO CDG calculado por TPI (Fuerza): numerador_acum\ndenominador_acum --> {numerador_acum} / {denominador_acum}")
+    print(f"\t\t   --> CDG = {cdg} <--\n\n\n")
     
-    self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 4)))
+    self.ui.tab2_line_total_cdg_fuerza.setText(str(round(cdg, 6)))
     
     numerador = 0
     numerador_acum = 0
@@ -439,10 +441,10 @@ def arm_act_cdg(self):
 
     ''' -------------------------------------'''
     ''' calculo SIN  TPI '''
+    print("\t>>>> CDG POR AREA\n")
     for y in range(cant_cotas):
         # print("\n")
         for x in range(cant_tipos_cordones):
-            # print(f"**************** \nen cota:{y} en cordon:{x}\n")
 
             cordon = self.dynamic_cordones_arm_act.get(x)
             cota = self.dynamic_cotas[y].text()
@@ -451,14 +453,18 @@ def arm_act_cdg(self):
             n_cords = cordon['num_cordones'][y].text()
             try:
                 numerador = (float(cota) * (float(n_cords))*float(area))
-                # print(f"Valor numerador: {numerador}")
+                print(f"\n\t Numerador en iteracion actual: cota * cantidad_cordones * area --> {float(cota)} * {float(n_cords)} * {float(area)} = {numerador}")
+
                 numerador_acum += numerador
-                # print(f"Valor numerador acumulado: {numerador_acum}\n")
+
 
                 denominador = (float(area) * float(n_cords))
-                # print(f"valor de denominador: {denominador}")
+                print(f"\t Denominador en iteracion actual: area * cantidad_cordones --> {float(area)} * {float(n_cords)} = {denominador}")
+
                 denominador_acum += denominador
-                # print(f"valor de denominador acumulado: {denominador_acum}\n")
+
+                print(f"\t Numerador_acumulado en iteracion actual = {numerador_acum} m --- Denominador_acumulado en iteracion actual = {denominador_acum} m")
+
             except Exception as error:
                 print("\tSe encuentra error en calculo: ", error, "\n")
     
@@ -469,9 +475,9 @@ def arm_act_cdg(self):
         print("\tSe encuentra error en calculo: ", error, "\n")
 
 
-    print(f"\t RESULTADO CDG calculado por AREA")
-    print(f"\t   CDG = {cdg}\n\n\n")
-    self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 4)))
+    print(f"\n\n\t ** RESULTADO CDG calculado por AREA: numerador_acum\ndenominador_acum --> {numerador_acum} / {denominador_acum}")
+    print(f"\t     --> CDG por AREA = {cdg} <--\n\n\n")
+    self.ui.tab2_line_total_cdg_area.setText(str(round(cdg, 6)))
 
 
 
