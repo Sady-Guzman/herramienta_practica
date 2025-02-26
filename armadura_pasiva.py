@@ -49,32 +49,37 @@ def apasiva_calcular(self):
         ''' Se calculo igual que centro de gravedad inferior para armaduras activas peros in tpi porque esta armadura no se tensa.'''
 
         cant_barras = len(self.dynamic_apasiva_barras)
-        print(f"cantidad de barras: {cant_barras}")
+        print(f"\tcantidad cotas usadas para barras corrugadas: {cant_barras}\n")
 
         numerador_acum = 0
         denominador_acum = 0
 
         for _, barra in enumerate(self.dynamic_apasiva_barras):
-            numerador_barra_actual = (float(barra['n_min'].text()) * (float(barra['diametro_min'].text()) * float(barra['cota'].text())))
+            numerador_barra_actual = (float(barra['n_min'].text()) * (((pow(float(barra['diametro_min'].text()),2) * math.pi) / 4) * float(barra['cota'].text())))
+            print(f"\tOperacion para numerador para barra en cota {barra['cota'].text()} -> {float(barra['n_min'].text())} * ((({float(barra['diametro_min'].text())} ^ 2) * PI) / 4) * {float(barra['cota'].text())})")
             numerador_acum += numerador_barra_actual
 
-            print(f"Valor de barra actual numerador: {numerador_barra_actual}")
-
-            denominador_barra_actual = (float(barra['n_min'].text()) * float(barra['diametro_min'].text()))
+            denominador_barra_actual = (float(barra['n_min'].text()) * (((pow(float(barra['diametro_min'].text()), 2) * math.pi))/4) )
+            print(f"\t Operacion para denominador barra en cota {barra['cota'].text()} -> {float(barra['n_min'].text())} * ({float(barra['diametro_min'].text())} ^ 2) * PI) / 4)")
             denominador_acum += denominador_barra_actual
+
+            print(f"\t Valores acumulados (anterior mas actual)")
+            print(f"\t\t Numerador acumulado = {numerador_acum}")
+            print(f"\t\t Denominador acumulado = {denominador_acum}\n\n")
         
-            print(f"Valor de barra actual denominador: {numerador_barra_actual}\n\n")
+
 
 
         cdg_barras = numerador_acum / denominador_acum
-        print(f"resultado de CDG barras = {cdg_barras}")
+        cdg_barras = round(cdg_barras, 6)
+        print(f"\tresultado de CDG barras corrugaras (Numerador acumulado / Denominador acumulado)")
+        print(f"\t\t CDG =====> {numerador_acum} / {denominador_acum} = {cdg_barras}")
 
-        cdg_barras = round(cdg_barras, 4)
         self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
     except:
         cdg_barras = 0
         self.ui.tab3_line_yinf_barras.setText(f"{cdg_barras}")
-        print(f"Faltan datos en barras corrugadas para hacer calculo de Y_inf. Se asigna por defecto Yinf = 0 para barras corrugadas !\n")
+        print(f"\tFaltan datos en barras corrugadas para hacer calculo de Y_inf. Se asigna por defecto Yinf = 0 para barras corrugadas !\n")
 
     
     try:
@@ -88,13 +93,13 @@ def apasiva_calcular(self):
         for _, barra in enumerate(self.dynamic_apasiva_barras):
             inercia_barra_especifica = math.pi * (pow((float(barra['diametro_min'].text())) / 1000, 4)) / 64
 
-            print(f"Valor de inercia especifica barra actual: {inercia_barra_especifica}")
+            # print(f"Valor de inercia especifica barra actual: {inercia_barra_especifica}")
 
             inercia_total_barras += inercia_barra_especifica
 
             # print(f"Valor de inercia acumulada barras actual: {inercia_barra_especifica}\n\n")
 
-        print("valor inercia total", inercia_total_barras)
+        # print("valor inercia total", inercia_total_barras)
         inercia_total_barras = round(inercia_total_barras, 6)
         print("valor inercia total", inercia_total_barras)
         self.ui.tab3_line_inercia_barras.setText(f"{inercia_total_barras}")
@@ -105,7 +110,7 @@ def apasiva_calcular(self):
 
 
 
-
+''' ========================================================================================================================================== '''
 
 
 

@@ -1292,6 +1292,9 @@
      <property name="text">
       <string>Area Barras [m2]:</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
     </widget>
     <widget class="QLineEdit" name="tab3_line_area_barras">
      <property name="geometry">

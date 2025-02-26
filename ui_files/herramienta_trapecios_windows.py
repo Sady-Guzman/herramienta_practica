@@ -494,6 +494,7 @@ class Ui_Dialog(object):
         self.tab3_label_area_barras = QLabel(self.tab_3)
         self.tab3_label_area_barras.setObjectName(u"tab3_label_area_barras")
         self.tab3_label_area_barras.setGeometry(QRect(890, 70, 131, 20))
+        self.tab3_label_area_barras.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.tab3_line_area_barras = QLineEdit(self.tab_3)
         self.tab3_line_area_barras.setObjectName(u"tab3_line_area_barras")
         self.tab3_line_area_barras.setGeometry(QRect(1030, 70, 81, 21))
