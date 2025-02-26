@@ -21,9 +21,9 @@ def apasiva_calcular(self):
     ''' Solo imprime valores ingresados a campos dinamicos. No es necesario usar btn para anadir valores a calculo '''
 
     print("----------------  Datos Arm. Pasiva  ----------------")
-    for index, barra in enumerate(self.dynamic_apasiva_barras):
+    # for index, barra in enumerate(self.dynamic_apasiva_barras):
         # print(f"VALOR BARRA {barra}")
-        print(f"posicion: {barra['posicion'].text()}; Num_Min: {barra['n_min'].text()}; Diametro_min: {barra['diametro_min'].text()}")
+        # print(f"posicion: {barra['posicion'].text()}; Num_Min: {barra['n_min'].text()}; Diametro_min: {barra['diametro_min'].text()}")
     
     
     try:
@@ -40,7 +40,8 @@ def apasiva_calcular(self):
         area_acumulada = round(area_acumulada, 4)
         self.ui.tab3_line_area_barras.setText(f"{area_acumulada}")
     except:
-        print("Faltan datos para hacer calculo de area total de barras corrugadas.")
+        self.ui.tab3_line_area_barras.setText(f"{0}")
+        print("Faltan datos para hacer calculo de area total de barras corrugadas. Valor por defecto 0.")
 
     
     try:
@@ -98,7 +99,8 @@ def apasiva_calcular(self):
         print("valor inercia total", inercia_total_barras)
         self.ui.tab3_line_inercia_barras.setText(f"{inercia_total_barras}")
     except:
-        print("Faltan datos para hacer calculo de inercia para barras corrugadas")
+        self.ui.tab3_line_inercia_barras.setText(f"{0}")
+        print("Faltan datos para hacer calculo de inercia para barras corrugadas. Valor por defecto 0.")
 
 
 
