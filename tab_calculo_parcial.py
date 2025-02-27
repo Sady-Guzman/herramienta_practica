@@ -340,6 +340,10 @@ def calc_seccion_homogeneizada_inicial(self):
 ''' CALCULO SECCION SIMPLE t = 00'''
 def calc_t00(self):
 
+    print("\n\n\n\n -------------------------------------------------------------------------------------")
+    print(" ----------------------- CALCULO SECCION SIMPLE T = 00  ------------------------------")
+    print(" -------------------------------------------------------------------------------------\n")
+
     print("\n\n--------------------------------------------------- ")
     print("----> PASO 1: SECCION COMPUESTA NETA INICIAL: <---- \n")
 
@@ -545,7 +549,7 @@ def calc_t00(self):
 
     print("--\n\n-------------------------------------------------------------")
     print("----> PASO 2: SECCION VIGA HOMOGENEIZADA COMPUESTA FINAL: <---- \n")
-    print("Solo considera cordones activos. (EXCEL no considera barras pasivas).\n\n")
+    print("!!!! Solo considera cordones activos. (EXCEL no considera barras pasivas). !!!!! \n\n")
 
     ''' Los nombres de las variables estan basados en los nombres que estan asignadps a tabla 6 en Plantilla claudio '''
 
