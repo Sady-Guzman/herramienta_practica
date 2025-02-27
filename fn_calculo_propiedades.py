@@ -1,5 +1,6 @@
 import numpy as np
 from fn_update_gui import aplicar_valores_calculados
+from utils import print_dynamic_trapecios
 
 ''' 
     Funciones para calcular propiedades en base a dimensiones de piezas
@@ -27,11 +28,10 @@ def calcular_area(trapecios):
     ''' ( (base_inf + base_sup) * Altura ) / 2'''
     resultados = []
 
-    # print("Debug calcular_area() -> Trapecios: ", trapecios)
-    # print("Debug calcular_area() -> Cantidad de trapecios: ", len(trapecios))
+    
+    print("AREA PIEZA: \n")
 
     for i in range(len(trapecios)):
-        # print("calcular_area() -> valor en trapeecio[i][6] = ", trapecios[i][7])
         if trapecios[i][7] == 0: # No insitu
             b_i = trapecios[i][3]
             b_s = trapecios[i][4]
@@ -39,14 +39,14 @@ def calcular_area(trapecios):
 
             area = ((b_i + b_s) * h) / 2
             
-            # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-            # print("AREA: ", area)
+            print(f"\t Para trapecio -> Bi: {b_i} m2 -- Bs: {b_s} m2 -- H: {h} m2")
+            print(f"\t AREA: {area} m2\n")
 
             area = round(area, 9)
             # print("calc_area() -> Area redondeada: ", area)
             resultados.append(area)
         else:
-            print(f"Salta trapecio insitu en calculo de area.")
+            # print(f"Salta trapecio insitu en calculo de area.")
             pass
 
     # print("Areas calculadas: ", resultados)
@@ -56,6 +56,8 @@ def calcular_inercia(trapecios):
     ''' (altura^3) * ((MAX(bi,bs)^2)+4*bi*bs+(MIN(bi,bs)^2)) / (36*(bi+bs))'''
 
     resultados = []
+
+    print("INERCIA PIEZA: \n")
 
     for i in range(len(trapecios)):
         if trapecios[i][7] == 0: # No insitu
@@ -74,17 +76,16 @@ def calcular_inercia(trapecios):
             result = (h_cubed * (max_base**2 + 4 * b_i * b_s + min_base**2)) / (36 * sum_bases)
 
 
-            # print(f"Para trapecio -> Bi: {b_i} -- Bs: {b_s} -- H: {h}")
-            # print("Inercia: ", result)
+            print(f"\t Para trapecio -> Bi: {b_i} m -- Bs: {b_s} m -- H: {h} m")
+            print(f"\t Inercia: {result} m4\n")
 
             result = round(result, 9)
             resultados.append(result)
         else:
-            print(f"Salta trapecio insitu en calculo de inercia.")
+            # print(f"Salta trapecio insitu en calculo de inercia.")
             pass
 
 
-    # print("Valores lista Inercia: ", resultados)
     return resultados
 
 
@@ -116,6 +117,8 @@ def calcular_centro_gravedad(trapecios):
     trapecios_filtrados.reverse()
     # print(f"\n\n\ncalcular_centro_gravedad, trapecios : {trapecios_filtrados}")
 
+    print("\nCDG PIEZA:")
+
 
     for i, trapecio in enumerate(trapecios_filtrados):
         # print(f"\n-----> LOOP \nValor de i = {i}")
@@ -134,25 +137,30 @@ def calcular_centro_gravedad(trapecios):
             # if i > 0:
                 # altura_acumulada += h  # Suma altura de trapecios anteriores
 
+            print(f"\t Para trapecio -> Bi: {b_i} m -- Bs: {b_s} m -- H: {h} m")
+
             # Formula condicional excel Joaquin 'traducida' a python (Considerar tambien suma h_acumulada)
             if b_s == b_i:
                 centro = h - h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
+                print("\t Como Bs = Bi, Usa formula: CENTRO = h - h * ((2 * max(Bs, Bi) + min(Bs, Bi)) / (3 * (Bs + Bi)))")
             if b_s < b_i:
                 centro = h - h * ((2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s)))
+                print("\t Como Bs = Bi, Usa formula: CENTRO = h - h * ((2 * max(Bs, Bi) + min(Bs, Bi)) / (3 * (Bs + Bi)))")
             else:
                 centro = h * (2 * max(b_i, b_s) + min(b_i, b_s)) / (3 * (b_i + b_s))
+                print("\t Como Bs = Bi, Usa formula: CENTRO = h * ((2 * max(Bs, Bi) + min(Bs, Bi)) / (3 * (Bs + Bi)))")
 
 
             # paso final: agregar valor de altura acumulada
-            # print(f"Valor de centro -> {centro}")
-            # print(f"Valor de altura_acumulada -> {altura_acumulada}")
+            print(f"\t Valor de centro -> {centro} m")
+            print(f"\t Valor de altura_acumulada -> {altura_acumulada} m")
 
 
             resultado = centro + altura_acumulada
             resultado = round(resultado, 9)
 
 
-            # print(f"Resultado de Centro + H_acu = {resultado}")
+            print(f"\t Resultado de Centro + H_acu = {resultado} m\n")
             resultados.append(resultado)
 
             altura_acumulada += h
@@ -160,7 +168,7 @@ def calcular_centro_gravedad(trapecios):
 
             # print(f"Contenido de resultados[] -> {resultados}")
         else:
-            print(f"Salta trapecio insitu en calculo de inercia.")
+            # print(f"Salta trapecio insitu en calculo de inercia.")
             continue
 
 
@@ -174,14 +182,14 @@ def calcular_centro_gravedad(trapecios):
 def calcular_suma_areas(areas):
     suma_areas = 0
 
-    # print("debug fn_calculos -> Areas a sumar: ", areas)
-    # print("debug fn_calculos -> Cantidad de areas: ", len(areas))
 
     for i in range(len(areas)):
         suma_areas += areas[i]
         # print(f"debug fn_calculos -> Area {i + 1}: {areas[i]}")
     # print("debug fn_calculos -> La suma de todas las areas es: ", suma_areas)
-    
+
+    print(f"\nTOTAL AREA PIEZA: {suma_areas} m2")
+
     return suma_areas
 
 # Se usa en calculo centro gravedad pieza
@@ -195,21 +203,29 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
     # print(f"EN calcular_prod_pond() -> \n\tAreas -> {areas} \n\tCentros_Gravedad -> {centros_gravedad} \n\t suma_areas -> {suma_areas}")
 
     resultado = 0
+    acumulado_print = 0
 
     # print(f"\tValor resultado = {resultado}")
     # print(f"\tValor len(areas) = {len(areas)}\n")
+
+    print("\nOPERACION (Area * CDG) para cada trapecio:")
 
     for i in range(len(areas)):
         # print(f"\n--->Valor de i = {i}")
         # print(f"Valor de areas[{i}] = {areas[i]}")
         # print(f"Valor de centros_gravedad[{i}] = {centros_gravedad[i]}")
+
         resultado += areas[i] * centros_gravedad[i]
+        acumulado_print += areas[i] * centros_gravedad[i]
         # print(f"valor resultado = {resultado}")
+        print(f"\tIteracion {i}: Area * CDG -> {areas[i]} m2 * {centros_gravedad[i]} m = {resultado} m3\n")
 
     
     # print(f"Valor suma_areas = {suma_areas}")
     resultado = resultado / suma_areas
     # print(f"valor resultado por division = {resultado}")
+
+    print(f"\n\t SUMATORIA de resultados / suma_areas -> {acumulado_print} m3 / {suma_areas} m2 = {resultado} m \n")
 
     # print("Resultado suma ponderada: ", resultado)
     # print(f"\t RESULTADO DE PROD_POND (Yc) = {resultado}\n\n\n ------------------------")
@@ -220,6 +236,7 @@ def calcular_producto_ponderado(areas, centros_gravedad, suma_areas):
 # Por cada trapecio que se agrega al calculo, el centro de gravedad se mueve
 # Lista de resultados entrega el CG hasta el trapecio al que corresponde el indice
 ''' Confirmar definicion con Joaquin/Ignacio '''
+''' CALCULA INERCIA '''
 def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
     '''
         =+H4+F4*(G4-$G$9)^2
@@ -231,18 +248,23 @@ def calcular_op(areas, centros_gravedad, inercias, producto_ponderado):
         $G$9: Producto ponderado
     '''
 
+    print("\nOPERACION (I + (A * (CDG_trapecio - CDG_total ) ^ 2))\n")
+
     resultados = []
 
     for i in range(len(areas)):
         result = inercias[i] + (areas[i] * (centros_gravedad[i] - producto_ponderado) ** 2)
         resultados.append(result)
+        print(f"\t Iteracion {i} -> {inercias[i]} m4 + ({areas[i]} m2 * ({centros_gravedad[i]} m - {producto_ponderado} m) ^ 2) = {result} m")
 
-    # print("Resultados OP: ", resultados)
+    print("\n\n")
     return resultados
 
 
 def calcular_altura_acumulada(trapecios):
     # trapecio[5] # 5: Posicion altura
+
+    print("ALTURA ACUMULADA DE PIEZA:")
 
     altura_acumulada = 0
 
@@ -252,13 +274,19 @@ def calcular_altura_acumulada(trapecios):
         else:
             pass
     
-    # print("Altura acumulada: ", altura_acumulada)
+    print(f"\t H_acum = {altura_acumulada} m\n")
     return altura_acumulada
 
 
 ''' Lee valores de todos los LineEdits dinamicos existentes y calcula nuevo resultado de area,I,cg,OP '''
 # Se usa en caso de que usuario agregue mas trapecios a una figura, para recalcular propiedades de pieza contemplando nuevos trapecios
 def calcular_nuevos_valores(self):
+
+    print("\n\n\n\n\t\t ----------------------------------------------------------------------------------------------------------------------")
+    print("\t\t ---------------------------------------       CALCULOS PESTANA GEOMETRIA       ---------------------------------------")
+    print("\t\t ---------------------------------------------------------------------------------------------------------------------- \n\n ")
+
+
     ''' Obtiene valores de dimensiones '''
     valores_dimensiones_dinamicas_normal = [] # SIN INSITU
     valores_dimensiones_dinamicas_completo = [] # INCLUYE TRAPECIOS DE HORMIGON INSITU
@@ -320,10 +348,13 @@ def calcular_nuevos_valores(self):
             except Exception as e:
                 print(">Error calcular_nuevos_valores(): ", e)
         
-    
 
 
-    # print("Debug calcular_nuevos_valores() -> los valores recuperados son: ", valores_dimensiones_dinamicas)
+
+    print("\nContenido TRAPECIOS en pestana Geometria: \n")
+    print_dynamic_trapecios(self)
+
+    print(">>> Trapecios de hormigon INSITU NO SE CONSIDERAN para los siguientes calculos de pieza! <<< \n")
 
     ''' calcular valores area, CentroGravedad, Inercia, Op, Sumatorias, Prod Ponderado '''
     valores_areas = calcular_area(valores_dimensiones_dinamicas_normal)
@@ -335,18 +366,8 @@ def calcular_nuevos_valores(self):
     producto_ponderado = calcular_producto_ponderado(valores_areas, valores_cg, suma_areas)
     valores_op = calcular_op(valores_areas, valores_cg, valores_inercia, producto_ponderado)
 
-    
-    # print(f"Caclular_nuevos_valores() -> valores de areas: {valores_areas}\n")
-    # print(f"Caclular_nuevos_valores() -> Suma de areas: {suma_areas}\n")
 
-
-    # valores_cg = int(69)
-    # print(f"\tContenido de valores_cg -> {valores_cg}\n")
-    # print(f"\tContenido de producto_ponderado -> {producto_ponderado}\n")
-
-    # TODO Pedir significado de nombres de columnas excel a Joaquin cuando tenga tiempo.
     # Aplica resultados a layouts dinamicos + layouts fijos
-    print(" ------ Calcular_nuevos_valores() ----> VALORES DE PROPIEDADES FUERON CALCULADOS Y ASIGNADOS ------\n\n")
     aplicar_valores_calculados(self, valores_areas, valores_cg, valores_inercia, valores_op, suma_areas, altura_acumulada, producto_ponderado)
 
     return 

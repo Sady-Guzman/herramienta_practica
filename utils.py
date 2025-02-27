@@ -10,22 +10,22 @@ def popup_msg(message):
 
 def print_dynamic_trapecios(self):
     for i, layout in enumerate(self.dynamic_layouts):
-        print(f"\n🔹 Para layout {i}")
-
-        # Print values from QLineEdit fields
-        print(f"  - Bi: {layout['bi_line'].text()}")
-        print(f"  - Bs: {layout['bs_line'].text()}")
-        print(f"  - Altura: {layout['altura_line'].text()}")
-        print(f"  - Área: {layout['area_line'].text()}")
-        print(f"  - Centro de gravedad (CG): {layout['cg_line'].text()}")
-        print(f"  - Inercia: {layout['inercia_line'].text()}")
-        print(f"  - Op: {layout['op_line'].text()}")
-
-        # Print the selected value from QComboBox
-        print(f"  - Insitu Type: {layout['combo_insitu'].currentText()}")
+        # print(f"\nPara layout {i}")
 
         # Print the label name
-        print(f"  - Nombre: {layout['name_label'].text()}")
+        print(f"\t- Nombre: {layout['name_label'].text()}")
+
+        # Print values from QLineEdit fields
+        print(f"\t\t- Bi: {layout['bi_line'].text()}")
+        print(f"\t\t- Bs: {layout['bs_line'].text()}")
+        print(f"\t\t- Altura: {layout['altura_line'].text()}")
+        print(f"\t\t- Área: {layout['area_line'].text()}")
+        print(f"\t\t- Centro de gravedad (CG): {layout['cg_line'].text()}")
+        print(f"\t\t- Inercia: {layout['inercia_line'].text()}")
+        print(f"\t\t- Op: {layout['op_line'].text()}")
+        print(f"\t\t- Tipo : {layout['combo_insitu'].currentText()} \n")
+
+        
 
 
 def util_cotas_existentes_codones(self):
