@@ -60,15 +60,36 @@ def mat_fill_resistencias_tipo_horm(self):
     tupla_resistencias = tupla_resistencias[0]
 
 
-    if tupla_resistencias:  
+    if tupla_resistencias:
+
+        print("\n\n\n\n\t\t -----------------------------------------------------------------------------------------------------------------------------")
+        print("\t\t -------------------------------------        CALCULOS PESTANA MATERIALES        ---------------------------------------------")
+        print("\t\t -----------------------------------------------------------------------------------------------------------------------------\n\n")
+
+        
+
         self.ui.tab4_line_horm_min_fc.setText(str(tupla_resistencias[2]))
         self.ui.tab4_line_horm_min_e.setText(str(tupla_resistencias[3]))
+
         self.ui.tab4_line_horm_max_fc.setText(str(tupla_resistencias[4]))
         self.ui.tab4_line_horm_max_e.setText(str(tupla_resistencias[5]))
+
         self.ui.tab4_line_horm_final_fc.setText(str(tupla_resistencias[6]))
         self.ui.tab4_line_horm_final_e.setText(str(tupla_resistencias[7]))
+
         self.ui.tab4_line_horm_insitu_fc.setText(str(tupla_resistencias[8]))
         self.ui.tab4_line_horm_insitu_e.setText(str(tupla_resistencias[9]))
+
+        print(f"--------------------------------------------")
+        print(f"---   Usando valores de formula JACENA   ---\n\n")
+
+        print("\n\tSe asigna densidad de concreto (Wc) de 2400 (kg/m3) por defecto.\n")
+
+
+        print(f"\t E (N/mm2) hormigon prefabricado INICIO MIN: 4700 * sqrt(f'c) --> 4700 * sqrt({self.ui.tab4_line_horm_min_fc.text()}) = {self.ui.tab4_line_horm_min_e.text()} (N/mm2)")
+        print(f"\t E (N/mm2) hormigon prefabricado INICIO MAX: 4700 * sqrt(f'c) --> 4700 * sqrt({self.ui.tab4_line_horm_max_fc.text()}) = {self.ui.tab4_line_horm_max_e.text()} (N/mm2)")
+        print(f"\t E (N/mm2) hormigon prefabricado INICIO MIN: 4700 * sqrt(f'c) --> 4700 * sqrt({self.ui.tab4_line_horm_final_fc.text()}) = {self.ui.tab4_line_horm_final_e.text()} (N/mm2)")
+        print(f"\t E (N/mm2) hormigon prefabricado INICIO MIN: 4700 * sqrt(f'c) --> 4700 * sqrt({self.ui.tab4_line_horm_insitu_fc.text()}) = {self.ui.tab4_line_horm_insitu_e.text()} (N/mm2)")
     else:
         print(f"No se encuentran resistencias para id_hormigon: {id_hormigon}")
 
@@ -101,7 +122,6 @@ def mat_fill_densidades_tipo_horm(self):
     else:
         print(f"No se encuentran densidades para id_hormigon: {id_hormigon}")
     
-    print("Pantalla materiales -> Densidad de concreto es 2400 (kg/m3) por defecto.\n")
     self.ui.tab4_line_dens_concreto.setText(str(2400))
 
 
@@ -126,38 +146,40 @@ def mat_calc_save_ec(self):
         print("Falta asignar valor para Wc\n")
         return
 
-
-    print(f"**********\nValores en GUI para W_c {valor_wc}\n\n")
+    print(f"\n\n--------------------------------------------")
+    print(f"--------     Usando formula ACI     --------\n\n")
     
-    
+    print(f"\tValor considerado para Wc = {valor_wc}\n")
 
-    print(f"Valores para campos F'c")
-    print(f"\tF'c horm. pref. ini. MIN = {fc_pref_ini_min}")
-    print(f"\tF'c horm. pref. ini. MAX = {fc_pref_ini_max}")
-    print(f"\tF'c horm. pref. FINAL = {fc_pref_final}")
-    print(f"\tF'c horm. INSITU = {fc_insitu}\n")
+    print(f"\tValores para campos F'c\n")
+    print(f"\t\tF'c horm. pref. ini. MIN = {fc_pref_ini_min}")
+    print(f"\t\tF'c horm. pref. ini. MAX = {fc_pref_ini_max}")
+    print(f"\t\tF'c horm. pref. FINAL = {fc_pref_final}")
+    print(f"\t\tF'c horm. INSITU = {fc_insitu}\n")
+
+    print("\n\tSe usa formula --> Ec =  Wc ^ 1.5 * 0.043 * sqrt(f'c)\n")
 
 
     ''' Calcula distintos Ec'''
     # Horm. Pref. Ini. MIN
     ec_horm_ini_min = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_min))
     ec_horm_ini_min = round(ec_horm_ini_min, 1)
-    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_min})] = {ec_horm_ini_min}\n")
+    print(f"\tValor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_min})] = {ec_horm_ini_min} (N/mm2)")
 
     # Horm. Pref. Ini. MAX
     ec_horm_ini_max = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_ini_max))
     ec_horm_ini_max = round(ec_horm_ini_max, 1)
-    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_max})] = {ec_horm_ini_max}\n")
+    print(f"\tValor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_ini_max})] = {ec_horm_ini_max} (N/mm2)")
 
     # Horm. Pref. FINAL
     ec_horm_final = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_pref_final))
     ec_horm_final = round(ec_horm_final, 1)
-    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_final})] = {ec_horm_final}\n")
+    print(f"\tValor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_pref_final})] = {ec_horm_final} (N/mm2)")
 
     # Horm. Insitu
     ec_horm_insitu = (pow(valor_wc, 1.5) * 0.043 * math.sqrt(fc_insitu))
     ec_horm_insitu = round(ec_horm_insitu, 1)
-    print(f"Valor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_insitu})] = {ec_horm_insitu}\n")
+    print(f"\tValor calculado para E_c usando [{valor_wc}^(1.5) * 0.043 * sqrt({fc_insitu})] = {ec_horm_insitu} (N/mm2)")
     
     ''' Asigna rsultados a LineEdits'''
     self.ui.tab4_line_horm_min_e.setText(str(ec_horm_ini_min))
