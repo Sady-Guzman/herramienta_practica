@@ -13,7 +13,7 @@ def setup_tab_calc_parcial(self):
     
 
 
-''' Calculo Parcial Bruta t = 0 '''
+''' Calculo para Bruta, Simple t = 0, Simple t = 00 '''
 def calc_propiedades_tabla(self):
     ''' Asigna valores a LineEdits Area, cdg, inercia para Bruta t=0. '''
     ''' Son los mismos valores calculados en Tab1. Solo recupera .text() de lineEdits tab1 (Geometria) '''
@@ -57,101 +57,146 @@ def calc_propiedades_tabla(self):
     self.operacion_tipo_cordones = 0
     self.operacion_final = 0
 
+    
+
+    print("\n\n\n\n\t\t --------------------------------------------------------------------------------------------------------------------")
+    print("\t\t ----------------------------------------     DATOS CALCULO PARCIAL      --------------------------------------------")
+    print("\t\t --------------------------------------------------------------------------------------------------------------------\n\n")
+
+    print("\n\n\n\n ----------------------------------------------------------------------------------")
+    print(" -----------------------   CALCULO SECCION BRUTA T=0  ------------------------------")
+    print(" -----------------------------------------------------------------------------------")
+    
+    print("\t Calculos de altura, area, CDG, inercia registrados en pestana geometria.\n")
+    
+
     ''' Hace calculos para simple t = 0 '''
-    calc_seccion_neta_inicial(self) # Primer paso
+
+    ''' Implementacion de pasos para calcular t = 0 estan separados en 2 metodos, comunicados por variables accesibles usando self. 
+        / Resultados de estos 2 pasos tambien son usados en calculos para t = 00.
+        / Estos calculos estan basados e EXCEL de JOAQUIN.
+    '''
+
+    calc_seccion_neta_inicial(self) # Primer paso t = 0
     calc_seccion_homogeneizada_inicial(self)  # segundo paso (final) para t = 0
 
+    ''' Pasos 1 y 2 para t = 00 estan implementados en un mismo metodo para simplificar uso de resultados entre los pasos. '''
     calc_t00(self) # Paso 1 y Paso 2 para calcular T=00. Basado en tablas 5 y 6 de EXCEL CLAUDIO
 
 
 
 
 
-''' Calculo Parcial Primer paso para Simple t= 0 '''
+''' Calculo Parcial Primer paso para Simple t = 0 '''
 def calc_seccion_neta_inicial(self):
     ''' Usa formulas de hoja calculos JOAQUIN. Pen-ultima tabla'''
 
-    print("\t\t\t\n\n\n>>Datos usados para simple t = 0<<\n")
+    print("\n\n\n\n ------------------------------------------------------------------------------------")
+    print(" ----------------------- CALCULO SECCION SIMPLE T = 0  ------------------------------")
+    print(" ------------------------------------------------------------------------------------\n")
+
+    print("\n-----------------------------------------")
+    print("----> PASO 1: SECCION NETA INICIAL: <---- \n")
+
 
     try: 
-        print(f"Areas:")
+        print(f"AREAS:")
         self.viga_area = self.ui.result_sum_area.text()
         self.cordones_area =self.ui.tab2_line_total_area.text()
-        self.cordones_area = float(self.cordones_area) / 10000 # Pasa a metros
+        self.cordones_area = float(self.cordones_area) / 10000 # Pasa a metros^2 AREA ARMADURA ACTIVA, que en pestana esta originalmente en cm2
         self.barras_area = self.ui.tab3_line_area_barras.text()
         print(f"\t VIGA: {self.viga_area} m2")
         print(f"\t Arm. Activa: {self.cordones_area} m2")
-        print(f"\t Arm. pasiva: {self.barras_area} mm2")
+        print(f"\t Arm. pasiva: {self.barras_area} m2\n")
     except:
-        print("Falta calcular valor de area en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        print("\t>>> Falta valor de area en una o mas de las siguienes pestanas: (GEOMETRIA, ARM. ACTIVA, ARM. PASIVA) para hacer calculo de seccion_neta_inicial.")
         return
 
     try:
-        print(f"\nY_inf:")
+        print(f"\nCENTRO DE GRAVEDAD:")
         self.viga_cg =self.ui.result_sum_ponderado.text()
         self.cordones_cg = self.ui.tab2_line_total_cdg_area.text()
         self.barras_cg = self.ui.tab3_line_yinf_barras.text()
         print(f"\t VIGA: {self.viga_cg} m")
         print(f"\t Arm. Activa (sin tpi): {self.cordones_cg} m")
-        print(f"\t Arm. pasiva: {self.barras_cg} mm")
+        print(f"\t Arm. pasiva: {self.barras_cg} m\n")
     except:
-        print("Falta calcular Y_inf en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        print("\t>>> Falta calcular Y_inf en una o mas de las siguienes pestanas: (GEOMETRIA, ARM. ACTIVA, ARM. PASIVA) para hacer calculo de seccion_neta_inicial.")
         return
 
     try:
-        print(f"\nInercia:")
+        print(f"\nINERCIA:")
         self.viga_inercia = self.ui.result_sum_op.text()
         self.cordones_inercia = self.ui.tab2_line_total_inercia.text()
         self.barras_inercia = self.ui.tab3_line_inercia_barras.text()
-        print(f"\t VIGA: {self.viga_inercia} [?]")
+        print(f"\t VIGA: {self.viga_inercia} m4")
         print(f"\t Arm. Activa (sin tpi): {self.cordones_inercia} m4")
-        print(f"\t Arm. pasiva: {self.barras_inercia} m4")
+        print(f"\t Arm. pasiva: {self.barras_inercia} m4\n")
     except:
-        print("Falta calcular Inercia en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        print("\t>>> Falta calcular Inercia en una o mas de las siguienes pestanas: (GEOMETRIA, ARM. ACTIVA, ARM. PASIVA) para hacer calculo de seccion_neta_inicial.")
         return
     
 
     try:
-        print("A*cg de cada tipo:")
-        # TODO que nombre usar para esta variable ??
+        print("\nOPERACION: (A * cg) para cada tipo:")
+
+        # TODO que nombre usar para esta variable ??, Solo dejar expresada operacion ?
+
         self.viga_a_cg = float(self.viga_area) * float(self.viga_cg)
         self.cordones_a_cg = float(self.cordones_area) * float(self.cordones_cg)
         self.barras_a_cg = float(self.barras_area) * float(self.barras_cg)
-        print(f"\tA*Cg de viga: {self.viga_a_cg}")
-        print(f"\tA*Cg de cordones: {self.cordones_a_cg}")
-        print(f"\tA*Cg de barras: {self.barras_a_cg}")
+
+        print(f"\t A * Cg de viga     --> {float(self.viga_area)} m2 * {float(self.viga_cg)} m = {self.viga_a_cg} m3")
+        print(f"\t A * Cg de cordones --> {float(self.cordones_area)} m2 * {float(self.cordones_cg)} m = {self.cordones_a_cg} m3")
+        print(f"\t A * Cg de barras   --> {float(self.barras_area)} m2 * {float(self.barras_cg)} m = {self.barras_a_cg} m3\n")
     except:
-        print("Falta calcular A*cg en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
+        print("\t>>> Falta calcular A*cg en geometria, cordones o barras para hacer calculo de seccion_neta_inicial.")
         return
 
-    print("\n\n\n\n")
-
-    self.area_final = float(self.viga_area) - (float(self.barras_area) + float(self.cordones_area))
-    print(f"Area final con viga-barras-cordones: {self.area_final}")
-
+    
+    ''' TOTAL de AREA * CDG'''
     self.total_area_cg = float(self.viga_a_cg) + float(self.barras_a_cg) + float(self.cordones_a_cg)
-    print(f"Sumatoria de Areas * Cg's: {self.total_area_cg}")
+    print(f"\t SUMATORIA de resultados OPERACION (Areas * Cg's) --> {float(self.viga_a_cg)} m3 + {float(self.barras_a_cg)} m3 + {float(self.cordones_a_cg)} m3 = {self.total_area_cg} m3 \n")
 
+    ''' TOTAL AREA EQUIVALENTE VIGA, CORDONES, BARRAS '''
+    self.area_final = float(self.viga_area) - (float(self.barras_area) + float(self.cordones_area))
+    print(f"Area final considerando viga, arm. activa/pasiva: AREA_viga - (Area_barras + AREA_cordones) --> {float(self.viga_area)} m2 - ({float(self.barras_area)} m2 + {float(self.cordones_area)} m2) = {self.area_final} m2 \n")
+
+    ''' CENTRO DE GRAVEDAD FINAL COMPUESTO CONSIDERANDO VIGA, CORDONES, BARRAS '''
     self.yinf_final = float(self.total_area_cg) / float(self.area_final)
-    print(f"Y_inf final: {self.yinf_final}")
+    print(f"CENTRO DE GRAVEDAD FINAL COMPUESTO (considerando viga, arm. activa/pasiva): SUM(Operacion_Area * CG) / Area_eq --> {float(self.total_area_cg)} m3 / {float(self.area_final)} m2 = {self.yinf_final} m \n")
 
-    # TODO nombre de variables
+
+    # TODO pedir nombre de variables de operacion I + A*r^2 w/ unidad: [m4]
+
+    print("\nOperacion (I + A * r^2) para cada tipo de material: \n")
+
+    ''' VIGA '''
     self.operacion_tipo_viga = float(self.viga_inercia) + float(self.viga_area) * pow((float(self.viga_cg) - float(self.yinf_final)), 2)
-    print("Operacion para viga: ", self.operacion_tipo_viga)
+    print(f"\t Para viga: Inercia_viga + Area_viga * (Y_inf_viga - Y_inf_compuesto) ^ 2 -> {float(self.viga_inercia)} m4 + {float(self.viga_area)} m2 * ({float(self.viga_cg)} m - {float(self.yinf_final)} m)^2 = {self.operacion_tipo_viga} m4 \n")
 
+    ''' BARRAS (arm. pasiva) '''
     self.operacion_tipo_barras = float(self.barras_inercia) + float(self.barras_area) * pow((float(self.barras_cg) - float(self.yinf_final)), 2)
-    print("Operacion para barras: ", self.operacion_tipo_viga)
+    print(f"\t Para barras: Inercia_barras + Area_barras * (Y_inf_barras - Y_inf_compuesto) ^ 2 -> {float(self.barras_inercia)} m4 + {float(self.barras_area)} m2 * ({float(self.barras_cg)} m - {float(self.yinf_final)} m)^2 = {self.operacion_tipo_viga} m4 \n")
 
+    ''' CORDONES (arm. activa)'''
     self.operacion_tipo_cordones = float(self.cordones_inercia) + float(self.cordones_area) * pow((float(self.cordones_cg) - float(self.yinf_final)), 2)
-    print("Operacion para cordones: ", self.operacion_tipo_viga)
+    print(f"\t Para cordones: Inercia_cordones + Area_cordones * (Y_inf_cordones - Y_inf_compuesto) ^ 2 -> {float(self.cordones_inercia)} m4 + {float(self.cordones_area)} m2 * ({float(self.cordones_cg)} m - {float(self.yinf_final)} m)^2 = {self.operacion_tipo_viga} m4 \n")
 
+    ''' OPERACION PARA RESULTADO COMPUESTO '''
     self.operacion_final = float(self.operacion_tipo_viga) - (float(self.operacion_tipo_barras) + float(self.operacion_tipo_cordones))
-    print("Resultado de operacion_final (Inercia de todo?): ", self.operacion_final)
+    print(f"\n\t ---> RESULTADO COMPUESTO considerando (Viga, Arm. pasiva/activa) (R: result): R_viga - (R_barras + R_cordones) -> {float(self.operacion_tipo_viga)} m4 - ({float(self.operacion_tipo_barras)} m4 + {float(self.operacion_tipo_cordones)} m4) = {self.operacion_final} m4 <---\n")
+
+
 
 
 ''' Calculo Parcial simple t = 0 paso final'''
 def calc_seccion_homogeneizada_inicial(self):
     ''' ultima tabla excel Joaquin '''
+
+    print("\n\n-------------------------------------------------- \n")
+    print("----> PASO 2: SECCION HOMOGENEIZADA INICIAL: <---- \n")
+
 
     ''' F'c y Ec son obtenidos de PESTANA MATERIALES '''
     # Ingresado por usr (o puede usar valor por defecto segun tipo de hormigon seleccionado en Cobmbo)
