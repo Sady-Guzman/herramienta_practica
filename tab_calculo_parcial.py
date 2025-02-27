@@ -95,7 +95,7 @@ def calc_seccion_neta_inicial(self):
     print(" ----------------------- CALCULO SECCION SIMPLE T = 0  ------------------------------")
     print(" ------------------------------------------------------------------------------------\n")
 
-    print("\n-----------------------------------------")
+    print("\n\n-----------------------------------------")
     print("----> PASO 1: SECCION NETA INICIAL: <---- \n")
 
 
@@ -211,18 +211,23 @@ def calc_seccion_homogeneizada_inicial(self):
 
 
 
-    ''' CONSTANTES '''
-    # cons_es = 200000 # unidad: MPa
-    # cons_eps = 198569 # Unidad: MPa ... = 28800 KSI
+    ''' CONSTANTES definidas por usuario en GUI pestana materiales '''
     cons_es = float(self.ui.tab3_line_cons_es.text())
     cons_eps = float(self.ui.tab3_line_cons_eps.text())
 
     ns =  cons_es / ec_ini # Para steel -> Barras Pasivas
     nps = cons_eps / ec_ini # Para preStressed Steel -> Cordones Activos
 
-    print(f"\nCalulo Parcial. calc_seccion_homogeneizada_inicial() --> Valores usados para f'c = {fc_ini}, ec = {ec_ini}, ns = {ns}, nps = {nps}\n")
 
-    ''' Col area m2'''
+    print(f"Valores de resistencia y modulos\n")
+    print(f"\t Valor F'c (prefabricado INICIAL MINIMO): {fc_ini} (N/mm2)")
+    print(f"\t Valor Ec (prefabricado INICIAL MINIMO) : {ec_ini} (N/mm2) (Resultado calculo en pestana materiales)")
+    print(f"\t Valor ns: constante_Es / Ec_inicial   --> {cons_es} / {ec_ini} = {ns}")
+    print(f"\t Valor nps: constante_Eps / Ec_inicial --> {cons_eps} / {ec_ini} = {nps}\n")
+
+
+    ''' -- Col area m2 -- '''
+    print("\nAREAS:\n")
     try:
         homo_area_viga_barra_cable = float(self.viga_area) - (float(self.barras_area) + float(self.cordones_area))
         homo_area_barras = float(self.barras_area) * ns
@@ -230,31 +235,31 @@ def calc_seccion_homogeneizada_inicial(self):
 
         homo_suma_areas = homo_area_viga_barra_cable + homo_area_cordones + homo_area_barras
 
-        print("Valores equivalente COL AREA:")
-        print("\t\t Area Viga-Barras-Cordones: ", homo_area_viga_barra_cable)
-        print("\t\t Area barras: ", homo_area_barras)
-        print("\t\t Area Cordones: ", homo_area_cordones)
-        print("\t\t Area sumatoria: ", homo_suma_areas)
+        print(f"\t Area Viga - (Barras + Cordones) -> {float(self.viga_area)} m2 - ({float(self.barras_area)} m2 + {float(self.cordones_area)} m2) = {homo_area_viga_barra_cable} m2 \n")
+        print(f"\t Area solo barras: Area * ns -> {float(self.barras_area)} m2 * {ns} = {homo_area_barras} m2")
+        print(f"\t Area solo cordones: Area * nps -> {float(self.cordones_area)} m2 * {nps} = {homo_area_cordones} m2\n")
+        print(f"\t Area SUMATORIA: A_viga + A_barras + A_cordones -> {homo_area_viga_barra_cable} m2 + {homo_area_barras} m2 + {homo_area_cordones} m2 = {homo_suma_areas} m2 \n")
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial.\n")
         return
 
 
-    '''Col Y_inf'''
+    ''' -- Col Y_inf -- '''
+    print("\nCentros de Gravedad:\n")
     try:
-        print("\n\nValores equivalente COL Y_inf")
         homo_yinf_viga_barra_cable = self.total_area_cg / self.area_final
         homo_yinf_barra = float(self.barras_cg)
         homo_yinf_cordones = float(self.cordones_cg)
 
-        print("\t\tY_inf viga-barras-cordones: ", homo_yinf_viga_barra_cable)
-        print("\t\tY_inf barras: ", homo_yinf_barra)
-        print("\t\tY_inf cordones: ", homo_yinf_cordones)
+        print(f"\t CDG viga, barras, cordones (Usa resultados PASO 1: Secc NETA INI): SUM(A * CDG) / Area eq -> {self.total_area_cg} m3 / {self.area_final} m2 = {homo_yinf_viga_barra_cable} m\n")
+        print(f"\t Y_inf solo barras: Valor calculado en pestana ARM. PASIVA. -> {homo_yinf_barra} m")
+        print(f"\t Y_inf solo cordones: Valor calculado en pestana ARM. ACTIVA. -> {homo_yinf_cordones} m\n")
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial. \n")
         return
 
-    ''' COL Area * Cg de cada tipo '''
+    ''' -- COL Area * Cg de cada tipo -- '''
+    print("OPERACION AREA * CG para cada tipo\n")
     try:
         homo_viga_barra_cordon_a_cg = homo_area_viga_barra_cable * homo_yinf_viga_barra_cable
         homo_barras_a_cg = homo_area_barras * homo_yinf_barra
@@ -262,40 +267,46 @@ def calc_seccion_homogeneizada_inicial(self):
 
         homo_suma_a_cg = homo_viga_barra_cordon_a_cg + homo_barras_a_cg + homo_cordones_a_cg
 
-        print("\n\nValores equivalente COL Area * Cg")
-        print("\t\tA * Cg Vigas-Barras-Cables: ", homo_viga_barra_cordon_a_cg)
-        print("\t\tA * Cg Barras: ", homo_barras_a_cg)
-        print("\t\tA * Cg Cables: ", homo_cordones_a_cg)
-        print("\t\tA * Cg SUMATORIA: ", homo_suma_a_cg)
+
+        print(f"\t Vigas - (Barras + Cables): A_viga * CDG_viga -> {homo_area_viga_barra_cable} m2 * {homo_yinf_viga_barra_cable} m = {homo_viga_barra_cordon_a_cg} m3")
+
+        print(f"\t Barras: A_barra * CDG_barra -> {homo_area_barras} m2 * {homo_yinf_barra} m = {homo_barras_a_cg} m3")
+
+        print(f"\t Cables: A_cables * CDG_cables -> {homo_area_cordones} m2 * {homo_yinf_cordones} m = {homo_cordones_a_cg} m3 \n")
+
+        print(f"\n\t SUMATORIA de resultados -> {homo_viga_barra_cordon_a_cg} m3 + {homo_barras_a_cg} m3 + {homo_cordones_a_cg} m3 = {homo_suma_a_cg} m3\n")
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial.\n")
         return
 
 
-    ''' Col Yinf. ultima fila '''
+    ''' Col Yinf. ultima fila (En excel joaquin) '''
+    print("OPERACION SUM(A * CDG) / SUM(AREAS)\n")
     try:
-        homo_total_yinf = homo_suma_a_cg / homo_suma_areas # No es realmente la sumatoria de col Y_inf TODO Que nombre asignarle ???
-        print("\tCelda Y_inf: ", homo_total_yinf)
+        homo_total_yinf = homo_suma_a_cg / homo_suma_areas
+        print(f"\t-> {homo_suma_a_cg} m3 / {homo_suma_areas} m2 = {homo_total_yinf} m \n")
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial.\n")
         return
 
 
     ''' COL Inercia tipo '''
+    print("INERCIAS:\n")
     try:
         homo_inercia_viga_barra_cordon = float(self.operacion_final)
         homo_inercia_barras = float(self.barras_inercia) * ns
         homo_inercia_cordones = float(self.cordones_inercia) * nps
 
-        print("\n\nValores equivalentes a COL Inercia")
-        print("\t\t Inercia Viga-Barras-Cables: ", homo_inercia_viga_barra_cordon)
-        print("\t\t Inercia Barras: ", homo_inercia_barras)
-        print("\t\t Inercia Cables: ", homo_inercia_cordones)
+        print(f"\t Viga-Barras-Cables: Inercia final de PASO 1: Secc NETA INI -> {homo_inercia_viga_barra_cordon} m4")
+        print(f"\t Barras: I_barra (de paso1) * ns -> {float(self.barras_inercia)} m4 * {ns} = {homo_inercia_barras} m4 ")
+        print(f"\t Cordones: I_cordon (de paso1) * nps -> {float(self.cordones_inercia)} m4 * {nps} = {homo_inercia_cordones} m4 \n")
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial.\n")
         return
     
+
     ''' Col Operacion final '''
+    print("OPERACION I + A * (tipo_CDG - (SUM(A * CDG) / SUM(AREAS)) ^ 2")
     try:
         homo_operacion_viga_barra_cordon = homo_inercia_viga_barra_cordon + homo_area_viga_barra_cable * pow((homo_yinf_viga_barra_cable - homo_total_yinf), 2)
         homo_operacion_barras = homo_inercia_barras + homo_area_barras * pow((homo_yinf_barra - homo_total_yinf), 2)
@@ -304,26 +315,33 @@ def calc_seccion_homogeneizada_inicial(self):
         # SUMATORIA DE TODAS OPERACIONES
         homo_operacion_final = homo_operacion_viga_barra_cordon + homo_operacion_barras + homo_operacion_cordones
 
-        print("\n\nValores equivalentes COL Operacion I + A*r^2")
-        print("\t\tOperacion vigas-barras-cables: ", homo_operacion_viga_barra_cordon)
-        print("\t\tOperacion barras: ", homo_operacion_barras)
-        print("\t\tOperacion cables: ", homo_operacion_cordones)
+        print(f"\t vigas-barras-cordones -> {homo_inercia_viga_barra_cordon} m4 + {homo_area_viga_barra_cable} m2 * ({homo_yinf_viga_barra_cable} m - {homo_total_yinf} m) ^ 2 = {homo_operacion_viga_barra_cordon} m4 ")
+        print(f"\t barras -> {homo_inercia_barras} m4 + {homo_area_barras} m2 * ({homo_yinf_barra} m - {homo_total_yinf} m) ^ 2 = {homo_operacion_barras} m4 ")
+        print(f"\t cordones -> {homo_inercia_cordones} m4 + {homo_area_cordones} m2 * ({homo_yinf_cordones} m - {homo_total_yinf} m) ^ 2 = {homo_operacion_cordones} m4 \n")
 
-        print("\n\t\t\t >> Tabla seccion homogeneizada inicial<<\n")
-        print("resultado de operacion final en seccion homogenea: ", homo_operacion_final) # Inercia
+
+        print(f"\t SUMATORIA resultados -> {homo_operacion_viga_barra_cordon} m4 + {homo_operacion_barras} m4 + {homo_operacion_cordones} m4 = {homo_operacion_final} m4\n") # Inercia
     except:
-        print("Faltan datos para hacer calculo de seccion_homogeneizada_inicial.")
+        print("\t>>> Faltan datos para hacer calculo de seccion_homogeneizada_inicial.\n")
         return
+
+    print("RESULTADOS DE PROPIEDADES para SIMPLE t = 0:")
+    print(f"\t AREA final    -> {homo_suma_areas} m2")
+    print(f"\t CDG final     -> {homo_total_yinf} m")
+    print(f"\t INERCIA final -> {homo_operacion_final} m4\n\n")
 
     self.ui.tab5_line_area_t0.setText(f"{round(homo_suma_areas, 7)}")
     self.ui.tab5_line_cdg_t0.setText(f"{round(homo_total_yinf, 7)}")
     self.ui.tab5_line_inercia_t0.setText(f"{round(homo_operacion_final, 7)}")
 
 
-
 ''' ===================================================================================================================== '''
 
+''' CALCULO SECCION SIMPLE t = 00'''
 def calc_t00(self):
+
+    print("\n\n--------------------------------------------------- ")
+    print("----> PASO 1: SECCION COMPUESTA NETA INICIAL: <---- \n")
 
     ''' Valores para concreto insitu, VIGA,Lc, Sw, e, voladizo '''
     try:
@@ -524,6 +542,9 @@ def calc_t00(self):
     ''' ================================================================================================================================================================== '''
     ''' ============================     PASO 2 PARA T=00, Tabla   6) Propiedades Sección Viga homogenizada compuesta Final EXCEL CLAUDIO     ============================ '''
     ''' ================================================================================================================================================================== '''
+
+    print("--\n\n-------------------------------------------------------------")
+    print("----> PASO 2: SECCION VIGA HOMOGENEIZADA COMPUESTA FINAL: <---- \n")
 
     ''' Los nombres de las variables estan basados en los nombres que estan asignadps a tabla 6 en Plantilla claudio '''
 
