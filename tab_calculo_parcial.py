@@ -350,33 +350,32 @@ def calc_t00(self):
         valor_espesor_losa = float(self.ui.tab6_line_espesor.text())
         # valor_voladizo = float(self.ui.tab6_line_voladizo.text())
     except:
-        print("Falta uno o mas de los siguientes valores: Luz de Calculo, Sw, Espesor losa insitu. Por lo que no se puede calcular t=00.\n")
+        print("\n>>> Falta uno o mas de los siguientes valores: Luz de Calculo, Sw, Espesor losa insitu. Por lo que no se puede calcular t=00. \n")
         return
 
-    print(f"\n🔹 Valores de inputs en pestana LUZ DE CALCULO:")
+    print(f"\nValores de inputs en pestana LUZ DE CALCULO:")
     print(f"\tLc (Luz calculo) = {valor_luz_calculo} m")
     print(f"\tSw (Dist. entre Almas) = {valor_sw} m")
-    print(f"\te (Espesor de losa) = {valor_espesor_losa}m ")
+    print(f"\te (Espesor de losa) = {valor_espesor_losa}m \n")
     # print(f"\tD (largo de voladizo) = {valor_voladizo} m")
 
 
 
     ''' Trapecios de hormigon insitu existentes '''
+    print("\nTrapecio de hormigon INSITU en GEOMETRIA:")
     for i, layout in enumerate(self.dynamic_layouts):
         tipo_hormigon = layout['combo_insitu'].currentText()
 
         if tipo_hormigon == "Insitu":
-            # print(f"\n🔹 Para layout {i}")
-            print("\tTrapecio de hormigon INSITU en GEOMETRIA:")
             print(f"\tNombre: {layout['name_label'].text()}")
             print(f"\tBi: {layout['bi_line'].text()}")
             print(f"\tAltura: {layout['altura_line'].text()}")
-            print(f"\tÁrea: {layout['area_line'].text()}")
+            print(f"\tÁrea: {layout['area_line'].text()} \n")
 
 
 
     ''' Encuentra ancho de alma (Trapecio mas angosto en self.dynamic_layouts, que tenga Bi y Bs iguales, y que no esta ni en el primer ni ultimo lugar del diciconario) '''
-    print("\n\n🔹 Ancho de alma:")
+    print("\n Ancho de alma:")
     menor_ancho = 99999
     for i, layout in enumerate(self.dynamic_layouts):
         if i == 0 or i == len(self.dynamic_layouts) - 1:
@@ -390,10 +389,10 @@ def calc_t00(self):
     
     ''' Si se entra a este IF, significa que hay un problema al encontrar el trapecio que corresponde al ALMA. (Problema de geometria) '''
     if menor_ancho == 99999:
-        print(f"No se encontró ancho de alma.")
-        # return
+        print(f"No se encontró ancho de alma.  (POR AHORA ANCHO_ALMA NO SE USA EN NINGUN CALCULO.)\n")
+        # return # No se usa return porque ancho de alma no se usa, Por lo tanto no va a haber ningun crash si la funcion sigue avanzando.
     else:
-        print(f"\tAncho de alma mas angosto: {menor_ancho} m, en layout {nombre}")
+        print(f"\t Ancho de alma: Trapecio mas angosto en geometria -> {menor_ancho} m, en layout {nombre}. (POR AHORA ANCHO_ALMA NO SE USA EN NINGUN CALCULO.)\n")
 
 
 
@@ -402,12 +401,10 @@ def calc_t00(self):
     fc_losa = float(self.ui.tab4_line_horm_insitu_fc.text())
     n_compresion = math.sqrt(fc_viga/fc_losa)
 
-    print(f"\n🔹 Valores de f'c en TAB MATERIALES:")
-    print(f"\tf'c final (viga) = {fc_viga} N/mm2")
-    print(f"\tf'c insitu (losa) = {fc_losa} N/mm2")
-    print(f"\tResultado de SQRT (f'c(Viga) / F'c(Losa)) = {n_compresion} [? unidad]")
-
-
+    print(f"\nValores de f'c VIGA, LOSA y razon 'n' en TAB MATERIALES:")
+    print(f"\t f'c hormigon prefabricado FINAL (VIGA) = {fc_viga} (N/mm2) ")
+    print(f"\t f'c hormigon insitu (LOSA) = {fc_losa} (N/mm2) ")
+    print(f"\t n_compresion: SQRT(f'c(Viga) / F'c(Losa)) = {n_compresion}\n")
 
 
     ''' Propiedades de viga bruta. '''
@@ -416,28 +413,30 @@ def calc_t00(self):
     viga_yinf = float(self.ui.result_sum_ponderado.text())
     viga_inercia = float(self.ui.result_sum_op.text())
 
-    print(f"\n🔹 Propiedades de VIGA BRUTA:")
+    print(f"\nPropiedades de VIGA BRUTA:")
     print(f"\t Altura = {viga_altura} m")
     print(f"\t Area = {viga_area} m2")
     print(f"\t Y_inf = {viga_yinf} m")
-    print(f"\t Inercia = {viga_inercia} m4")
+    print(f"\t Inercia = {viga_inercia} m4\n")
 
 
 
     ''' Valores para tabla ACI 6.3.2.1 '''
     ''' B_eff de losa '''
 
-    print(f"\n🔹 Comparaciones TABLA ACI 6.3.2.1 de valor minimo:")
-    ''' Ambos lados'''
-    print(f"\tAMBOS LADOS -> ")
-    print(f"\t\t 8*h (espesor losa)->({valor_espesor_losa} * 8) =\t{round(valor_espesor_losa * 8, 3)} m")
-    print(f"\t\t Sw/2 (separacion almas->({valor_sw} / 2) =\t{round(valor_sw / 2, 3)} m")
-    print(f"\t\t Lc/8 (luz calculo)->({valor_luz_calculo} / 8) =\t{round(valor_luz_calculo / 8, 3)} m")
+    print(f"\nComparaciones TABLA ACI 6.3.2.1 de valor minimo:")
+    
+    ''' Beff AMBOS LADOS '''
+    print(f"\tAMBOS LADOS: (Minimo de estos valores)  ")
+    print(f"\t\t 8*h (espesor losa)     -> ({valor_espesor_losa} * 8) =\t{round(valor_espesor_losa * 8, 3)} m")
+    print(f"\t\t Sw/2 (separacion almas -> ({valor_sw} / 2) =\t{round(valor_sw / 2, 3)} m")
+    print(f"\t\t Lc/8 (luz calculo)     -> ({valor_luz_calculo} / 8) =\t{round(valor_luz_calculo / 8, 3)} m\n")
 
-    print(f"\tSOLO UN LADO -> ")
+    ''' Beff UN LADO '''
+    print(f"\tSOLO UN LADO: (Minimo de estos valores) ")
     print(f"\t\t 6*h (espesor losa)->({valor_espesor_losa} * 6) =\t{round(valor_espesor_losa * 6, 3)} m")
     print(f"\t\t Sw/2 (separacion almas)->({valor_sw} / 2) =\t{round(valor_sw / 2, 3)} m")
-    print(f"\t\t Lc/12 (luz calculo)->({valor_luz_calculo} / 12) =\t{round(valor_luz_calculo / 12, 3)} m")
+    print(f"\t\t Lc/12 (luz calculo)->({valor_luz_calculo} / 12) =\t{round(valor_luz_calculo / 12, 3)} m\n")
 
     ancho_efectivo_losa_ambos = float(min(valor_espesor_losa * 8, valor_sw / 2, valor_luz_calculo / 8))
     ancho_efectivo_losa_uno = float(min(valor_espesor_losa * 6, valor_sw / 2, valor_luz_calculo / 12))
@@ -445,9 +444,9 @@ def calc_t00(self):
     self.ui.tab5_line_beff_ambos.setText(f"{round(ancho_efectivo_losa_ambos, 4)}")
     self.ui.tab5_line_beff_uno.setText(f"{round(ancho_efectivo_losa_uno, 4)}")
 
-    print(f"\n🔹 Por lo tanto ANCHO EFECTIVO:")
-    print(f"\t\t B_eff (Valor minimo para ambos lados) = {ancho_efectivo_losa_ambos} m")
-    print(f"\t\t B_eff (Valor minimo para un lado) = {ancho_efectivo_losa_uno} m")
+    print(f"\nANCHO EFECTIVO:")
+    print(f"\t B_eff (Valor minimo para ambos lados) = {ancho_efectivo_losa_ambos} m")
+    print(f"\t B_eff (Valor minimo para un lado) = {ancho_efectivo_losa_uno} m\n")
 
 
 
@@ -462,7 +461,7 @@ def calc_t00(self):
         tipo_hormigon = layout['combo_insitu'].currentText()
 
         if tipo_hormigon == "Insitu":
-            # print(f"\n🔹 Para layout {i}")
+            # print(f"\n Para layout {i}")
             # print("\tTrapecio de hormigon Insitu:")
             # print(f"\tNombre: {layout['name_label'].text()}")
             # print(f"\tBi: {layout['bi_line'].text()}")
@@ -472,69 +471,70 @@ def calc_t00(self):
             existe_insitu = True
     
     if existe_insitu == False:
-        print("No se encuentra ningun bloque de hormigon insitu en la geometria, No se continua con calculo t = 00.\n")
+        print(">>> No se encuentra ningun bloque de hormigon insitu en la geometria, No se continua con calculo t = 00. \n")
         return
 
     area_losa = ancho_real_losa * valor_espesor_losa
-    print(f"\n🔹 Area de losa (Ancho real losa * Espesor losa) -> ({ancho_real_losa} * {valor_espesor_losa}) = {area_losa} m2")
+    print("\nSe condisidera valor ingresado en pestana Luz de Calculo para Espesor de Losa para calculos, NO alto de trapecio insitu en pestana Geometria. ANCHO corresponde a Bi en Geometria.\n")
+    print(f"AREA DE LOSA: (Ancho real losa * Espesor losa) -> ({ancho_real_losa} m * {valor_espesor_losa} m) = {area_losa} m2")
     
     area_equivalente_losa = (ancho_efectivo_losa_ambos * valor_espesor_losa) / n_compresion
-    print(f"\n🔹 Area equivalente solo losa (B_eff (Ambos Lados * espesor) / n) ({ancho_efectivo_losa_ambos} * {valor_espesor_losa}) / {n_compresion} = {area_equivalente_losa} m2")
+    print(f"\nAREA EQUIVALENTE SOLO LOSA (con B_eff): (B_eff (Ambos Lados) * espesor_losa) / n_compresion):")
+    print(f"\t({ancho_efectivo_losa_ambos} * {valor_espesor_losa}) / {n_compresion} = {area_equivalente_losa} m2 \n")
 
 
     ''' A_eq viga/losa '''
     ''' A_eq = A_viga + ((B_eff * espesor_losa) / n_compresion)'''
 
-    print(f"\n🔹 Area equivalente viga/losa:")
-    print(f"\tA_eq = A_viga + ((B_eff->(ambos lados) * espesor_losa) / n_compresion")
+    print(f"\nAREA EQUIVALENTE COMPUESTA VIGA/LOSA:")
+    print(f"\tA_eq_viga_losa = A_viga m2 + ((B_eff->(ambos lados) m * espesor_losa m) / n_compresion: ")
     area_equivalente_viga_losa = viga_area + ((ancho_efectivo_losa_ambos * valor_espesor_losa) / n_compresion)
-    print(f"\tA_eq = {area_equivalente_viga_losa} m2")
+    print(f"\t{viga_area} + (({ancho_efectivo_losa_ambos} * {valor_espesor_losa}) / {n_compresion}) = {area_equivalente_viga_losa} m2 \n")
 
 
 
     ''' Inercia de losa '''
     ''' I_losa = ((B_eff/n_compresion) * h ^3) / 12 '''
 
-    print(f"\n🔹 Inercia de losa:")
-    print(f"\tI_losa = ((B_eff->(Ambos Lados) / n_compresion) * h^3->(Espesor Losa)) / 12 ")
+    print(f"\nINERCIA DE LOSA:")
+    print(f"\tI_losa = ((B_eff(Ambos Lados) m / n_compresion) * espesor_losa[m]^3 ) / 12: ")
     print(f"\tI_losa = (({ancho_efectivo_losa_ambos} / {n_compresion}) * {valor_espesor_losa}^3) / 12")
     losa_inercia = ((ancho_efectivo_losa_ambos / n_compresion) * pow(valor_espesor_losa, 3)) / 12
-    print(f"\tInercia de losa = {losa_inercia} [? Unidad]")
+    print(f"\tInercia de losa = {losa_inercia} [m4] \n")
 
 
     ''' Centro de gravedad de losa Y_cl '''
     ''' Y_inf de losa desde base de losa + Altura total de viga '''
 
-    print(f"\n🔹 Centro de gravedad de losa:")
+    print(f"\nCentro de gravedad de losa:")
     print(f"\tY_inf de losa desde base de losa + Altura total de viga")
     losa_yinf = viga_altura + (valor_espesor_losa / 2)
-    print(f"\tY_inf losa = {viga_altura} + ({valor_espesor_losa} / 2)")
-    print(f"\tCentro de gravedad losa (+ altura vida) = {losa_yinf}")
+    print(f"\tY_inf losa = {viga_altura} m + ({valor_espesor_losa} m / 2)")
+    print(f"\tCentro de gravedad losa (+ altura viga) = {losa_yinf} m \n")
 
     ''' Centro de gravedad compuesto '''
     ''' Y_c = (Area_viga * Centroide_viga + Area_eq_losa * Centroide_losa) / Area_eq_viga_losa'''
-
-    print(f"\n🔹 Centro de gravedad compuesto:")
+    print(f"\nCENTRO DE GRAVEDAD COMPUESTO:")
     centro_gravedad_compuesto = (viga_area * viga_yinf + area_equivalente_losa * losa_yinf) / (area_equivalente_viga_losa)
-    print("\tY_c = (Area_viga * Centroide_viga + Area_eq_losa * Centroide_losa) / Area_eq_viga_losa")
-    print(f"\tY_c = ({viga_area} * {viga_yinf} + {area_equivalente_losa} * {losa_yinf}) / {area_equivalente_viga_losa}")
-    print(f"\tCentro de gravedad compuesto = {centro_gravedad_compuesto}")
+    print("\t Y_c = (Area_viga m2 * Centroide_viga m + Area_eq_losa m2 * Centroide_losa m) / Area_eq_viga_losa m")
+    print(f"\t Y_c = ({viga_area} * {viga_yinf} + {area_equivalente_losa} * {losa_yinf}) / {area_equivalente_viga_losa}")
+    print(f"\t Centro de gravedad compuesto = {centro_gravedad_compuesto} m")
 
     ''' Inercia compuesta '''
     ''' I_c = I_viga + I_losa + (Area_viga * (Y_c - Y_viga) ^2) + (Area_eq_losa * (Y_c - Y_losa) ^2) '''
     ''' I_c = I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima '''
 
-
-    print(f"\n🔹 Inercia compuesta:")
+    print(f"\nINERCIA COMPUESTA:")
     Inercia_viga_prima = viga_area * pow((viga_yinf - centro_gravedad_compuesto), 2)
     Inercia_losa_prima = area_equivalente_losa * pow((losa_yinf - centro_gravedad_compuesto), 2)
 
-    print(f"\tInercia_viga_prima (Area_viga * (Y_c - Y_viga) ^2) -> {viga_area} * ({viga_yinf} - {centro_gravedad_compuesto})^2 = {Inercia_viga_prima}")
-    print(f"\tInercia_viga_prima (Area_viga * (Y_c - Y_viga) ^2) -> {area_equivalente_losa} * ({losa_yinf} - {centro_gravedad_compuesto})^2 = {Inercia_losa_prima}")
+    print(f"\t Inercia VIGA prima (Area_viga * (Y_viga - Y_compuesto) ^2) -> {viga_area} m2 * ({viga_yinf} m - {centro_gravedad_compuesto} m) ^2 = {Inercia_viga_prima} m4")
+    print(f"\t Inercia LOSA prima (Area_losa * (Y_losa - Y_compuesto) ^2) -> {area_equivalente_losa} m2 * ({losa_yinf} m - {centro_gravedad_compuesto} m) ^2 = {Inercia_losa_prima} m4\n")
 
     inercia_compuesta = viga_inercia + losa_inercia + Inercia_viga_prima + Inercia_losa_prima
-    print(f"\tInercia_compuesta (Final) = (I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima) -> {viga_inercia} + {losa_inercia} + {Inercia_viga_prima} + {Inercia_losa_prima}.")
-    print(f"\tInercia compuesta = {inercia_compuesta} m4")
+    print(f"\t Inercia_compuesta (Final) = (I_viga + I_losa + Inercia_viga_prima + Inercia_losa_prima) ->")
+    print(f"{viga_inercia} m4 + {losa_inercia} m4 + {Inercia_viga_prima} m4 + {Inercia_losa_prima} m4 ->")
+    print(f"\t Inercia compuesta = {inercia_compuesta} m4 \n")
 
 
 
@@ -545,48 +545,76 @@ def calc_t00(self):
 
     print("--\n\n-------------------------------------------------------------")
     print("----> PASO 2: SECCION VIGA HOMOGENEIZADA COMPUESTA FINAL: <---- \n")
+    print("Solo considera cordones activos. (EXCEL no considera barras pasivas).\n\n")
 
     ''' Los nombres de las variables estan basados en los nombres que estan asignadps a tabla 6 en Plantilla claudio '''
 
-    modulo_elasticidad = float(self.ui.tab3_line_cons_es.text()) / float(self.ui.tab4_line_horm_final_e.text()) # TODO Preguntar IGNACIO si esta bie usar Ec como horm_final_e
+    modulo_elasticidad = float(self.ui.tab3_line_cons_es.text()) / float(self.ui.tab4_line_horm_final_e.text())
+    print(f"MODULO ELASTICIDAD: constante_Es [MPa] / Ec_hormigon_final [N/mm2] -> {float(self.ui.tab3_line_cons_es.text())} MPa / {float(self.ui.tab4_line_horm_final_e.text())} N/mm2 = {modulo_elasticidad}\n")
 
     ''' COL area'''
     ani_viga_comp = area_equivalente_viga_losa # Area equivalente total de todo el hormigon
+    print(f"AREA VIGA COMPUESTA (Todo el hormigion. resultado de PASO1) = {area_equivalente_viga_losa} m2\n")
 
     # Area total de cables * modulo (Es / Ec) (Es, Ec son ingresados por usuario en TAB materiales, Pero toman valores por defecto al iniciar programa.)
     area_total_cables = float(self.ui.tab2_line_total_area.text()) / 100 # Variable original esta en CM, Por eso se pasa a METROS
     ani_cables = float(area_total_cables) * float(modulo_elasticidad)
+    print(f"AREA CABLES: A_cables * modulo_elasticidad -> {area_total_cables} m2 * {modulo_elasticidad} = {ani_cables} m2\n")
 
     area_neta_ini = ani_viga_comp + ani_cables
+    print(f"AREA NETA (viga + cables) -> {ani_viga_comp} m2 + {ani_cables} m2 = {area_neta_ini} m2\n")
 
     ''' COL Y cdg '''
     ycdg_viga_comp = centro_gravedad_compuesto
-    ycdg_cables = float(self.ui.tab2_line_total_cdg_fuerza.text()) # USA centro de gravedad calculado por fuerza (CON TPI), Se puede cambiar a usar por AREA
+    ycdg_cables = float(self.ui.tab2_line_total_cdg_fuerza.text()) # Usa centro de gravedad calculado por fuerza (CON TPI), Se puede cambiar a usar por AREA
+    print(f"\nCENTRO DE GRAVEDAD:")
+    print(f"\t CDG viga compuesta: {ycdg_viga_comp} m")
+    print(f"\t CDG Cables activos: {ycdg_cables} m \n")
     
     ''' COL li INERCIA '''
     inercia_viga_comp = inercia_compuesta
     inercia_cables = float(self.ui.tab2_line_total_inercia.text()) * modulo_elasticidad
+    print(f"\nINERCIA:")
+    print(f"\t INERCIA viga compuesta: {inercia_viga_comp} m4")
+    print(f"\t INERCIA cables activos: I_cables * modulo_elasticidad -> {float(self.ui.tab2_line_total_inercia.text())} m4 * {modulo_elasticidad} = {inercia_cables} m4\n")
 
     ''' COL Ani * Ycg i'''
     ani_Y_viga_comp = ani_viga_comp * ycdg_viga_comp
     ani_Y_cables = ani_cables * ycdg_cables
+    print(f"\nOperacion Area * CDG")
+    print(f"\t A_viga_comp * CDG_viga_comp -> {ani_viga_comp} m2 * {ycdg_viga_comp} m = {ani_Y_viga_comp} m3")
+    print(f"\t A_cables_activos * CDG_cables_activos -> {ani_cables} m2 * {ycdg_cables} m = {ani_Y_cables} m3 \n")
 
     # 3ra fila en columna, suma de ambos resultados
     ani_Y_total = ani_Y_viga_comp + ani_Y_cables
+    print(f"SUMATORIA resultados anteriores -> ani_Y_viga_comp m3 + {ani_Y_cables} m3 = {ani_Y_total} m3\n")
 
     ''' Yc.g neta ini (En Primera Columna) '''
     Ycg_neta_ini = ani_Y_total / area_neta_ini
+    print(f"\n CDG neta ini: CDG total / Area neta ini -> {ani_Y_total} 3m / {area_neta_ini} m2 = {Ycg_neta_ini} m \n")
 
     ''' COL Ani * li (O Ani * D^2 segun IGNACIO) '''
     ani_d2_viga_comp = ani_viga_comp * pow((ycdg_viga_comp - Ycg_neta_ini), 2)
     ani_d2_cables = ani_cables * pow((ycdg_cables - Ycg_neta_ini), 2)
+    print(f"\nOPERACION (Area * (CDG - CDG neta ini)^2 )")
+    print(f"\tPara viga   -> {ani_viga_comp} m2 * ({ycdg_viga_comp} m - {Ycg_neta_ini} m)^2 ) = {ani_d2_viga_comp} m4")
+    print(f"\tPara cables -> {ani_cables} m2 * ({ycdg_cables} m - {Ycg_neta_ini} m)^2 ) = {ani_d2_cables} m4\n")
 
     ''' COL IT (ultima col) '''
     it_viga_comp = inercia_viga_comp + ani_d2_viga_comp
     it_cables = inercia_cables + ani_d2_cables
+    print(f"\INERCIA TOTAL")
+    print(f"\t Viga: I_viga_comp + Operacion_anterior (A * (cdg_viga * cdg_total)^2) -> {inercia_viga_comp} m4 + {ani_d2_viga_comp} m4 = {it_viga_comp} m4")
+    print(f"\t Viga: I_cable_activo + Operacion_anterior (A * (cdg_cable * cdg_total)^2) -> {inercia_cables} m4 + {ani_d2_cables} m4 = {it_cables} m4 \n")
 
     it_total = it_viga_comp + it_cables
     inercia_neta_ini = it_total # Son la misma variable, Pero se hace asi para mantener consistencia con excel claudio
+    print(f"\tSUMATORIA INERCIAS TOTALES -> {it_viga_comp} m4 + {it_cables} m4 = {it_total} m4\n")
+
+    print(f"\nRESULTADOS DE SIMPLE T=00 (Sin redondear):")
+    print(f"\t AREA: {area_neta_ini} m2")
+    print(f"\t CDG: {Ycg_neta_ini} m")
+    print(f"\t INERCIA: {inercia_neta_ini} m4\n\n")
 
     ''' ASIGNA RESULTADOS DE PROPIEDADES A LINEEDITS DE T = 00 en TAB CALC. PARCIAL '''
     area_neta_ini = round(area_neta_ini, 7)

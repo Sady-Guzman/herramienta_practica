@@ -157,7 +157,7 @@ def mat_calc_save_ec(self):
     print(f"\t\tF'c horm. pref. FINAL = {fc_pref_final}")
     print(f"\t\tF'c horm. INSITU = {fc_insitu}\n")
 
-    print("\n\tSe usa formula --> Ec =  Wc ^ 1.5 * 0.043 * sqrt(f'c)\n")
+    print(f"\n\tSe usa formula --> Ec =  Wc ^ 1.5 * 0.043 * sqrt(f'c). Con Wc = {valor_wc} (kg/m3) \n")
 
 
     ''' Calcula distintos Ec'''
