@@ -77,7 +77,7 @@ def save_current_section_data(self):
         # es_insitu = layout["combo_insitu"].currentText()
         es_insitu = 0 # Por defecto no es Insitu, asigna 0
 
-        print(f"save_current_section_data() -> bi: {bi}, bs: {bs}, altura: {altura} \n")
+        # print(f"save_current_section_data() -> bi: {bi}, bs: {bs}, altura: {altura} \n")
 
         if layout["combo_insitu"].currentText() == "Insitu":
             bs = bi
@@ -96,6 +96,6 @@ def save_current_section_data(self):
 
     # Store the data under the selected section name
     self.dynamic_layout_data[pieza_seccion] = current_section_data
-    print(f"save_current_section_data() -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]} \n\n")
+    # print(f"save_current_section_data() -> Saved data for section '{pieza_seccion}': {self.dynamic_layout_data[pieza_seccion]} \n\n")
 
-    print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
+    # print(f"save_current_section_data() --> El contenido dentro d e dynamic_layout_data es: {self.dynamic_layout_data} \n\n")
